@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+*.db
+
+#folder
+x64/
+ipch/
