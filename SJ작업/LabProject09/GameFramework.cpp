@@ -3,7 +3,7 @@
 #include "GameFramework.h"
 #include "Shader.h"
 #include "Camera.h"
-
+#include "GameObject.h"
 
 CGameFramework::CGameFramework()
 {
@@ -350,8 +350,33 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			ChangeSwapChainState();
 			break;
 		case VK_UP:
-			XMFLOAT3 pos = m_pCamera->GetCameraPos();
-			m_pCamera->SetCameraPos(pos.x, pos.y + 1.f, pos.z);
+		{
+			CGameObject* Player = m_pScene->GetppObjects()[0];
+			XMFLOAT3 pos = Player->GetPos();
+			Player->SetPos(pos.x, pos.y + 1.f, pos.z);
+		}
+		break;
+		case VK_DOWN:
+		{
+			CGameObject* Player = m_pScene->GetppObjects()[0];
+			XMFLOAT3 pos = Player->GetPos();
+			Player->SetPos(pos.x, pos.y -1.f, pos.z);
+		}
+		break;
+		case VK_LEFT:
+		{
+			CGameObject* Player = m_pScene->GetppObjects()[0];
+			XMFLOAT3 pos = Player->GetPos();
+			Player->SetPos(pos.x-1.f, pos.y, pos.z);
+		}
+		break;
+		case VK_RIGHT:
+		{
+			CGameObject* Player = m_pScene->GetppObjects()[0];
+			XMFLOAT3 pos = Player->GetPos();
+			Player->SetPos(pos.x+1.f, pos.y, pos.z);
+		}
+		break;
 		default:
 			break;
 		}
@@ -466,7 +491,7 @@ void CGameFramework::FrameAdvance()
 	//¿øÇÏ´Â °ªÀ¸·Î ±íÀÌ-½ºÅÙ½Ç(ºä)À» Áö¿î´Ù. 
 
 
-	if (m_pScene) m_pScene->Render(m_pd3dCommandList,m_pCamera);  //¾À±×¸®±â
+	if (m_pScene) m_pScene->Render(m_pd3dCommandList, m_pCamera);  //¾À±×¸®±â
 
 
 

@@ -61,16 +61,7 @@ extern ID3D12Resource* CreateBufferResource(ID3D12Device* pd3dDevice,
 	D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, ID3D12Resource** ppd3dUploadBuffer =
 	NULL);
 
-#ifndef ThrowIfFailed
-#define ThrowIfFailed(x) \
-{ \
-HRESULT hr__ = (x); \
-std::wstring wfn = AnsiToWString(__FILE__); \
-if(FAILED(hr__)) { throw DxException(hr__, L#x, wfn,
-__LINE__);
-} \
-}
-#endif
+
 
 
 //3차원 벡터의 연산 

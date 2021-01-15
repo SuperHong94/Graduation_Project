@@ -29,6 +29,8 @@ public:
 	virtual void OnPrepareRender();
 	virtual void Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera);
 	void Rotate(XMFLOAT3* pxmf3Axis, float fAngle);
+	XMFLOAT3 GetPos();
+	void SetPos(float x, float y, float z);
 };
 
 

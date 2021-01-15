@@ -25,6 +25,7 @@ public:
 
 
 	ID3D12PipelineState* m_pd3dPipelineState;
+	CGameObject** GetppObjects();
 	//파이프라인 상태를 나타내는 인터페이스 포인터이다.
 protected:
 	//씬은 게임 객체들의 집합이다. 게임 객체는 셰이더를 포함한다.

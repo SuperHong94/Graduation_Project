@@ -62,6 +62,18 @@ void CGameObject::Rotate(XMFLOAT3* pxmf3Axis, float fAngle)
 	m_xmf4x4World = Matrix4x4::Multiply(mtxRotate, m_xmf4x4World);
 }
 
+XMFLOAT3 CGameObject::GetPos()
+{
+	return XMFLOAT3(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43);
+}
+
+void CGameObject::SetPos(float x, float y, float z)
+{
+	m_xmf4x4World._41 = x;
+	m_xmf4x4World._42 = y;
+	m_xmf4x4World._43 = z;
+}
+
 CRotatingObject::CRotatingObject()
 {
 	m_xmf3RotationAxis = XMFLOAT3(0.0f, 1.0f, 0.0f);
