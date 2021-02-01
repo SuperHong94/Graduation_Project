@@ -1,0 +1,27 @@
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  //
+  // FX Version: fx_5_0
+  //
+  // 1 local buffer(s)
+  //
+  cbuffer GLOBAL_MATRIX : register(b0)
+  {
+      float4x4 g_matWorld;                // Offset:    0, size:   64
+      float4x4 g_matView;                 // Offset:   64, size:   64
+      float4x4 g_matProj;                 // Offset:  128, size:   64
+  }
+  
+  stdafx.cpp
+  Core.cpp
+  desc.cpp
+  Device.cpp
+  Entity.cpp
+  func.cpp
+  KeyMgr.cpp
+  Mesh.cpp
+  PathMgr.cpp
+  Resource.cpp
+  Shader.cpp
+  TimeMgr.cpp
+  Engine.vcxproj -> C:\Users\JeeHun\Desktop\JeeHun\DX12\Dx12_3th\2th\Dx12_2주차\03. External\Library\Engine\Engine.lib
