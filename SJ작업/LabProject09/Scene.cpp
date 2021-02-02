@@ -19,11 +19,11 @@ void CScene::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 	//그래픽 루트 시그너쳐를 생성한다.
 
-	CCubeMeshDiffused* pCubeMesh = new CCubeMeshDiffused(pd3dDevice, pd3dCommandList,12.0f, 12.0f, 12.0f);
+	CMesh* Grave = new CMesh(pd3dDevice, pd3dCommandList, "model/gravestone_03.bin");
 	m_nObjects = 1;
 	m_ppObjects = new CGameObject * [m_nObjects];
 	CRotatingObject* pRotatingObject = new CRotatingObject();
-	pRotatingObject->SetMesh(pCubeMesh);
+	pRotatingObject->SetMesh(Grave);
 	CDiffusedShader* pShader = new CDiffusedShader();
 	pShader->CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
 	pShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
@@ -101,7 +101,7 @@ ID3D12RootSignature* CScene::CreateGraphicsRootSignature(ID3D12Device* pd3dDevic
 {
 
 	D3D12_ROOT_PARAMETER pd3dRootParameters[2];
-	pd3dRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS;
+	pd3dRootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS; //GameObjecct
 	pd3dRootParameters[0].Constants.Num32BitValues = 16;
 	pd3dRootParameters[0].Constants.ShaderRegister = 0;
 	pd3dRootParameters[0].Constants.RegisterSpace = 0;

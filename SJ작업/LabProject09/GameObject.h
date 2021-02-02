@@ -31,6 +31,14 @@ public:
 	void Rotate(XMFLOAT3* pxmf3Axis, float fAngle);
 	XMFLOAT3 GetPos();
 	void SetPos(float x, float y, float z);
+
+
+	//상수버퍼 생성
+	virtual void CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList);
+
+	//상수 버퍼의 내용을 갱신한다.
+	virtual void UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList);
+	virtual void ReleaseShaderVariables();
 };
 
 

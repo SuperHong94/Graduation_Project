@@ -31,9 +31,10 @@
 
 #include <mmsystem.h>//시간
 #include <iostream>
+#include <fstream>
 using namespace DirectX;
 using namespace DirectX::PackedVector;
-
+using namespace std;
 using Microsoft::WRL::ComPtr;
 
 
