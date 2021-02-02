@@ -1,20 +1,38 @@
+#pragma once
+
+
 cbuffer GLOBAL_MATRIX : register(b0)
 {
-    row_major matrix g_matWorld;
-    row_major matrix g_matView;
-    row_major matrix g_matProj;
+    float4 vOffset;
 };
+
+
+cbuffer GLOBAL_MATRIX2 : register(b1)
+{
+    float4 vOffset2;
+};
+
+
+Texture2D g_tex_0 : register(t0);
+Texture2D g_tex_1 : register(t1);
+
+
+SamplerState g_sam_0 : register(s0);    // anisotrophic
+SamplerState g_sam_1 : register(s1);    // point
+
 
 struct VS_INPUT
 {
     float3 vPos : POSITION; // sementic (지시자) 정점 Layout 과 연동       
     float4 vColor : COLOR;    
+    float2 vUV : TEXCOORD;
 };
 
 struct VS_OUTPUT
 {
     float4 vOutPos : SV_Position; 
     float4 vOutColor : COLOR;
+    float2 vUV : TEXCOORD;
 };
 
 // ==================
@@ -22,13 +40,14 @@ struct VS_OUTPUT
 // ==================
 VS_OUTPUT VS_Test(VS_INPUT _input)
 {
-    VS_OUTPUT output = (VS_OUTPUT) 0;
-    
-    //_input.vPos;
-    //_input.vColor;
+    VS_OUTPUT output = (VS_OUTPUT) 0;  
     
     output.vOutPos = float4(_input.vPos, 1.f);
+    output.vOutPos.x += vOffset2.x;
+    
     output.vOutColor = _input.vColor;
+    
+    output.vUV = _input.vUV;
 
     return output;
 }
@@ -47,8 +66,6 @@ float4 PS_Test(VS_OUTPUT _input) : SV_Target
 {
     float fRatio = _input.vOutPos.x / 1280.f;
     
-    //return float4(0.f, 0.f, 1.f * fRatio, 1.f);
-    //return _input.vOutColor;
-    
-    return float4(1.f, 0.2f, 0.2f, 1.f);
+    float4 vOutColor = g_tex_0.Sample(g_sam_0, _input.vUV);
+    return vOutColor;    
 }

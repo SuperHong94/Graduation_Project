@@ -13,6 +13,7 @@ static type* GetInst()\
 
 #define DEVICE CDevice::GetInst()->GetDevice()
 #define CMDLIST CDevice::GetInst()->GetCmdList()
+#define CMDLIST_RES CDevice::GetInst()->GetCmdListRes()
 
 #define KEY(Key, State) (CKeyMgr::GetInst()->GetKeyState(Key) == State)
 #define KEY_HOLD(Key) KEY(Key, KEY_STATE::STATE_HOLD)
@@ -29,6 +30,35 @@ typedef XMFLOAT3 Vec3;
 typedef XMFLOAT2 Vec2;
 typedef XMMATRIX Matrix;
 
+enum class CONST_REGISTER
+{
+	b0 = 0,
+	b1 = 1,
+	b2 = 2,
+	b3 = 3,
+	b4 = 4,
+
+	END,
+};
+
+enum class TEXTURE_REGISTER
+{
+	t0 = (UINT)CONST_REGISTER::END,
+	t1,
+	t2,
+	t3,
+	t4,
+	t5,
+	t6,
+	t7,
+	t8,
+	t9,
+	t10,
+	t11,
+	t12,
+	END,
+};
+
 enum class RES_TYPE
 {
 	MATERIAL,
@@ -41,8 +71,8 @@ enum class RES_TYPE
 
 enum class ROOT_SIG_TYPE
 {
-	RENDER,
-	COMPUTE,
+	INPUT_ASSEM,
+	CONST_BUFFER,
 	END,
 };
 

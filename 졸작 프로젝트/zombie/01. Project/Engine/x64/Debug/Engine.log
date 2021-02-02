@@ -1,17 +1,36 @@
 ﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Users\yajun\Desktop\dxd12\3����\DX12_3th\DX12_2(Texture)\01. Project\Engine\std.fx(1,9-12): warning X3568: 'once' : unknown pragma ignored
   
   //
   // FX Version: fx_5_0
   //
-  // 1 local buffer(s)
+  // 2 local buffer(s)
   //
   cbuffer GLOBAL_MATRIX : register(b0)
   {
-      float4x4 g_matWorld;                // Offset:    0, size:   64
-      float4x4 g_matView;                 // Offset:   64, size:   64
-      float4x4 g_matProj;                 // Offset:  128, size:   64
+      float4  vOffset;                    // Offset:    0, size:   16
   }
   
-  Engine.vcxproj -> C:\Users\yajun\Desktop\dxd12\2주차\Dx12_2주차\03. External\Library\Engine\Engine_debug.lib
+  cbuffer GLOBAL_MATRIX2 : register(b1)
+  {
+      float4  vOffset2;                   // Offset:    0, size:   16
+  }
+  
+  //
+  // 4 local object(s)
+  //
+  Texture2D g_tex_0;
+  Texture2D g_tex_1;
+  SamplerState g_sam_0
+  {
+  };
+  SamplerState g_sam_1
+  {
+  };
+  
+  Texture.cpp
+  TimeMgr.cpp
+  코드를 생성하고 있습니다...
+  Engine.vcxproj -> C:\Users\yajun\Desktop\dxd12\3주차\DX12_3th\DX12_2(Texture)\03. External\Library\Engine\Engine_debug.lib
   0개 파일이 복사되었습니다.
   0개 파일이 복사되었습니다.

@@ -14,16 +14,18 @@
 
 #include "Mesh.h"
 #include "shader.h"
+#include "Texture.h"
+#include "ConstantBuffer.h"
 
 vector<VTX> g_vecVTX;
-//vector<UINT> g_vecIdx;
+vector<UINT> g_vecIDX;
 //tTransform	g_transform;
 //Vec3	g_vPos = Vec3(0.f, 0.f, 900.f);
 //Vec3    g_vCamPos = Vec3(0.f, 0.f, 0.f);
 
-CMesh*		g_pMesh = nullptr;
-CShader*	g_pShader = nullptr;
-
+CMesh*				g_pMesh = nullptr;
+CShader*			g_pShader = nullptr;
+CTexture*			g_pTex = nullptr;
 
 void TestInit()
 {
@@ -36,41 +38,52 @@ void TestInit()
 	
 	VTX v;
 	// 1. 입력 조립기 단계에 전달할, 정점 3개로 구성된 삼각형 1개
-	v.vPos = Vec3(0.f, 1.f, 0.5f);
+	v.vPos = Vec3(-0.5f, 0.5f, 0.5f);
 	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
+	v.vUV = Vec2(0.f, 0.f);
 	g_vecVTX.push_back(v);
 
-	v.vPos = Vec3(1.f, -1.f, 0.5f);
-	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);;
+	v.vPos = Vec3(0.5f, 0.5f, 0.5f);
+	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
+	v.vUV = Vec2(1.f, 0.f);
 	g_vecVTX.push_back(v);
 
-	v.vPos = Vec3(-1.f, -1.f, 0.5f);
+	v.vPos = Vec3(0.5f, -0.5f, 0.5f);
+	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
+	v.vUV = Vec2(1.f, 1.f);
+	g_vecVTX.push_back(v);
+
+	v.vPos = Vec3(-0.5f, -0.5f, 0.5f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
+	v.vUV = Vec2(0.f, 1.f);
 	g_vecVTX.push_back(v);
 
 	//v.vPos = Vec3(-0.5f, -0.5f, 0.f);
 	//v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
 	//g_vecVTX.push_back(v);
 
-	//g_vecIdx.push_back(0); g_vecIdx.push_back(1); g_vecIdx.push_back(2);
-	//g_vecIdx.push_back(0); g_vecIdx.push_back(2); g_vecIdx.push_back(3);
+	g_vecIDX.push_back(0); g_vecIDX.push_back(1); g_vecIDX.push_back(2);
+	g_vecIDX.push_back(0); g_vecIDX.push_back(2); g_vecIDX.push_back(3);
 	
-	g_pMesh->Create((UINT)g_vecVTX.size() * sizeof(VTX), (BYTE*)(&g_vecVTX[0]));
+	g_pMesh->Create(sizeof(VTX), g_vecVTX.size(), (BYTE*)g_vecVTX.data()
+					, DXGI_FORMAT_R32_UINT, g_vecIDX.size(), (BYTE*)g_vecIDX.data());
 	   
 	// 쉐이더 생성
 	g_pShader->CreateVertexShader(L"Shader\\std.fx", "VS_Test", "vs_5_0");
 	g_pShader->CreatePixelShader(L"Shader\\std.fx", "PS_Test", "ps_5_0");
 	g_pShader->Create();
 	
-	
-	// 상수버퍼 생성
+	// Texture 로드
+	wstring strPath = CPathMgr::GetResPath();
+	strPath += L"Texture\\Test.png";
 
-	CDevice::GetInst()->WaitForFenceEvent();
+	g_pTex = new CTexture;
+	g_pTex->Load(strPath);
 }
 
 void TestUpdate()
 {	
-
+	
 }
 
 void TestRender()
@@ -81,6 +94,21 @@ void TestRender()
 	CDevice::GetInst()->render_start(arrColor);
 
 	g_pShader->UpdateData();
+
+	
+	CConstantBuffer* pCB = CDevice::GetInst()->GetCB(CONST_REGISTER::b1);
+
+	Vec4 vData = Vec4(-0.5f, 0.f, 0.f, 0.f);
+	pCB->SetData(&vData, sizeof(Vec4), 0);
+	vData.x = 0.5f;
+	pCB->SetData(&vData, sizeof(Vec4), 1);
+
+	CDevice::GetInst()->SetConstBufferToRegister(pCB, 0);
+	CDevice::GetInst()->SetTextureToRegister(g_pTex, TEXTURE_REGISTER::t0);
+	g_pMesh->render();
+	
+	CDevice::GetInst()->SetConstBufferToRegister(pCB, 1);
+	CDevice::GetInst()->SetTextureToRegister(g_pTex, TEXTURE_REGISTER::t0);
 	g_pMesh->render();
 
 	// 그리기 종료
@@ -89,10 +117,9 @@ void TestRender()
 
 void TestRelease()
 {	
-	//SAFE_RELEASE(g_CB);
-
 	SAFE_DELETE(g_pMesh);
 	SAFE_DELETE(g_pShader);
+	SAFE_DELETE(g_pTex);
 }
 
 // ==============================

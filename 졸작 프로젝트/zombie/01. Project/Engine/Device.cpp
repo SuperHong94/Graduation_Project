@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Device.h"
 
+#include "ConstantBuffer.h"
+#include "Texture.h"
 
 CDevice::CDevice()
 	: m_pDevice(nullptr)
@@ -9,6 +11,7 @@ CDevice::CDevice()
 	, m_iCurTargetIdx(0)
 	, m_hFenceEvent(nullptr)
 	, m_iFenceValue(0)
+	, m_iCurDummyIdx(0)
 {
 }
 
@@ -16,6 +19,11 @@ CDevice::~CDevice()
 {		
 	WaitForFenceEvent();
 	CloseHandle(m_hFenceEvent);
+
+	for (size_t i = 0; i < m_vecCB.size(); ++i)
+	{
+		SAFE_DELETE(m_vecCB[i]);
+	}
 }
 
 int CDevice::init(HWND _hWnd, const tResolution & _res, bool _bWindow)
@@ -29,7 +37,7 @@ int CDevice::init(HWND _hWnd, const tResolution & _res, bool _bWindow)
 #ifdef _DEBUG
 	D3D12GetDebugInterface(IID_PPV_ARGS(&m_pDbgCtrl));
 	m_pDbgCtrl->EnableDebugLayer();
-#endif
+#endif	
 
 	CreateDXGIFactory(IID_PPV_ARGS(&m_pFactory));
 	   	 
@@ -55,12 +63,15 @@ int CDevice::init(HWND _hWnd, const tResolution & _res, bool _bWindow)
 
 	// Create Command Allocator
 	m_pDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_pCmdAlloc));
+	m_pDevice->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&m_pCmdAllocRes));
 
 	// Create the command list.
 	m_pDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT
 		, m_pCmdAlloc.Get(), nullptr, IID_PPV_ARGS(&m_pCmdListGraphic));
+	m_pDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT
+		, m_pCmdAllocRes.Get(), nullptr, IID_PPV_ARGS(&m_pCmdListRes));
 
-	m_pCmdListGraphic->Close();	
+	m_pCmdListGraphic->Close();
 
 	// SwapChain 만들기
 	CreateSwapChain();
@@ -70,37 +81,36 @@ int CDevice::init(HWND _hWnd, const tResolution & _res, bool _bWindow)
 
 	// ViewPort 만들기
 	CreateViewPort();
-	
-	// Empty Signature 만들기
-	// 루트 서명 
-	// 그리기 호출 전에 해당 자원이 파이프라인에 묶일 자료이며,
-	// 어느 시점에 묶이는지, 또는 쉐이더 자원으로 사용 시 레지스터 대응정보를 기술한다.
-	D3D12_ROOT_SIGNATURE_DESC sigDesc = {};
-	sigDesc.NumParameters = 0;
-	sigDesc.pParameters = nullptr;
-	sigDesc.NumStaticSamplers = 0;
-	sigDesc.pStaticSamplers = nullptr; // 사용 될 Sampler 정보
-	sigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT; // 입력 조립기 단계
+		
+	// RootSignature 만들기
+	CreateRootSignature();
 
-	ComPtr<ID3DBlob> pSignature;
-	ComPtr<ID3DBlob> pError;
-	D3D12SerializeRootSignature(&sigDesc, D3D_ROOT_SIGNATURE_VERSION_1, &pSignature, &pError);
-	m_pDevice->CreateRootSignature(0, pSignature->GetBufferPointer(), pSignature->GetBufferSize(), IID_PPV_ARGS(&m_arrSig[(UINT)ROOT_SIG_TYPE::RENDER]));
-	
 	return S_OK;
 }
 
+
 void CDevice::render_start(float(&_arrFloat)[4])
 {
+	m_iCurDummyIdx = 0;
+
 	// 그리기 준비
 	// Command list allocators can only be reset when the associated 
 	// command lists have finished execution on the GPU; apps should use 
 	// fences to determine GPU execution progress.
 	m_pCmdAlloc->Reset();
-
 	m_pCmdListGraphic->Reset(m_pCmdAlloc.Get(), nullptr);
 
 	// 필요한 상태 설정	
+	// RootSignature 설정	
+	CMDLIST->SetGraphicsRootSignature(CDevice::GetInst()->GetRootSignature(ROOT_SIG_TYPE::INPUT_ASSEM).Get());
+	
+	//vector<ID3D12DescriptorHeap*> vecCBV;	
+	//for (UINT i = 0; i < 1; ++i)
+	//{
+	//	vecCBV.push_back(m_pDummyCVB[i].Get());
+	//}	
+	// m_pCmdListGraphic->SetDescriptorHeaps(1/*vecCBV.size()*/, &vecCBV[0]);	
+	
 	m_pCmdListGraphic->RSSetViewports(1, &m_tVP);
 	m_pCmdListGraphic->RSSetScissorRects(1, &m_tScissorRect);
 
@@ -153,7 +163,7 @@ void CDevice::WaitForFenceEvent()
 	m_pCmdQueue->Signal(m_pFence.Get(), fence);
 	m_iFenceValue++;
 	
-	UINT64 a = m_pFence->GetCompletedValue();
+	int a = m_pFence->GetCompletedValue();
 	// Wait until the previous frame is finished.
 	if (a < fence)
 	{
@@ -224,4 +234,182 @@ void CDevice::CreateViewPort()
 	// DirectX 로 그려질 화면 크기를 설정한다.
 	m_tVP = D3D12_VIEWPORT{ 0.f, 0.f, m_tResolution.fWidth, m_tResolution.fHeight, 0.f, 1.f };	
 	m_tScissorRect = D3D12_RECT{0, 0, (LONG)m_tResolution.fWidth, (LONG)m_tResolution.fHeight };
+}
+
+void CDevice::CreateRootSignature()
+{
+	m_iCBVIncreSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+
+	// 슬롯 별 Descriptor Table 을 작성한다.
+	// 0 번 슬롯
+	vector< D3D12_DESCRIPTOR_RANGE> vecRange;
+
+	D3D12_ROOT_PARAMETER slotParam = {};
+	vecRange.clear();
+	
+	D3D12_DESCRIPTOR_RANGE range = {};
+			
+	range.BaseShaderRegister = 0;  // b0 에서
+	range.NumDescriptors = 5;	   // b4 까지 5개 상수레지스터 사용여부 
+	range.OffsetInDescriptorsFromTableStart = -1;
+	range.RegisterSpace = 0;
+	range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+	vecRange.push_back(range);
+
+	range = {};
+	range.BaseShaderRegister = 0;  // t0 에서
+	range.NumDescriptors = 13;	   // t12 까지 13 개 텍스쳐 레지스터 사용여부 
+	range.OffsetInDescriptorsFromTableStart = 5;
+	range.RegisterSpace = 0;
+	range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	vecRange.push_back(range);
+
+	slotParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	slotParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	slotParam.DescriptorTable.NumDescriptorRanges = vecRange.size();
+	slotParam.DescriptorTable.pDescriptorRanges = &vecRange[0];
+			
+	// Sampler Desc 만들기
+	CreateSamplerDesc();
+
+	// 루트 서명 	
+	D3D12_ROOT_SIGNATURE_DESC sigDesc = {};
+	sigDesc.NumParameters = 1;
+	sigDesc.pParameters = &slotParam;
+	sigDesc.NumStaticSamplers = 2;// m_vecSamplerDesc.size();
+	sigDesc.pStaticSamplers = &m_vecSamplerDesc[0]; // 사용 될 Sampler 정보
+	sigDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT; // 입력 조립기 단계 허용
+	
+	ComPtr<ID3DBlob> pSignature;
+	ComPtr<ID3DBlob> pError;
+	HRESULT hr = D3D12SerializeRootSignature(&sigDesc, D3D_ROOT_SIGNATURE_VERSION_1, &pSignature, &pError);
+	m_pDevice->CreateRootSignature(0, pSignature->GetBufferPointer(), pSignature->GetBufferSize(), IID_PPV_ARGS(&m_arrSig[(UINT)ROOT_SIG_TYPE::INPUT_ASSEM]));	
+
+	// 더미용 Descriptor Heap 만들기
+	D3D12_DESCRIPTOR_HEAP_DESC cbvHeapDesc = {};
+
+	UINT iDescriptorNum = 0;
+	for (size_t i = 0; i < vecRange.size(); ++i)
+	{
+		iDescriptorNum += vecRange[i].NumDescriptors;
+	}
+
+	cbvHeapDesc.NumDescriptors = iDescriptorNum;
+	cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	cbvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+
+	for (size_t i = 0; i < 512; ++i)
+	{
+		ComPtr<ID3D12DescriptorHeap> pDummyDescriptor;
+		DEVICE->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&pDummyDescriptor));
+		m_vecDummyDescriptor.push_back(pDummyDescriptor);
+	}		
+}
+
+void CDevice::CreateSamplerDesc()
+{
+	D3D12_STATIC_SAMPLER_DESC sampler = {};
+	sampler.Filter = D3D12_FILTER_ANISOTROPIC; 
+	sampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	sampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	sampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	sampler.MipLODBias = 0;
+	sampler.MaxAnisotropy = 0;
+	sampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+	sampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+	sampler.MinLOD = 0.0f;
+	sampler.MaxLOD = D3D12_FLOAT32_MAX;
+	sampler.ShaderRegister = 0;
+	sampler.RegisterSpace = 0;
+	sampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	m_vecSamplerDesc.push_back(sampler);
+
+	sampler.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
+	sampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	sampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	sampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	sampler.MipLODBias = 0;
+	sampler.MaxAnisotropy = 0;
+	sampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+	sampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+	sampler.MinLOD = 0.0f;
+	sampler.MaxLOD = D3D12_FLOAT32_MAX;
+	sampler.ShaderRegister = 1;
+	sampler.RegisterSpace = 0;
+	sampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	m_vecSamplerDesc.push_back(sampler);
+}
+
+void CDevice::CreateConstBuffer(const wstring & _strName, size_t _iSize
+	, size_t _iMaxCount, CONST_REGISTER _eRegisterNum, bool _bGlobal)
+{
+	CConstantBuffer* pCB = new CConstantBuffer;
+
+	pCB->Create((UINT)_iSize, (UINT)_iMaxCount, _eRegisterNum);
+	if (m_vecCB.size() <= (UINT)_eRegisterNum)
+	{
+		m_vecCB.resize((UINT)_eRegisterNum + 1);
+	}
+	m_vecCB[(UINT)_eRegisterNum] = pCB;
+}
+
+void CDevice::SetConstBufferToRegister(CConstantBuffer * _pCB, UINT _iOffset)
+{
+	UINT iDestRange = 1;
+	UINT iSrcRange = 1;
+
+	// 0번 슬롯이 상수버퍼 데이터
+	D3D12_CPU_DESCRIPTOR_HANDLE hDescHandle = m_vecDummyDescriptor[m_iCurDummyIdx]->GetCPUDescriptorHandleForHeapStart();
+	hDescHandle.ptr += m_iCBVIncreSize * (UINT)_pCB->GetRegisterNum();
+
+	D3D12_CPU_DESCRIPTOR_HANDLE hSrcHandle = _pCB->GetCBV()->GetCPUDescriptorHandleForHeapStart();
+	hSrcHandle.ptr += _iOffset * m_iCBVIncreSize;
+
+	m_pDevice->CopyDescriptors(1, &hDescHandle, &iDestRange
+		, 1, &hSrcHandle, &iSrcRange, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+}
+
+void CDevice::SetTextureToRegister(CTexture * _pTex, TEXTURE_REGISTER _eRegisterNum)
+{
+	UINT iDestRange = 1;
+	UINT iSrcRange = 1;
+
+	// 0번 슬롯이 상수버퍼 데이터
+	D3D12_CPU_DESCRIPTOR_HANDLE hDescHandle = m_vecDummyDescriptor[m_iCurDummyIdx]->GetCPUDescriptorHandleForHeapStart();
+	hDescHandle.ptr += m_iCBVIncreSize * (UINT)_eRegisterNum;
+
+	D3D12_CPU_DESCRIPTOR_HANDLE hSrcHandle = _pTex->GetSRV()->GetCPUDescriptorHandleForHeapStart();	
+
+	m_pDevice->CopyDescriptors(1, &hDescHandle, &iDestRange
+		, 1, &hSrcHandle, &iSrcRange, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+}
+
+void CDevice::UpdateTable()
+{
+	ID3D12DescriptorHeap* pDescriptor = m_vecDummyDescriptor[m_iCurDummyIdx].Get();
+	m_pCmdListGraphic->SetDescriptorHeaps(1, &pDescriptor);
+
+	D3D12_GPU_DESCRIPTOR_HANDLE gpuhandle = pDescriptor->GetGPUDescriptorHandleForHeapStart();
+	m_pCmdListGraphic->SetGraphicsRootDescriptorTable(0, gpuhandle);
+
+	// 다음 더미 Descriptor Heap 을 가리키게 인덱스를 증가시킨다.
+	++m_iCurDummyIdx;	
+}
+
+void CDevice::ExcuteResourceLoad()
+{
+	// 리소스 로딩 명령 닫기
+	m_pCmdListRes->Close();
+
+	// 커맨드 리스트 수행	
+	ID3D12CommandList* ppCommandLists[] = { m_pCmdListRes.Get() };
+	m_pCmdQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+	
+	WaitForFenceEvent();
+
+	// 다시 활성화
+	m_pCmdAllocRes->Reset();
+	m_pCmdListRes->Reset(m_pCmdAllocRes.Get(), nullptr);
 }
