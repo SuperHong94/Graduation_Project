@@ -1,5 +1,5 @@
 ﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
-C:\Users\yajun\Desktop\dxd12\3����\DX12_3th\DX12_2(Texture)\01. Project\Engine\std.fx(1,9-12): warning X3568: 'once' : unknown pragma ignored
+C:\Users\yajun\Desktop\dxd12\3����\DX12_3th\DX12_3(GameObject)\01. Project\Engine\std.fx(1,9-12): warning X3568: 'once' : unknown pragma ignored
   
   //
   // FX Version: fx_5_0
@@ -30,7 +30,8 @@ C:\Users\yajun\Desktop\dxd12\3����\DX12_3th\DX12_2(Texture)\01. Project\
   
   Texture.cpp
   TimeMgr.cpp
+  Transform.cpp
   코드를 생성하고 있습니다...
-  Engine.vcxproj -> C:\Users\yajun\Desktop\dxd12\3주차\DX12_3th\DX12_2(Texture)\03. External\Library\Engine\Engine_debug.lib
+  Engine.vcxproj -> C:\Users\yajun\Desktop\dxd12\3주차\DX12_3th\DX12_3(GameObject)\03. External\Library\Engine\Engine_debug.lib
   0개 파일이 복사되었습니다.
   0개 파일이 복사되었습니다.

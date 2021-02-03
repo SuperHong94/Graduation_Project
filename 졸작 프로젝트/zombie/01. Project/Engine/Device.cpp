@@ -128,6 +128,8 @@ void CDevice::render_start(float(&_arrFloat)[4])
 	D3D12_CPU_DESCRIPTOR_HANDLE hRTVHandle = m_pRTV->GetCPUDescriptorHandleForHeapStart();
 	hRTVHandle.ptr += m_iCurTargetIdx * m_iRTVHeapSize;
 	m_pCmdListGraphic->OMSetRenderTargets(1, &hRTVHandle, FALSE, nullptr);	
+	float color[4] = { 0.6f, 0.6f, 0.6f , 1.f };
+	m_pCmdListGraphic->ClearRenderTargetView(hRTVHandle, color, 0, nullptr);
 }
 
 void CDevice::render_present()
@@ -151,6 +153,12 @@ void CDevice::render_present()
 	m_pSwapChain->Present(0, 0);
 
 	WaitForFenceEvent();
+
+	// 상수버퍼 오프셋 초기화
+	for (size_t i = 0; i < m_vecCB.size(); ++i)
+	{
+		m_vecCB[i]->Clear();
+	}
 
 	// 백버퍼 타겟 인덱스 변경
 	m_iCurTargetIdx == 0 ? m_iCurTargetIdx = 1 : m_iCurTargetIdx = 0;
@@ -303,7 +311,12 @@ void CDevice::CreateRootSignature()
 		ComPtr<ID3D12DescriptorHeap> pDummyDescriptor;
 		DEVICE->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&pDummyDescriptor));
 		m_vecDummyDescriptor.push_back(pDummyDescriptor);
-	}		
+	}
+	
+
+	//D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
+	//D3D12_CPU_DESCRIPTOR_HANDLE handle = m_pDummyCVB[0]->GetCPUDescriptorHandleForHeapStart();
+	//DEVICE->CreateConstantBufferView(&cbvDesc, handle);				
 }
 
 void CDevice::CreateSamplerDesc()
@@ -388,6 +401,8 @@ void CDevice::SetTextureToRegister(CTexture * _pTex, TEXTURE_REGISTER _eRegister
 
 void CDevice::UpdateTable()
 {
+	//m_pCmdListGraphic->Close();
+
 	ID3D12DescriptorHeap* pDescriptor = m_vecDummyDescriptor[m_iCurDummyIdx].Get();
 	m_pCmdListGraphic->SetDescriptorHeaps(1, &pDescriptor);
 
@@ -395,7 +410,8 @@ void CDevice::UpdateTable()
 	m_pCmdListGraphic->SetGraphicsRootDescriptorTable(0, gpuhandle);
 
 	// 다음 더미 Descriptor Heap 을 가리키게 인덱스를 증가시킨다.
-	++m_iCurDummyIdx;	
+	++m_iCurDummyIdx;
+	//m_vecDummyDescriptor[m_iCurDummyIdx]; // clear
 }
 
 void CDevice::ExcuteResourceLoad()

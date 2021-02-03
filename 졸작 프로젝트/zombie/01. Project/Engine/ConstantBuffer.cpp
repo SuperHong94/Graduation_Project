@@ -12,6 +12,7 @@ CConstantBuffer::CConstantBuffer()
 	, m_pData(nullptr)
 	, m_tHeapDesc{}
 	, m_iMaxCount(2)
+	, m_iCurCount(0)
 {
 }
 
@@ -77,4 +78,17 @@ void CConstantBuffer::Create(UINT _iBufferSize, UINT _iMaxCount, CONST_REGISTER 
 	// 상수버퍼에 접근하기 위해서 맵핑을 해둔다.
 	D3D12_RANGE readRange{ 0, 0 };
 	m_pBuffer->Map(0, &readRange, reinterpret_cast<void**>(&m_pData));
+}
+
+
+UINT CConstantBuffer::AddData(void * _pSrc)
+{
+	// 지정한 크기의 상수버퍼를 넘어서게 데이터가 들어오는 경우
+	assert(!(m_iCurCount >= m_iMaxCount));
+
+	UINT iOffsetPos = m_iCurCount++;
+
+	memcpy(m_pData + (m_iBufferSize * iOffsetPos), _pSrc, m_iBufferSize);
+
+	return iOffsetPos;
 }

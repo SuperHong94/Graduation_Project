@@ -24,7 +24,6 @@ static type* GetInst()\
 #define DT CTimeMgr::GetInst()->GetDeltaTime()
 
 
-
 typedef XMFLOAT4 Vec4;
 typedef XMFLOAT3 Vec3;
 typedef XMFLOAT2 Vec2;
@@ -37,6 +36,7 @@ enum class CONST_REGISTER
 	b2 = 2,
 	b3 = 3,
 	b4 = 4,
+	b5 = 5,
 
 	END,
 };
@@ -58,7 +58,6 @@ enum class TEXTURE_REGISTER
 	t12,
 	END,
 };
-
 enum class RES_TYPE
 {
 	MATERIAL,
@@ -85,6 +84,16 @@ enum class RS_TYPE
 enum class BLEND_TYPE
 {
 	DEFAULT,
+	END,
+};
+
+enum class COMPONENT_TYPE
+{
+	TRANSFORM,
+	MESHRENDER,
+
+
+
 	END,
 };
 

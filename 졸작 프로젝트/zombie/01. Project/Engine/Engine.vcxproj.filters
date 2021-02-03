@@ -26,6 +26,12 @@
     <Filter Include="0. Defalt">
       <UniqueIdentifier>{3ebf1d83-a30a-4065-8e8f-d216a47cbf1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. GameObject">
+      <UniqueIdentifier>{de211b8e-2a34-4e11-b1f7-528ca14ffb17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. GameObject\Component">
+      <UniqueIdentifier>{0a953554-fee4-4895-8134-01109d249fa2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -84,6 +90,18 @@
     <ClInclude Include="d3dx12.h">
       <Filter>01. Header</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>04. GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>04. GameObject\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>04. GameObject\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRender.h">
+      <Filter>04. GameObject\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -125,6 +143,18 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>04. GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>04. GameObject\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>04. GameObject\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshRender.cpp">
+      <Filter>04. GameObject\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

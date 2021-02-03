@@ -17,6 +17,13 @@
 #include "Texture.h"
 #include "ConstantBuffer.h"
 
+#include "GameObject.h"
+#include "Transform.h"
+#include "MeshRender.h"
+
+#include "KeyMgr.h"
+#include "TimeMgr.h"
+
 vector<VTX> g_vecVTX;
 vector<UINT> g_vecIDX;
 //tTransform	g_transform;
@@ -26,6 +33,9 @@ vector<UINT> g_vecIDX;
 CMesh*				g_pMesh = nullptr;
 CShader*			g_pShader = nullptr;
 CTexture*			g_pTex = nullptr;
+
+vector<CGameObject*> g_vecObj;
+
 
 void TestInit()
 {
@@ -79,11 +89,52 @@ void TestInit()
 
 	g_pTex = new CTexture;
 	g_pTex->Load(strPath);
+
+	CDevice::GetInst()->WaitForFenceEvent();
+
+
+	// GameObject 만들기
+	CGameObject* pObject = nullptr;
+	{
+		pObject = new CGameObject;
+		pObject->AddComponent(new CTransform);
+		pObject->AddComponent(new CMeshRender);
+
+		pObject->MeshRender()->SetMesh(g_pMesh);
+		pObject->MeshRender()->SetShader(g_pShader);
+
+		g_vecObj.push_back(pObject);
+
+		/*pObject = new CGameObject;
+		pObject->AddComponent(new CTransform);
+		pObject->AddComponent(new CMeshRender);
+
+		pObject->MeshRender()->SetMesh(g_pMesh);
+		pObject->MeshRender()->SetShader(g_pShader);
+
+		g_vecObj.push_back(pObject);*/
+	}
 }
 
 void TestUpdate()
 {	
-	
+	g_vecObj[0]->update();
+	g_vecObj[0]->lateupdate();
+	g_vecObj[0]->finalupdate();
+
+	if (KEY_HOLD(KEY_TYPE::KEY_LEFT))
+	{
+		Vec3 vPos = g_vecObj[0]->Transform()->GetLocalPos();
+		vPos.x -= DT * 1.f;
+		g_vecObj[0]->Transform()->SetLocalPos(vPos);
+	}
+
+	if (KEY_HOLD(KEY_TYPE::KEY_RIGHT))
+	{
+		Vec3 vPos = g_vecObj[0]->Transform()->GetLocalPos();
+		vPos.x += DT * 1.f;
+		g_vecObj[0]->Transform()->SetLocalPos(vPos);
+	}
 }
 
 void TestRender()
@@ -91,28 +142,16 @@ void TestRender()
 	// 그리기 준비
 	float arrColor[4] = { 0.0f, 0.0f, 0.0f, 0.f };
 		
-	CDevice::GetInst()->render_start(arrColor);
-
-	g_pShader->UpdateData();
-
+	CDevice::GetInst()->render_start(arrColor);	
 	
-	CConstantBuffer* pCB = CDevice::GetInst()->GetCB(CONST_REGISTER::b1);
-
-	Vec4 vData = Vec4(-0.5f, 0.f, 0.f, 0.f);
-	pCB->SetData(&vData, sizeof(Vec4), 0);
-	vData.x = 0.5f;
-	pCB->SetData(&vData, sizeof(Vec4), 1);
-
-	CDevice::GetInst()->SetConstBufferToRegister(pCB, 0);
-	CDevice::GetInst()->SetTextureToRegister(g_pTex, TEXTURE_REGISTER::t0);
-	g_pMesh->render();
-	
-	CDevice::GetInst()->SetConstBufferToRegister(pCB, 1);
-	CDevice::GetInst()->SetTextureToRegister(g_pTex, TEXTURE_REGISTER::t0);
-	g_pMesh->render();
+	for (size_t i = 0; i < g_vecObj.size(); ++i)
+	{
+		g_vecObj[i]->render();
+	}
 
 	// 그리기 종료
 	CDevice::GetInst()->render_present();
+
 }
 
 void TestRelease()

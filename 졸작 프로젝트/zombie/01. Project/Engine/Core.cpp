@@ -27,11 +27,11 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	{
 		return E_FAIL;
 	}
-
+	
 	// 상수버퍼 만들기
 	CDevice::GetInst()->CreateConstBuffer(L"GLOBAL_MATRIX_1", sizeof(tTransform), 512, CONST_REGISTER::b0);
 	CDevice::GetInst()->CreateConstBuffer(L"GLOBAL_MATRIX_2", sizeof(tTransform), 512, CONST_REGISTER::b1);
-		
+	
 	CPathMgr::init();
 	CKeyMgr::GetInst()->init();
 	CTimeMgr::GetInst()->init();

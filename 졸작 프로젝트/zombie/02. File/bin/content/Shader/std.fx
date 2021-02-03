@@ -43,7 +43,7 @@ VS_OUTPUT VS_Test(VS_INPUT _input)
     VS_OUTPUT output = (VS_OUTPUT) 0;  
     
     output.vOutPos = float4(_input.vPos, 1.f);
-    output.vOutPos.x += vOffset2.x;
+    output.vOutPos.x += vOffset.x;
     
     output.vOutColor = _input.vColor;
     
@@ -66,6 +66,7 @@ float4 PS_Test(VS_OUTPUT _input) : SV_Target
 {
     float fRatio = _input.vOutPos.x / 1280.f;
     
-    float4 vOutColor = g_tex_0.Sample(g_sam_0, _input.vUV);
-    return vOutColor;    
+    //float4 vOutColor = g_tex_1.Sample(g_sam_0, _input.vUV);
+    return float4(1.f, 0.f, 0.f, 1.f);
+
 }
