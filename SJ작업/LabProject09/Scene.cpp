@@ -19,7 +19,7 @@ void CScene::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 	//그래픽 루트 시그너쳐를 생성한다.
 
-	CMesh* Grave = new CMesh(pd3dDevice, pd3dCommandList, "model/gravestone_03.bin");
+	CMesh* Grave = new CMesh(pd3dDevice, pd3dCommandList, "model/gravestone_03_vertex.bin");
 	m_nObjects = 1;
 	m_ppObjects = new CGameObject * [m_nObjects];
 	CRotatingObject* pRotatingObject = new CRotatingObject();

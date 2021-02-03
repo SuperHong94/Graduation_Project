@@ -51,41 +51,47 @@ void CMesh::Render(ID3D12GraphicsCommandList* pd3dCommandList)
 
 void CMesh::LoadMeshFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, char* pstrFileName)
 {
+
+
+
+	FILE* pFile = NULL;
+	::fopen_s(&pFile, pstrFileName, "rb");
+	::rewind(pFile); //파일위치를 0으로 설정
+
 	char pstrToken[64] = { '\0' };
 
-	std::ifstream InFile(pstrFileName,ios_base::binary);
+	BYTE nStrLength = 0;
+	UINT nReads = 0;
+	//nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pFile);
+	//nReads = (UINT)::fread(pstrToken, sizeof(char), 14, pFile); //"<BoundingBox>:"
+	//nReads = (UINT)::fread(&m_xmBoundingBox.Center, sizeof(float), 3, pFile);
+	//nReads = (UINT)::fread(&m_xmBoundingBox.Extents, sizeof(float), 3, pFile);
 
-	for (; ; )
-	{
-		InFile >> pstrToken;
-		if (!InFile) break;
+	nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pFile);
+	nReads = (UINT)::fread(pstrToken, sizeof(char), nStrLength, pFile); //"<Vertices>:"
+	nReads = (UINT)::fread(&m_nVertices, sizeof(int), 1, pFile);
+	m_pxmf3Positions = new XMFLOAT3[m_nVertices];
+	nReads = (UINT)::fread(m_pxmf3Positions, sizeof(float), 3 * m_nVertices, pFile);
 
-		if (!strcmp(pstrToken, "<Vertices>:"))
-		{
-			InFile >> m_nVertices;
-			m_pxmf3Positions = new XMFLOAT3[m_nVertices];
-			for (UINT i = 0; i < m_nVertices; i++) InFile >> m_pxmf3Positions[i].x >> m_pxmf3Positions[i].y >> m_pxmf3Positions[i].z;
-		}
-		/*	else if (!strcmp(pstrToken, "<Normals>:"))
-			{
-				InFile >> pstrToken;
-				m_pxmf3Normals = new XMFLOAT3[m_nVertices];
-				for (UINT i = 0; i < m_nVertices; i++) InFile >> m_pxmf3Normals[i].x >> m_pxmf3Normals[i].y >> m_pxmf3Normals[i].z;
-			}
-			else if (!strcmp(pstrToken, "<TextureCoords>:"))
-			{
-				InFile >> pstrToken;
-				m_pxmf2TextureCoords = new XMFLOAT2[m_nVertices];
-				for (UINT i = 0; i < m_nVertices; i++) InFile >> m_pxmf2TextureCoords[i].x >> m_pxmf2TextureCoords[i].y;
-			}*/
-		else if (!strcmp(pstrToken, "<Indices>:"))
-		{
-			InFile >> m_nIndices;
-			m_pnIndices = new UINT[m_nIndices];
-			for (UINT i = 0; i < m_nIndices; i++) InFile >> m_pnIndices[i];
-		}
-	}
+	//nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pFile);
+	//nReads = (UINT)::fread(pstrToken, sizeof(char), 10, pFile); //"<Normals>:"
+	//nReads = (UINT)::fread(&m_nVertices, sizeof(int), 1, pFile);
+	//m_pxmf3Normals = new XMFLOAT3[m_nVertices];
+	//nReads = (UINT)::fread(m_pxmf3Normals, sizeof(float), 3 * m_nVertices, pFile);
 
+	//nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pFile);
+	//nReads = (UINT)::fread(pstrToken, sizeof(char), 16, pFile); //"<TextureCoords>:"
+	//nReads = (UINT)::fread(&m_nVertices, sizeof(int), 1, pFile);
+	//m_pxmf2TextureCoords = new XMFLOAT2[m_nVertices];
+	//nReads = (UINT)::fread(m_pxmf2TextureCoords, sizeof(float), 2 * m_nVertices, pFile);
+
+	nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pFile);
+	nReads = (UINT)::fread(pstrToken, sizeof(char), nStrLength, pFile); //"<Indices>:"
+	nReads = (UINT)::fread(&m_nIndices, sizeof(int), 1, pFile);
+	m_pnIndices = new UINT[m_nIndices];
+	nReads = (UINT)::fread(m_pnIndices, sizeof(UINT), m_nIndices, pFile);
+
+	::fclose(pFile);
 	m_pd3dVertexBuffer = ::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf3Positions, sizeof(XMFLOAT3) * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dVertexUploadBuffer);
 	/*m_pd3dNormalBuffer = ::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf3Normals, sizeof(XMFLOAT3) * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dNormalUploadBuffer);
 	m_pd3dTextureCoordBuffer = ::CreateBufferResource(pd3dDevice, pd3dCommandList, m_pxmf2TextureCoords, sizeof(XMFLOAT2) * m_nVertices, D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER, &m_pd3dTextureCoordUploadBuffer);*/
@@ -111,3 +117,6 @@ void CMesh::LoadMeshFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList
 	m_d3dIndexBufferView.Format = DXGI_FORMAT_R32_UINT;
 	m_d3dIndexBufferView.SizeInBytes = sizeof(UINT) * m_nIndices;
 }
+
+
+
