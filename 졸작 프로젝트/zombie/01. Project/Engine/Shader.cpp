@@ -23,19 +23,25 @@ CShader::~CShader()
 {	
 }
 
-void CShader::Create()
+void CShader::Create(D3D_PRIMITIVE_TOPOLOGY _eTopology)
 {
+	m_eTopology = _eTopology;
+
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 28, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },		
+
+		{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 36, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 48, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 60, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
 	m_tPipeline.InputLayout = { inputElementDescs, _countof(inputElementDescs) };
 	m_tPipeline.pRootSignature = CDevice::GetInst()->GetRootSignature(ROOT_SIG_TYPE::INPUT_ASSEM).Get();
 		
-	m_tPipeline.RasterizerState  = g_arrRSDesc[(UINT)RS_TYPE::DEFAULT];
+	m_tPipeline.RasterizerState  = g_arrRSDesc[(UINT)RS_TYPE::CULL_BACK];
 	m_tPipeline.BlendState		 = g_arrBlendDesc[(UINT)BLEND_TYPE::DEFAULT];
 	m_tPipeline.DepthStencilState.DepthEnable = FALSE;
 	m_tPipeline.DepthStencilState.StencilEnable = FALSE;
@@ -45,7 +51,9 @@ void CShader::Create()
 	m_tPipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	m_tPipeline.SampleDesc.Count = 1;
 
-	DEVICE->CreateGraphicsPipelineState(&m_tPipeline, IID_PPV_ARGS(&m_pPilelineState));
+	HRESULT hr = DEVICE->CreateGraphicsPipelineState(&m_tPipeline, IID_PPV_ARGS(&m_pPilelineState));	
+	if (FAILED(hr))
+		assert(nullptr);
 }
 
 void CShader::CreateVertexShader(const wstring & _strPath, const string & _strFuncName, const string & _strhlslVersion)
@@ -94,6 +102,7 @@ void CShader::CreatePixelShader(const wstring & _strPath, const string & _strFun
 }
 
 void CShader::UpdateData()
-{	
+{		
 	CMDLIST->SetPipelineState(m_pPilelineState.Get());	
+	CMDLIST->IASetPrimitiveTopology(m_eTopology);	
 }

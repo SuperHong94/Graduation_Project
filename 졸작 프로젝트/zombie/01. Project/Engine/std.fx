@@ -1,31 +1,17 @@
-#pragma once
+#include "value.fx"
 
-
-cbuffer GLOBAL_MATRIX : register(b0)
-{
-    float4 vOffset;
-};
-
-
-cbuffer GLOBAL_MATRIX2 : register(b1)
-{
-    float4 vOffset2;
-};
-
-
-Texture2D g_tex_0 : register(t0);
-Texture2D g_tex_1 : register(t1);
-
-
-SamplerState g_sam_0 : register(s0);    // anisotrophic
-SamplerState g_sam_1 : register(s1);    // point
-
+#ifndef _STD
+#define _STD
 
 struct VS_INPUT
 {
     float3 vPos : POSITION; // sementic (지시자) 정점 Layout 과 연동       
     float4 vColor : COLOR;    
     float2 vUV : TEXCOORD;
+    
+    float3 vNormal : NORMAL;
+    float3 vTangent : TANGENT;
+    float3 VBinormal : BINORMAL;
 };
 
 struct VS_OUTPUT
@@ -42,9 +28,11 @@ VS_OUTPUT VS_Test(VS_INPUT _input)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;  
     
-    output.vOutPos = float4(_input.vPos, 1.f);
-    output.vOutPos.x += vOffset.x;
+    // 로컬(모델) 좌표의 변환.
+    // 따라서 w 요소를 1로 확장한다 (월드 행렬의 4행(이동) 을 적용 받는다.)
+    float4 vWorldPos = mul(float4(_input.vPos, 1.f), g_matWorld);
     
+    output.vOutPos = vWorldPos;
     output.vOutColor = _input.vColor;
     
     output.vUV = _input.vUV;
@@ -63,10 +51,15 @@ VS_OUTPUT VS_Test(VS_INPUT _input)
 // Rasterizer 에서 검출한 픽셀들마다 호출 되는 함수
 // 정점에서 반환한 색상값을 타겟에 출력한다.
 float4 PS_Test(VS_OUTPUT _input) : SV_Target
-{
-    float fRatio = _input.vOutPos.x / 1280.f;
-    
-    //float4 vOutColor = g_tex_1.Sample(g_sam_0, _input.vUV);
-    return float4(1.f, 0.f, 0.f, 1.f);
+{    
+    if(g_int_0 == 1)
+        return float4(1.f, 0.2f, 0.2f, 1.f);
+    if (g_int_0 == 2)
+        return float4(0.2f, 0.2f, 1.f, 1.f);
+    else   
+        return g_tex_0.Sample(g_sam_0, _input.vUV);
 
+   // return g_tex_0.Sample(g_sam_0, _input.vUV);
 }
+
+#endif

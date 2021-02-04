@@ -125,11 +125,21 @@ void CDevice::render_start(float(&_arrFloat)[4])
 
 	m_pCmdListGraphic->ResourceBarrier(1, &barrier);
 	
+	// RenderTarget 과 DepthStencilView 를 연결
 	D3D12_CPU_DESCRIPTOR_HANDLE hRTVHandle = m_pRTV->GetCPUDescriptorHandleForHeapStart();
+	D3D12_CPU_DESCRIPTOR_HANDLE hDSVHandle = m_pDSV->GetCPUDescriptorHandleForHeapStart();
+		
+	// 타겟 지정
 	hRTVHandle.ptr += m_iCurTargetIdx * m_iRTVHeapSize;
-	m_pCmdListGraphic->OMSetRenderTargets(1, &hRTVHandle, FALSE, nullptr);	
+	m_pCmdListGraphic->OMSetRenderTargets(1, &hRTVHandle, FALSE, &hDSVHandle);
+
+	// 타겟 클리어
 	float color[4] = { 0.6f, 0.6f, 0.6f , 1.f };
 	m_pCmdListGraphic->ClearRenderTargetView(hRTVHandle, color, 0, nullptr);
+	m_pCmdListGraphic->ClearDepthStencilView(hDSVHandle, D3D12_CLEAR_FLAG_DEPTH , 1.f, 0, 0, nullptr);	
+
+	// 첫번째 더미 Descriptor Heap 초기화
+	ClearDymmyDescriptorHeap(0);
 }
 
 void CDevice::render_present()
@@ -154,14 +164,14 @@ void CDevice::render_present()
 
 	WaitForFenceEvent();
 
+	// 백버퍼 타겟 인덱스 변경
+	m_iCurTargetIdx == 0 ? m_iCurTargetIdx = 1 : m_iCurTargetIdx = 0;
+
 	// 상수버퍼 오프셋 초기화
 	for (size_t i = 0; i < m_vecCB.size(); ++i)
 	{
 		m_vecCB[i]->Clear();
 	}
-
-	// 백버퍼 타겟 인덱스 변경
-	m_iCurTargetIdx == 0 ? m_iCurTargetIdx = 1 : m_iCurTargetIdx = 0;
 }
 
 void CDevice::WaitForFenceEvent()
@@ -235,6 +245,46 @@ void CDevice::CreateView()
 		m_pDevice->CreateRenderTargetView(m_RenderTargets[i].Get(), nullptr, hRTVHeap);
 		hRTVHeap.ptr += m_iRTVHeapSize; // Offset 증가
 	}
+
+	// DepthStencilView 만들기
+	// Create a Texture2D.
+	D3D12_RESOURCE_DESC textureDesc = {};
+	textureDesc.MipLevels = 1;
+	textureDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	textureDesc.Width = (UINT)m_tResolution.fWidth;
+	textureDesc.Height = (UINT)m_tResolution.fHeight;
+	textureDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+	textureDesc.DepthOrArraySize = 1;
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.SampleDesc.Quality = 0;
+	textureDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+
+	CD3DX12_CLEAR_VALUE depthOptimizedClearValue(DXGI_FORMAT_D32_FLOAT, 1.0f, 0);
+
+
+	CD3DX12_HEAP_PROPERTIES tUploadHeap = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+
+	HRESULT hr = m_pDevice->CreateCommittedResource(
+		&tUploadHeap,
+		D3D12_HEAP_FLAG_NONE,
+		&textureDesc,
+		D3D12_RESOURCE_STATE_DEPTH_WRITE,
+		&depthOptimizedClearValue,
+		IID_PPV_ARGS(&m_pDepthStencilTex));
+
+	if (FAILED(hr))
+		assert(nullptr);
+
+	// DepthStencilView 를 저장할 DescriptorHeap 생성
+	tDesc = {};
+	tDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+	tDesc.NumDescriptors = 1;
+	tDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	tDesc.NodeMask = 0;
+	hr = m_pDevice->CreateDescriptorHeap(&tDesc, IID_PPV_ARGS(&m_pDSV));
+
+	D3D12_CPU_DESCRIPTOR_HANDLE hDSVHandle = m_pDSV->GetCPUDescriptorHandleForHeapStart();
+	m_pDevice->CreateDepthStencilView(m_pDepthStencilTex.Get(), nullptr, hDSVHandle);
 }
 
 void CDevice::CreateViewPort()
@@ -313,10 +363,10 @@ void CDevice::CreateRootSignature()
 		m_vecDummyDescriptor.push_back(pDummyDescriptor);
 	}
 	
+	// 초기화요 더미 디스크립터 힙 작성	
+	cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	DEVICE->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&m_pInitDescriptor));
 
-	//D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-	//D3D12_CPU_DESCRIPTOR_HANDLE handle = m_pDummyCVB[0]->GetCPUDescriptorHandleForHeapStart();
-	//DEVICE->CreateConstantBufferView(&cbvDesc, handle);				
 }
 
 void CDevice::CreateSamplerDesc()
@@ -357,15 +407,16 @@ void CDevice::CreateSamplerDesc()
 
 void CDevice::CreateConstBuffer(const wstring & _strName, size_t _iSize
 	, size_t _iMaxCount, CONST_REGISTER _eRegisterNum, bool _bGlobal)
-{
+{	
 	CConstantBuffer* pCB = new CConstantBuffer;
-
+	pCB->SetName(_strName);
 	pCB->Create((UINT)_iSize, (UINT)_iMaxCount, _eRegisterNum);
-	if (m_vecCB.size() <= (UINT)_eRegisterNum)
+	m_vecCB.push_back(pCB);
+
+	if (_bGlobal)
 	{
-		m_vecCB.resize((UINT)_eRegisterNum + 1);
+		SetGlobalConstBufferToRegister(pCB, 0);
 	}
-	m_vecCB[(UINT)_eRegisterNum] = pCB;
 }
 
 void CDevice::SetConstBufferToRegister(CConstantBuffer * _pCB, UINT _iOffset)
@@ -375,6 +426,22 @@ void CDevice::SetConstBufferToRegister(CConstantBuffer * _pCB, UINT _iOffset)
 
 	// 0번 슬롯이 상수버퍼 데이터
 	D3D12_CPU_DESCRIPTOR_HANDLE hDescHandle = m_vecDummyDescriptor[m_iCurDummyIdx]->GetCPUDescriptorHandleForHeapStart();
+	hDescHandle.ptr += m_iCBVIncreSize * (UINT)_pCB->GetRegisterNum();
+
+	D3D12_CPU_DESCRIPTOR_HANDLE hSrcHandle = _pCB->GetCBV()->GetCPUDescriptorHandleForHeapStart();
+	hSrcHandle.ptr += _iOffset * m_iCBVIncreSize;
+
+	m_pDevice->CopyDescriptors(1, &hDescHandle, &iDestRange
+		, 1, &hSrcHandle, &iSrcRange, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+}
+
+void CDevice::SetGlobalConstBufferToRegister(CConstantBuffer * _pCB, UINT _iOffset)
+{
+	UINT iDestRange = 1;
+	UINT iSrcRange = 1;
+
+	// 0번 슬롯이 상수버퍼 데이터
+	D3D12_CPU_DESCRIPTOR_HANDLE hDescHandle = m_pInitDescriptor->GetCPUDescriptorHandleForHeapStart();
 	hDescHandle.ptr += m_iCBVIncreSize * (UINT)_pCB->GetRegisterNum();
 
 	D3D12_CPU_DESCRIPTOR_HANDLE hSrcHandle = _pCB->GetCBV()->GetCPUDescriptorHandleForHeapStart();
@@ -399,10 +466,25 @@ void CDevice::SetTextureToRegister(CTexture * _pTex, TEXTURE_REGISTER _eRegister
 		, 1, &hSrcHandle, &iSrcRange, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 }
 
+void CDevice::ClearDymmyDescriptorHeap(UINT _iDummyIndex)
+{	
+	D3D12_CPU_DESCRIPTOR_HANDLE hDescHandle = m_vecDummyDescriptor[_iDummyIndex]->GetCPUDescriptorHandleForHeapStart();
+	hDescHandle.ptr;
+
+	D3D12_CPU_DESCRIPTOR_HANDLE hSrcHandle = m_pInitDescriptor->GetCPUDescriptorHandleForHeapStart();
+	hSrcHandle.ptr;
+
+	UINT iDestRange = (UINT)TEXTURE_REGISTER::END;
+	UINT iSrcRange = (UINT)TEXTURE_REGISTER::END;
+
+	m_pDevice->CopyDescriptors(1/*디스크립터 개수*/
+						     , &hDescHandle, &iDestRange
+						     , 1/*디스크립터 개수*/
+						     , &hSrcHandle, &iSrcRange, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+}
+
 void CDevice::UpdateTable()
 {
-	//m_pCmdListGraphic->Close();
-
 	ID3D12DescriptorHeap* pDescriptor = m_vecDummyDescriptor[m_iCurDummyIdx].Get();
 	m_pCmdListGraphic->SetDescriptorHeaps(1, &pDescriptor);
 
@@ -411,7 +493,9 @@ void CDevice::UpdateTable()
 
 	// 다음 더미 Descriptor Heap 을 가리키게 인덱스를 증가시킨다.
 	++m_iCurDummyIdx;
-	//m_vecDummyDescriptor[m_iCurDummyIdx]; // clear
+
+	// 다음 더비 Descriptor Heap 을 초기화 한다.(전역 상수버퍼는 남는다)
+	ClearDymmyDescriptorHeap(m_iCurDummyIdx);	
 }
 
 void CDevice::ExcuteResourceLoad()

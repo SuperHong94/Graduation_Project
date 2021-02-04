@@ -103,12 +103,3 @@ void CTexture::Load(const wstring & _strFullPath)
 	DEVICE->CreateShaderResourceView(m_pTex2D.Get(), &srvDesc, m_pSRV->GetCPUDescriptorHandleForHeapStart());	
 }
 
-void CTexture::UpdateData(UINT _iShaderType, UINT _iRegisterNum)
-{
-
-}
-
-void CTexture::ClearData(UINT _iShaderType, UINT _iRegisterNum)
-{
-	
-}

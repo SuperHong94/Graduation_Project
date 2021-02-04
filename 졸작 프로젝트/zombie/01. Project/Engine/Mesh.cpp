@@ -27,7 +27,8 @@ CMesh::~CMesh()
 	//SAFE_RELEASE(m_pLayout);
 }
 
-void CMesh::Create(UINT _iVtxSize, UINT _iVtxCount, BYTE* _pVtxSysMem, DXGI_FORMAT _eIdxFormat, UINT _iIdxCount, BYTE* _pIdxSysMem)
+void CMesh::Create(UINT _iVtxSize, UINT _iVtxCount, BYTE* _pVtxSysMem
+	, DXGI_FORMAT _eIdxFormat, UINT _iIdxCount, BYTE* _pIdxSysMem)
 {
 	m_iVtxSize = _iVtxSize;
 	m_iVtxCount = _iVtxCount;

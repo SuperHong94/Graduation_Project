@@ -6,9 +6,6 @@
 
 #include "PathMgr.h"
 
-// ==============================
-// 물체 하나 그려보기
-// ==============================
 #include "Core.h"
 #include "Device.h"
 
@@ -26,23 +23,19 @@
 
 vector<VTX> g_vecVTX;
 vector<UINT> g_vecIDX;
-//tTransform	g_transform;
-//Vec3	g_vPos = Vec3(0.f, 0.f, 900.f);
-//Vec3    g_vCamPos = Vec3(0.f, 0.f, 0.f);
 
 CMesh*				g_pMesh = nullptr;
+
 CShader*			g_pShader = nullptr;
+CMaterial*			g_pMtrl_0 = nullptr;
+CMaterial*			g_pMtrl_1 = nullptr;
+
 CTexture*			g_pTex = nullptr;
 
 vector<CGameObject*> g_vecObj;
 
-
 void TestInit()
-{
-	//g_transform.matWorld = XMMatrixIdentity();
-	//g_transform.matView = XMMatrixIdentity();
-	//g_transform.matProj = XMMatrixIdentity();
-	
+{	
 	g_pMesh = new CMesh;
 	g_pShader = new CShader;
 	
@@ -68,14 +61,10 @@ void TestInit()
 	v.vUV = Vec2(0.f, 1.f);
 	g_vecVTX.push_back(v);
 
-	//v.vPos = Vec3(-0.5f, -0.5f, 0.f);
-	//v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	//g_vecVTX.push_back(v);
-
 	g_vecIDX.push_back(0); g_vecIDX.push_back(1); g_vecIDX.push_back(2);
 	g_vecIDX.push_back(0); g_vecIDX.push_back(2); g_vecIDX.push_back(3);
 	
-	g_pMesh->Create(sizeof(VTX), g_vecVTX.size(), (BYTE*)g_vecVTX.data()
+	g_pMesh->Create(sizeof(VTX), (UINT)g_vecVTX.size(), (BYTE*)g_vecVTX.data()
 					, DXGI_FORMAT_R32_UINT, g_vecIDX.size(), (BYTE*)g_vecIDX.data());
 	   
 	// 쉐이더 생성
@@ -90,8 +79,18 @@ void TestInit()
 	g_pTex = new CTexture;
 	g_pTex->Load(strPath);
 
-	CDevice::GetInst()->WaitForFenceEvent();
+	// Material 생성
+	int a = 1;
+	int b = 3;
+	g_pMtrl_0 = new CMaterial;
+	g_pMtrl_0->SetShader(g_pShader);
+	g_pMtrl_0->SetData(SHADER_PARAM::INT_0, &a);
+	g_pMtrl_0->SetData(SHADER_PARAM::TEX_0, g_pTex);
 
+	g_pMtrl_1 = new CMaterial;
+	g_pMtrl_1->SetShader(g_pShader);
+	g_pMtrl_1->SetData(SHADER_PARAM::INT_0, &b);
+	g_pMtrl_1->SetData(SHADER_PARAM::TEX_0, g_pTex);
 
 	// GameObject 만들기
 	CGameObject* pObject = nullptr;
@@ -101,26 +100,37 @@ void TestInit()
 		pObject->AddComponent(new CMeshRender);
 
 		pObject->MeshRender()->SetMesh(g_pMesh);
-		pObject->MeshRender()->SetShader(g_pShader);
+		pObject->MeshRender()->SetMaterial(g_pMtrl_0);
 
 		g_vecObj.push_back(pObject);
 
-		/*pObject = new CGameObject;
+		pObject = new CGameObject;
 		pObject->AddComponent(new CTransform);
 		pObject->AddComponent(new CMeshRender);
 
 		pObject->MeshRender()->SetMesh(g_pMesh);
-		pObject->MeshRender()->SetShader(g_pShader);
+		pObject->MeshRender()->SetMaterial(g_pMtrl_1);
 
-		g_vecObj.push_back(pObject);*/
+		g_vecObj.push_back(pObject);
 	}
 }
 
 void TestUpdate()
 {	
-	g_vecObj[0]->update();
-	g_vecObj[0]->lateupdate();
-	g_vecObj[0]->finalupdate();
+	for (UINT i = 0; i < g_vecObj.size(); ++i)
+	{
+		g_vecObj[i]->update();		
+	}
+
+	for (UINT i = 0; i < g_vecObj.size(); ++i)
+	{
+		g_vecObj[i]->lateupdate();
+	}
+
+	for (UINT i = 0; i < g_vecObj.size(); ++i)
+	{
+		g_vecObj[i]->finalupdate();
+	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_LEFT))
 	{
@@ -146,24 +156,47 @@ void TestRender()
 	
 	for (size_t i = 0; i < g_vecObj.size(); ++i)
 	{
-		g_vecObj[i]->render();
+		if (nullptr != g_vecObj[i]->MeshRender())
+		{	
+			g_vecObj[i]->MeshRender()->render();
+		}			
 	}
 
 	// 그리기 종료
 	CDevice::GetInst()->render_present();
-
 }
 
 void TestRelease()
 {	
 	SAFE_DELETE(g_pMesh);
+
+	SAFE_DELETE(g_pMtrl_0);
+	SAFE_DELETE(g_pMtrl_1);
+
 	SAFE_DELETE(g_pShader);
-	SAFE_DELETE(g_pTex);
+	SAFE_DELETE(g_pTex);	
 }
 
 // ==============================
 
 
+namespace RES_TYPE_STR
+{
+	const wchar_t* MATERIAL = L"MATERIAL";
+	const wchar_t* MESH = L"MESH";
+	const wchar_t* TEXTURE = L"TEXTURE";
+	const wchar_t* SOUND = L"SOUND";
+	const wchar_t* SHADER = L"SHADER";
+};
+
+const wchar_t* RES_TYPE_NAME[(UINT)RES_TYPE::END] =
+{
+	L"MATERIAL",
+	L"MESH",
+	L"TEXTURE",
+	L"SOUND",
+	L"SHADER",
+};
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat)
 {
@@ -251,7 +284,8 @@ int GetSizeofFormat(DXGI_FORMAT _eFormat)
 	case DXGI_FORMAT_R8_SINT:
 	case DXGI_FORMAT_A8_UNORM:
 		iRetByte = 8;
-		break;		
+		break;
+		// Compressed format; http://msdn2.microsoft.com/en-us/library/bb694531(VS.85).aspx
 	case DXGI_FORMAT_BC2_TYPELESS:
 	case DXGI_FORMAT_BC2_UNORM:
 	case DXGI_FORMAT_BC2_UNORM_SRGB:
@@ -262,7 +296,8 @@ int GetSizeofFormat(DXGI_FORMAT _eFormat)
 	case DXGI_FORMAT_BC5_UNORM:
 	case DXGI_FORMAT_BC5_SNORM:
 		iRetByte = 128;
-		break;		
+		break;
+		// Compressed format; http://msdn2.microsoft.com/en-us/library/bb694531(VS.85).aspx
 	case DXGI_FORMAT_R1_UNORM:
 	case DXGI_FORMAT_BC1_TYPELESS:
 	case DXGI_FORMAT_BC1_UNORM:
@@ -271,7 +306,8 @@ int GetSizeofFormat(DXGI_FORMAT _eFormat)
 	case DXGI_FORMAT_BC4_UNORM:
 	case DXGI_FORMAT_BC4_SNORM:
 		iRetByte = 64;
-		break;		
+		break;
+		// Compressed format; http://msdn2.microsoft.com/en-us/library/bb694531(VS.85).aspx
 	case DXGI_FORMAT_R9G9B9E5_SHAREDEXP:
 		iRetByte = 32;
 		break;
@@ -286,4 +322,23 @@ int GetSizeofFormat(DXGI_FORMAT _eFormat)
 	}
 
 	return iRetByte / 8;
+}
+
+void SaveWString(FILE * _pFile, const wstring & _str)
+{
+	BYTE c = (BYTE)_str.length();
+	fwrite(&c, 1, 1, _pFile);
+	fwrite(_str.c_str(), 2, c, _pFile);
+}
+
+wchar_t* LoadWString(FILE * _pFile)
+{
+	static wchar_t szStr[255] = {};
+
+	BYTE c = 0;
+	fread(&c, 1, 1, _pFile);
+	fread(szStr, 2, c, _pFile);
+	szStr[c] = 0;
+
+	return szStr;
 }

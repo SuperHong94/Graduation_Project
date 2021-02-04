@@ -30,11 +30,13 @@ private:
 	ComPtr<IDXGISwapChain>					m_pSwapChain;
 	ComPtr<ID3D12Resource>					m_RenderTargets[2];
 	ComPtr<ID3D12DescriptorHeap>			m_pRTV;
+
+	ComPtr<ID3D12Resource>					m_pDepthStencilTex;
 	ComPtr<ID3D12DescriptorHeap>			m_pDSV;
 
 	vector<ComPtr<ID3D12DescriptorHeap>>	m_vecDummyDescriptor;
 	UINT									m_iCurDummyIdx;
-	//ComPtr<ID3D12DescriptorHeap>			m_pDummyCVB[2];
+	ComPtr<ID3D12DescriptorHeap>			m_pInitDescriptor;
 	UINT									m_iCBVIncreSize; // 핸들 오프셋 증감 사이즈
 
 	vector<D3D12_STATIC_SAMPLER_DESC>		m_vecSamplerDesc;
@@ -56,7 +58,8 @@ public:
 	int init(HWND _hWnd, const tResolution& _res, bool _bWindow);
 
 	void CreateConstBuffer(const wstring& _strName, size_t _iBufferSize
-		, size_t _iMaxCount, CONST_REGISTER _eRegisterNum, bool _bGlobal = false);
+		, size_t _iMaxCount, CONST_REGISTER _eRegisterNum
+		, bool _bGlobal = false);
 
 	void render_start(float(&_arrFloat)[4]); 	
 
@@ -64,7 +67,9 @@ public:
 	void WaitForFenceEvent();
 
 	void SetConstBufferToRegister(CConstantBuffer* _pCB, UINT _iOffset);	
+	void SetGlobalConstBufferToRegister(CConstantBuffer* _pCB, UINT _iOffset);
 	void SetTextureToRegister(CTexture* _pTex, TEXTURE_REGISTER _eRegister);
+	void ClearDymmyDescriptorHeap(UINT _iDummyIndex);
 
 	void UpdateTable();
 	void ExcuteResourceLoad();

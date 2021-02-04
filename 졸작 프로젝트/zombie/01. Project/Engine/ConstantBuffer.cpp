@@ -3,7 +3,6 @@
 
 #include "Device.h"
 
-
 CConstantBuffer::CConstantBuffer()
 	: m_pBuffer(nullptr)
 	, m_pCBV(nullptr)
@@ -11,8 +10,8 @@ CConstantBuffer::CConstantBuffer()
 	, m_eRegisterNum(CONST_REGISTER::END)
 	, m_pData(nullptr)
 	, m_tHeapDesc{}
-	, m_iMaxCount(2)
 	, m_iCurCount(0)
+	, m_iMaxCount(2)
 {
 }
 
@@ -32,7 +31,7 @@ void CConstantBuffer::Create(UINT _iBufferSize, UINT _iMaxCount, CONST_REGISTER 
 	properties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
 	properties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
 	properties.CreationNodeMask = 1;
-	properties.VisibleNodeMask = 1;
+	properties.VisibleNodeMask = 1;	
 
 	D3D12_RESOURCE_DESC resource = {};
 	resource.Alignment = 0;
@@ -45,7 +44,7 @@ void CConstantBuffer::Create(UINT _iBufferSize, UINT _iMaxCount, CONST_REGISTER 
 	resource.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	resource.MipLevels = 1;
 	resource.SampleDesc.Count = 1;
-	resource.SampleDesc.Quality = 0;
+	resource.SampleDesc.Quality = 0;	
 
 	DEVICE->CreateCommittedResource(
 		&properties,
@@ -80,15 +79,14 @@ void CConstantBuffer::Create(UINT _iBufferSize, UINT _iMaxCount, CONST_REGISTER 
 	m_pBuffer->Map(0, &readRange, reinterpret_cast<void**>(&m_pData));
 }
 
-
 UINT CConstantBuffer::AddData(void * _pSrc)
-{
+{	
 	// 지정한 크기의 상수버퍼를 넘어서게 데이터가 들어오는 경우
 	assert(!(m_iCurCount >= m_iMaxCount));
 
 	UINT iOffsetPos = m_iCurCount++;
 
-	memcpy(m_pData + (m_iBufferSize * iOffsetPos), _pSrc, m_iBufferSize);
+	memcpy(m_pData + (m_iBufferSize * iOffsetPos), _pSrc, m_iBufferSize);	
 
 	return iOffsetPos;
 }
