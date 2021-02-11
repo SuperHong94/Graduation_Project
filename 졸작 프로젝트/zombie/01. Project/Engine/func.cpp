@@ -95,23 +95,23 @@ void TestInit()
 	// GameObject ¸¸µé±â
 	CGameObject* pObject = nullptr;
 	{
-		/*pObject = new CGameObject;
+		pObject = new CGameObject;
 		pObject->AddComponent(new CTransform);
 		pObject->AddComponent(new CMeshRender);
 
 		pObject->MeshRender()->SetMesh(g_pMesh);
 		pObject->MeshRender()->SetMaterial(g_pMtrl_0);
 
-		g_vecObj.push_back(pObject);*/
+		g_vecObj.push_back(pObject);
 
-	/*	pObject = new CGameObject;
+		pObject = new CGameObject;
 		pObject->AddComponent(new CTransform);
 		pObject->AddComponent(new CMeshRender);
 
 		pObject->MeshRender()->SetMesh(g_pMesh);
 		pObject->MeshRender()->SetMaterial(g_pMtrl_1);
 
-		g_vecObj.push_back(pObject);*/
+		g_vecObj.push_back(pObject);
 	}
 }
 

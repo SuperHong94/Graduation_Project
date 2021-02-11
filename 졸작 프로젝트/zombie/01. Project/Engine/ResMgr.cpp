@@ -538,7 +538,7 @@ void CResMgr::CreateDefaultShader()
 	pShader->CreatePixelShader(L"Shader\\std.fx", "PS_Test", "ps_5_0");
 
 	// BlendState ¼³Á¤
-	pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
+	//pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
 
 	pShader->Create();	
 

@@ -110,6 +110,7 @@ void CShader::Create(D3D_PRIMITIVE_TOPOLOGY _eTopology)
 	m_tPipeline.SampleMask = UINT_MAX;
 	m_tPipeline.NumRenderTargets = 1;
 	m_tPipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	m_tPipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	m_tPipeline.SampleDesc.Count = 1;
 
 	switch (_eTopology)

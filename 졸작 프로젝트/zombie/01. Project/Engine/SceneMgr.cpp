@@ -100,11 +100,14 @@ void CSceneMgr::init()
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CLight3D);
 	   	
-	pObject->Light3D()->SetLightType(LIGHT_TYPE::DIR);
+	
+	pObject->Light3D()->SetLightPos(Vec3(0.f, 200.f, 1000.f));
+	pObject->Light3D()->SetLightType(LIGHT_TYPE::POINT);
 	pObject->Light3D()->SetDiffuseColor(Vec3(1.f, 1.f, 1.f));
 	pObject->Light3D()->SetSpecular(Vec3(0.3f, 0.3f, 0.3f));
-	pObject->Light3D()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+	pObject->Light3D()->SetAmbient(Vec3(0.f, 0.f, 0.f));
 	pObject->Light3D()->SetLightDir(Vec3(1.f, -1.f, 1.f));
+	pObject->Light3D()->SetLightRange(500.f);
 	   
 	m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
@@ -119,10 +122,11 @@ void CSceneMgr::init()
 
 	// Transform 설정
 	pObject->Transform()->SetLocalPos(Vec3(0.f, -200.f, 1000.f));
-	pObject->Transform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+	pObject->Transform()->SetLocalScale(Vec3(1000.f, 1000.f, 1000.f));
+	pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
 
 	// MeshRender 설정
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
 	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pBlackTex.GetPointer());
 
