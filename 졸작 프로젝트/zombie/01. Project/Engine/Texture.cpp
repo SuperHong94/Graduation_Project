@@ -2,6 +2,9 @@
 #include "Texture.h"
 
 #include "Device.h"
+#include "PathMgr.h"
+
+#include <wincodec.h>
 
 CTexture::CTexture()
 	: CResource(RES_TYPE::TEXTURE)
@@ -38,7 +41,7 @@ void CTexture::Load(const wstring & _strFullPath)
 	}
 	else // png, jpg, jpeg, bmp (WIC)
 	{
-		if (FAILED(LoadFromWICFile(_strFullPath.c_str(), WIC_FLAGS_NONE, nullptr, m_Image)))
+		if (FAILED(LoadFromWICFile(_strFullPath.c_str(), WIC_FLAGS_FORCE_RGB, nullptr, m_Image)))
 		{
 			assert(nullptr);
 		}
@@ -101,5 +104,27 @@ void CTexture::Load(const wstring & _strFullPath)
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
 	DEVICE->CreateShaderResourceView(m_pTex2D.Get(), &srvDesc, m_pSRV->GetCPUDescriptorHandleForHeapStart());	
+}
+
+void CTexture::Save(const wstring& _strPath)
+{
+	wstring strPath = CPathMgr::GetResPath();
+	strPath += _strPath;
+
+	const wchar_t* pExt = CPathMgr::GetExt(_strPath.c_str());
+	const Image* pImage = m_Image.GetImages();
+	if (!wcscmp(pExt, L".dds"))
+	{
+		SaveToDDSFile(m_Image.GetImages(), m_Image.GetMetadata().arraySize, m_Image.GetMetadata(), DDS_FLAGS::DDS_FLAGS_NONE, strPath.c_str());
+	}
+	else if (!wcscmp(pExt, L".tga"))
+	{
+		SaveToTGAFile(*pImage, strPath.c_str());
+	}
+	else
+	{
+		SaveToWICFile(*pImage, WIC_FLAGS_NONE, GUID_ContainerFormatPng, strPath.c_str());
+	}
+	
 }
 

@@ -65,7 +65,7 @@ void TestInit()
 	g_vecIDX.push_back(0); g_vecIDX.push_back(2); g_vecIDX.push_back(3);
 	
 	g_pMesh->Create(sizeof(VTX), (UINT)g_vecVTX.size(), (BYTE*)g_vecVTX.data()
-					, DXGI_FORMAT_R32_UINT, g_vecIDX.size(), (BYTE*)g_vecIDX.data());
+					, DXGI_FORMAT_R32_UINT, (UINT)g_vecIDX.size(), (BYTE*)g_vecIDX.data());
 	   
 	// 쉐이더 생성
 	g_pShader->CreateVertexShader(L"Shader\\std.fx", "VS_Test", "vs_5_0");
@@ -81,7 +81,7 @@ void TestInit()
 
 	// Material 생성
 	int a = 1;
-	int b = 3;
+	int b = 2;
 	g_pMtrl_0 = new CMaterial;
 	g_pMtrl_0->SetShader(g_pShader);
 	g_pMtrl_0->SetData(SHADER_PARAM::INT_0, &a);
@@ -90,28 +90,28 @@ void TestInit()
 	g_pMtrl_1 = new CMaterial;
 	g_pMtrl_1->SetShader(g_pShader);
 	g_pMtrl_1->SetData(SHADER_PARAM::INT_0, &b);
-	g_pMtrl_1->SetData(SHADER_PARAM::TEX_0, g_pTex);
+	
 
 	// GameObject 만들기
 	CGameObject* pObject = nullptr;
 	{
-		pObject = new CGameObject;
+		/*pObject = new CGameObject;
 		pObject->AddComponent(new CTransform);
 		pObject->AddComponent(new CMeshRender);
 
 		pObject->MeshRender()->SetMesh(g_pMesh);
 		pObject->MeshRender()->SetMaterial(g_pMtrl_0);
 
-		g_vecObj.push_back(pObject);
+		g_vecObj.push_back(pObject);*/
 
-		pObject = new CGameObject;
+	/*	pObject = new CGameObject;
 		pObject->AddComponent(new CTransform);
 		pObject->AddComponent(new CMeshRender);
 
 		pObject->MeshRender()->SetMesh(g_pMesh);
 		pObject->MeshRender()->SetMaterial(g_pMtrl_1);
 
-		g_vecObj.push_back(pObject);
+		g_vecObj.push_back(pObject);*/
 	}
 }
 

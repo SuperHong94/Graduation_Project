@@ -111,7 +111,7 @@ struct tLight3D
 	int			iPadding;
 };
 
-static struct tLight3DInfo
+struct tLight3DInfo
 {
 	tLight3D arrLight3D[100];
 	UINT	 iCurCount;

@@ -43,7 +43,7 @@ public:
 	//void CreateComputeShader();
 
 	void SetBlendState(BLEND_TYPE _eType) { m_eBlendType = _eType; }
-	void SetDepthStencilType(DEPTH_STENCIL_TYPE _eType) { m_eDSType = _eType; }
+	void SetDepthStencilType(DEPTH_STENCIL_TYPE _eType);
 	void SetRasterizerType(RS_TYPE _eType) { m_eRSType = _eType; }
 
 	void UpdateData();

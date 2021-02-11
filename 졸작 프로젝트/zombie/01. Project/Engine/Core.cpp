@@ -4,9 +4,15 @@
 #include "Device.h"
 #include "KeyMgr.h"
 #include "TimeMgr.h"
+#include "ResMgr.h"
+
+#include "SceneMgr.h"
+#include "EventMgr.h"
+#include "RenderMgr.h"
 
 #include "PathMgr.h"
 #include "ConstantBuffer.h"
+
 
 CCore::CCore()
 	: m_hMainHwnd(nullptr)
@@ -42,16 +48,16 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b3), 0);
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b4), 0);
 
-	tLight2DInfo info;
-	info.iCount = 20;
-	CDevice::GetInst()->GetCB(CONST_REGISTER::b3)->AddData(&info);
-
-	
 	CPathMgr::init();
 	CKeyMgr::GetInst()->init();
 	CTimeMgr::GetInst()->init();
 
-	TestInit();
+	CResMgr::GetInst()->init();
+
+	CSceneMgr::GetInst()->init();
+	CRenderMgr::GetInst()->init(_hWnd, _resolution, _bWindow);
+
+	//TestInit();
 
 	return S_OK;
 }
@@ -68,28 +74,12 @@ void CCore::progress()
 {
 	CKeyMgr::GetInst()->update();
 	CTimeMgr::GetInst()->update();
-	   	 
-	update();
-	lateupdate();
-	finalupdate();
-	
-	render();
-}
+	CSound::g_pFMOD->update();
 
-void CCore::update()
-{
-	TestUpdate();
-}
-
-void CCore::lateupdate()
-{
-}
-
-void CCore::finalupdate()
-{
-}
-
-void CCore::render()
-{
-	TestRender();
+	CEventMgr::GetInst()->clear();
+	{
+		CSceneMgr::GetInst()->update();
+		CRenderMgr::GetInst()->render();
+	}
+	CEventMgr::GetInst()->update();
 }

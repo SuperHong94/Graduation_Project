@@ -32,9 +32,7 @@ Ptr<CMaterial> CMeshRender::GetCloneMaterial()
 		return nullptr;
 
 	m_pMtrl = m_pMtrl->Clone();
-	return m_pMtrl;
-
-	return Ptr<CMaterial>();
+	return m_pMtrl;	
 }
 
 void CMeshRender::SaveToScene(FILE * _pFile)

@@ -5,7 +5,8 @@
 
 tLightColor CalLight(int _iLightIdx, float3 _vViewNormal, float3 _vViewPos)
 {
-    tLightColor tCol = (tLightColor) 0.f;    
+    tLightColor tCol = (tLightColor) 0.f;
+    
       
     float3 vViewLightDir = (float3) 0.f;
     float fDiffPow = 0.f;
@@ -13,14 +14,14 @@ tLightColor CalLight(int _iLightIdx, float3 _vViewNormal, float3 _vViewPos)
     float fRatio = 1.f;
     
     // Directional Light
-    if (g_Light3D[_iLightIdx].iLight2DType == 0)
+    if (g_Light3D[_iLightIdx].iLight3DType == 0)
     {        
         // ±¤¿øÀÇ ¹æÇâ   
         vViewLightDir = normalize(mul(float4(g_Light3D[_iLightIdx].vLightDir.xyz, 0.f), g_matView).xyz);
         fDiffPow = saturate(dot(-vViewLightDir, _vViewNormal));      
     }
     // Point Light
-    else if (g_Light3D[_iLightIdx].iLight2DType == 1)
+    else if (g_Light3D[_iLightIdx].iLight3DType == 1)
     {
         float3 vViewLightPos = mul(float4(g_Light3D[_iLightIdx].vLightPos.xyz, 1.f), g_matView).xyz;        
         vViewLightDir = normalize(_vViewPos - vViewLightPos);

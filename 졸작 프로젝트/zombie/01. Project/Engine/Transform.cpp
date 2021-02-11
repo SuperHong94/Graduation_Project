@@ -51,7 +51,7 @@ void CTransform::finalupdate()
 	else
 	{
 		memcpy(m_vWorldDir, m_vLocalDir, sizeof(Vec3) * 3);
-	}	
+	}
 }
 
 void CTransform::UpdateData()
@@ -59,6 +59,8 @@ void CTransform::UpdateData()
 	static CConstantBuffer* pCB = CDevice::GetInst()->GetCB(CONST_REGISTER::b0);
 
 	g_transform.matWorld = m_matWorld;
+	g_transform.matWV = g_transform.matWorld * g_transform.matView;
+	g_transform.matWVP = g_transform.matWV * g_transform.matProj;
 
 	UINT iOffsetPos = pCB->AddData(&g_transform);
 	CDevice::GetInst()->SetConstBufferToRegister(pCB, iOffsetPos);

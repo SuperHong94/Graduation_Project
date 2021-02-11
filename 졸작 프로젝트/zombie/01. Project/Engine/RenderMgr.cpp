@@ -13,27 +13,20 @@
 #include "Light3D.h"
 
 CRenderMgr::CRenderMgr()
-	: m_pSwapChain(nullptr)
-	, m_arrRT{}
-	, m_arrMRT{}	
-	, m_arrBlendState{}
-	, m_arrDepthStencilState{}		
+	: m_arrRT{}
+	, m_arrMRT{}		
 {	
 }
 
 CRenderMgr::~CRenderMgr()
-{
-	Safe_Delete_Array(m_arrBlendState);
-	Safe_Delete_Array(m_arrDepthStencilState);
-
-	SAFE_RELEASE(m_pSwapChain);
+{	
 }
 
 void CRenderMgr::render()
 {
 	// 초기화
-	float arrColor[4] = { 0.6f, 0.6f, 0.6f, 1.f };
-	//Clear(arrColor);
+	float arrColor[4] = { 0.6f,0.6f, 0.6f, 1.f };
+	CDevice::GetInst()->render_start(arrColor);
 
 	// 광원 정보 업데이트
 	UpdateLight2D();
@@ -45,7 +38,7 @@ void CRenderMgr::render()
 	}	
 
 	// 출력
-	Present();
+	CDevice::GetInst()->render_present();
 }
 
 void CRenderMgr::render_tool()
@@ -80,7 +73,7 @@ void CRenderMgr::UpdateLight3D()
 		const tLight3D& info = m_vecLight3D[i]->GetLight3DInfo();
 		tLight3DArray.arrLight3D[i] = info;
 	}
-	tLight3DArray.iCurCount = m_vecLight3D.size();
+	tLight3DArray.iCurCount = (UINT)m_vecLight3D.size();
 	
 	UINT iOffsetPos = pLight3DBuffer->AddData(&tLight3DArray);
 	CDevice::GetInst()->SetConstBufferToRegister(pLight3DBuffer, iOffsetPos);

@@ -102,7 +102,7 @@ void CScript::TransferLayer(const wstring & _strLayerName, bool _bMoveAll)
 
 	evt.eType = EVENT_TYPE::TRANSFER_LAYER;
 	evt.wParam = (DWORD_PTR)GetObj();
-	evt.lParam = ((DWORD_PTR)pLayer->GetLayerIdx() << 16 | _bMoveAll);
+	evt.lParam = ((DWORD_PTR)pLayer->GetLayerIdx() << 16 | (DWORD_PTR)_bMoveAll);
 
 	CEventMgr::GetInst()->AddEvent(evt);
 }
@@ -115,7 +115,7 @@ void CScript::TransferLayer(int _iLayerIdx, bool _bMoveAll)
 
 	evt.eType = EVENT_TYPE::TRANSFER_LAYER;
 	evt.wParam = (DWORD_PTR)GetObj();
-	evt.lParam = ((DWORD_PTR)_iLayerIdx << 16 | _bMoveAll);
+	evt.lParam = ((DWORD_PTR)_iLayerIdx << 16 | (DWORD_PTR)_bMoveAll);
 
 	CEventMgr::GetInst()->AddEvent(evt);
 }
@@ -132,7 +132,7 @@ void CScript::TransferLayer(CGameObject * _pTarget, const wstring & _strLayerNam
 
 	evt.eType = EVENT_TYPE::TRANSFER_LAYER;
 	evt.wParam = (DWORD_PTR)_pTarget;
-	evt.lParam = ((DWORD_PTR)pLayer->GetLayerIdx() << 16 | _bMoveAll);
+	evt.lParam = ((DWORD_PTR)pLayer->GetLayerIdx() << 16 | (DWORD_PTR)_bMoveAll);
 
 	CEventMgr::GetInst()->AddEvent(evt);
 }
@@ -145,7 +145,7 @@ void CScript::TransferLayer(CGameObject * _pTarget, int _iLayerIdx, bool _bMoveA
 
 	evt.eType = EVENT_TYPE::TRANSFER_LAYER;
 	evt.wParam = (DWORD_PTR)_pTarget;
-	evt.lParam = ((DWORD_PTR)_iLayerIdx << 16 | _bMoveAll);
+	evt.lParam = ((DWORD_PTR)_iLayerIdx << 16 | (DWORD_PTR)_bMoveAll);
 
 	CEventMgr::GetInst()->AddEvent(evt);
 }

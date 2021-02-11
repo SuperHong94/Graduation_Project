@@ -124,7 +124,7 @@ void CResMgr::CreateDefaultMesh()
 	vecIdx.push_back(0); vecIdx.push_back(2); vecIdx.push_back(3);
 
 	pMesh->Create(sizeof(VTX), (UINT)vecVTX.size(), (BYTE*)vecVTX.data()
-		, DXGI_FORMAT_R32_UINT, vecIdx.size(), (BYTE*)vecIdx.data());
+		, DXGI_FORMAT_R32_UINT, (UINT)vecIdx.size(), (BYTE*)vecIdx.data());
 
 	AddRes(L"RectMesh", pMesh);	
 	
@@ -139,7 +139,7 @@ void CResMgr::CreateDefaultMesh()
 	vecIdx.push_back(2); vecIdx.push_back(3); vecIdx.push_back(0);
 
 	pMesh->Create(sizeof(VTX), (UINT)vecVTX.size(), (BYTE*)vecVTX.data()
-		, DXGI_FORMAT_R32_UINT, vecIdx.size(), (BYTE*)vecIdx.data()); //D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP
+		, DXGI_FORMAT_R32_UINT, (UINT)vecIdx.size(), (BYTE*)vecIdx.data()); //D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP
 	
 	AddRes(L"ColRectMesh", pMesh);
 
@@ -182,7 +182,7 @@ void CResMgr::CreateDefaultMesh()
 	vecIdx.push_back(4); vecIdx.push_back(5);
 
 	pMesh->Create(sizeof(VTX), (UINT)vecVTX.size(), (BYTE*)vecVTX.data()
-		, DXGI_FORMAT_R32_UINT, vecIdx.size(), (BYTE*)vecIdx.data()); // D3D11_PRIMITIVE_TOPOLOGY_LINELIST
+		, DXGI_FORMAT_R32_UINT, (UINT)vecIdx.size(), (BYTE*)vecIdx.data()); // D3D11_PRIMITIVE_TOPOLOGY_LINELIST
 
 	AddRes(L"DirMesh", pMesh);
 	   
@@ -231,7 +231,7 @@ void CResMgr::CreateDefaultMesh()
 	}	
 
 	pMesh->Create(sizeof(VTX), (UINT)vecVTX.size(), (BYTE*)vecVTX.data()
-		, DXGI_FORMAT_R32_UINT, vecIdx.size(), (BYTE*)vecIdx.data());
+		, DXGI_FORMAT_R32_UINT, (UINT)vecIdx.size(), (BYTE*)vecIdx.data());
 
 	AddRes(L"CircleMesh", pMesh);
 
@@ -248,7 +248,7 @@ void CResMgr::CreateDefaultMesh()
 	}
 
 	pMesh->Create(sizeof(VTX), (UINT)vecVTX.size(), (BYTE*)vecVTX.data()
-		, DXGI_FORMAT_R32_UINT, vecIdx.size(), (BYTE*)vecIdx.data()); // D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP
+		, DXGI_FORMAT_R32_UINT, (UINT)vecIdx.size(), (BYTE*)vecIdx.data()); // D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP
 
 	AddRes(L"ColCircleMesh", pMesh);
 
@@ -402,7 +402,7 @@ void CResMgr::CreateDefaultMesh()
 	pMesh = new CMesh;
 
 	pMesh->Create(sizeof(VTX), 24, (BYTE*)arrCube
-		, DXGI_FORMAT_R32_UINT, vecIdx.size(), (BYTE*)vecIdx.data());
+		, DXGI_FORMAT_R32_UINT, (UINT)vecIdx.size(), (BYTE*)vecIdx.data());
 
 	pMesh->SetName(L"CubeMesh");
 	AddRes<CMesh>(pMesh->GetName(), pMesh);	
@@ -516,7 +516,7 @@ void CResMgr::CreateDefaultMesh()
 	pMesh = new CMesh;
 
 	pMesh->Create(sizeof(VTX), (UINT)vecVTX.size(), (BYTE*)vecVTX.data()
-		, DXGI_FORMAT_R32_UINT, vecIdx.size(), (BYTE*)vecIdx.data());
+		, DXGI_FORMAT_R32_UINT, (UINT)vecIdx.size(), (BYTE*)vecIdx.data());
 
 	pMesh->SetName(L"SphereMesh");
 	AddRes<CMesh>(pMesh->GetName(), pMesh);
@@ -534,13 +534,17 @@ void CResMgr::CreateDefaultShader()
 	Ptr<CShader> pShader = nullptr;
 	   
 	pShader = new CShader;
-	pShader->CreateVertexShader(L"Shader\\std.fx", "VS_Color", "vs_5_0");
-	pShader->CreatePixelShader(L"Shader\\std.fx", "PS_Color", "ps_5_0");
-	pShader->Create();
+	pShader->CreateVertexShader(L"Shader\\std.fx", "VS_Test", "vs_5_0");
+	pShader->CreatePixelShader(L"Shader\\std.fx", "PS_Test", "ps_5_0");
+
+	// BlendState 설정
+	pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
+
+	pShader->Create();	
 
 	pShader->AddShaderParam(tShaderParam{ L"Test Value", SHADER_PARAM::INT_0 });
 
-	AddRes(L"ColorShader", pShader);
+	AddRes(L"TestShader", pShader);
 
 	// ==============
 	// Texture Shader
@@ -565,7 +569,11 @@ void CResMgr::CreateDefaultShader()
 	pShader = new CShader;
 	pShader->CreateVertexShader(L"Shader\\std.fx", "VS_Collider2D", "vs_5_0");
 	pShader->CreatePixelShader(L"Shader\\std.fx", "PS_Collider2D", "ps_5_0");
-	pShader->Create();
+
+	// DepthStencilState 설정
+	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::NO_DEPTHTEST);
+
+	pShader->Create(D3D_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
 	AddRes(L"Collider2DShader", pShader);
 
 	// =================
@@ -600,16 +608,6 @@ void CResMgr::CreateDefaultShader()
 	pShader->Create();
 	AddRes(L"2DShadowShader", pShader);
 
-	// ==========
-	// Dir Shader
-	// ==========
-	pShader = new CShader;
-	pShader->CreateVertexShader(L"Shader\\tool.fx", "VS_Dir", "vs_5_0");
-	pShader->CreatePixelShader(L"Shader\\tool.fx", "PS_Dir", "ps_5_0");
-	pShader->Create();
-	AddRes(L"DirShader", pShader);
-
-
 	// ============
 	// Std3D Shader
 	// ============
@@ -637,8 +635,8 @@ void CResMgr::CreateDefaultMaterial()
 	
 	pMtrl = new CMaterial;
 	pMtrl->DisableFileSave();
-	pMtrl->SetShader(FindRes<CShader>(L"ColorShader"));
-	AddRes(L"ColorMtrl", pMtrl);
+	pMtrl->SetShader(FindRes<CShader>(L"TestShader"));
+	AddRes(L"TestMtrl", pMtrl);
 
 	pMtrl = new CMaterial;
 	pMtrl->DisableFileSave();

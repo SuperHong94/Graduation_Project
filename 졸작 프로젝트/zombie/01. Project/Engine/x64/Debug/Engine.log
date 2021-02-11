@@ -185,7 +185,7 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   };
   
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\���� ??��??Ʈ\zombie\01. Project\Engine\std3d.fx(63,16-59): warning X3206: implicit truncation of vector type
+  
   //
   // FX Version: fx_5_0
   //
@@ -276,8 +276,6 @@ C:\Users\yajun\Desktop\graduation_project\Graduation_Project\���� ??��
   SamplerState g_sam_1
   {
   };
-  
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\���� ??��??Ʈ\zombie\01. Project\Engine\std3d.fx(119,5-24): warning X3206: implicit truncation of vector type
   
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
@@ -372,118 +370,7 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   {
   };
   
-  stdafx.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\struct.h(119,2): warning C4091: 'static ': 변수를 선언하지 않으면 'tLight3DInfo' 왼쪽은 무시됩니다.
-  Animation2D.cpp
-  Animator2D.cpp
-  Camera.cpp
-  Collider2D.cpp
-  CollisionMgr.cpp
-  Component.cpp
-  ConstantBuffer.cpp
-  Core.cpp
-  desc.cpp
-  Device.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\Device.cpp(184,8): warning C4244: '초기화 중': 'UINT64'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\Device.cpp(327,65): warning C4267: '=': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Entity.cpp
-  EventMgr.cpp
-  Frustum.cpp
   func.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\func.cpp(68,69): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  GameObject.cpp
-  KeyMgr.cpp
-  Layer.cpp
-  Light2D.cpp
-  Light3D.cpp
-  Material.cpp
-  코드를 생성하고 있습니다...
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\Collider2D.cpp(45): warning C4717: 'CCollider2D::operator=': 모든 제어 경로에서 재귀적입니다. 함수로 인해 런타임 스택 오버플로가 발생합니다.
-  컴파일하고 있습니다...
-  Mesh.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\Mesh.cpp(80,35): warning C4244: '=': 'UINT64'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\Mesh.cpp(121,42): warning C4244: '=': 'UINT64'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  MeshRender.cpp
-  PathMgr.cpp
-  RenderMgr.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\RenderMgr.cpp(83,47): warning C4267: '=': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\func.h(30,1): warning C4150: 불완전한 형식 'CBlendState'에 대한 포인터를 삭제했습니다. 소멸자가 호출되지 않습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\RenderMgr.h(3): message : 'CBlendState' 선언을 참조하십시오.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\RenderMgr.cpp(26): message : 컴파일되는 함수 템플릿 인스턴스화 'void Safe_Delete_Array<CBlendState,3>(T *(&)[3])'에 대한 참조를 확인하세요.
-          with
-          [
-              T=CBlendState
-          ]
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\func.h(30,1): warning C4150: 불완전한 형식 'CDepthStencilState'에 대한 포인터를 삭제했습니다. 소멸자가 호출되지 않습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\RenderMgr.h(4): message : 'CDepthStencilState' 선언을 참조하십시오.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\RenderMgr.cpp(27): message : 컴파일되는 함수 템플릿 인스턴스화 'void Safe_Delete_Array<CDepthStencilState,3>(T *(&)[3])'에 대한 참조를 확인하세요.
-          with
-          [
-              T=CDepthStencilState
-          ]
-  RenderMgrInit.cpp
-  ResMgr.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\ResMgr.cpp(127,62): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\ResMgr.cpp(142,62): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\ResMgr.cpp(185,62): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\ResMgr.cpp(234,62): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\ResMgr.cpp(251,62): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\ResMgr.cpp(405,62): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\ResMgr.cpp(519,62): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Resource.cpp
-  Scene.cpp
-  SceneMgr.cpp
-  Script.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\Script.cpp(105,57): warning C4805: '|': 연산에 'DWORD_PTR' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\Script.cpp(118,46): warning C4805: '|': 연산에 'DWORD_PTR' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\Script.cpp(135,57): warning C4805: '|': 연산에 'DWORD_PTR' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\Script.cpp(148,46): warning C4805: '|': 연산에 'DWORD_PTR' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-  Shader.cpp
-  SimpleMath.cpp
-  Sound.cpp
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\xstring(2468,23): warning C4244: '인수': 'const wchar_t'에서 'const _Elem'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-          with
-          [
-              _Elem=char
-          ]
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\xstring(2479): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<const wchar_t*>(_Iter,const _Iter,std::input_iterator_tag)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Iter=const wchar_t *
-          ]
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\xstring(2479): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<const wchar_t*>(_Iter,const _Iter,std::input_iterator_tag)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Iter=const wchar_t *
-          ]
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\xstring(2459): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<const wchar_t*>(const _Iter,const _Iter,std::forward_iterator_tag)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Iter=const wchar_t *
-          ]
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29333\include\xstring(2459): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct<const wchar_t*>(const _Iter,const _Iter,std::forward_iterator_tag)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Iter=const wchar_t *
-          ]
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\Sound.cpp(100): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Elem=wchar_t,
-              _Iter=std::_String_const_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
-              _Alloc=std::allocator<char>
-          ]
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\01. Project\Engine\Sound.cpp(100): message : 컴파일되는 함수 템플릿 인스턴스화 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_const_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)'에 대한 참조를 확인하세요.
-          with
-          [
-              _Elem=wchar_t,
-              _Iter=std::_String_const_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
-              _Alloc=std::allocator<char>
-          ]
-  Texture.cpp
-  TimeMgr.cpp
-  Transform.cpp
-  코드를 생성하고 있습니다...
-  Engine.vcxproj -> C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\03. External\Library\Engine\Engine_debug.lib
+  Engine.vcxproj -> C:\Users\yajun\Desktop\dxd12\4,5주차\4th\DX12_4th_4(3D Camera)\03. External\Library\Engine\Engine_debug.lib
   0개 파일이 복사되었습니다.
   0개 파일이 복사되었습니다.

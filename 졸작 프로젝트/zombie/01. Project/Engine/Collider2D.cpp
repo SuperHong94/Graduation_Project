@@ -20,8 +20,10 @@ CCollider2D::CCollider2D()
 	, m_pColMtrl(nullptr)
 	, m_iColID(g_iColID++)
 	, m_iCollisionCount(0)
+	, m_eType(COLLIDER2D_TYPE::RECT)
 {
 	m_pColMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"Collider2DMtrl_0");
+	SetCollider2DType(m_eType);
 }
 
 CCollider2D::CCollider2D(const CCollider2D & _other)
@@ -40,7 +42,7 @@ CCollider2D::CCollider2D(const CCollider2D & _other)
 void CCollider2D::operator=(const CCollider2D & _other)
 {
 	UINT iColID = m_iColID;
-	*this = _other;
+	memcpy(this, &_other, sizeof(CCollider2D));
 	m_iColID = iColID;
 }
 

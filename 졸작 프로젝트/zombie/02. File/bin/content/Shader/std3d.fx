@@ -60,7 +60,7 @@ float4 PS_Std3D(VS_STD3D_OUTPUT _in) : SV_Target
     // 노말맵이 있는경우
     if(tex_1)
     {
-        float3 vTSNormal = g_tex_1.Sample(g_sam_0, _in.vUV);        
+        float3 vTSNormal = g_tex_1.Sample(g_sam_0, _in.vUV).xyz;        
         vTSNormal.xyz = (vTSNormal.xyz - 0.5f) * 2.f;
         float3x3 matTBN = { _in.vViewTangent, _in.vViewBinormal, _in.vViewNormal};        
         vViewNormal = normalize(mul(vTSNormal, matTBN));
@@ -95,7 +95,7 @@ float4 PS_Std3D(VS_STD3D_OUTPUT _in) : SV_Target
 struct VS_SKY_IN
 {
     float3 vPos : POSITION;
-    float3 vUV : TEXCOORD;
+    float2 vUV : TEXCOORD;
 };
 
 struct VS_SKY_OUT

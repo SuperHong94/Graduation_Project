@@ -77,7 +77,7 @@ void CMesh::Create(UINT _iVtxSize, UINT _iVtxCount, BYTE* _pVtxSysMem
 	// Initialize the vertex buffer view.
 	m_tVtxView.BufferLocation = m_pVB->GetGPUVirtualAddress();
 	m_tVtxView.StrideInBytes = sizeof(VTX);
-	m_tVtxView.SizeInBytes = tResDesc.Width;
+	m_tVtxView.SizeInBytes = (UINT)tResDesc.Width;
 	   
 	// IdxBuffer
 	tHeapProperty = {};
@@ -118,7 +118,7 @@ void CMesh::Create(UINT _iVtxSize, UINT _iVtxCount, BYTE* _pVtxSysMem
 	// Initialize the Index buffer view.
 	m_tIdxView.BufferLocation = m_pIB->GetGPUVirtualAddress();
 	m_tIdxView.Format = DXGI_FORMAT_R32_UINT;
-	m_tIdxView.SizeInBytes = tResDesc.Width * tResDesc.Height;
+	m_tIdxView.SizeInBytes = (UINT)(tResDesc.Width * tResDesc.Height);
 
 	CDevice::GetInst()->WaitForFenceEvent();
 }
@@ -126,8 +126,7 @@ void CMesh::Create(UINT _iVtxSize, UINT _iVtxCount, BYTE* _pVtxSysMem
 void CMesh::render()
 {
 	CDevice::GetInst()->UpdateTable();	
-
-	CMDLIST->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		
 	CMDLIST->IASetVertexBuffers(0, 1, &m_tVtxView);
 	CMDLIST->IASetIndexBuffer(&m_tIdxView);
 

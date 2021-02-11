@@ -133,9 +133,8 @@ void CDevice::render_start(float(&_arrFloat)[4])
 	hRTVHandle.ptr += m_iCurTargetIdx * m_iRTVHeapSize;
 	m_pCmdListGraphic->OMSetRenderTargets(1, &hRTVHandle, FALSE, &hDSVHandle);
 
-	// 타겟 클리어
-	float color[4] = { 0.6f, 0.6f, 0.6f , 1.f };
-	m_pCmdListGraphic->ClearRenderTargetView(hRTVHandle, color, 0, nullptr);
+	// 타겟 클리어	
+	m_pCmdListGraphic->ClearRenderTargetView(hRTVHandle, _arrFloat, 0, nullptr);
 	m_pCmdListGraphic->ClearDepthStencilView(hDSVHandle, D3D12_CLEAR_FLAG_DEPTH , 1.f, 0, 0, nullptr);	
 
 	// 첫번째 더미 Descriptor Heap 초기화
@@ -177,11 +176,11 @@ void CDevice::render_present()
 void CDevice::WaitForFenceEvent()
 {
 	// Signal and increment the fence value.
-	const UINT64 fence = m_iFenceValue;
+	const size_t fence = m_iFenceValue;
 	m_pCmdQueue->Signal(m_pFence.Get(), fence);
 	m_iFenceValue++;
 	
-	int a = m_pFence->GetCompletedValue();
+	size_t a = m_pFence->GetCompletedValue();
 	// Wait until the previous frame is finished.
 	if (a < fence)
 	{
@@ -261,7 +260,6 @@ void CDevice::CreateView()
 
 	CD3DX12_CLEAR_VALUE depthOptimizedClearValue(DXGI_FORMAT_D32_FLOAT, 1.0f, 0);
 
-
 	CD3DX12_HEAP_PROPERTIES tUploadHeap = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 
 	HRESULT hr = m_pDevice->CreateCommittedResource(
@@ -324,7 +322,7 @@ void CDevice::CreateRootSignature()
 
 	slotParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	slotParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	slotParam.DescriptorTable.NumDescriptorRanges = vecRange.size();
+	slotParam.DescriptorTable.NumDescriptorRanges = (UINT)vecRange.size();
 	slotParam.DescriptorTable.pDescriptorRanges = &vecRange[0];
 			
 	// Sampler Desc 만들기

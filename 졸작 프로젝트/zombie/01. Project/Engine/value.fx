@@ -26,11 +26,12 @@ struct tLight3DInfo
     tLightColor tCol;
     float4      vLightPos;   
     float4      vLightDir;
-    int         iLight2DType;
+    int         iLight3DType;
     float       fRange;
     float       fAngle;
     int         ipadding;
 };
+
 
 // constant register 
 cbuffer TRANSFORM_MATRIX : register(b0)
@@ -69,10 +70,10 @@ cbuffer MATERIAL_PARAM : register(b1)
     float4 g_vec4_2;
     float4 g_vec4_3;
 
-    row_major matrix g_mat_0;
-    row_major matrix g_mat_1;
-    row_major matrix g_mat_2;
-    row_major matrix g_mat_3;
+    row_major float4x4 g_mat_0;
+    row_major float4x4 g_mat_1;
+    row_major float4x4 g_mat_2;
+    row_major float4x4 g_mat_3;
 
     int tex_0;
     int tex_1;
