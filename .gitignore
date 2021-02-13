@@ -36,3 +36,5 @@
 #folder
 x64/
 ipch/
+*.user
+*.suo
