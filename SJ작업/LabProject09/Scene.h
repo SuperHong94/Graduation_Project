@@ -25,12 +25,14 @@ public:
 
 
 	ID3D12PipelineState* m_pd3dPipelineState;
-	CGameObject** GetppObjects();
+	//CGameObject** GetppObjects();
 	//파이프라인 상태를 나타내는 인터페이스 포인터이다.
 protected:
-	//씬은 게임 객체들의 집합이다. 게임 객체는 셰이더를 포함한다.
-	CGameObject **m_ppObjects = NULL;
-	int m_nObjects = 0;
+	//씬은 쉐이더 객체들의 집합이다. 쉐이더 객체는 게임객체를 포함한다.
+
+	CObjectsShader* m_pShaders = NULL;
+	int m_nShaders = 0;
+
 	ID3D12RootSignature* m_pd3dGraphicsRootSignature = NULL;
 
 	//루트 시그너쳐를 나타내는 인터페이스 포인터이다.

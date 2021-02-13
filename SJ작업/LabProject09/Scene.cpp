@@ -19,35 +19,29 @@ void CScene::BuildObjects(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* p
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 	//그래픽 루트 시그너쳐를 생성한다.
 
-	CMesh* Grave = new CMesh(pd3dDevice, pd3dCommandList, "model/gravestone_03_vertex.bin");
-	m_nObjects = 1;
-	m_ppObjects = new CGameObject * [m_nObjects];
-	CRotatingObject* pRotatingObject = new CRotatingObject();
-	pRotatingObject->SetMesh(Grave);
-	CDiffusedShader* pShader = new CDiffusedShader();
-	pShader->CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
-	pShader->CreateShaderVariables(pd3dDevice, pd3dCommandList);
-	pRotatingObject->SetShader(pShader);
-	m_ppObjects[0] = pRotatingObject;
+	m_nShaders = 1;
+	m_pShaders = new CObjectsShader[m_nShaders];
+	m_pShaders[0].CreateShader(pd3dDevice, m_pd3dGraphicsRootSignature);
+	m_pShaders[0].BuildObjects(pd3dDevice, pd3dCommandList);
+
+
+
 }
 
 void CScene::ReleaseObjects()
 {
 	if (m_pd3dGraphicsRootSignature) m_pd3dGraphicsRootSignature->Release();
-	if (m_ppObjects)
+	for (int i = 0; i < m_nShaders; i++)
 	{
-		for (int j = 0; j < m_nObjects; j++) if (m_ppObjects[j]) delete m_ppObjects[j];
-		delete[] m_ppObjects;
+		m_pShaders[i].ReleaseShaderVariables();
+		m_pShaders[i].ReleaseObjects();
 	}
+	if (m_pShaders) delete[] m_pShaders;
 }
 
 void CScene::ReleaseUploadBuffers()
 {
-	if (m_ppObjects)
-	{
-		for (int j = 0; j < m_nObjects; j++) if (m_ppObjects[j])
-			m_ppObjects[j]->ReleaseUploadBuffers();
-	}
+	for (int i = 0; i < m_nShaders; i++) m_pShaders[i].ReleaseUploadBuffers();
 }
 
 ID3D12RootSignature* CScene::GetGraphicsRootSignature()
@@ -55,10 +49,7 @@ ID3D12RootSignature* CScene::GetGraphicsRootSignature()
 	return(m_pd3dGraphicsRootSignature);
 }
 
-CGameObject** CScene::GetppObjects()
-{
-	return m_ppObjects;
-}
+
 
 bool CScene::OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam)
 {
@@ -77,9 +68,9 @@ bool CScene::ProcessInput()
 
 void CScene::AnimateObjects(float fTimeElapsed)
 {
-	for (int j = 0; j < m_nObjects; j++)
+	for (int i = 0; i < m_nShaders; i++)
 	{
-		m_ppObjects[j]->Animate(fTimeElapsed);
+		m_pShaders[i].AnimateObjects(fTimeElapsed);
 	}
 }
 
@@ -87,11 +78,10 @@ void CScene::Render(ID3D12GraphicsCommandList* pd3dCommandList, CCamera* pCamera
 {
 	pCamera->SetViewportsAndScissorRects(pd3dCommandList);
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
-	if (pCamera) pCamera->UpdateShaderVariables(pd3dCommandList);
-	//씬을 렌더링하는 것은 씬을 구성하는 게임 객체(셰이더를 포함하는 객체)들을 렌더링하는 것이다.
-	for (int j = 0; j < m_nObjects; j++)
+	pCamera->UpdateShaderVariables(pd3dCommandList);
+	for (int i = 0; i < m_nShaders; i++)
 	{
-		if (m_ppObjects[j]) m_ppObjects[j]->Render(pd3dCommandList, pCamera);
+		m_pShaders[i].Render(pd3dCommandList, pCamera);
 	}
 
 }
@@ -126,8 +116,8 @@ ID3D12RootSignature* CScene::CreateGraphicsRootSignature(ID3D12Device* pd3dDevic
 	d3dRootSignatureDesc.Flags = d3dRootSignatureFlags;
 	ID3DBlob* pd3dSignatureBlob = NULL;
 	ID3DBlob* pd3dErrorBlob = NULL;
-	::D3D12SerializeRootSignature(&d3dRootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1,&pd3dSignatureBlob, &pd3dErrorBlob);
-	pd3dDevice->CreateRootSignature(0, pd3dSignatureBlob->GetBufferPointer(),pd3dSignatureBlob->GetBufferSize(), __uuidof(ID3D12RootSignature), (void**)&m_pd3dGraphicsRootSignature);
+	::D3D12SerializeRootSignature(&d3dRootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &pd3dSignatureBlob, &pd3dErrorBlob);
+	pd3dDevice->CreateRootSignature(0, pd3dSignatureBlob->GetBufferPointer(), pd3dSignatureBlob->GetBufferSize(), __uuidof(ID3D12RootSignature), (void**)&m_pd3dGraphicsRootSignature);
 	if (pd3dSignatureBlob) pd3dSignatureBlob->Release();
 	if (pd3dErrorBlob) pd3dErrorBlob->Release();
 	return(m_pd3dGraphicsRootSignature);

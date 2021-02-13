@@ -351,30 +351,30 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 			break;
 		case VK_UP:
 		{
-			CGameObject* Player = m_pScene->GetppObjects()[0];
+			/*CGameObject* Player = m_pScene->GetppObjects()[0];
 			XMFLOAT3 pos = Player->GetPos();
-			Player->SetPos(pos.x, pos.y + 1.f, pos.z);
+			Player->SetPos(pos.x, pos.y + 1.f, pos.z);*/
 		}
 		break;
 		case VK_DOWN:
 		{
-			CGameObject* Player = m_pScene->GetppObjects()[0];
+			/*CGameObject* Player = m_pScene->GetppObjects()[0];
 			XMFLOAT3 pos = Player->GetPos();
-			Player->SetPos(pos.x, pos.y -1.f, pos.z);
+			Player->SetPos(pos.x, pos.y -1.f, pos.z);*/
 		}
 		break;
 		case VK_LEFT:
 		{
-			CGameObject* Player = m_pScene->GetppObjects()[0];
+			/*CGameObject* Player = m_pScene->GetppObjects()[0];
 			XMFLOAT3 pos = Player->GetPos();
-			Player->SetPos(pos.x-1.f, pos.y, pos.z);
+			Player->SetPos(pos.x-1.f, pos.y, pos.z);*/
 		}
 		break;
 		case VK_RIGHT:
 		{
-			CGameObject* Player = m_pScene->GetppObjects()[0];
+			/*CGameObject* Player = m_pScene->GetppObjects()[0];
 			XMFLOAT3 pos = Player->GetPos();
-			Player->SetPos(pos.x+1.f, pos.y, pos.z);
+			Player->SetPos(pos.x+1.f, pos.y, pos.z);*/
 		}
 		break;
 		default:
