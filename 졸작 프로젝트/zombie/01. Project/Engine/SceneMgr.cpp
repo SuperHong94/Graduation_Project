@@ -122,11 +122,11 @@ void CSceneMgr::init()
 
 	// Transform 설정
 	pObject->Transform()->SetLocalPos(Vec3(0.f, -200.f, 1000.f));
-	pObject->Transform()->SetLocalScale(Vec3(1000.f, 1000.f, 1000.f));
+	pObject->Transform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
 	pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
 
 	// MeshRender 설정
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
 	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pBlackTex.GetPointer());
 

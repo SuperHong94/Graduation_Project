@@ -25,7 +25,7 @@ CRenderMgr::~CRenderMgr()
 void CRenderMgr::render()
 {
 	// 초기화
-	float arrColor[4] = { 0.f,0.f, 0.f, 1.f };
+	float arrColor[4] = { 0.2f,0.2f, 0.2f, 1.f };
 	CDevice::GetInst()->render_start(arrColor);
 
 	// 광원 정보 업데이트
