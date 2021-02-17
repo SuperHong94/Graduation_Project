@@ -1,0 +1,2 @@
+﻿  Scene.cpp
+C:\Users\yajun\Desktop\대학교\3학년2학기\3D게임프로그래밍2\애니메이션 예제\LabProject07-9-5(Animation)\Scene.cpp(5,10): fatal error C1853: 'Debug\LabProject07-9-5(Animation).pch' 미리 컴파일된 헤더 파일이 다른 버전의 컴파일러에서 만들어졌거나, 미리 컴파일된 헤더가 C++인데 C에서 사용하고 있거나 그 반대의 경우입니다.
