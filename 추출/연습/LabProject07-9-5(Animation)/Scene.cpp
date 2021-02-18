@@ -107,7 +107,7 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_ppHierarchicalGameObjects[0] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	m_ppHierarchicalGameObjects[0]->SetChild(pAngrybotModel, true);
 	m_ppHierarchicalGameObjects[0]->SetPosition(400.0f, m_pTerrain->GetHeight(400.0f, 700.0f), 700.0f);
-	m_ppHierarchicalGameObjects[0]->SetScale(2.0f, 2.0f, 2.0f);
+	m_ppHierarchicalGameObjects[0]->SetScale(15.0f, 15.0f, 15.0f);
 
 	//m_ppHierarchicalGameObjects[1] = new CAngrybotObject(pd3dDevice, pd3dCommandList, m_pd3dGraphicsRootSignature);
 	//m_ppHierarchicalGameObjects[1]->SetChild(pAngrybotModel, true);
