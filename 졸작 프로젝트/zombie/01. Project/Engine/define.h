@@ -46,6 +46,8 @@ enum class CONST_REGISTER
 	b2 = 2,
 	b3 = 3,
 	b4 = 4,	
+	b5 = 5,
+
 	END,	
 };
 
@@ -197,9 +199,9 @@ enum class DEPTH_STENCIL_TYPE
 	GRATER,
 	GRATER_EQUAL,
 
-	NO_DEPTHTEST,
-	NO_DEPTHTEST_NO_WRITE,
-
+	NO_DEPTHTEST,	//깊이 테스트 X, 깊이기록 o
+	NO_DEPTHTEST_NO_WRITE, // 깊이테스트 X, 깊이기록 X
+	LESS_NO_WRITE,	// Less 깊이테스트, 깊이기록 X
 	END,
 };
 
@@ -285,3 +287,11 @@ enum class MRT_TYPE
 };
 
 
+enum class SHADER_POV
+{
+	DEFERRED,
+	FORWARD,
+	POST_EFFECT,
+	LIGHTING,
+	COMPUTE, // GPGPU
+};

@@ -42,4 +42,3 @@ public:
 	template<typename T>
 	friend class Ptr;
 };
-

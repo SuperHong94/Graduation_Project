@@ -70,6 +70,81 @@ void CCamera::finalupdate()
 	CRenderMgr::GetInst()->RegisterCamera(this);
 }
 
+
+void CCamera::SortGameObject()
+{
+	m_vecDeferred.clear();
+	m_vecForward.clear();
+
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+
+	for (UINT i = 0; i < MAX_LAYER; ++i)
+	{
+		if (m_iLayerCheck & (1 << i))
+		{
+			const vector<CGameObject*>& vecObj = pCurScene->GetLayer(i)->GetObjects();
+
+			for (UINT i = 0; i < vecObj.size(); ++i)
+			{
+				if (!vecObj[i]->GetFrustumCheck()
+					|| m_frustum.CheckFrustumSphere(vecObj[i]->Transform()->GetWorldPos(), vecObj[i]->Transform()->GetMaxScale()))
+				{
+					if (vecObj[i]->MeshRender()
+						&& vecObj[i]->MeshRender()->GetMesh() != nullptr
+						&& vecObj[i]->MeshRender()->GetSharedMaterial() != nullptr
+						&& vecObj[i]->MeshRender()->GetSharedMaterial()->GetShader() != nullptr)
+					{
+						if (SHADER_POV::DEFERRED == vecObj[i]->MeshRender()->GetSharedMaterial()->GetShader()->GetShaderPOV())
+							m_vecDeferred.push_back(vecObj[i]);
+						else if (SHADER_POV::FORWARD == vecObj[i]->MeshRender()->GetSharedMaterial()->GetShader()->GetShaderPOV())
+							m_vecForward.push_back(vecObj[i]);
+					}
+				}
+			}
+		}
+	}
+}
+
+void CCamera::render_deferred()
+{
+	g_transform.matView = GetViewMat();
+	g_transform.matProj = GetProjMat();
+	g_transform.matViewInv = m_matViewInv;
+	g_transform.matProjInv = m_matProjInv;
+
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+
+	for (size_t i = 0; i < m_vecDeferred.size(); ++i)
+	{
+		m_vecDeferred[i]->MeshRender()->render();
+	}
+}
+
+void CCamera::render_forward()
+{
+	g_transform.matView = GetViewMat();
+	g_transform.matProj = GetProjMat();
+	g_transform.matViewInv = m_matViewInv;
+	g_transform.matProjInv = m_matProjInv;
+
+	CScene* pCurScene = CSceneMgr::GetInst()->GetCurScene();
+
+	for (size_t i = 0; i < m_vecForward.size(); ++i)
+	{
+		m_vecForward[i]->MeshRender()->render();
+
+		if (m_vecForward[i]->Collider2D())
+			m_vecForward[i]->Collider2D()->render();
+	}
+
+	for (size_t i = 0; i < m_vecDeferred.size(); ++i)
+	{
+		if (m_vecDeferred[i]->Collider2D())
+			m_vecDeferred[i]->Collider2D()->render();
+	}
+}
+
+
 void CCamera::render()
 {
 	g_transform.matView = GetViewMat();
@@ -86,7 +161,7 @@ void CCamera::render()
 			for (UINT i = 0; i < vecObj.size(); ++i)
 			{
 				if (!vecObj[i]->GetFrustumCheck() 
-					|| m_frustum.CheckFrustumSphere(vecObj[i]->Transform()->GetWorldPos(), vecObj[i]->Transform()->GetMaxScale()))
+					|| m_frustum.CheckFrustumSphere(vecObj[i]->Transform()->GetWorldPos(), vecObj[i]->Transform()->GetMaxScale()))					
 				{
 					if (vecObj[i]->MeshRender())
 					{

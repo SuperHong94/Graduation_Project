@@ -50,6 +50,12 @@
     <Filter Include="04. GameObject\Script">
       <UniqueIdentifier>{cbb81f79-d307-4371-9e99-ab9e93821102}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Manager\ResMgr">
+      <UniqueIdentifier>{780d6568-f989-431b-be7a-d3c34b23aa99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\MRT">
+      <UniqueIdentifier>{4f14963d-c0d9-4fff-8025-3322001b56a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -147,9 +153,6 @@
     <ClInclude Include="Animation2D.h">
       <Filter>04. GameObject\Component\Animator2D</Filter>
     </ClInclude>
-    <ClInclude Include="ResMgr.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>Resource</Filter>
     </ClInclude>
@@ -188,6 +191,16 @@
     </ClInclude>
     <ClInclude Include="ToolCamScript.h">
       <Filter>04. GameObject\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="ResMgr.h">
+      <Filter>Manager\ResMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="GridScript.h">
+      <Filter>04. GameObject\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h" />
+    <ClInclude Include="MRT.h">
+      <Filter>Rendering\MRT</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -267,9 +280,6 @@
     <ClCompile Include="Animator2D.cpp">
       <Filter>04. GameObject\Component\Animator2D</Filter>
     </ClCompile>
-    <ClCompile Include="ResMgr.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="Sound.cpp">
       <Filter>Resource</Filter>
     </ClCompile>
@@ -315,6 +325,18 @@
     <ClCompile Include="ToolCamScript.cpp">
       <Filter>04. GameObject\Script</Filter>
     </ClCompile>
+    <ClCompile Include="ResMgr.cpp">
+      <Filter>Manager\ResMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="ResMgrInit.cpp">
+      <Filter>Manager\ResMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="GridScript.cpp">
+      <Filter>04. GameObject\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="MRT.cpp">
+      <Filter>Rendering\MRT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="std.fx">
@@ -329,10 +351,18 @@
     <FxCompile Include="func.fx">
       <Filter>ShaderCode</Filter>
     </FxCompile>
+    <FxCompile Include="tool.fx">
+      <Filter>ShaderCode</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
       <Filter>0. Defalt</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Engine.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -64,6 +64,10 @@ void CTransform::UpdateData()
 
 	UINT iOffsetPos = pCB->AddData(&g_transform);
 	CDevice::GetInst()->SetConstBufferToRegister(pCB, iOffsetPos);
+
+	static CConstantBuffer* pTestCB = CDevice::GetInst()->GetCB(CONST_REGISTER::b5);
+	Vec4 vColor = Vec4(1.f, 0.f, 0.f, 1.f);
+	CDevice::GetInst()->SetConstBufferToRegister(pTestCB, pTestCB->AddData(&vColor));
 }
 
 Vec3 CTransform::GetWorldScale()

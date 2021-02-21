@@ -1,7 +1,9 @@
 #pragma once
 
 class CConstantBuffer;
-class CTexture;
+
+#include "Ptr.h"
+#include "Texture.h"
 
 class CDevice
 {
@@ -27,12 +29,9 @@ private:
 	ComPtr<IDXGIFactory>					m_pFactory;
 	ComPtr<ID3D12Debug>						m_pDbgCtrl;		// 디버그 관리	
 
-	ComPtr<IDXGISwapChain>					m_pSwapChain;
-	ComPtr<ID3D12Resource>					m_RenderTargets[2];
-	ComPtr<ID3D12DescriptorHeap>			m_pRTV;
-
-	ComPtr<ID3D12Resource>					m_pDepthStencilTex;
-	ComPtr<ID3D12DescriptorHeap>			m_pDSV;
+	ComPtr<IDXGISwapChain>					m_pSwapChain;	
+	//Ptr<CTexture>							m_arrRenderTargets[2];
+	//Ptr<CTexture>							m_pDSTex;
 
 	vector<ComPtr<ID3D12DescriptorHeap>>	m_vecDummyDescriptor;
 	UINT									m_iCurDummyIdx;
@@ -45,8 +44,7 @@ private:
 
 	HANDLE									m_hFenceEvent;
 	size_t									m_iFenceValue;
-	UINT									m_iCurTargetIdx;
-	size_t									m_iRTVHeapSize;
+	UINT									m_iCurTargetIdx;	
 
 	vector<CConstantBuffer*>				m_vecCB;
 
@@ -75,8 +73,7 @@ public:
 	void ExcuteResourceLoad();
 
 private:
-	void CreateSwapChain();
-	void CreateView();
+	void CreateSwapChain();	
 	void CreateViewPort();	
 	void CreateRootSignature();
 	void CreateSamplerDesc(); 
@@ -87,6 +84,8 @@ public:
 	ComPtr<ID3D12GraphicsCommandList> GetCmdListRes() { return m_pCmdListRes; }
 	ComPtr<ID3D12Device> GetDevice() { return m_pDevice; }
 	ComPtr<ID3D12RootSignature> GetRootSignature(ROOT_SIG_TYPE _eType) { return m_arrSig[(UINT)_eType]; }
-	CConstantBuffer* GetCB(CONST_REGISTER _eRegister) { return m_vecCB[(UINT)_eRegister]; }
+	CConstantBuffer* GetCB(CONST_REGISTER _eRegister) { return m_vecCB[(UINT)_eRegister]; }	
+	UINT GetSwapchainIdx() { return m_iCurTargetIdx; }
+	ComPtr<IDXGISwapChain> GetSwapChain() { return m_pSwapChain; }
 };
 

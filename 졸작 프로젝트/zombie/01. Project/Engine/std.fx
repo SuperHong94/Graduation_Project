@@ -10,6 +10,8 @@ struct VS_INPUT
     float4 vColor : COLOR;    
     float2 vUV : TEXCOORD;
     float3 vNormal : NORMAL;
+    float3 vTangent : TANGENT;
+    float3 vBinormal : BINORMAL;
 };
 
 struct VS_OUTPUT
@@ -17,12 +19,16 @@ struct VS_OUTPUT
     float4 vOutPos : SV_Position; 
     float4 vOutColor : COLOR;
     float3 vViewNormal : NORMAL;
+    float3 vViewTangent : TANGENT;
+    float3 vViewBinormal : BINORMAL;    
     float3 vViewPos : POSITION;
     float2 vUV : TEXCOORD;
 };
 
 // ==================
 // Test Vertex Shader
+// g_tex_0 : Color Texture
+// g_tex_1 : Normal Map
 // ==================
 VS_OUTPUT VS_Test(VS_INPUT _input)
 {
@@ -30,7 +36,11 @@ VS_OUTPUT VS_Test(VS_INPUT _input)
   
     output.vOutPos = mul(float4(_input.vPos, 1.f), g_matWVP);
     output.vViewPos = mul(float4(_input.vPos, 1.f), g_matWV).xyz;
+    
     output.vViewNormal = normalize(mul(float4(_input.vNormal, 0.f), g_matWV)).xyz;
+    output.vViewTangent = normalize(mul(float4(_input.vTangent, 0.f), g_matWV)).xyz;
+    output.vViewBinormal = normalize(mul(float4(_input.vBinormal, 0.f), g_matWV)).xyz;    
+    
     output.vOutColor = _input.vColor;
     
     
@@ -41,28 +51,35 @@ VS_OUTPUT VS_Test(VS_INPUT _input)
 
 float4 PS_Test(VS_OUTPUT _input) : SV_Target
 {
-    float4 vOutColor = float4(0.8f, 0.8f, 0.8f, 1.f);   
-    
-    //float3 vViewLightDir = normalize(mul(float4(g_Light3D[0].vLightDir.xyz, 0.f), g_matView));
-    //float fDiffusePow = saturate(dot(-vViewLightDir, _input.vViewNormal));
+    float4 vOutColor = g_tex_0.Sample(g_sam_0, _input.vUV);
+    float4 vNormal = g_tex_1.Sample(g_sam_0, _input.vUV);   
+    vNormal = vNormal * 2.f - 1.f; // 표면 좌표에서의 Normal
         
-    //float3 vViewReflect = normalize(vViewLightDir + 2 * dot(-vViewLightDir, _input.vViewNormal) * _input.vViewNormal);
+    // 표면 좌표계 기준의 Normal 방향을
+    // 현재 표면 기준으로 가져올 회전 행렬
+    float3x3 matTBN =
+    {
+        _input.vViewTangent,
+        _input.vViewBinormal,
+        _input.vViewNormal
+    };
+    
+    // 표면 좌표 방향에 행렬을 곱해서 View Space 표면으로 가져온다.
+    float3 vViewNormal = mul(vNormal.xyz, matTBN);
+    
+    tLightColor tCol = (tLightColor) 0.f;
+    
+    for (int i = 0; i < g_iLight3DCount; ++i)
+    {
+        tLightColor tTemp = CalLight(i, vViewNormal, _input.vViewPos);
+        tCol.vDiff += tTemp.vDiff;
+        tCol.vSpec += tTemp.vSpec;
+        tCol.vAmb += tTemp.vAmb;
+    }
         
-    //float3 vEye = normalize(_input.vViewPos);
-    
-    //float fRelectPow = saturate(dot(-vEye, vViewReflect));    
-    //fRelectPow = pow(fRelectPow, 10);
-    
-    //vOutColor = vOutColor * g_Light3D[0].tCol.vDiff * fDiffusePow 
-    //        + g_Light3D[0].tCol.vSpec * fRelectPow
-    //        + g_Light3D[0].tCol.vAmb;
-    
-    
-    tLightColor tCol = CalLight(0, _input.vViewNormal, _input.vViewPos);
-    
     vOutColor = vOutColor * tCol.vDiff 
                  + tCol.vSpec 
-                 + tCol.vAmb;
+                 + tCol.vAmb;   
     
     return vOutColor;
 }

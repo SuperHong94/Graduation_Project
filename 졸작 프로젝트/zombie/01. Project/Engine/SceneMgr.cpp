@@ -30,6 +30,7 @@
 #include "PlayerScript.h"
 #include "MonsterScript.h"
 #include "ToolCamScript.h"
+#include "GridScript.h"
 
 CScene* CSceneMgr::GetCurScene()
 {
@@ -52,6 +53,43 @@ CSceneMgr::~CSceneMgr()
 	SAFE_DELETE(m_pCurScene);
 }
 
+
+void CSceneMgr::CreateTargetUI()
+{
+	Vec3 vScale(150.f, 150.f, 1.f);
+
+	Ptr<CTexture> arrTex[3] = { CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex")
+		, CResMgr::GetInst()->FindRes<CTexture>(L"NormalTargetTex")
+		, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex") };
+
+	for (UINT i = 0; i < 3; ++i)
+	{
+		CGameObject* pObject = new CGameObject;
+		pObject->SetName(L"UI Object");
+		pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
+		pObject->AddComponent(new CTransform);
+		pObject->AddComponent(new CMeshRender);
+
+		// Transform 설정
+		tResolution res = CRenderMgr::GetInst()->GetResolution();
+
+		pObject->Transform()->SetLocalPos(Vec3(-(res.fWidth / 2.f) + (vScale.x / 2.f) + (i * vScale.x)
+										, (res.fHeight / 2.f) - (vScale.y / 2.f)
+										, 1.f));
+
+		pObject->Transform()->SetLocalScale(vScale);
+		
+		// MeshRender 설정
+		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+		Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
+		pObject->MeshRender()->SetMaterial(pMtrl->Clone());
+		pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, arrTex[i].GetPointer());
+	
+		// AddGameObject
+		m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
+	}	
+}
+
 void CSceneMgr::init()
 {
 	// =================
@@ -61,6 +99,15 @@ void CSceneMgr::init()
 	Ptr<CTexture> pTex = CResMgr::GetInst()->Load<CTexture>(L"TestTex", L"Texture\\Health.png");
 	Ptr<CTexture> pExplosionTex = CResMgr::GetInst()->Load<CTexture>(L"Explosion", L"Texture\\Explosion\\Explosion80.png");	
 	Ptr<CTexture> pBlackTex = CResMgr::GetInst()->Load<CTexture>(L"Black", L"Texture\\asd.png");
+	Ptr<CTexture> pSky01 = CResMgr::GetInst()->Load<CTexture>(L"Sky01", L"Texture\\Skybox\\Sky01.png");
+	Ptr<CTexture> pSky02 = CResMgr::GetInst()->Load<CTexture>(L"Sky02", L"Texture\\Skybox\\Sky02.jpg");
+
+	Ptr<CTexture> pColor = CResMgr::GetInst()->Load<CTexture>(L"Tile", L"Texture\\Tile\\TILE_03.tga");
+	Ptr<CTexture> pNormal = CResMgr::GetInst()->Load<CTexture>(L"Tile_n", L"Texture\\Tile\\TILE_03_N.tga");
+
+	Ptr<CTexture> pDiffuseTargetTex = CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex");
+	Ptr<CTexture> pNormalTargetTex = CResMgr::GetInst()->FindRes<CTexture>(L"NormalTargetTex");
+	Ptr<CTexture> pPositionTargetTex = CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex");
 
 	
 	// ===============
@@ -77,35 +124,55 @@ void CSceneMgr::init()
 	m_pCurScene->GetLayer(2)->SetName(L"Monster");
 	m_pCurScene->GetLayer(3)->SetName(L"Bullet");
 
+	m_pCurScene->GetLayer(30)->SetName(L"UI");
+	m_pCurScene->GetLayer(31)->SetName(L"Tool");
+
 	CGameObject* pObject = nullptr;
 
 	// ==================
 	// Camera Object 생성
 	// ==================
-	pObject = new CGameObject;
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CCamera);
-	pObject->AddComponent(new CToolCamScript);
+	// Main Camera
+	CGameObject* pMainCam = new CGameObject;
+	pMainCam->SetName(L"MainCam");
+	pMainCam->AddComponent(new CTransform);
+	pMainCam->AddComponent(new CCamera);
+	pMainCam->AddComponent(new CToolCamScript);
 
-	pObject->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE); 
-	pObject->Camera()->SetFar(100000.f);
-	pObject->Camera()->SetLayerAllCheck();
+	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+	pMainCam->Camera()->SetFar(100000.f);
+	pMainCam->Camera()->SetLayerAllCheck();
+	pMainCam->Camera()->SetLayerCheck(30, false);
 
-	m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+	m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
 	
+	// UI Camera
+	CGameObject* pUICam = new CGameObject;
+	pUICam->SetName(L"MainCam");
+	pUICam->AddComponent(new CTransform);
+	pUICam->AddComponent(new CCamera);	
+
+	pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHGRAPHIC);
+	pUICam->Camera()->SetFar(100.f);	
+	pUICam->Camera()->SetLayerCheck(30, true);	
+
+	m_pCurScene->FindLayer(L"Default")->AddGameObject(pUICam);
+
+
+	CreateTargetUI();
+
 	// ====================
 	// 3D Light Object 추가
 	// ====================
 	pObject = new CGameObject;
 	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CLight3D);
-	   	
+	pObject->AddComponent(new CLight3D);	   	
 	
 	pObject->Light3D()->SetLightPos(Vec3(0.f, 200.f, 1000.f));
-	pObject->Light3D()->SetLightType(LIGHT_TYPE::POINT);
+	pObject->Light3D()->SetLightType(LIGHT_TYPE::DIR);
 	pObject->Light3D()->SetDiffuseColor(Vec3(1.f, 1.f, 1.f));
 	pObject->Light3D()->SetSpecular(Vec3(0.3f, 0.3f, 0.3f));
-	pObject->Light3D()->SetAmbient(Vec3(0.f, 0.f, 0.f));
+	pObject->Light3D()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
 	pObject->Light3D()->SetLightDir(Vec3(1.f, -1.f, 1.f));
 	pObject->Light3D()->SetLightRange(500.f);
 	   
@@ -117,23 +184,19 @@ void CSceneMgr::init()
 	pObject = new CGameObject;
 	pObject->SetName(L"Player Object");
 	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);
-	pObject->AddComponent(new CCollider2D);
+	pObject->AddComponent(new CMeshRender);	
 
 	// Transform 설정
-	pObject->Transform()->SetLocalPos(Vec3(0.f, -200.f, 1000.f));
+	pObject->Transform()->SetLocalPos(Vec3(0.f, 200.f, 1000.f));
 	pObject->Transform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
-	pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
+	//pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
 
 	// MeshRender 설정
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
-	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pBlackTex.GetPointer());
-
-	// Collider2D 설정	
-	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
-	pObject->Collider2D()->SetOffsetScale(Vec3(1.f, 1.f, 1.f));
-
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3DMtrl"));
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+	
 	// Script 설정
 	pObject->AddComponent(new CPlayerScript);
 
@@ -147,8 +210,7 @@ void CSceneMgr::init()
 	pObject = new CGameObject;
 	pObject->SetName(L"Monster Object");
 	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);
-	pObject->AddComponent(new CCollider2D);
+	pObject->AddComponent(new CMeshRender);	
 
 	// Transform 설정
 	pObject->Transform()->SetLocalPos(Vec3(0.f, 200.f, 500.f));
@@ -157,17 +219,57 @@ void CSceneMgr::init()
 	// MeshRender 설정
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));	
-
-	// Collider2D 설정	
-	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
-	pObject->Collider2D()->SetOffsetScale(Vec3(1.5f, 1.5f, 1.f));
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormalTargetTex.GetPointer());
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
 
 	// Script 설정
-	pObject->AddComponent(new CMonsterScript);
+	// pObject->AddComponent(new CMonsterScript);
 
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Monster")->AddGameObject(pObject);
 
+	// ====================
+	// Skybox 오브젝트 생성
+	// ====================
+	pObject = new CGameObject;
+	pObject->SetName(L"SkyBox");
+	pObject->FrustumCheck(false);
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);	
+
+	// MeshRender 설정
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyboxMtrl"));
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pSky02.GetPointer());
+
+	// AddGameObject
+	m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+
+	// ====================
+	// Grid 오브젝트 생성
+	// ====================
+	pObject = new CGameObject;
+	pObject->SetName(L"Grid");
+	pObject->FrustumCheck(false);
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CGridScript);
+
+	// Transform 설정
+	pObject->Transform()->SetLocalScale(Vec3(100000.f, 100000.f, 1.f));
+	pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
+
+	// MeshRender 설정
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"GridMtrl"));	
+
+	// Script 설정	
+	pObject->GetScript<CGridScript>()->SetToolCamera(pMainCam);
+	pObject->GetScript<CGridScript>()->SetGridColor(Vec3(0.8f, 0.2f, 0.2f));
+
+	// AddGameObject
+	m_pCurScene->FindLayer(L"Tool")->AddGameObject(pObject);
+		
 
 	// =================================
 	// CollisionMgr 충돌 그룹(Layer) 지정
@@ -215,6 +317,7 @@ void CSceneMgr::FindGameObjectByTag(const wstring& _strTag, vector<CGameObject*>
 		}
 	}	
 }
+
 
 bool Compare(CGameObject* _pLeft, CGameObject* _pRight)
 {

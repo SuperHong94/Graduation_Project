@@ -4,21 +4,26 @@
 #include "ConstantBuffer.h"
 #include "Texture.h"
 
+#include "ResMgr.h"
+#include "RenderMgr.h"
+#include "MRT.h"
+
 CDevice::CDevice()
 	: m_pDevice(nullptr)
 	, m_pFence(nullptr)
-	, m_pFactory(nullptr)
-	, m_iCurTargetIdx(0)
+	, m_pFactory(nullptr)	
 	, m_hFenceEvent(nullptr)
 	, m_iFenceValue(0)
 	, m_iCurDummyIdx(0)
 {
+	m_vecCB.resize((UINT)CONST_REGISTER::END);
 }
 
 CDevice::~CDevice()
 {		
 	WaitForFenceEvent();
 	CloseHandle(m_hFenceEvent);
+
 
 	for (size_t i = 0; i < m_vecCB.size(); ++i)
 	{
@@ -76,9 +81,6 @@ int CDevice::init(HWND _hWnd, const tResolution & _res, bool _bWindow)
 	// SwapChain 만들기
 	CreateSwapChain();
 
-	// View 만들기
-	CreateView();
-
 	// ViewPort 만들기
 	CreateViewPort();
 		
@@ -93,61 +95,41 @@ void CDevice::render_start(float(&_arrFloat)[4])
 {
 	m_iCurDummyIdx = 0;
 
-	// 그리기 준비
-	// Command list allocators can only be reset when the associated 
-	// command lists have finished execution on the GPU; apps should use 
-	// fences to determine GPU execution progress.
+	// 그리기 준비	
 	m_pCmdAlloc->Reset();
 	m_pCmdListGraphic->Reset(m_pCmdAlloc.Get(), nullptr);
 
 	// 필요한 상태 설정	
 	// RootSignature 설정	
 	CMDLIST->SetGraphicsRootSignature(CDevice::GetInst()->GetRootSignature(ROOT_SIG_TYPE::INPUT_ASSEM).Get());
-	
-	//vector<ID3D12DescriptorHeap*> vecCBV;	
-	//for (UINT i = 0; i < 1; ++i)
-	//{
-	//	vecCBV.push_back(m_pDummyCVB[i].Get());
-	//}	
-	// m_pCmdListGraphic->SetDescriptorHeaps(1/*vecCBV.size()*/, &vecCBV[0]);	
-	
+		
 	m_pCmdListGraphic->RSSetViewports(1, &m_tVP);
 	m_pCmdListGraphic->RSSetScissorRects(1, &m_tScissorRect);
+		
+	CMRT* pSwapChainMRT = CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SWAPCHAIN);
 
-	// Indicate that the back buffer will be used as a render target.
 	D3D12_RESOURCE_BARRIER barrier = {};
 	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE; ;
-	barrier.Transition.pResource = m_RenderTargets[m_iCurTargetIdx].Get();
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE; 
+	barrier.Transition.pResource = pSwapChainMRT->GetRTTex(m_iCurTargetIdx)->GetTex2D().Get();
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;		// 출력에서
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET; // 다시 백버퍼로 지정
 	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 
 	m_pCmdListGraphic->ResourceBarrier(1, &barrier);
 	
-	// RenderTarget 과 DepthStencilView 를 연결
-	D3D12_CPU_DESCRIPTOR_HANDLE hRTVHandle = m_pRTV->GetCPUDescriptorHandleForHeapStart();
-	D3D12_CPU_DESCRIPTOR_HANDLE hDSVHandle = m_pDSV->GetCPUDescriptorHandleForHeapStart();
-		
-	// 타겟 지정
-	hRTVHandle.ptr += m_iCurTargetIdx * m_iRTVHeapSize;
-	m_pCmdListGraphic->OMSetRenderTargets(1, &hRTVHandle, FALSE, &hDSVHandle);
-
-	// 타겟 클리어	
-	m_pCmdListGraphic->ClearRenderTargetView(hRTVHandle, _arrFloat, 0, nullptr);
-	m_pCmdListGraphic->ClearDepthStencilView(hDSVHandle, D3D12_CLEAR_FLAG_DEPTH , 1.f, 0, 0, nullptr);	
-
 	// 첫번째 더미 Descriptor Heap 초기화
 	ClearDymmyDescriptorHeap(0);
 }
 
 void CDevice::render_present()
 {
-	// Indicate that the back buffer will now be used to present.
+	CMRT* pSwapChainMRT = CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SWAPCHAIN);
+
 	D3D12_RESOURCE_BARRIER barrier = {};
 	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE; ;
-	barrier.Transition.pResource = m_RenderTargets[m_iCurTargetIdx].Get();
+	barrier.Transition.pResource = pSwapChainMRT->GetRTTex(m_iCurTargetIdx)->GetTex2D().Get();// m_arrRenderTargets[m_iCurTargetIdx]->GetTex2D().Get();
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;	// 백버퍼에서
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;			// 다시 출력으로 지정
 
@@ -163,14 +145,14 @@ void CDevice::render_present()
 
 	WaitForFenceEvent();
 
-	// 백버퍼 타겟 인덱스 변경
-	m_iCurTargetIdx == 0 ? m_iCurTargetIdx = 1 : m_iCurTargetIdx = 0;
-
 	// 상수버퍼 오프셋 초기화
 	for (size_t i = 0; i < m_vecCB.size(); ++i)
 	{
 		m_vecCB[i]->Clear();
 	}
+
+	// 백버퍼 타겟 인덱스 변경
+	m_iCurTargetIdx == 0 ? m_iCurTargetIdx = 1 : m_iCurTargetIdx = 0;
 }
 
 void CDevice::WaitForFenceEvent()
@@ -216,74 +198,6 @@ void CDevice::CreateSwapChain()
 	HRESULT hr = m_pFactory->CreateSwapChain(m_pCmdQueue.Get(), &tDesc, &m_pSwapChain);
 }
 
-void CDevice::CreateView()
-{
-	// RenderTargetViewHeap 의 메모리 사이즈
-	m_iRTVHeapSize = m_pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-
-	// dx12 설명자힙 으로 RenderTargetView 생성
-	// Descriptor Heap(설명자 힙) 이 Dx11 의 RTV, DSV, UAV, SRV 를 전부 대체
-
-	// RenderTargetView 만들기	
-	D3D12_DESCRIPTOR_HEAP_DESC tDesc = {};
-	tDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-	tDesc.NumDescriptors = 2;
-	tDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	tDesc.NodeMask = 0;
-	m_pDevice->CreateDescriptorHeap(&tDesc, IID_PPV_ARGS(&m_pRTV));
-
-	D3D12_CPU_DESCRIPTOR_HANDLE hRTVHeap = m_pRTV->GetCPUDescriptorHandleForHeapStart();
-
-	// Create a RTV for each frame.
-	for (UINT i = 0; i < 2; i++)
-	{
-		// 생성된 SwapChain 에서 버퍼를 가져옴
-		m_pSwapChain->GetBuffer(i, IID_PPV_ARGS(&m_RenderTargets[i]));
-
-		// 해당 버퍼로 RenderTarvetView 생성함
-		m_pDevice->CreateRenderTargetView(m_RenderTargets[i].Get(), nullptr, hRTVHeap);
-		hRTVHeap.ptr += m_iRTVHeapSize; // Offset 증가
-	}
-
-	// DepthStencilView 만들기
-	// Create a Texture2D.
-	D3D12_RESOURCE_DESC textureDesc = {};
-	textureDesc.MipLevels = 1;
-	textureDesc.Format = DXGI_FORMAT_D32_FLOAT;
-	textureDesc.Width = (UINT)m_tResolution.fWidth;
-	textureDesc.Height = (UINT)m_tResolution.fHeight;
-	textureDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-	textureDesc.DepthOrArraySize = 1;
-	textureDesc.SampleDesc.Count = 1;
-	textureDesc.SampleDesc.Quality = 0;
-	textureDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-
-	CD3DX12_CLEAR_VALUE depthOptimizedClearValue(DXGI_FORMAT_D32_FLOAT, 1.0f, 0);
-
-	CD3DX12_HEAP_PROPERTIES tUploadHeap = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
-
-	HRESULT hr = m_pDevice->CreateCommittedResource(
-		&tUploadHeap,
-		D3D12_HEAP_FLAG_NONE,
-		&textureDesc,
-		D3D12_RESOURCE_STATE_DEPTH_WRITE,
-		&depthOptimizedClearValue,
-		IID_PPV_ARGS(&m_pDepthStencilTex));
-
-	if (FAILED(hr))
-		assert(nullptr);
-
-	// DepthStencilView 를 저장할 DescriptorHeap 생성
-	tDesc = {};
-	tDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-	tDesc.NumDescriptors = 1;
-	tDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	tDesc.NodeMask = 0;
-	hr = m_pDevice->CreateDescriptorHeap(&tDesc, IID_PPV_ARGS(&m_pDSV));
-
-	D3D12_CPU_DESCRIPTOR_HANDLE hDSVHandle = m_pDSV->GetCPUDescriptorHandleForHeapStart();
-	m_pDevice->CreateDepthStencilView(m_pDepthStencilTex.Get(), nullptr, hDSVHandle);
-}
 
 void CDevice::CreateViewPort()
 {
@@ -306,7 +220,7 @@ void CDevice::CreateRootSignature()
 	D3D12_DESCRIPTOR_RANGE range = {};
 			
 	range.BaseShaderRegister = 0;  // b0 에서
-	range.NumDescriptors = 5;	   // b4 까지 5개 상수레지스터 사용여부 
+	range.NumDescriptors = (UINT)CONST_REGISTER::END;	  // b5 까지 6개 상수레지스터 사용여부 
 	range.OffsetInDescriptorsFromTableStart = -1;
 	range.RegisterSpace = 0;
 	range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
@@ -315,7 +229,7 @@ void CDevice::CreateRootSignature()
 	range = {};
 	range.BaseShaderRegister = 0;  // t0 에서
 	range.NumDescriptors = 13;	   // t12 까지 13 개 텍스쳐 레지스터 사용여부 
-	range.OffsetInDescriptorsFromTableStart = 5;
+	range.OffsetInDescriptorsFromTableStart = (UINT)CONST_REGISTER::END;
 	range.RegisterSpace = 0;
 	range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	vecRange.push_back(range);
@@ -409,7 +323,7 @@ void CDevice::CreateConstBuffer(const wstring & _strName, size_t _iSize
 	CConstantBuffer* pCB = new CConstantBuffer;
 	pCB->SetName(_strName);
 	pCB->Create((UINT)_iSize, (UINT)_iMaxCount, _eRegisterNum);
-	m_vecCB.push_back(pCB);
+	m_vecCB[(UINT)_eRegisterNum] = pCB;
 
 	if (_bGlobal)
 	{
