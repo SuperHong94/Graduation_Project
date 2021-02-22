@@ -488,7 +488,7 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   {
   };
   
-  Texture.cpp
-  Engine.vcxproj -> C:\Users\yajun\Desktop\dxd12\6주차\6th\DX12_6th_2(Skybox, Frustum Culling, NormalMapping)\03. External\Library\Engine\Engine_debug.lib
+  ToolCamScript.cpp
+  Engine.vcxproj -> C:\Users\yajun\Desktop\graduation_project\Graduation_Project\졸작 프로젝트\zombie\03. External\Library\Engine\Engine_debug.lib
   0개 파일이 복사되었습니다.
   0개 파일이 복사되었습니다.

@@ -86,21 +86,6 @@ void CSceneMgr::init()
 	m_pCurScene->GetLayer(31)->SetName(L"Tool");
 
 	CGameObject* pObject = nullptr;
-
-	// ==================
-	// Camera Object 积己
-	// ==================
-	CGameObject* pMainCam = new CGameObject;
-	pMainCam->SetName(L"MainCam");
-	pMainCam->AddComponent(new CTransform);
-	pMainCam->AddComponent(new CCamera);
-	pMainCam->AddComponent(new CToolCamScript);
-
-	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
-	pMainCam->Camera()->SetFar(100000.f);
-	pMainCam->Camera()->SetLayerAllCheck();
-
-	m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
 	
 	// ====================
 	// 3D Light Object 眠啊
@@ -144,6 +129,21 @@ void CSceneMgr::init()
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Player")->AddGameObject(pObject);
 
+
+	// ==================
+	// Camera Object 积己
+	// ==================
+	CGameObject* pMainCam = new CGameObject;
+	pMainCam->SetName(L"MainCam");
+	pMainCam->AddComponent(new CTransform);
+	pMainCam->AddComponent(new CCamera);
+	pMainCam->AddComponent(new CToolCamScript(pObject));
+
+	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+	pMainCam->Camera()->SetFar(100000.f);
+	pMainCam->Camera()->SetLayerAllCheck();
+
+	m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
 
 	// ====================
 	// Monster 坷宏璃飘 积己

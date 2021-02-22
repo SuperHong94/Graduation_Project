@@ -31,12 +31,12 @@ void CPlayerScript::update()
 
 	if (KEY_HOLD(KEY_TYPE::KEY_UP))
 	{
-		vPos.y += DT * 200.f;
+		vPos.z += DT * 200.f;
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_DOWN))
 	{
-		vPos.y -= DT * 200.f;
+		vPos.z -= DT * 200.f;
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_LEFT))
@@ -66,7 +66,7 @@ void CPlayerScript::update()
 	Transform()->SetLocalPos(vPos);
 	Transform()->SetLocalRot(vRot);
 
-	if (KEY_TAB(KEY_TYPE::KEY_SPACE))
+	if (KEY_TAB(KEY_TYPE::KEY_LBTN))
 	{
 		// πÃªÁ¿œ ΩÓ±‚
 		CGameObject* pBullet = new CGameObject;
