@@ -287,11 +287,3 @@ enum class MRT_TYPE
 };
 
 
-enum class SHADER_POV
-{
-	DEFERRED,
-	FORWARD,
-	POST_EFFECT,
-	LIGHTING,
-	COMPUTE, // GPGPU
-};

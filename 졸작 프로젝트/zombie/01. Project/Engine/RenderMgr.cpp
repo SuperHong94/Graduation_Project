@@ -11,17 +11,15 @@
 #include "EventMgr.h"
 
 #include "Light3D.h"
-#include "MRT.h"
 
 CRenderMgr::CRenderMgr()
-	: m_arrMRT{}		
-	, m_iRTVHeapSize(0)	
+	: m_arrRT{}
+	, m_arrMRT{}		
 {	
 }
 
 CRenderMgr::~CRenderMgr()
 {	
-	Safe_Delete_Array(m_arrMRT);
 }
 
 void CRenderMgr::render()
@@ -34,36 +32,10 @@ void CRenderMgr::render()
 	UpdateLight2D();
 	UpdateLight3D();
 
-	// SwapChain MRT 초기화
-	UINT iIdx = CDevice::GetInst()->GetSwapchainIdx();
-	m_arrMRT[(UINT)MRT_TYPE::SWAPCHAIN]->Clear(iIdx);
-
-	// DeferredMRT 초기화
-	m_arrMRT[(UINT)MRT_TYPE::DEFERRED]->Clear();
-
 	for (size_t i = 0; i < m_vecCam.size(); ++i)
 	{
-		m_vecCam[i]->SortGameObject();
-		
-		// Deferred MRT 셋팅
-		m_arrMRT[(UINT)MRT_TYPE::DEFERRED]->OMSet();
-		m_vecCam[i]->render_deferred();
-
-		// Light MRT 세팅
-		//m_arrMRT[(UINT)MRT_TYPE::LIGHT]->OMSet();
-		//for (size_t i = 0; i < m_vecLight3D.size(); ++i)
-		//{
-		//	m_vecLight3D[i]->Light3D()->render();
-		//}
-
-		// SwapChain MRT 셋팅
-		m_arrMRT[(UINT)MRT_TYPE::SWAPCHAIN]->OMSet(1, iIdx);
-		m_vecCam[i]->render_forward();
-
-		// Merge (Diffuse Target, Diffuse Light Target, Specular Target )
-		// ㄴ->
-
-	}
+		m_vecCam[i]->render();
+	}	
 
 	// 출력
 	CDevice::GetInst()->render_present();

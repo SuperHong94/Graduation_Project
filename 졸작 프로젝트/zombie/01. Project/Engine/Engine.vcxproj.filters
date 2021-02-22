@@ -53,9 +53,6 @@
     <Filter Include="Manager\ResMgr">
       <UniqueIdentifier>{780d6568-f989-431b-be7a-d3c34b23aa99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Rendering\MRT">
-      <UniqueIdentifier>{4f14963d-c0d9-4fff-8025-3322001b56a0}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -198,10 +195,6 @@
     <ClInclude Include="GridScript.h">
       <Filter>04. GameObject\Script</Filter>
     </ClInclude>
-    <ClInclude Include="resource1.h" />
-    <ClInclude Include="MRT.h">
-      <Filter>Rendering\MRT</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -334,9 +327,6 @@
     <ClCompile Include="GridScript.cpp">
       <Filter>04. GameObject\Script</Filter>
     </ClCompile>
-    <ClCompile Include="MRT.cpp">
-      <Filter>Rendering\MRT</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="std.fx">
@@ -359,10 +349,5 @@
     <None Include="SimpleMath.inl">
       <Filter>0. Defalt</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Engine.rc">
-      <Filter>리소스 파일</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

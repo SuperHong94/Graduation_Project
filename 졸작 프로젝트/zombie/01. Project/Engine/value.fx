@@ -75,7 +75,6 @@ cbuffer MATERIAL_PARAM : register(b1)
     row_major float4x4 g_mat_2;
     row_major float4x4 g_mat_3;
 
-    // Texture 전달확인용
     int tex_0;
     int tex_1;
     int tex_2;
@@ -131,7 +130,6 @@ SamplerState g_sam_0 : register(s0); // anisotrophic
 SamplerState g_sam_1 : register(s1); // point
 
 
-// Debugging
 int HasTex(in Texture2D _tex)
 {
     uint iWidth = 0;

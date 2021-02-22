@@ -21,6 +21,7 @@ CCore::CCore()
 
 CCore::~CCore()
 {
+	TestRelease();
 }
 
 int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
@@ -33,8 +34,6 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	{
 		return E_FAIL;
 	}
-
-	CRenderMgr::GetInst()->init(_hWnd, _resolution, _bWindow);
 
 	// 상수버퍼 만들기
 	CDevice::GetInst()->CreateConstBuffer(L"TRANSFORM_MATRIX", sizeof(tTransform), 512, CONST_REGISTER::b0);
@@ -53,12 +52,17 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b4), 0);
 		
 
+
 	CPathMgr::init();
 	CKeyMgr::GetInst()->init();
 	CTimeMgr::GetInst()->init();
+
 	CResMgr::GetInst()->init();
+
 	CSceneMgr::GetInst()->init();
-	
+	CRenderMgr::GetInst()->init(_hWnd, _resolution, _bWindow);
+
+	//TestInit();
 
 	return S_OK;
 }

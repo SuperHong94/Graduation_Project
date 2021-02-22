@@ -21,8 +21,7 @@ CTexture::~CTexture()
 }
 
 void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat
-	, const D3D12_HEAP_PROPERTIES & _HeapProperty, D3D12_HEAP_FLAGS _eHeapFlag, D3D12_RESOURCE_FLAGS _eResFlag
-	, Vec4 _vClearColor)
+	, const D3D12_HEAP_PROPERTIES & _HeapProperty, D3D12_HEAP_FLAGS _eHeapFlag, D3D12_RESOURCE_FLAGS _eResFlag)
 {	
 	m_tDesc.MipLevels = 1;
 	m_tDesc.Format = _eFormat;
@@ -35,27 +34,18 @@ void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat
 	m_tDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 
 	D3D12_CLEAR_VALUE* pValue = nullptr;
-	D3D12_RESOURCE_STATES eResStates = D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_COMMON;
 
 	if (_eResFlag & D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL)
 	{
 		CD3DX12_CLEAR_VALUE depthOptimizedClearValue(DXGI_FORMAT_D32_FLOAT, 1.0f, 0);
 		pValue = &depthOptimizedClearValue;
-		eResStates = D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_DEPTH_WRITE;
 	}	
-	else if (_eResFlag & D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET)
-	{
-		eResStates = D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_RENDER_TARGET;
-		float arrFloat[4] = { _vClearColor.x, _vClearColor .y, _vClearColor .z, _vClearColor .w};
-		CD3DX12_CLEAR_VALUE depthOptimizedClearValue(_eFormat, arrFloat);
-		pValue = &depthOptimizedClearValue;
-	}
 
 	HRESULT hr = DEVICE->CreateCommittedResource(
 		&_HeapProperty,
 		_eHeapFlag,
 		&m_tDesc,
-		eResStates,
+		D3D12_RESOURCE_STATE_DEPTH_WRITE,
 		pValue,
 		IID_PPV_ARGS(&m_pTex2D));
 
@@ -90,22 +80,25 @@ void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat
 
 			DEVICE->CreateRenderTargetView(m_pTex2D.Get(), nullptr, hRTVHeap);
 		}
-		
-		// SRV 를 저장할 DescriptorHeap Create
-		D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-		srvHeapDesc.NumDescriptors = 1;
-		srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-		srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		DEVICE->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_pSRV));
 
-		D3D12_CPU_DESCRIPTOR_HANDLE handle = m_pSRV->GetCPUDescriptorHandleForHeapStart();
+		if (_eResFlag & D3D12_RESOURCE_FLAG_DENY_SHADER_RESOURCE)
+		{			
+			// SRV 를 저장할 DescriptorHeap Create
+			D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
+			srvHeapDesc.NumDescriptors = 1;
+			srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+			srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+			DEVICE->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_pSRV));
 
-		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-		srvDesc.Format = m_Image.GetMetadata().format;
-		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-		srvDesc.Texture2D.MipLevels = 1;
-		DEVICE->CreateShaderResourceView(m_pTex2D.Get(), &srvDesc, m_pSRV->GetCPUDescriptorHandleForHeapStart());		
+			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_pSRV->GetCPUDescriptorHandleForHeapStart();
+
+			D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+			srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+			srvDesc.Format = m_Image.GetMetadata().format;
+			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+			srvDesc.Texture2D.MipLevels = 1;
+			DEVICE->CreateShaderResourceView(m_pTex2D.Get(), &srvDesc, m_pSRV->GetCPUDescriptorHandleForHeapStart());
+		}
 	}
 }
 
@@ -214,13 +207,13 @@ void CTexture::Load(const wstring & _strFullPath)
 	// upload is implemented by application developer. Here's one solution using <d3dx12.h>
 	const UINT64 uploadBufferSize = GetRequiredIntermediateSize(m_pTex2D.Get(), 0, static_cast<unsigned int>(vecSubresources.size()));
 	CD3DX12_HEAP_PROPERTIES tUploadHeap = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-	CD3DX12_RESOURCE_DESC rBuffer = CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize);
+	CD3DX12_RESOURCE_DESC bDesc = CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize);
 
 	ComPtr<ID3D12Resource> textureUploadHeap;
 	hr = DEVICE->CreateCommittedResource(
 		&tUploadHeap,
 		D3D12_HEAP_FLAG_NONE,
-		&rBuffer,
+		&bDesc,
 		D3D12_RESOURCE_STATE_GENERIC_READ,
 		nullptr,
 		IID_PPV_ARGS(textureUploadHeap.GetAddressOf()));

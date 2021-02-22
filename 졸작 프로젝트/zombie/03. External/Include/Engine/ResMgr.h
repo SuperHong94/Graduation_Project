@@ -41,7 +41,7 @@ public:
 
 	Ptr<CTexture> CreateTexture(const wstring& _strName, UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat
 		, const D3D12_HEAP_PROPERTIES& _HeapProperty, D3D12_HEAP_FLAGS _eHeapFlag
-		, D3D12_RESOURCE_FLAGS _eResFlag = D3D12_RESOURCE_FLAG_NONE, Vec4 _vClearColor = Vec4());
+		, D3D12_RESOURCE_FLAGS _eResFlag = D3D12_RESOURCE_FLAG_NONE);
 
 	Ptr<CTexture> CreateTextureFromResource(const wstring& _strName, ComPtr<ID3D12Resource> _pTex2D);
 };

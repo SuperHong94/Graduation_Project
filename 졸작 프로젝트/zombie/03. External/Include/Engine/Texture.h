@@ -26,7 +26,7 @@ private:
 public:
 	void Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat
 		, const D3D12_HEAP_PROPERTIES& _HeapProperty, D3D12_HEAP_FLAGS _eHeapFlag
-		, D3D12_RESOURCE_FLAGS _eResFlag, Vec4 _vClearClolr = Vec4());
+		, D3D12_RESOURCE_FLAGS _eResFlag);
 
 	void CreateFromResource(ComPtr<ID3D12Resource> _pTex2D);
 

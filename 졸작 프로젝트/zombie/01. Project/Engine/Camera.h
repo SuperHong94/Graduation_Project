@@ -29,15 +29,9 @@ private:
 	PROJ_TYPE	m_eProjType;
 	UINT		m_iLayerCheck; // 카메라가 찍는 Layer 비트값
 
-
-	vector<CGameObject*>	m_vecDeferred;
-	vector<CGameObject*>	m_vecForward;
-
+	 
 public:	
 	virtual void finalupdate();
-	void SortGameObject(); // 렌더링 시점 분류
-	void render_deferred();
-	void render_forward();
 	void render();
 
 public:

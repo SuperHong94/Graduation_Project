@@ -27,8 +27,6 @@ struct VS_OUTPUT
 
 // ==================
 // Test Vertex Shader
-// g_tex_0 : Color Texture
-// g_tex_1 : Normal Map
 // ==================
 VS_OUTPUT VS_Test(VS_INPUT _input)
 {
@@ -67,19 +65,12 @@ float4 PS_Test(VS_OUTPUT _input) : SV_Target
     // 표면 좌표 방향에 행렬을 곱해서 View Space 표면으로 가져온다.
     float3 vViewNormal = mul(vNormal.xyz, matTBN);
     
-    tLightColor tCol = (tLightColor) 0.f;
+    tLightColor tCol = CalLight(0, vViewNormal, _input.vViewPos);
+    //tLightColor tCol = CalLight(0, _input.vViewNormal, _input.vViewPos);
     
-    for (int i = 0; i < g_iLight3DCount; ++i)
-    {
-        tLightColor tTemp = CalLight(i, vViewNormal, _input.vViewPos);
-        tCol.vDiff += tTemp.vDiff;
-        tCol.vSpec += tTemp.vSpec;
-        tCol.vAmb += tTemp.vAmb;
-    }
-        
     vOutColor = vOutColor * tCol.vDiff 
                  + tCol.vSpec 
-                 + tCol.vAmb;   
+                 + tCol.vAmb;
     
     return vOutColor;
 }

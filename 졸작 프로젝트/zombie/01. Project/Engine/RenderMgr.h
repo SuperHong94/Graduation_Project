@@ -21,7 +21,7 @@ private:
 		
 	tResolution				m_tResolution;
 
-	//CRenderTarget24*		m_arrRT[(UINT)RT_TYPE::END];
+	CRenderTarget24*		m_arrRT[(UINT)RT_TYPE::END];
 	CMRT*					m_arrMRT[(UINT)MRT_TYPE::END];	
 
 	tLight2DInfo			m_tLight2DInfo;
@@ -29,8 +29,6 @@ private:
 	vector<CLight3D*>		m_vecLight3D;
 	vector<CCamera*>		m_vecCam;
 	
-	UINT					m_iRTVHeapSize;	
-
 	HWND					m_hWnd;
 	bool					m_bWindowed;
 
@@ -40,7 +38,9 @@ public:
 	void render_tool();			
 
 private:
-	void CreateMRT();
+	void CreateSamplerState();
+	void CreateBlendState();
+	void CreateDepthStencilState();
 	
 	void UpdateLight2D();
 	void UpdateLight3D();
@@ -63,9 +63,6 @@ public:
 
 	tResolution GetResolution() { return m_tResolution; }
 	HWND GetHwnd() { return m_hWnd; }
-	UINT GetRTVHeapSize() { return m_iRTVHeapSize; }
-
-	CMRT* GetMRT(MRT_TYPE _eType) { return m_arrMRT[(UINT)_eType]; }
 
 	friend class CSceneMgr;
 };

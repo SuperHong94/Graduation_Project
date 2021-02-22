@@ -53,43 +53,6 @@ CSceneMgr::~CSceneMgr()
 	SAFE_DELETE(m_pCurScene);
 }
 
-
-void CSceneMgr::CreateTargetUI()
-{
-	Vec3 vScale(150.f, 150.f, 1.f);
-
-	Ptr<CTexture> arrTex[3] = { CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex")
-		, CResMgr::GetInst()->FindRes<CTexture>(L"NormalTargetTex")
-		, CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex") };
-
-	for (UINT i = 0; i < 3; ++i)
-	{
-		CGameObject* pObject = new CGameObject;
-		pObject->SetName(L"UI Object");
-		pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
-		pObject->AddComponent(new CTransform);
-		pObject->AddComponent(new CMeshRender);
-
-		// Transform 설정
-		tResolution res = CRenderMgr::GetInst()->GetResolution();
-
-		pObject->Transform()->SetLocalPos(Vec3(-(res.fWidth / 2.f) + (vScale.x / 2.f) + (i * vScale.x)
-										, (res.fHeight / 2.f) - (vScale.y / 2.f)
-										, 1.f));
-
-		pObject->Transform()->SetLocalScale(vScale);
-		
-		// MeshRender 설정
-		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-		Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
-		pObject->MeshRender()->SetMaterial(pMtrl->Clone());
-		pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, arrTex[i].GetPointer());
-	
-		// AddGameObject
-		m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
-	}	
-}
-
 void CSceneMgr::init()
 {
 	// =================
@@ -105,9 +68,6 @@ void CSceneMgr::init()
 	Ptr<CTexture> pColor = CResMgr::GetInst()->Load<CTexture>(L"Tile", L"Texture\\Tile\\TILE_03.tga");
 	Ptr<CTexture> pNormal = CResMgr::GetInst()->Load<CTexture>(L"Tile_n", L"Texture\\Tile\\TILE_03_N.tga");
 
-	Ptr<CTexture> pDiffuseTargetTex = CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex");
-	Ptr<CTexture> pNormalTargetTex = CResMgr::GetInst()->FindRes<CTexture>(L"NormalTargetTex");
-	Ptr<CTexture> pPositionTargetTex = CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex");
 
 	
 	// ===============
@@ -123,8 +83,6 @@ void CSceneMgr::init()
 	m_pCurScene->GetLayer(1)->SetName(L"Player");
 	m_pCurScene->GetLayer(2)->SetName(L"Monster");
 	m_pCurScene->GetLayer(3)->SetName(L"Bullet");
-
-	m_pCurScene->GetLayer(30)->SetName(L"UI");
 	m_pCurScene->GetLayer(31)->SetName(L"Tool");
 
 	CGameObject* pObject = nullptr;
@@ -132,7 +90,6 @@ void CSceneMgr::init()
 	// ==================
 	// Camera Object 생성
 	// ==================
-	// Main Camera
 	CGameObject* pMainCam = new CGameObject;
 	pMainCam->SetName(L"MainCam");
 	pMainCam->AddComponent(new CTransform);
@@ -142,25 +99,9 @@ void CSceneMgr::init()
 	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 	pMainCam->Camera()->SetFar(100000.f);
 	pMainCam->Camera()->SetLayerAllCheck();
-	pMainCam->Camera()->SetLayerCheck(30, false);
 
 	m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
 	
-	// UI Camera
-	CGameObject* pUICam = new CGameObject;
-	pUICam->SetName(L"MainCam");
-	pUICam->AddComponent(new CTransform);
-	pUICam->AddComponent(new CCamera);	
-
-	pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHGRAPHIC);
-	pUICam->Camera()->SetFar(100.f);	
-	pUICam->Camera()->SetLayerCheck(30, true);	
-
-	m_pCurScene->FindLayer(L"Default")->AddGameObject(pUICam);
-
-
-	CreateTargetUI();
-
 	// ====================
 	// 3D Light Object 추가
 	// ====================
@@ -193,7 +134,7 @@ void CSceneMgr::init()
 
 	// MeshRender 설정
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3DMtrl"));
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
 	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
 	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
 	
@@ -219,11 +160,9 @@ void CSceneMgr::init()
 	// MeshRender 설정
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));	
-	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormalTargetTex.GetPointer());
-	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
-
+	
 	// Script 설정
-	// pObject->AddComponent(new CMonsterScript);
+	//pObject->AddComponent(new CMonsterScript);
 
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Monster")->AddGameObject(pObject);
@@ -317,7 +256,6 @@ void CSceneMgr::FindGameObjectByTag(const wstring& _strTag, vector<CGameObject*>
 		}
 	}	
 }
-
 
 bool Compare(CGameObject* _pLeft, CGameObject* _pRight)
 {

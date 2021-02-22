@@ -194,14 +194,12 @@ call EngineCopy.bat</Command>
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshRender.h" />
     <ClInclude Include="MonsterScript.h" />
-    <ClInclude Include="MRT.h" />
     <ClInclude Include="PathMgr.h" />
     <ClInclude Include="PlayerScript.h" />
     <ClInclude Include="Ptr.h" />
     <ClInclude Include="RenderMgr.h" />
     <ClInclude Include="ResMgr.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="resource1.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="Script.h" />
@@ -243,7 +241,6 @@ call EngineCopy.bat</Command>
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshRender.cpp" />
     <ClCompile Include="MonsterScript.cpp" />
-    <ClCompile Include="MRT.cpp" />
     <ClCompile Include="PathMgr.cpp" />
     <ClCompile Include="PlayerScript.cpp" />
     <ClCompile Include="RenderMgr.cpp" />
@@ -363,9 +360,6 @@ call EngineCopy.bat</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Engine.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -16,7 +16,7 @@ void CResMgr::CreateDefaultShader()
 	// BlendState 설정
 	//pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
 
-	pShader->Create(SHADER_POV::FORWARD);
+	pShader->Create();
 
 	pShader->AddShaderParam(tShaderParam{ L"Test Value", SHADER_PARAM::INT_0 });
 
@@ -30,15 +30,12 @@ void CResMgr::CreateDefaultShader()
 	pShader->CreatePixelShader(L"Shader\\std.fx", "PS_Tex", "ps_5_0");
 
 	// BlendState 설정
-	// pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
-
-	// DSState
-	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::NO_DEPTHTEST_NO_WRITE);
+	pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
 
 	// Shader Parameter 알림
 	pShader->AddShaderParam(tShaderParam{ L"Output Texture", SHADER_PARAM::TEX_0 });
 
-	pShader->Create(SHADER_POV::FORWARD);
+	pShader->Create();
 
 	AddRes(L"TexShader", pShader);
 
@@ -52,7 +49,7 @@ void CResMgr::CreateDefaultShader()
 	// DepthStencilState 설정
 	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::NO_DEPTHTEST);
 
-	pShader->Create(SHADER_POV::FORWARD, D3D_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	pShader->Create(D3D_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
 	AddRes(L"Collider2DShader", pShader);
 
 	// =================
@@ -69,7 +66,7 @@ void CResMgr::CreateDefaultShader()
 	pShader->AddShaderParam(tShaderParam{ L"Output Texture", SHADER_PARAM::TEX_0 });
 	pShader->AddShaderParam(tShaderParam{ L"Anim Tex", SHADER_PARAM::TEX_3 });
 
-	pShader->Create(SHADER_POV::FORWARD);
+	pShader->Create();
 	AddRes(L"Std2DShader", pShader);
 
 	// =================
@@ -84,7 +81,7 @@ void CResMgr::CreateDefaultShader()
 
 	// Parameter 설정
 	pShader->AddShaderParam(tShaderParam{ L"Output Texture", SHADER_PARAM::TEX_0 });
-	pShader->Create(SHADER_POV::FORWARD);
+	pShader->Create();
 	AddRes(L"2DShadowShader", pShader);
 
 	// ============
@@ -93,8 +90,8 @@ void CResMgr::CreateDefaultShader()
 	pShader = new CShader;
 	pShader->CreateVertexShader(L"Shader\\std3d.fx", "VS_Std3D", "vs_5_0");
 	pShader->CreatePixelShader(L"Shader\\std3d.fx", "PS_Std3D", "ps_5_0");
-	
-	pShader->Create(SHADER_POV::DEFERRED);
+	//pShader->SetRSType(RS_TYPE::WIRE_FRAME);
+	pShader->Create();
 	AddRes(L"Std3DShader", pShader);
 
 	// ============
@@ -105,7 +102,7 @@ void CResMgr::CreateDefaultShader()
 	pShader->CreatePixelShader(L"Shader\\std3d.fx", "PS_Skybox", "ps_5_0");
 	pShader->SetRasterizerType(RS_TYPE::CULL_FRONT);
 	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS_EQUAL);
-	pShader->Create(SHADER_POV::FORWARD);
+	pShader->Create();
 	AddRes(L"SkyboxShader", pShader);
 
 	// ============
@@ -118,7 +115,7 @@ void CResMgr::CreateDefaultShader()
 	pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
 	pShader->SetRasterizerType(RS_TYPE::CULL_NONE);
 	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS_NO_WRITE);
-	pShader->Create(SHADER_POV::FORWARD);
+	pShader->Create();
 	AddRes(L"GridShader", pShader);	
 }
 

@@ -489,8 +489,6 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   };
   
   Texture.cpp
-  Transform.cpp
-  코드를 생성하고 있습니다...
-  Engine.vcxproj -> C:\Users\yajun\Desktop\dxd12\6주차\6th\DX12_6th_3(Multi Render Target)\03. External\Library\Engine\Engine_debug.lib
+  Engine.vcxproj -> C:\Users\yajun\Desktop\dxd12\6주차\6th\DX12_6th_2(Skybox, Frustum Culling, NormalMapping)\03. External\Library\Engine\Engine_debug.lib
   0개 파일이 복사되었습니다.
   0개 파일이 복사되었습니다.
