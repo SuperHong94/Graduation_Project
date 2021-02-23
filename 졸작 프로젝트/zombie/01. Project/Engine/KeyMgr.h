@@ -51,6 +51,9 @@ enum class KEY_TYPE
 	KEY_NUM8,
 	KEY_NUM9,
 
+	KEY_PLUS,
+	KEY_MINUS,
+
 	KEY_END,
 };
 

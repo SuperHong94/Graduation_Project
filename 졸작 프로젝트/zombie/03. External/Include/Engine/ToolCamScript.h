@@ -7,11 +7,15 @@ class CToolCamScript :
 private:
 	float		m_fSpeed;
 	float		m_fScaleSpeed;
-	CGameObject* m_pPlayer;
+	float		m_fZoomScaleY = 1;
+	float		m_fZoomScaleZ = 1;
+	float		m_fZoomSpeed = 0.005;
+
+	CGameObject* m_pShootObject;
 
 public:	
 	virtual void update();
-	void SetPlayer(CGameObject* _pPlayer) { m_pPlayer = _pPlayer; }
+	void SetShootObject(CGameObject* _pShootObject) { m_pShootObject = _pShootObject; }
 
 public:
 	CLONE(CToolCamScript);

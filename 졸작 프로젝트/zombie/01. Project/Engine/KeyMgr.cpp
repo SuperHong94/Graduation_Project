@@ -52,6 +52,9 @@ int arrVK[(UINT)KEY_TYPE::KEY_END] =
 	VK_NUMPAD7,
 	VK_NUMPAD8,
 	VK_NUMPAD9,
+
+	'+',
+	'-',
 };
 
 CKeyMgr::CKeyMgr()

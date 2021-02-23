@@ -29,24 +29,24 @@ void CPlayerScript::update()
 	Vec3 vPos = Transform()->GetLocalPos();
 	Vec3 vRot = Transform()->GetLocalRot();
 
-	if (KEY_HOLD(KEY_TYPE::KEY_UP))
+	if (KEY_HOLD(KEY_TYPE::KEY_W))
 	{
-		vPos.z += DT * 200.f;
+		vPos.z += DT * 400.f;
 	}
 
-	if (KEY_HOLD(KEY_TYPE::KEY_DOWN))
+	if (KEY_HOLD(KEY_TYPE::KEY_S))
 	{
-		vPos.z -= DT * 200.f;
+		vPos.z -= DT * 400.f;
 	}
 
-	if (KEY_HOLD(KEY_TYPE::KEY_LEFT))
+	if (KEY_HOLD(KEY_TYPE::KEY_A))
 	{	
-		vPos.x -= DT * 200.f;
+		vPos.x -= DT * 400.f;
 	}
 
-	if (KEY_HOLD(KEY_TYPE::KEY_RIGHT))
+	if (KEY_HOLD(KEY_TYPE::KEY_D))
 	{
-		vPos.x += DT * 200.f;
+		vPos.x += DT * 400.f;
 	}
 
 	// z 키를 누르면 z 축 회전
