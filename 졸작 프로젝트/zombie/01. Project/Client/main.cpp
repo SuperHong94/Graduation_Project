@@ -47,7 +47,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
-	if (FAILED(CCore::GetInst()->init(g_hWnd, tResolution{ 1280, 768 }, true)))
+	if (FAILED(CCore::GetInst()->init(g_hWnd, tResolution{ FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT }, true)))
 	{
 		return 0;
 	}

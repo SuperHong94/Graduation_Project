@@ -53,8 +53,11 @@ int arrVK[(UINT)KEY_TYPE::KEY_END] =
 	VK_NUMPAD8,
 	VK_NUMPAD9,
 
-	'+',
-	'-',
+	VK_ADD,
+	VK_SUBTRACT,
+	VK_PRIOR,
+	VK_NEXT,
+	'L',
 };
 
 CKeyMgr::CKeyMgr()

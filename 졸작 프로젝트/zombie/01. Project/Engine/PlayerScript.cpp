@@ -68,7 +68,41 @@ void CPlayerScript::update()
 
 	if (KEY_TAB(KEY_TYPE::KEY_LBTN))
 	{
-		// ¹Ì»çÀÏ ½î±â
+		// ÃÑ¾Ë ¹æÇâ °è»ê
+		POINT ptMousePos = CKeyMgr::GetInst()->GetMousePos();
+		Vec3 vMousePos;
+		vMousePos.x = (((2.0f * ptMousePos.x) / FRAME_BUFFER_WIDTH) - 1) / g_transform.matProj._11;
+		vMousePos.y = -(((2.0f * ptMousePos.y) / FRAME_BUFFER_HEIGHT) - 1) / g_transform.matProj._22;
+		vMousePos.z = 1.0f;
+		
+		XMMATRIX m;
+		XMVECTOR xmVec = XMMatrixDeterminant(m);
+		XMMATRIX InverseM = XMMatrixInverse(&xmVec, m);
+
+		Vec3 vPickRayDir;
+		vPickRayDir.x = vMousePos.x * InverseM._11 + vMousePos.y * InverseM._21 + vMousePos.z * InverseM._31;
+		vPickRayDir.y = vMousePos.x * InverseM._12 + vMousePos.y * InverseM._22 + vMousePos.z * InverseM._32;
+		vPickRayDir.z = vMousePos.x * InverseM._13 + vMousePos.y * InverseM._23 + vMousePos.z * InverseM._33;
+
+		Vec3 vPickRayOrig;
+		vPickRayOrig.x = InverseM._41;
+		vPickRayOrig.y = InverseM._42;
+		vPickRayOrig.z = InverseM._43;
+
+		bulletHeight = vPos.y;
+
+		Vec3 vBulletPos;
+		vBulletPos.x = (bulletHeight - vPickRayOrig.y) * (vPickRayDir.x - vPickRayOrig.x) / (vPickRayDir.y - vPickRayOrig.y) + vPickRayOrig.x;
+		vBulletPos.z = (bulletHeight - vPickRayOrig.y) * (vPickRayDir.z - vPickRayOrig.z) / (vPickRayDir.y - vPickRayOrig.y) + vPickRayOrig.z;
+
+		Vec3 vBulletDir;
+		vBulletDir.x -= vPos.x;
+		vBulletDir.y = 0;
+		vBulletDir.z -= vPos.z;
+
+		Vec3 vNBulletDir = vBulletDir.Normalize();
+
+		// ÃÑ¾Ë ½î±â
 		CGameObject* pBullet = new CGameObject;
 		pBullet->SetName(L"Bullet Object");
 
@@ -84,7 +118,7 @@ void CPlayerScript::update()
 		pBullet->AddComponent(new CCollider2D);
 		pBullet->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
 		
-		pBullet->AddComponent(new CBulletScript);
+		pBullet->AddComponent(new CBulletScript(vNBulletDir));
 			   
 		CreateObject(pBullet, L"Bullet");
 	}

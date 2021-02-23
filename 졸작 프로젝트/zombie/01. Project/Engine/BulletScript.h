@@ -5,6 +5,9 @@
 class CBulletScript :
 	public CScript
 {
+private:
+	Vec3 vBulletDir;
+
 public:
 	virtual void update();
 	virtual void OnCollisionEnter(CCollider2D* _pOther);
@@ -14,7 +17,8 @@ public:
 	CLONE(CBulletScript);
 
 public:
-	CBulletScript();
+	CBulletScript(Vec3 Dir);
+	//CBulletScript();
 	virtual ~CBulletScript();
 };
 

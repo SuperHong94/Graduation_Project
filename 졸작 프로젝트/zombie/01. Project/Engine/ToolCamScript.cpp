@@ -73,7 +73,7 @@ void CToolCamScript::update()
 	//	Transform()->SetLocalRot(vRot);
 	//}
 
-	if (KEY_HOLD(KEY_TYPE::KEY_UP))
+	if (KEY_HOLD(KEY_TYPE::KEY_ADD) || KEY_HOLD(KEY_TYPE::KEY_PRIOR))
 	{
 		if (m_fZoomScaleY >= 0.3)
 		{
@@ -82,7 +82,7 @@ void CToolCamScript::update()
 		}
 	}
 
-	if (KEY_HOLD(KEY_TYPE::KEY_DOWN))
+	if (KEY_HOLD(KEY_TYPE::KEY_SUBTRACT) || KEY_HOLD(KEY_TYPE::KEY_NEXT))
 	{
 		if (m_fZoomScaleY <= 1.3)
 		{
