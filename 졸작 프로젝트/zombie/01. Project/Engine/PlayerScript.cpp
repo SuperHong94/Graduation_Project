@@ -75,9 +75,9 @@ void CPlayerScript::update()
 		vMousePos.y = -(((2.0f * ptMousePos.y) / FRAME_BUFFER_HEIGHT) - 1) / g_transform.matProj._22;
 		vMousePos.z = 1.0f;
 		
-		XMMATRIX m;
-		XMVECTOR xmVec = XMMatrixDeterminant(m);
-		XMMATRIX InverseM = XMMatrixInverse(&xmVec, m);
+		//XMMATRIX m;
+		//XMVECTOR xmVec = XMMatrixDeterminant(m);
+		XMMATRIX InverseM = XMMatrixInverse(NULL, g_transform.matView);
 
 		Vec3 vPickRayDir;
 		vPickRayDir.x = vMousePos.x * InverseM._11 + vMousePos.y * InverseM._21 + vMousePos.z * InverseM._31;
@@ -92,13 +92,15 @@ void CPlayerScript::update()
 		bulletHeight = vPos.y;
 
 		Vec3 vBulletPos;
-		vBulletPos.x = (bulletHeight - vPickRayOrig.y) * (vPickRayDir.x - vPickRayOrig.x) / (vPickRayDir.y - vPickRayOrig.y) + vPickRayOrig.x;
-		vBulletPos.z = (bulletHeight - vPickRayOrig.y) * (vPickRayDir.z - vPickRayOrig.z) / (vPickRayDir.y - vPickRayOrig.y) + vPickRayOrig.z;
+		vBulletPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
+		vBulletPos.z = (bulletHeight - vPickRayOrig.y) * vPickRayDir.z / vPickRayDir.y + vPickRayOrig.z;
 
 		Vec3 vBulletDir;
-		vBulletDir.x -= vPos.x;
+		vBulletDir.x = vBulletPos.x - vPos.x;
 		vBulletDir.y = 0;
-		vBulletDir.z -= vPos.z;
+		vBulletDir.z = vBulletPos.z - vPos.z;
+
+		printf("%f	%f	%f\n", vBulletDir.x, vBulletDir.y, vBulletDir.z);
 
 		Vec3 vNBulletDir = vBulletDir.Normalize();
 
