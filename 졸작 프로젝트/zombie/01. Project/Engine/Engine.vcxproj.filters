@@ -53,6 +53,9 @@
     <Filter Include="Manager\ResMgr">
       <UniqueIdentifier>{780d6568-f989-431b-be7a-d3c34b23aa99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. GameObject\BehaviourTree">
+      <UniqueIdentifier>{9c6cf474-5fc7-43a7-9ecb-2f83dc6acfdf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -195,6 +198,9 @@
     <ClInclude Include="GridScript.h">
       <Filter>04. GameObject\Script</Filter>
     </ClInclude>
+    <ClInclude Include="BehaviourTree.h">
+      <Filter>04. GameObject\BehaviourTree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -326,6 +332,9 @@
     </ClCompile>
     <ClCompile Include="GridScript.cpp">
       <Filter>04. GameObject\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="BehaviourTree.cpp">
+      <Filter>04. GameObject\BehaviourTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

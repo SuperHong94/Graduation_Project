@@ -168,6 +168,7 @@ call EngineCopy.bat</Command>
   <ItemGroup>
     <ClInclude Include="Animation2D.h" />
     <ClInclude Include="Animator2D.h" />
+    <ClInclude Include="BehaviourTree.h" />
     <ClInclude Include="BulletScript.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider2D.h" />
@@ -218,6 +219,7 @@ call EngineCopy.bat</Command>
   <ItemGroup>
     <ClCompile Include="Animation2D.cpp" />
     <ClCompile Include="Animator2D.cpp" />
+    <ClCompile Include="BehaviourTree.cpp" />
     <ClCompile Include="BulletScript.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider2D.cpp" />

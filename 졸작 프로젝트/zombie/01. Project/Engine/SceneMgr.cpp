@@ -68,7 +68,6 @@ void CSceneMgr::init()
 	Ptr<CTexture> pColor = CResMgr::GetInst()->Load<CTexture>(L"Tile", L"Texture\\Tile\\TILE_03.tga");
 	Ptr<CTexture> pNormal = CResMgr::GetInst()->Load<CTexture>(L"Tile_n", L"Texture\\Tile\\TILE_03_N.tga");
 
-
 	
 	// ===============
 	// Test Scene 생성
@@ -86,7 +85,8 @@ void CSceneMgr::init()
 	m_pCurScene->GetLayer(31)->SetName(L"Tool");
 
 	CGameObject* pObject = nullptr;
-	
+	CGameObject* pPlayerObject = nullptr;
+
 	// ====================
 	// 3D Light Object 추가
 	// ====================
@@ -107,27 +107,28 @@ void CSceneMgr::init()
 	// ===================
 	// Player 오브젝트 생성
 	// ===================
-	pObject = new CGameObject;
-	pObject->SetName(L"Player Object");
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);	
+	pPlayerObject = new CGameObject;
+	pPlayerObject->SetName(L"Player Object");
+	pPlayerObject->AddComponent(new CTransform);
+	pPlayerObject->AddComponent(new CMeshRender);
 
 	// Transform 설정
-	pObject->Transform()->SetLocalPos(Vec3(0.f, 200.f, 1000.f));
-	pObject->Transform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 200.f, 1000.f));
+	pPlayerObject->Transform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
 	//pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
 
+
 	// MeshRender 설정
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
-	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
-	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+	pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+	pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
+	pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
+	pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
 	
 	// Script 설정
-	pObject->AddComponent(new CPlayerScript);
+	pPlayerObject->AddComponent(new CPlayerScript);
 
 	// AddGameObject
-	m_pCurScene->FindLayer(L"Player")->AddGameObject(pObject);
+	m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
 
 
 	// ==================
@@ -137,7 +138,7 @@ void CSceneMgr::init()
 	pMainCam->SetName(L"MainCam");
 	pMainCam->AddComponent(new CTransform);
 	pMainCam->AddComponent(new CCamera);
-	pMainCam->AddComponent(new CToolCamScript(pObject));
+	pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
 
 	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 	pMainCam->Camera()->SetFar(100000.f);
@@ -155,14 +156,19 @@ void CSceneMgr::init()
 
 	// Transform 설정
 	pObject->Transform()->SetLocalPos(Vec3(0.f, 200.f, 500.f));
-	pObject->Transform()->SetLocalScale(Vec3(100.f, 100.f, 1.f));
+	pObject->Transform()->SetLocalScale(Vec3(50.f, 50.f, 50.f));
 
 	// MeshRender 설정
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));	
+
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+
+
 	
 	// Script 설정
-	//pObject->AddComponent(new CMonsterScript);
+	pObject->AddComponent(new CMonsterScript(pPlayerObject));
 
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Monster")->AddGameObject(pObject);
@@ -179,7 +185,7 @@ void CSceneMgr::init()
 	// MeshRender 설정
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyboxMtrl"));
-	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pSky02.GetPointer());
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pSky01.GetPointer());
 
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);

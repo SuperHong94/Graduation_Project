@@ -1,10 +1,23 @@
 #include "stdafx.h"
 #include "MonsterScript.h"
 
-CMonsterScript::CMonsterScript()
+CMonsterScript::CMonsterScript(CGameObject* Object)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
-	, m_iDir(1)
 {
+	TargetObejct = Object;
+	status = new MonsterStatus;
+
+	root = new Sequence;
+	sequence1 = new Sequence;
+	CCheckRange = new CheckPlayerInRange(status);
+	CCheckAttackRange = new CheckPlayerInAttackRange(status);
+	CAttackPlayer = new AttackPlayer(status);
+
+	root->addChild(sequence1);
+
+	sequence1->addChild(CCheckRange);
+	sequence1->addChild(CCheckAttackRange);
+	sequence1->addChild(CAttackPlayer);
 }
 
 CMonsterScript::~CMonsterScript()
@@ -14,17 +27,35 @@ CMonsterScript::~CMonsterScript()
 
 void CMonsterScript::update()
 {
-	// Transform 월드 좌표정보 얻기
+	//// Transform 월드 좌표정보 얻기
 	Vec3 vPos = Transform()->GetLocalPos();
+	Vec3 vTargetPos = TargetObejct->Transform()->GetLocalPos();
+	Vec3 vDir;
 
-	if (vPos.x > 600.f)
-		m_iDir = -1;
-	else if(vPos.x < -600.f)
-		m_iDir = 1;
+	float XZdistanceToTarget = sqrt(((vPos.x - vTargetPos.x) * (vPos.x - vTargetPos.x)) + ((vPos.z - vTargetPos.z) * (vPos.z - vTargetPos.z)));
+	status->distanceToPlayer = XZdistanceToTarget;
 
-	vPos.x += DT * 100.f * m_iDir;
+	vDir.x = vTargetPos.x - vPos.x;
+	vDir.y = 0;
+	vDir.z = vTargetPos.z - vPos.z;
+
+	//if (vPos.x > 600.f)
+	//	m_iDir = -1;
+	//else if(vPos.x < -600.f)
+	//	m_iDir = 1;
+
+	//vPos.x += DT * 100.f * m_iDir;
 
 	// 수정된 좌표를 다시 세팅하기.
+	//Transform()->SetLocalPos(vPos);
+
+	root->run();
+
+	if (status->state == MonsterState::Run)
+	{
+		vPos += DT * 0.3f * vDir;
+	}
+
 	Transform()->SetLocalPos(vPos);
 }
 
