@@ -165,7 +165,8 @@ void CSceneMgr::init()
 	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
 	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
 
-
+	pObject->AddComponent(new CCollider2D);
+	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
 	
 	// Script ¼³Á¤
 	pObject->AddComponent(new CMonsterScript(pPlayerObject));
