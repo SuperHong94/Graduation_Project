@@ -5,13 +5,6 @@ Data netData = { 0,0 };
 int sizeData = sizeof(netData);
 void Update(char* buf, int bufLength,unsigned int id);
 
-struct SOCKETINFO
-{
-	WSAOVERLAPPED overlapped;
-	WSABUF dataBuffer;
-	SOCKET socket;
-	char messageBuffer[BUFSIZE];
-};
 
 
 map<unsigned int, SOCKETINFO> clients; //id와 소켓인포를가진 클라이언트들
@@ -33,7 +26,7 @@ void recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWO
 	Update(clients[client_id].messageBuffer, dataBytes, client_id);
 	for (auto i = clients.begin(); i != clients.end(); ++i)
 	{
-
+		
 	}
 }
 
@@ -64,42 +57,61 @@ int main()
 	// listen()
 	retval = listen(listen_sock, SOMAXCONN);
 	if (retval == SOCKET_ERROR) err_quit("listen()");
+
 	// 데이터 통신에 사용할 변수
-	SOCKET client_sock;
 	SOCKADDR_IN clientaddr;
 	int addrlen = sizeof(clientaddr);
 	char buf[BUFSIZE + 1];
 
 	ZeroMemory(buf, sizeof(buf));
 
+	int client_cnt = -1;
 	while (1)
 	{
-		client_sock = accept(listen_sock, (SOCKADDR*)&clientaddr, &addrlen);
+		SOCKET client_sock = accept(listen_sock, (SOCKADDR*)&clientaddr, &addrlen);
 		if (client_sock == INVALID_SOCKET) {
 			err_display("accept()");
 			break;
 		}
+		else
+			client_cnt += 1;
+		clients[client_cnt] = SOCKETINFO{};
+		clients[client_cnt].socket = client_sock;
+		clients[client_cnt].dataBuffer.len = BUFSIZE;
+		clients[client_cnt].dataBuffer.buf = clients[client_cnt].messageBuffer;
+		memset(&clients[client_cnt].overlapped, 0, sizeof(WSAOVERLAPPED));
+		clients[client_cnt].overlapped.hEvent = (HANDLE)clients[client_cnt].socket;
+
+		DWORD flags = 0;
 
 		// 접속한 클라이언트 정보 출력
 		printf("\n[TCP 서버] 클라이언트 접속: IP 주소=%s, 포트 번호=%d\n",
 			inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
+
+		//키데이터 받기
+		retval = WSARecv(clients[client_cnt].socket, &clients[client_cnt].dataBuffer, 1, NULL,
+			&flags, &(clients[client_cnt].overlapped), recv_callback);
 		// 클라이언트와 데이터 통신
-		while (1) {
-			//  키데이터 받기
-			retval = recv(client_sock, buf, BUFSIZE, 0);
-			if (retval == SOCKET_ERROR) {
-				err_display("recv()");
-				break;
-			}
-			//Update(buf, BUFSIZE);
+		//while (1) {
+		//	//  키데이터 받기
+		//	retval = recv(client_sock, buf, BUFSIZE, 0);
+		//	if (retval == SOCKET_ERROR) {
+		//		err_display("recv()");
+		//		break;
+		//	}
+		//	//Update(buf, BUFSIZE);
 
-			retval = send(client_sock, (char*)&netData, sizeData, 0);
-			if (retval > 0)
-			{
-				cout<<"x: " <<netData.x<<"y: "<<netData.y<< "데이터 보냈습니다. " << endl;
-			}
+		//	/*retval = send(client_sock, (char*)&netData, sizeData, 0);
+		//	if (retval == SOCKET_ERROR)
+		//	{
+		//		err_display("send()");
+		//	}
+		//	if (retval > 0)
+		//	{
+		//		cout<<"x:" <<netData.x<<" y:"<<netData.y<< " 데이터를 보냈습니다. " << endl;
+		//	}*/
 
-		}
+		//}
 
 		// closesocket()
 		closesocket(client_sock);

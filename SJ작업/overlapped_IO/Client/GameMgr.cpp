@@ -40,7 +40,10 @@ void GameMgr::SendData()
 	if (m_pKeys[0] == 0) {
 		m_pKeys[1] = 'f';
 	}
-	send(m_sock, m_pKeys, m_curKeyCNT, 0);
+	if (send(m_sock, m_pKeys, m_curKeyCNT, 0) == SOCKET_ERROR)
+	{
+		err_display("send()");
+	}
 
 }
 
@@ -50,7 +53,7 @@ void GameMgr::RecvData()
 	int retval= recv(m_sock, buffer, sizeof(buffer) - 1, 0);
 	if (retval == SOCKET_ERROR)
 	{
-		return;
+		err_display("recv");
 	}
 	buffer[retval] = '\0';
 
@@ -75,19 +78,28 @@ GameMgr::GameMgr(HDC hdc, HWND hwnd, HINSTANCE hInst) :m_hDC(hdc), m_hwnd(hwnd),
 
 
 	m_wsa;
-	WSAStartup(MAKEWORD(2, 2), &m_wsa);
+	if (WSAStartup(MAKEWORD(2, 2), &m_wsa) != 0){
+		err_quit("WSAStartup");
+	}
 	// socket()
 
 	int retval = 0;
-	m_sock = socket(AF_INET, SOCK_STREAM, 0);
+	m_sock = WSASocket(AF_INET, SOCK_STREAM, 0,NULL,0,0);
+	if (m_sock == INVALID_SOCKET)
+	{
+		err_quit("socket()");
+	}
 
 
 	//connect()
 	SOCKADDR_IN serveraddr;
 	ZeroMemory(&serveraddr, sizeof(serveraddr));
 	serveraddr.sin_family = AF_INET;
-	serveraddr.sin_addr.s_addr = inet_addr(SERVERIP);
 	serveraddr.sin_port = htons(SERVERPORT);
+	inet_pton(AF_INET, SERVERIP, &serveraddr.sin_addr);
 	retval = connect(m_sock, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
+
+	if (retval == SOCKET_ERROR) err_quit("connect()");
+
 
 }

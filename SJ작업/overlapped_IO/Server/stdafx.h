@@ -11,16 +11,14 @@ using namespace std;
 #define SERVERPORT 9000
 #define BUFSIZE    512
 
-
 struct SOCKETINFO
 {
-    WSAOVERLAPPED overlapped;
-    SOCKET sock;
-    char buf[BUFSIZE + 1];
-    int recvbytes;
-    int sendbytes;
-    WSABUF wsabuf;
+	WSAOVERLAPPED overlapped;
+	WSABUF dataBuffer;
+	SOCKET socket;
+	char messageBuffer[BUFSIZE];
 };
+
 
 
 // 소켓 함수 오류 출력 후 종료

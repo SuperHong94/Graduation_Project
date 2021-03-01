@@ -9,8 +9,8 @@
 
 // 여기에 미리 컴파일하려는 헤더 추가
 
-#pragma comment(lib, "ws2_32")
-#include <winsock2.h>
+#include <WS2tcpip.h>
+#pragma comment(lib, "Ws2_32.lib")S
 #include <Windows.h>
 #include "framework.h"
 #include <iostream>
@@ -34,3 +34,12 @@ struct Data
 	short y = 0;
 };
 #pragma pack(pop)
+
+
+
+
+// 소켓 함수 오류 출력 후 종료
+void err_quit(char* msg);
+
+// 소켓 함수 오류 출력
+void err_display(char* msg);
