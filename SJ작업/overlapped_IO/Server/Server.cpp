@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "Data.h"
 
+
 Data netData = { 0,0 };
 int sizeData = sizeof(netData);
 void Update(char* buf, int bufLength,unsigned int id);
 
-
+int g_client_cnt;
 
 map<unsigned int, SOCKETINFO> clients; //id와 소켓인포를가진 클라이언트들
 map<unsigned int, Data> netDatas;
@@ -16,6 +17,7 @@ void CALLBACK send_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overla
 
 void recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags)
 {
+	clients.find(reinterpret_cast<unsigned int>(overlapped->hEvent));
 	unsigned int client_id = reinterpret_cast<unsigned int>(overlapped->hEvent);
 	if (dataBytes == 0) {
 		closesocket(clients[client_id].socket);
@@ -24,10 +26,10 @@ void recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWO
 	}
 	//[client_id].messageBuffer[dataBytes]
 	Update(clients[client_id].messageBuffer, dataBytes, client_id);
-	for (auto i = clients.begin(); i != clients.end(); ++i)
-	{
-		
-	}
+	//for (auto i = clients.begin(); i != clients.end(); ++i)
+	//{
+	//	
+	//}
 }
 
 int main()
@@ -65,7 +67,7 @@ int main()
 
 	ZeroMemory(buf, sizeof(buf));
 
-	int client_cnt = -1;
+	g_client_cnt = -1;
 	while (1)
 	{
 		SOCKET client_sock = accept(listen_sock, (SOCKADDR*)&clientaddr, &addrlen);
@@ -74,13 +76,13 @@ int main()
 			break;
 		}
 		else
-			client_cnt += 1;
-		clients[client_cnt] = SOCKETINFO{};
-		clients[client_cnt].socket = client_sock;
-		clients[client_cnt].dataBuffer.len = BUFSIZE;
-		clients[client_cnt].dataBuffer.buf = clients[client_cnt].messageBuffer;
-		memset(&clients[client_cnt].overlapped, 0, sizeof(WSAOVERLAPPED));
-		clients[client_cnt].overlapped.hEvent = (HANDLE)clients[client_cnt].socket;
+			g_client_cnt += 1;
+		clients[g_client_cnt] = SOCKETINFO{};
+		clients[g_client_cnt].socket = client_sock;
+		clients[g_client_cnt].dataBuffer.len = BUFSIZE;
+		clients[g_client_cnt].dataBuffer.buf = clients[g_client_cnt].messageBuffer;
+		memset(&clients[g_client_cnt].overlapped, 0, sizeof(WSAOVERLAPPED));
+		clients[g_client_cnt].overlapped.hEvent = (HANDLE)clients[g_client_cnt].socket;
 
 		DWORD flags = 0;
 
@@ -89,8 +91,8 @@ int main()
 			inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
 		//키데이터 받기
-		retval = WSARecv(clients[client_cnt].socket, &clients[client_cnt].dataBuffer, 1, NULL,
-			&flags, &(clients[client_cnt].overlapped), recv_callback);
+		retval = WSARecv(clients[g_client_cnt].socket, &clients[g_client_cnt].dataBuffer, 1, NULL,
+			&flags, &(clients[g_client_cnt].overlapped), recv_callback);
 		// 클라이언트와 데이터 통신
 		//while (1) {
 		//	//  키데이터 받기
