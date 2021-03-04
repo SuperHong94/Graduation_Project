@@ -2,10 +2,13 @@
 #include "BulletScript.h"
 
 
-CBulletScript::CBulletScript(Vec3 Dir)
+CBulletScript::CBulletScript(Vec3 Dir, float d)
 	: CScript((UINT)SCRIPT_TYPE::BULLETSCRIPT)
 {
+	this->SetName(L"BulletScript");
+
 	vBulletDir = Dir;
+	setDamage(d);
 }
 
 //CBulletScript::CBulletScript()

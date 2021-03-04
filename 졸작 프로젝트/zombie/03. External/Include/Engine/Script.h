@@ -29,6 +29,7 @@ class CScript :
 {
 private:
 	UINT		m_iScriptType;
+	float		damage = 0;
 
 public:
 	UINT GetScriptType() { return m_iScriptType; }
@@ -69,7 +70,8 @@ public:
 	//virtual void OnCollisoin(CCollider3D* _pOther) {}
 	//virtual void OnCollisoinExit(CCollider3D* _pOther) {}
 
-
+	void setDamage(float d) { damage = d; };
+	float getDamage() { return damage; };
 public:
 	CScript(UINT _iScriptType);
 	virtual ~CScript();

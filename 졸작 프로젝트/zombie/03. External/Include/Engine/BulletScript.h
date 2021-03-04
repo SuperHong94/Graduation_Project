@@ -17,8 +17,9 @@ public:
 	CLONE(CBulletScript);
 
 public:
-	CBulletScript(Vec3 Dir);
+	CBulletScript(Vec3 Dir, float d);
 	//CBulletScript();
 	virtual ~CBulletScript();
+
 };
 

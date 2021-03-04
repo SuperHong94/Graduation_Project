@@ -18,7 +18,7 @@ struct MonsterStatus
 	bool PlayerInRange = false;
 	bool PlayerInAttackRange = false;
 	bool isAttack = false;
-	int hp = 100;
+	float hp = 100;
 };
 
 
