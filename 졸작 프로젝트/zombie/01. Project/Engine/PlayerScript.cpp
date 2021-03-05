@@ -31,22 +31,22 @@ void CPlayerScript::update()
 
 	if (KEY_HOLD(KEY_TYPE::KEY_W))
 	{
-		vPos.z += DT * 400.f;
+		vPos.z += DT * 300.f;
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_S))
 	{
-		vPos.z -= DT * 400.f;
+		vPos.z -= DT * 300.f;
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_A))
 	{	
-		vPos.x -= DT * 400.f;
+		vPos.x -= DT * 300.f;
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_D))
 	{
-		vPos.x += DT * 400.f;
+		vPos.x += DT * 300.f;
 	}
 
 	// z 키를 누르면 z 축 회전
@@ -108,10 +108,10 @@ void CPlayerScript::update()
 		CGameObject* pBullet = new CGameObject;
 		pBullet->SetName(L"Bullet Object");
 
-		vPos.y += 50;
+		vPos.y += 15;
 		pBullet->AddComponent(new CTransform());
 		pBullet->Transform()->SetLocalPos(vPos);
-		pBullet->Transform()->SetLocalScale(Vec3(50.f, 50.f, 1.f));
+		pBullet->Transform()->SetLocalScale(Vec3(5.f, 5.f, 5.f));
 
 		pBullet->AddComponent(new CMeshRender);
 		pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));

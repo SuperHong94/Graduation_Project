@@ -114,7 +114,7 @@ void CSceneMgr::init()
 
 	// Transform 설정
 	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 200.f, 1000.f));
-	pPlayerObject->Transform()->SetLocalScale(Vec3(100.f, 100.f, 100.f));
+	pPlayerObject->Transform()->SetLocalScale(Vec3(30.f, 30.f, 30.f));
 	//pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
 
 
@@ -221,7 +221,7 @@ void CSceneMgr::init()
 	// CollisionMgr 충돌 그룹(Layer) 지정
 	// =================================
 	// Player Layer 와 Monster Layer 는 충돌 검사 진행
-	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Player", L"Monster");
+	//CCollisionMgr::GetInst()->CheckCollisionLayer(L"Player", L"Monster");
 	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Monster");
 	
 	m_pCurScene->awake();

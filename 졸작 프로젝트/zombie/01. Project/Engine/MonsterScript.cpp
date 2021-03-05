@@ -53,7 +53,7 @@ void CMonsterScript::update()
 
 	if (status->state == MonsterState::Run)
 	{
-		vPos += DT * 0.3f * vDir;
+		vPos += DT * 0.2f * vDir;
 	}
 
 	Transform()->SetLocalPos(vPos);
@@ -61,7 +61,7 @@ void CMonsterScript::update()
 
 void CMonsterScript::OnCollisionEnter(CCollider2D * _pOther)
 {
-	// 충돌이 발생하고, 상대 물체가 총일이면 스스로를 삭제
+	// 충돌이 발생하고, 상대 물체가 총알이면 체력 감소
 	if (L"Bullet Object" == _pOther->GetObj()->GetName())
 	{	
 		float damage = 0;

@@ -24,8 +24,11 @@ void CBulletScript::update()
 {
 	Vec3 vPos = Transform()->GetLocalPos();
 	//vPos.y += 400.f * DT;
-	vPos += vBulletDir * 400 * DT;
+	vPos += vBulletDir * 1000 * DT;
 	Transform()->SetLocalPos(vPos);
+
+	if(vPos.x >= 5000 || vPos.x <= - 5000 || vPos.y >= 5000 || vPos.y <= -5000)
+		DeleteObject(GetObj());
 }
 
 void CBulletScript::OnCollisionEnter(CCollider2D * _pOther)
