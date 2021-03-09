@@ -4,11 +4,11 @@
 
 Data netData = { 0,0 };
 int sizeData = sizeof(netData);
-void Update(char* buf, int bufLength,unsigned int id);
+void Update(char* buf, int bufLength, unsigned int id);
 
 int g_client_cnt;
 
-map<unsigned int, SOCKETINFO> clients; //id와 소켓인포를가진 클라이언트들
+map <SOCKET, SOCKETINFO> clients; //id와 소켓인포를가진 클라이언트들
 map<unsigned int, Data> netDatas;
 map<unsigned int, keyData> keyDatas;
 void CALLBACK recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags);
@@ -17,19 +17,43 @@ void CALLBACK send_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overla
 
 void recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags)
 {
-	clients.find(reinterpret_cast<unsigned int>(overlapped->hEvent));
-	unsigned int client_id = reinterpret_cast<unsigned int>(overlapped->hEvent);
+
+	SOCKET  client_id = reinterpret_cast<int>(overlapped->hEvent);
 	if (dataBytes == 0) {
 		closesocket(clients[client_id].socket);
 		clients.erase(client_id);
 		return;
 	}
 	//[client_id].messageBuffer[dataBytes]
+	clients[client_id].messageBuffer[dataBytes] = 0; //메모리 마지막 쓰레기 붙어서 마지막 0으로한다.
+
+	memset(&(clients[client_id].overlapped), 0, sizeof(WSAOVERLAPPED)); //0으로초기화하는데 이벤트도 0으로 초기화됨
 	Update(clients[client_id].messageBuffer, dataBytes, client_id);
-	//for (auto i = clients.begin(); i != clients.end(); ++i)
-	//{
-	//	
-	//}
+
+	clients[client_id].overlapped.hEvent = (HANDLE)client_id; //다시이벤트도 설
+	WSASend(client_id, &(clients[client_id].dataBuffer), 1, NULL, 0, &(clients[client_id].overlapped), send_callback);
+
+	
+}
+
+void send_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags)
+{
+	DWORD receiveBytes = 0;
+	DWORD flags = 0;
+
+	SOCKET client_s = reinterpret_cast<int>(overlapped->hEvent);
+
+	if (dataBytes == 0) {
+		closesocket(clients[client_s].socket);
+		clients.erase(client_s);
+		return;
+	}  // 클라이언트가 closesocket을 했을 경우
+
+	clients[client_s].dataBuffer.len = BUFSIZE;
+	memset(&(clients[client_s].overlapped), 0, sizeof(WSAOVERLAPPED));
+	clients[client_s].overlapped.hEvent = (HANDLE)client_s;
+	WSARecv(client_s, &clients[client_s].dataBuffer, 1, 0, &flags, &(clients[client_s].overlapped), recv_callback);
+
 }
 
 int main()
@@ -42,8 +66,8 @@ int main()
 		return 1;
 
 	// socket()
-	SOCKET listen_sock = WSASocket(AF_INET, SOCK_STREAM, 0,NULL,0,WSA_FLAG_OVERLAPPED);
-	if (listen_sock == INVALID_SOCKET) 
+	SOCKET listen_sock = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+	if (listen_sock == INVALID_SOCKET)
 		err_quit("WSAsocket()");
 
 	// bind() n
@@ -75,14 +99,13 @@ int main()
 			err_display("accept()");
 			break;
 		}
-		else
-			g_client_cnt += 1;
-		clients[g_client_cnt] = SOCKETINFO{};
-		clients[g_client_cnt].socket = client_sock;
-		clients[g_client_cnt].dataBuffer.len = BUFSIZE;
-		clients[g_client_cnt].dataBuffer.buf = clients[g_client_cnt].messageBuffer;
-		memset(&clients[g_client_cnt].overlapped, 0, sizeof(WSAOVERLAPPED));
-		clients[g_client_cnt].overlapped.hEvent = (HANDLE)clients[g_client_cnt].socket;
+	
+		clients[client_sock] = SOCKETINFO{};
+		clients[client_sock].socket = client_sock;
+		clients[client_sock].dataBuffer.len = BUFSIZE;
+		clients[client_sock].dataBuffer.buf = clients[g_client_cnt].messageBuffer;
+		memset(&clients[client_sock].overlapped, 0, sizeof(WSAOVERLAPPED));
+		clients[client_sock].overlapped.hEvent = (HANDLE)clients[client_sock].socket;
 
 		DWORD flags = 0;
 
@@ -91,8 +114,13 @@ int main()
 			inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
 
 		//키데이터 받기
-		retval = WSARecv(clients[g_client_cnt].socket, &clients[g_client_cnt].dataBuffer, 1, NULL,
-			&flags, &(clients[g_client_cnt].overlapped), recv_callback);
+		retval = WSARecv(clients[client_sock].socket, &clients[client_sock].dataBuffer, 1, NULL,
+			&flags, &(clients[client_sock].overlapped), recv_callback);
+
+
+		//업데이트하고 모든 클라이언트에게 정보 보내기
+		//retval=WSASend(clients[client_sock].socket,&clients[client_sock].dataBuffer,1,NULL,&flags, &(clients[client_sock].overlapped),send_callback)
+
 		// 클라이언트와 데이터 통신
 		//while (1) {
 		//	//  키데이터 받기
@@ -116,9 +144,9 @@ int main()
 		//}
 
 		// closesocket()
-		closesocket(client_sock);
+		/*closesocket(client_sock);
 		printf("[TCP 서버] 클라이언트 종료: IP 주소=%s, 포트 번호=%d\n",
-			inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));
+			inet_ntoa(clientaddr.sin_addr), ntohs(clientaddr.sin_port));*/
 	}
 
 	// closesocket()
@@ -134,7 +162,7 @@ void Update(char* buf, int bufLength, unsigned int id)
 {
 	int offX = 28;
 	int offY = 28;
-	
+
 	for (int i = 0; i < bufLength; i++)
 	{
 		switch (buf[i])
