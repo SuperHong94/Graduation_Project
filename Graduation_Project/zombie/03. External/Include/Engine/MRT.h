@@ -19,6 +19,9 @@ private:
 	Ptr<CTexture>					m_pDSTex;
 	ComPtr<ID3D12DescriptorHeap>	m_pRTV;
 
+	D3D12_VIEWPORT					m_tVP;
+	D3D12_RECT						m_tScissorRect;
+
 	D3D12_RESOURCE_BARRIER			m_TargetToRes[8];
 	D3D12_RESOURCE_BARRIER			m_ResToTarget[8];
 

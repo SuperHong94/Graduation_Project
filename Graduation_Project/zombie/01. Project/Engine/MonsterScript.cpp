@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "MonsterScript.h"
 
-
 CMonsterScript::CMonsterScript(CGameObject* Object)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
 {

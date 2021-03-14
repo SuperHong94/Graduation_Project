@@ -151,6 +151,9 @@ void CShader::Create(SHADER_POV _ePOV, D3D_PRIMITIVE_TOPOLOGY _eTopology)
 		{ "TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 36, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 48, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 		{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 60, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+
+		{ "BLENDWEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 72, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
+		{ "BLENDINDICES", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 88, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
 	};
 
 	m_tPipeline.InputLayout = { inputElementDescs, _countof(inputElementDescs) };
@@ -163,8 +166,7 @@ void CShader::Create(SHADER_POV _ePOV, D3D_PRIMITIVE_TOPOLOGY _eTopology)
 
 	m_tPipeline.SampleMask = UINT_MAX;	
 	m_tPipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-	m_tPipeline.SampleDesc.Count = 1;
-
+	m_tPipeline.SampleDesc.Count = 1;	
 
 	switch (m_ePOV)
 	{
@@ -187,6 +189,10 @@ void CShader::Create(SHADER_POV _ePOV, D3D_PRIMITIVE_TOPOLOGY _eTopology)
 		break;
 	case SHADER_POV::COMPUTE:
 		m_tPipeline.NumRenderTargets = 0;
+		break;
+	case SHADER_POV::SHADOWMAP:
+		m_tPipeline.NumRenderTargets = 1;
+		m_tPipeline.RTVFormats[0] = DXGI_FORMAT_R32_FLOAT;
 		break;
 	default:
 		m_tPipeline.NumRenderTargets = 1;

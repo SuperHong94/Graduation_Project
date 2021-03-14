@@ -108,9 +108,6 @@ void CMaterial::UpdateData()
 
 void CMaterial::UpdateData_CS()
 {
-	// CS 용 Dummy 클리어
-	CDevice::GetInst()->ClearDymmyDescriptorHeap_CS();
-
 	// Texture Register Update
 	UINT iOffsetPos = (UINT)TEXTURE_REGISTER::t0;
 
@@ -144,6 +141,9 @@ void CMaterial::Dispatch(UINT _x, UINT _y, UINT _z)
 	CMDLIST_CS->Dispatch(_x, _y, _z);	
 
 	CDevice::GetInst()->ExcuteComputeShader();
+
+	// CS 용 Dummy 클리어
+	CDevice::GetInst()->ClearDymmyDescriptorHeap_CS();
 }
 
 void CMaterial::Load(const wstring & _strFullPath)
@@ -186,9 +186,10 @@ void CMaterial::Save(const wstring & _strPath)
 {
 	if (!m_bFileSave)
 		return;
-
-	wstring strFilePath = _strPath;
-	strFilePath += GetName();
+	
+	wstring strFilePath = CPathMgr::GetResPath();
+	strFilePath += _strPath;
+	SetPath(_strPath);
 
 	FILE* pFile = nullptr;
 	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");

@@ -42,8 +42,8 @@ public:
 	D3D12_RESOURCE_STATES GetResState() { return m_eState; }
 	void SetResState(D3D12_RESOURCE_STATES _eState) { m_eState = _eState; }
 
-	float Width() { return (float)m_Image.GetMetadata().width; }
-	float Height() { return (float)m_Image.GetMetadata().height;}
+	float Width() { return (float)m_tDesc.Width; }
+	float Height() { return (float)m_tDesc.Height;}
 
 
 

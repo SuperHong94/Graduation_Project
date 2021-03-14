@@ -119,3 +119,5 @@ public:
 	CMonsterScript(CGameObject* Object);
 	virtual ~CMonsterScript();
 };
+
+

@@ -16,6 +16,8 @@ private:
 
 	int				m_iArrIdx;
 
+	CGameObject*	m_pCamObj; // 광원 시점으로 카메라 관리
+
 public:
 	void SetLightType(LIGHT_TYPE _eType);
 	void SetLightPos(const Vec3& _vPos);
@@ -31,6 +33,7 @@ public:
 public:
 	virtual void finalupdate();
 	void render();
+	void render_shadowmap();
 
 	virtual void SaveToScene(FILE* _pFile);
 	virtual void LoadFromScene(FILE* _pFile);
@@ -40,6 +43,7 @@ public:
 
 public:
 	CLight3D();
+	CLight3D(const CLight3D & _light);
 	virtual ~CLight3D();
 };
 

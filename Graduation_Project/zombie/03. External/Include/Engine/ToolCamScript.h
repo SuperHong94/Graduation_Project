@@ -13,7 +13,7 @@ private:
 
 	CGameObject* m_pShootObject;
 
-public:	
+public:
 	virtual void update();
 	void SetShootObject(CGameObject* _pShootObject) { m_pShootObject = _pShootObject; }
 
@@ -24,4 +24,3 @@ public:
 	CToolCamScript(CGameObject* _pPlayer);
 	virtual ~CToolCamScript();
 };
-

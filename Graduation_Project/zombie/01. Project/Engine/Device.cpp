@@ -86,12 +86,12 @@ int CDevice::init(HWND _hWnd, const tResolution & _res, bool _bWindow)
 
 	m_pCmdListGraphic->Close();
 
+	m_pCmdAllocCompute->Reset();
+	m_pCmdListCompute->Reset(m_pCmdAllocCompute.Get(), nullptr);
+
 	// SwapChain 만들기
 	CreateSwapChain();
-
-	// ViewPort 만들기
-	CreateViewPort();
-		
+			
 	// RootSignature 만들기
 	CreateRootSignature();
 
@@ -111,8 +111,6 @@ void CDevice::render_start(float(&_arrFloat)[4])
 	// RootSignature 설정	
 	CMDLIST->SetGraphicsRootSignature(CDevice::GetInst()->GetRootSignature(ROOT_SIG_TYPE::RENDER).Get());
 		
-	m_pCmdListGraphic->RSSetViewports(1, &m_tVP);
-	m_pCmdListGraphic->RSSetScissorRects(1, &m_tScissorRect);
 		
 	CMRT* pSwapChainMRT = CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SWAPCHAIN);
 
@@ -182,7 +180,7 @@ void CDevice::WaitForFenceEvent()
 void CDevice::WaitForFenceEvent_CS()
 {
 	// Signal and increment the fence value.
-	static int iFenceValue = 0;
+	static size_t iFenceValue = 1;
 
 	const size_t fence = iFenceValue;
 	m_pCmdQueueCompute->Signal(m_pFenceCompute.Get(), fence);
@@ -222,13 +220,6 @@ void CDevice::CreateSwapChain()
 	tDesc.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_FLIP_DISCARD; // 전면 후면 버퍼 교체 시 이전 프레임 정보 버림
 		
 	HRESULT hr = m_pFactory->CreateSwapChain(m_pCmdQueue.Get(), &tDesc, &m_pSwapChain);
-}
-
-void CDevice::CreateViewPort()
-{
-	// DirectX 로 그려질 화면 크기를 설정한다.
-	m_tVP = D3D12_VIEWPORT{ 0.f, 0.f, m_tResolution.fWidth, m_tResolution.fHeight, 0.f, 1.f };	
-	m_tScissorRect = D3D12_RECT{0, 0, (LONG)m_tResolution.fWidth, (LONG)m_tResolution.fHeight };
 }
 
 void CDevice::CreateRootSignature()
@@ -299,10 +290,7 @@ void CDevice::CreateRootSignature()
 		DEVICE->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&pDummyDescriptor));
 		m_vecDummyDescriptor.push_back(pDummyDescriptor);
 	}
-	
-	// 초기화용 더미 디스크립터 힙 작성	
-	cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	DEVICE->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&m_pInitDescriptor));
+
 		
 	// ====================================
 	// Compute Shader 전용 Signature 만들기
@@ -343,6 +331,10 @@ void CDevice::CreateRootSignature()
 	cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	cbvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	DEVICE->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&m_pDummyDescriptorCompute));
+
+	// 초기화용 더미 디스크립터 힙 작성	
+	cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	DEVICE->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&m_pInitDescriptor));
 }
 
 void CDevice::CreateSamplerDesc()
@@ -445,7 +437,6 @@ void CDevice::SetTextureToRegister(CTexture * _pTex, TEXTURE_REGISTER _eRegister
 	// 리소스 상태 변경
 	CD3DX12_RESOURCE_BARRIER resurceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(_pTex->GetTex2D().Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
 
-
 	if (_pTex->GetResState() == D3D12_RESOURCE_STATE_UNORDERED_ACCESS)
 	{
 		CMDLIST_CS->ResourceBarrier(1, &resurceBarrier);
@@ -469,7 +460,6 @@ void CDevice::SetBufferToRegister(CStructuredBuffer * _pBuffer, TEXTURE_REGISTER
 	
 	// 리소스 상태 변경
 	CD3DX12_RESOURCE_BARRIER resurceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(_pBuffer->GetBuffer().Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
-
 
 	if (_pBuffer->GetResState() == D3D12_RESOURCE_STATE_UNORDERED_ACCESS)
 	{
@@ -529,7 +519,6 @@ void CDevice::SetTextureToRegister_CS(CTexture * _pTex, TEXTURE_REGISTER _eRegis
 	// 리소스 상태 변경
 	CD3DX12_RESOURCE_BARRIER resurceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(_pTex->GetTex2D().Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
 
-
 	if (_pTex->GetResState() == D3D12_RESOURCE_STATE_UNORDERED_ACCESS)
 	{
 		CMDLIST_CS->ResourceBarrier(1, &resurceBarrier);
@@ -554,7 +543,6 @@ void CDevice::SetUAVToRegister_CS(CTexture * _pTex, UAV_REGISTER _eRegister)
 	// 리소스 상태 변경
 	CD3DX12_RESOURCE_BARRIER resurceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(_pTex->GetTex2D().Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
 
-
 	if (_pTex->GetResState() == D3D12_RESOURCE_STATE_UNORDERED_ACCESS)
 	{
 		CMDLIST_CS->ResourceBarrier(1, &resurceBarrier);
@@ -578,7 +566,6 @@ void CDevice::SetBufferToSRVRegister_CS(CStructuredBuffer * _pBuffer, TEXTURE_RE
 
 	// 리소스 상태 변경
 	CD3DX12_RESOURCE_BARRIER resurceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(_pBuffer->GetBuffer().Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
-
 
 	if (_pBuffer->GetResState() == D3D12_RESOURCE_STATE_UNORDERED_ACCESS)
 	{
@@ -605,7 +592,6 @@ void CDevice::SetBufferToUAVRegister_CS(CStructuredBuffer * _pBuffer, UAV_REGIST
 	// 리소스 상태 변경
 	CD3DX12_RESOURCE_BARRIER resurceBarrier = CD3DX12_RESOURCE_BARRIER::Transition(_pBuffer->GetBuffer().Get(), D3D12_RESOURCE_STATE_UNORDERED_ACCESS, D3D12_RESOURCE_STATE_COMMON);
 
-
 	if (_pBuffer->GetResState() == D3D12_RESOURCE_STATE_UNORDERED_ACCESS)
 	{
 		CMDLIST_CS->ResourceBarrier(1, &resurceBarrier);
@@ -622,8 +608,8 @@ void CDevice::ClearDymmyDescriptorHeap_CS()
 	D3D12_CPU_DESCRIPTOR_HANDLE hSrcHandle = m_pInitDescriptor->GetCPUDescriptorHandleForHeapStart();
 	hSrcHandle.ptr;
 
-	UINT iDestRange = (UINT)TEXTURE_REGISTER::END;
-	UINT iSrcRange = (UINT)TEXTURE_REGISTER::END;
+	UINT iDestRange = (UINT)UAV_REGISTER::END;
+	UINT iSrcRange = (UINT)UAV_REGISTER::END;
 
 	m_pDevice->CopyDescriptors(1/*디스크립터 개수*/
 		, &hDescHandle, &iDestRange

@@ -5,7 +5,7 @@
 #include "Device.h"
 
 tTransform	g_transform;
-
+Vec3 vAsis[3] = { Vec3::Right , Vec3::Up , Vec3::Front };
 
 CTransform::CTransform()
 	: CComponent(COMPONENT_TYPE::TRANSFORM)
@@ -102,6 +102,40 @@ float CTransform::GetMaxScale()
 	fMax = max(fMax, vWorldScale.z);
 	return fMax;
 }
+
+
+void CTransform::LookAt(const Vec3 & _vLook)
+{
+	Vec3 vFront = _vLook;
+	vFront.Normalize();
+
+	Vec3 vRight = Vec3::Up.Cross(_vLook);
+	vRight.Normalize();
+
+	Vec3 vUp = vFront.Cross(vRight);
+	vUp.Normalize();
+
+	Matrix matRot = XMMatrixIdentity();
+
+	matRot.Right(vRight);
+	matRot.Up(vUp);
+	matRot.Front(vFront);
+
+	m_vLocalRot = DecomposeRotMat(matRot);
+
+	// 방향벡터(우, 상, 전) 갱신하기	
+	Matrix matRotate = XMMatrixRotationX(m_vLocalRot.x);
+	matRotate *= XMMatrixRotationY(m_vLocalRot.y);
+	matRotate *= XMMatrixRotationZ(m_vLocalRot.z);
+
+	for (UINT i = 0; i < (UINT)DIR_TYPE::END; ++i)
+	{
+		m_vLocalDir[i] = XMVector3TransformNormal(vAsis[i], matRotate);
+		m_vLocalDir[i].Normalize();
+		m_vWorldDir[i] = m_vLocalDir[i];
+	}
+}
+
 
 void CTransform::SaveToScene(FILE * _pFile)
 {

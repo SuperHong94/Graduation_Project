@@ -57,7 +57,7 @@
       <UniqueIdentifier>{4f14963d-c0d9-4fff-8025-3322001b56a0}</UniqueIdentifier>
     </Filter>
     <Filter Include="04. GameObject\BehaviourTree">
-      <UniqueIdentifier>{0a91cb18-7318-48f9-9535-068f3480544c}</UniqueIdentifier>
+      <UniqueIdentifier>{5c510952-2140-4223-a4d5-cefae2e91e2b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -400,6 +400,12 @@
       <Filter>ShaderCode</Filter>
     </FxCompile>
     <FxCompile Include="particle.fx">
+      <Filter>ShaderCode</Filter>
+    </FxCompile>
+    <FxCompile Include="animation.fx">
+      <Filter>ShaderCode</Filter>
+    </FxCompile>
+    <FxCompile Include="posteffect.fx">
       <Filter>ShaderCode</Filter>
     </FxCompile>
   </ItemGroup>

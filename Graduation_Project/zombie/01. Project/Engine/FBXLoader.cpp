@@ -358,7 +358,10 @@ Vec4 CFBXLoader::GetMtrlData(FbxSurfaceMaterial * _pSurface
 		dFactor = tMtrlFactorProperty.Get<FbxDouble>();
 	}
 
-	Vec4 vRetVal = Vec4(vMtrl.mData[0] * dFactor, vMtrl.mData[1] * dFactor, vMtrl.mData[2] * dFactor, dFactor);
+	Vec4 vRetVal = Vec4(  (float)(vMtrl.mData[0] * dFactor )
+						, (float)(vMtrl.mData[1] * dFactor )
+						, (float)(vMtrl.mData[2] * dFactor )
+						, (float)(dFactor));
 	return vRetVal;
 }
 

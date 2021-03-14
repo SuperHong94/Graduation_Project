@@ -97,7 +97,7 @@ void CSceneMgr::CreateTargetUI()
 
 void CSceneMgr::init()
 {
-	// =================
+// =================
 	// 필요한 리소스 로딩
 	// =================
 	// Texture 로드
@@ -145,6 +145,7 @@ void CSceneMgr::init()
 	CGameObject* pObject = nullptr;
 	CGameObject* pPlayerObject = nullptr;
 
+
 	// ====================
 	// 3D Light Object 추가
 	// ====================
@@ -160,6 +161,7 @@ void CSceneMgr::init()
 	pObject->Light3D()->SetLightDir(Vec3(1.f, -1.f, 1.f));
 	pObject->Light3D()->SetLightRange(1000.f);
 
+	pObject->Transform()->SetLocalPos(Vec3(-1000.f, 1000.f, -1000.f));
 	m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
 	// ===================
@@ -187,6 +189,7 @@ void CSceneMgr::init()
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
 
+
 	// ==================
 	// Camera Object 생성
 	// ==================
@@ -210,9 +213,11 @@ void CSceneMgr::init()
 	//pUICam->AddComponent(new CTransform);
 	//pUICam->AddComponent(new CCamera);	
 
-	//pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHGRAPHIC);
+	//pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
 	//pUICam->Camera()->SetFar(100.f);	
 	//pUICam->Camera()->SetLayerCheck(30, true);	
+	//pUICam->Camera()->SetWidth(CRenderMgr::GetInst()->GetResolution().fWidth);
+	//pUICam->Camera()->SetHeight(CRenderMgr::GetInst()->GetResolution().fHeight);
 
 	//m_pCurScene->FindLayer(L"Default")->AddGameObject(pUICam);
 
@@ -223,43 +228,48 @@ void CSceneMgr::init()
 	// =============
 	// FBX 파일 로드
 	// =============
-	Ptr<CMeshData> pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\House.fbx");
+	//Ptr<CMeshData> pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\monster.fbx");
 	//pMeshData->Save(pMeshData->GetPath());
+
 	// MeshData 로드
-	//Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\House.mdat", L"MeshData\\monster.mdat");
+	Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\monster.mdat", L"MeshData\\monster.mdat");
 	
 	pObject = pMeshData->Instantiate();
 	pObject->SetName(L"House");
 	pObject->FrustumCheck(false);
-	//pObject->Transform()->SetLocalPos(Vec3(0.f, 200.f, 300.f));
-	pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 300.f));
-	pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+	pObject->Transform()->SetLocalPos(Vec3(0.f, 100.f, 0.f));
+	pObject->Transform()->SetLocalScale(Vec3(2.f, 2.f, 2.f));
+	pObject->MeshRender()->SetDynamicShadow(true);
+	/*pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 0);
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
 	m_pCurScene->AddGameObject(L"Default", pObject, false);
 
+	
 	// ====================
 	// Monster 오브젝트 생성
 	// ====================
 	pObject = new CGameObject;
-	Ptr<CMeshData> pMeshData1 = CResMgr::GetInst()->LoadFBX(L"FBX\\cc.fbx");
-	//pMeshData1->Save(pMeshData1->GetPath());
-	// MeshData 로드
-	//Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\House.mdat", L"MeshData\\monster.mdat");
 
-	pObject = pMeshData1->Instantiate();
+	Ptr<CMeshData> pMeshData2 = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\monster.mdat", L"MeshData\\monster.mdat");
+
+	pObject = pMeshData->Instantiate();
 	pObject->SetName(L"Monster Object");
 	pObject->FrustumCheck(false);
 	pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);	
+	//pObject->AddComponent(new CMeshRender);
 
 	// Transform 설정
 	pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
 	pObject->Transform()->SetLocalScale(Vec3(3.f, 3.f, 3.f));
-
-	// MeshRender 설정
-	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	//pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));	
-	//pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
-	//pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+	
+	pObject->MeshRender()->SetDynamicShadow(true);
+	/*pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 0);
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
+	m_pCurScene->AddGameObject(L"Default", pObject, false);
 
 	pObject->AddComponent(new CCollider2D);
 	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
@@ -283,7 +293,6 @@ void CSceneMgr::init()
 	
 	m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
-
 	// ====================
 	// Skybox 오브젝트 생성
 	// ====================
@@ -296,7 +305,7 @@ void CSceneMgr::init()
 	// MeshRender 설정
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyboxMtrl"));
-	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pSky01.GetPointer());
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pSky02.GetPointer());
 
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
@@ -326,6 +335,26 @@ void CSceneMgr::init()
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Tool")->AddGameObject(pObject);
 		
+	// ==========================
+	// Distortion Object 만들기
+	// ==========================
+	//pObject = new CGameObject;
+	//pObject->SetName(L"PostEffect");
+
+	//pObject->AddComponent(new CTransform);
+	//pObject->AddComponent(new CMeshRender);
+
+	//// Material 값 셋팅
+	//Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl");
+
+	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//pObject->MeshRender()->SetMaterial(pMtrl, 0);
+
+	//pObject->Transform()->SetLocalScale(Vec3(500.f, 500.f, 500.f));
+	//pObject->Transform()->SetLocalPos(Vec3(0.f, 500.f, 0.f));
+
+	//m_pCurScene->AddGameObject(L"Default", pObject, false);
+
 
 	// ====================
 	// Compute Shader Test
@@ -337,6 +366,8 @@ void CSceneMgr::init()
 	CDevice::GetInst()->SetUAVToRegister_CS(pTestUAVTexture.GetPointer(), UAV_REGISTER::u0);
 		
 	pCSMtrl->Dispatch(1, 1024, 1); // --> 컴퓨트 쉐이더 수행	
+
+
 
 	// =================================
 	// CollisionMgr 충돌 그룹(Layer) 지정

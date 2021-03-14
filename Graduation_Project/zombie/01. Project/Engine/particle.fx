@@ -212,7 +212,7 @@ void CS_ParticleUpdate(int3 _iThreadIdx : SV_DispatchThreadID)
             };
             
             
-            float3 vDir = (float4) 0.f;
+            float3 vDir = (float3) 0.f;
             
             vDir = (vNoise - 0.5f) * 2.f;
             

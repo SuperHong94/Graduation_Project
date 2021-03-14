@@ -98,4 +98,61 @@ float gaussian5x5Sample(in int2 _uv, in Texture2D _tex)
     return fOut.x;
 }
 
+
+struct tSkinningInfo
+{
+    float3 vPos;
+    float3 vTangent;
+    float3 vBinormal;
+    float3 vNormal;
+};
+
+matrix GetBoneMat(int _iBoneIdx, int _iRowIdx)
+{
+    return g_arrFinalBoneMat[_iBoneIdx];
+}
+
+void Skinning(inout float3 _vPos, inout float3 _vTangent, inout float3 _vBinormal, inout float3 _vNormal
+                        , inout float4 _vWeight, inout float4 _vIndices
+                        , int _iRowIdx)
+{
+    tSkinningInfo info = (tSkinningInfo) 0.f;
+
+    for (int i = 0; i < 4; ++i)
+    {
+        if (0.f == _vWeight[i])
+            continue;
+
+        matrix matBone = GetBoneMat((int) _vIndices[i], _iRowIdx);
+        
+        info.vPos += (mul(float4(_vPos, 1.f), matBone) * _vWeight[i]).xyz;
+        info.vTangent += (mul(float4(_vTangent, 0.f), matBone) * _vWeight[i]).xyz;
+        info.vBinormal += (mul(float4(_vBinormal, 0.f), matBone) * _vWeight[i]).xyz;
+        info.vNormal += (mul(float4(_vNormal, 0.f), matBone) * _vWeight[i]).xyz;
+    }
+    
+    _vPos = info.vPos;
+    _vTangent = normalize(info.vTangent);
+    _vBinormal = normalize(info.vBinormal);
+    _vNormal = normalize(info.vNormal);
+}
+
+
+void Skinning(inout float3 _vPos, inout float4 _vWeight, inout float4 _vIndices, int _iRowIdx)
+{
+    tSkinningInfo info = (tSkinningInfo) 0.f;
+
+    for (int i = 0; i < 4; ++i)
+    {
+        if (0.f == _vWeight[i])
+            continue;
+
+        matrix matBone = GetBoneMat((int) _vIndices[i], _iRowIdx);
+
+        info.vPos += (mul(float4(_vPos, 1.f), matBone) * _vWeight[i]).xyz;
+    }
+    
+    _vPos = info.vPos;
+}
+
 #endif
