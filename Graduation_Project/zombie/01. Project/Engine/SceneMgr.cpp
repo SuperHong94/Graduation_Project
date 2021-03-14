@@ -223,7 +223,7 @@ void CSceneMgr::init()
 	// =============
 	// FBX 파일 로드
 	// =============
-	Ptr<CMeshData> pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\house.fbx");
+	Ptr<CMeshData> pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\House.fbx");
 	//pMeshData->Save(pMeshData->GetPath());
 	// MeshData 로드
 	//Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\House.mdat", L"MeshData\\monster.mdat");
@@ -231,7 +231,8 @@ void CSceneMgr::init()
 	pObject = pMeshData->Instantiate();
 	pObject->SetName(L"House");
 	pObject->FrustumCheck(false);
-	pObject->Transform()->SetLocalPos(Vec3(0.f, 200.f, 300.f));
+	//pObject->Transform()->SetLocalPos(Vec3(0.f, 200.f, 300.f));
+	pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 300.f));
 	pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 	m_pCurScene->AddGameObject(L"Default", pObject, false);
 
@@ -239,19 +240,26 @@ void CSceneMgr::init()
 	// Monster 오브젝트 생성
 	// ====================
 	pObject = new CGameObject;
+	Ptr<CMeshData> pMeshData1 = CResMgr::GetInst()->LoadFBX(L"FBX\\cc.fbx");
+	//pMeshData1->Save(pMeshData1->GetPath());
+	// MeshData 로드
+	//Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\House.mdat", L"MeshData\\monster.mdat");
+
+	pObject = pMeshData1->Instantiate();
 	pObject->SetName(L"Monster Object");
+	pObject->FrustumCheck(false);
 	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);	
+	//pObject->AddComponent(new CMeshRender);	
 
 	// Transform 설정
-	pObject->Transform()->SetLocalPos(Vec3(0.f, 25.f, -300.f));
-	pObject->Transform()->SetLocalScale(Vec3(50.f, 50.f, 50.f));
+	pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
+	pObject->Transform()->SetLocalScale(Vec3(3.f, 3.f, 3.f));
 
 	// MeshRender 설정
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));	
-	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
-	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+	//pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));	
+	//pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
+	//pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
 
 	pObject->AddComponent(new CCollider2D);
 	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
@@ -334,7 +342,7 @@ void CSceneMgr::init()
 	// CollisionMgr 충돌 그룹(Layer) 지정
 	// =================================
 	// Player Layer 와 Monster Layer 는 충돌 검사 진행
-	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Player", L"Monster");
+	//CCollisionMgr::GetInst()->CheckCollisionLayer(L"Player", L"Monster");
 	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Monster");
 	
 	m_pCurScene->awake();
