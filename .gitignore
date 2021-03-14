@@ -38,3 +38,6 @@ ipch/
 *.user
 *.suo
 *.exe
+
+*.lib
+*.zip
