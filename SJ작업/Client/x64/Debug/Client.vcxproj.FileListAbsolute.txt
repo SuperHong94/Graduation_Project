@@ -1,0 +1,2 @@
+C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\SJ작업\Client\x64\Debug\Client.exe
+C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\SJ작업\Client\x64\Debug\Client.pdb
