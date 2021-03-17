@@ -169,8 +169,8 @@ void CSceneMgr::init()
 	// ===================
 	pPlayerObject = new CGameObject;
 
-	Ptr<CMeshData> pMeshData2 = CResMgr::GetInst()->LoadFBX(L"FBX\\test2.fbx");
-	pMeshData2->Save(pMeshData2->GetPath());
+	//Ptr<CMeshData> pMeshData2 = CResMgr::GetInst()->LoadFBX(L"FBX\\test2.fbx");
+	//pMeshData2->Save(pMeshData2->GetPath());
 
 	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\monster.mdat", L"MeshData\\monster.mdat");
 
@@ -180,7 +180,7 @@ void CSceneMgr::init()
 	//pPlayerObject->AddComponent(new CMeshRender);
 
 	// Transform 설정
-	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 15.f, 0.f));
+	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
 	pPlayerObject->Transform()->SetLocalScale(Vec3(2.f, 2.f, 2.f));
 	//pPlayerObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
 
@@ -313,6 +313,29 @@ void CSceneMgr::init()
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyboxMtrl"));
 	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pSky01.GetPointer());
+
+	// AddGameObject
+	m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+
+	// ===================
+	// Ground 오브젝트 생성
+	// ===================
+	pObject = new CGameObject;
+	pObject->SetName(L"Ground Object");
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+
+	// Transform 설정
+	pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
+	pObject->Transform()->SetLocalScale(Vec3(10000.f, 10000.f, 1.f));
+	pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
+
+	// MeshRender 설정
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3DMtrl"));
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+	pObject->MeshRender()->SetDynamicShadow(true);
 
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
