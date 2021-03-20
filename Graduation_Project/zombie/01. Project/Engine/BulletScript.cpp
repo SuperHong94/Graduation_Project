@@ -31,7 +31,7 @@ void CBulletScript::update()
 		DeleteObject(GetObj());
 }
 
-void CBulletScript::OnCollisionEnter(CCollider2D * _pOther)
+void CBulletScript::OnCollisionEnter(CCollider2D* _pOther)
 {
 	if (L"Monster Object" == _pOther->GetObj()->GetName())
 	{

@@ -27,6 +27,9 @@ public:
 	void SetResState(D3D12_RESOURCE_STATES _eState) { m_eResState = _eState; }
 	D3D12_RESOURCE_STATES GetResState() { return m_eResState; }
 	ComPtr<ID3D12Resource> GetBuffer() { return m_pBuffer; }
+	UINT GetElementSize() { return m_iElementSize; }
+	UINT GetElementCount() { return m_iElementCount; }
+	UINT GetBufferSize() { return m_iElementSize * m_iElementCount; }
 
 public:
 	CStructuredBuffer();

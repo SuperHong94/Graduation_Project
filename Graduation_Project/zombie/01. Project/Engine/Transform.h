@@ -36,6 +36,8 @@ public:
 	bool IsCasting(const Vec3& _vPos);
 	float GetMaxScale();
 
+	void LookAt(const Vec3 & _vLook);
+
 	// Transform 정보를 상수데이터 및 레지스터로 전달한다.
 	void UpdateData();
 

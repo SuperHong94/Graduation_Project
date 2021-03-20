@@ -20,6 +20,9 @@ struct VS_STD3D_INPUT
     float3 vTangent : TANGENT;
     float3 vNormal : NORMAL;
     float3 vBinormal : BINORMAL;
+    
+    float4 vWeight : BLENDWEIGHT;
+    float4 vIndices : BLENDINDICES;
 };
 
 struct VS_STD3D_OUTPUT
@@ -39,6 +42,13 @@ VS_STD3D_OUTPUT VS_Std3D(VS_STD3D_INPUT _in)
 {
     VS_STD3D_OUTPUT output = (VS_STD3D_OUTPUT) 0.f;
         
+    if (g_int_0)
+    {
+        Skinning(_in.vPos, _in.vTangent
+                , _in.vBinormal, _in.vNormal
+                , _in.vWeight, _in.vIndices, 0);        
+    }
+    
     output.vPosition = mul(float4(_in.vPos, 1.f), g_matWVP);
     
     output.vViewPos = mul(float4(_in.vPos, 1.f), g_matWV).xyz;

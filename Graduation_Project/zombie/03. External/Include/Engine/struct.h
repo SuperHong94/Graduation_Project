@@ -218,6 +218,13 @@ typedef struct _tagContainer
 }tContainer;
 
 // Animation
+struct tFrameTrans
+{
+	Vec4	vTranslate;
+	Vec4	vScale;
+	Vec4	qRot;
+};
+
 struct tMTKeyFrame
 {
 	double	dTime;

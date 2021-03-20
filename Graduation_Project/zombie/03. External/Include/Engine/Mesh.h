@@ -3,7 +3,7 @@
 
 #include "FBXLoader.h"
 #include "Ptr.h"
-#include "Texture.h"
+#include "StructuredBuffer.h"
 
 struct tIndexInfo
 {
@@ -29,8 +29,10 @@ private:
 
 	// Animation3D 정보
 	vector<tMTAnimClip>			m_vecAnimClip;
-	vector<tMTBone>				m_vecBones;
-	Ptr<CTexture>				m_pBoneTex;
+	vector<tMTBone>				m_vecBones;	
+
+	CStructuredBuffer*			m_pBoneFrameData; // 전체 본 프레임 정보
+	CStructuredBuffer*			m_pBoneOffset;	   // 각 뼈의 offset 행렬
 
 
 public:
@@ -44,10 +46,11 @@ public:
 
 public:
 	UINT GetSubsetCount() { return (UINT)m_vecIdxInfo.size(); }
-	const vector<tMTBone>* GetBones() { return &m_vecBones; }
-	void SetBoneTex(Ptr<CTexture> _pTex) { m_pBoneTex = _pTex; }
-	const vector<tMTAnimClip>* GetAnimClip() { return &m_vecAnimClip; }
-	Ptr<CTexture> GetBoneTex() { return m_pBoneTex; }
+	const vector<tMTBone>* GetBones() { return &m_vecBones; }	
+	const vector<tMTAnimClip>* GetAnimClip() { return &m_vecAnimClip; }	
+	CStructuredBuffer*	GetBoneFrameDataBuffer() { return m_pBoneFrameData; } // 전체 본 프레임 정보
+	CStructuredBuffer*	GetBoneOffsetBuffer() { return  m_pBoneOffset; }	   // 각 뼈의 offset 행렬	
+	UINT GetBoneCount() { return (UINT)m_vecBones.size(); }
 	bool IsAnimMesh() { return !m_vecAnimClip.empty(); }
 
 public:	

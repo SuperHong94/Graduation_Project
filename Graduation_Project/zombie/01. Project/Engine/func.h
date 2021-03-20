@@ -1,14 +1,5 @@
 #pragma once
 
-void TestInit();
-
-void TestUpdate();
-
-void TestRender();
-
-void TestRelease();
-
-
 int GetSizeofFormat(DXGI_FORMAT _eFormat);
 
 template<typename T1, typename T2>
@@ -41,5 +32,11 @@ void Safe_Delete_Vector(vector<T*> _vec)
 }
 
 void SaveWString(FILE* _pFile, const wstring& _str);
-
 wchar_t* LoadWString(FILE* _pFile);
+
+
+
+Matrix GetMatrix(FbxAMatrix & _mat);
+
+
+Vec3 DecomposeRotMat(const Matrix & _matRot);
