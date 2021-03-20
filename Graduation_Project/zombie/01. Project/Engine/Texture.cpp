@@ -219,6 +219,7 @@ void CTexture::Load(const wstring & _strFullPath)
 	HRESULT hr = CreateTexture(DEVICE.Get(), m_Image.GetMetadata(), &m_pTex2D);
 	if (FAILED(hr))
 		assert(nullptr);
+
 	m_tDesc = m_pTex2D->GetDesc();
 
 	vector<D3D12_SUBRESOURCE_DATA> vecSubresources;

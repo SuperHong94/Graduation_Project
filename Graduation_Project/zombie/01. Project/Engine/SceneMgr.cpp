@@ -169,10 +169,10 @@ void CSceneMgr::init()
 	// ===================
 	pPlayerObject = new CGameObject;
 
-	//Ptr<CMeshData> pMeshData2 = CResMgr::GetInst()->LoadFBX(L"FBX\\test2.fbx");
-	//pMeshData2->Save(pMeshData2->GetPath());
+	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\p1.fbx");
+	//pMeshData->Save(pMeshData->GetPath());
 
-	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\monster.mdat", L"MeshData\\monster.mdat");
+	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\p1.mdat", L"MeshData\\p1.mdat");
 
 	pPlayerObject = pMeshData->Instantiate();
 	pPlayerObject->SetName(L"Player Object");
@@ -181,8 +181,8 @@ void CSceneMgr::init()
 
 	// Transform 설정
 	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
-	pPlayerObject->Transform()->SetLocalScale(Vec3(2.f, 2.f, 2.f));
-	//pPlayerObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
+	pPlayerObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+	pPlayerObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2.f, 0.f, 0.f));
 
 	// MeshRender 설정
 	pPlayerObject->MeshRender()->SetDynamicShadow(true);
@@ -236,7 +236,7 @@ void CSceneMgr::init()
 	// =============
 	// FBX 파일 로드
 	// =============
-	//Ptr<CMeshData> pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\monster.fbx");
+	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\monster.fbx");
 	//pMeshData->Save(pMeshData->GetPath());
 
 	// MeshData 로드
