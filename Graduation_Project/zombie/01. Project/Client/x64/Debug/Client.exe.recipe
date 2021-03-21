@@ -2,7 +2,11 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
+<<<<<<< HEAD
       <FullPath>C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\02. File\bin_debug\Client.exe</FullPath>
+=======
+      <FullPath>C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\02. File\bin_debug\Client.exe</FullPath>
+>>>>>>> yjs
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

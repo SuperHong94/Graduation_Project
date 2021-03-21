@@ -79,7 +79,11 @@
   }
   
   //
+<<<<<<< HEAD
   // 16 local object(s)
+=======
+  // 14 local object(s)
+>>>>>>> yjs
   //
   Texture2D g_tex_0;
   Texture2D g_tex_1;
@@ -88,11 +92,117 @@
   Texture2D g_tex_4;
   Texture2D g_tex_5;
   Texture2D g_tex_6;
+<<<<<<< HEAD
   Texture2D g_tex_7;
   Texture2DArray g_arrtex_0;
   Texture2DArray g_arrtex_1;
   Texture2DArray g_arrtex_2;
   Texture2DArray g_arrtex_3;
+=======
+  StructuredBuffer g_arrFinalBoneMat;
+  Texture2D g_tex_anim2D;
+  SamplerState g_sam_0
+  {
+  };
+  SamplerState g_sam_1
+  {
+  };
+  StructuredBuffer g_arrFrameTrans;
+  StructuredBuffer g_arrOffset;
+  RWStructuredBuffer g_arrFinalMat;
+  
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  //
+  // FX Version: fx_5_0
+  //
+  // 6 local buffer(s)
+  //
+  cbuffer TRANSFORM_MATRIX : register(b0)
+  {
+      float4x4 g_matWorld;                // Offset:    0, size:   64
+      float4x4 g_matView;                 // Offset:   64, size:   64
+      float4x4 g_matProj;                 // Offset:  128, size:   64
+      float4x4 g_matWV;                   // Offset:  192, size:   64
+      float4x4 g_matWVP;                  // Offset:  256, size:   64
+      float4x4 g_matWorldInv;             // Offset:  320, size:   64
+      float4x4 g_matViewInv;              // Offset:  384, size:   64
+      float4x4 g_matProjInv;              // Offset:  448, size:   64
+  }
+  
+  cbuffer MATERIAL_PARAM : register(b1)
+  {
+      float4  g_vDiff;                    // Offset:    0, size:   16
+      float4  g_vSpec;                    // Offset:   16, size:   16
+      float4  g_vEmv;                     // Offset:   32, size:   16
+      int     g_int_0;                    // Offset:   48, size:    4
+      int     g_int_1;                    // Offset:   52, size:    4
+      int     g_int_2;                    // Offset:   56, size:    4
+      int     g_int_3;                    // Offset:   60, size:    4
+      float   g_float_0;                  // Offset:   64, size:    4
+      float   g_float_1;                  // Offset:   68, size:    4
+      float   g_float_2;                  // Offset:   72, size:    4
+      float   g_float_3;                  // Offset:   76, size:    4
+      float2  g_vec2_0;                   // Offset:   80, size:    8
+      float2  g_vec2_1;                   // Offset:   88, size:    8
+      float2  g_vec2_2;                   // Offset:   96, size:    8
+      float2  g_vec2_3;                   // Offset:  104, size:    8
+      float4  g_vec4_0;                   // Offset:  112, size:   16
+      float4  g_vec4_1;                   // Offset:  128, size:   16
+      float4  g_vec4_2;                   // Offset:  144, size:   16
+      float4  g_vec4_3;                   // Offset:  160, size:   16
+      float4x4 g_mat_0;                   // Offset:  176, size:   64
+      float4x4 g_mat_1;                   // Offset:  240, size:   64
+      float4x4 g_mat_2;                   // Offset:  304, size:   64
+      float4x4 g_mat_3;                   // Offset:  368, size:   64
+      int     tex_0;                      // Offset:  432, size:    4
+      int     tex_1;                      // Offset:  436, size:    4
+      int     tex_2;                      // Offset:  440, size:    4
+      int     tex_3;                      // Offset:  444, size:    4
+  }
+  
+  cbuffer ANIM2D : register(b2)
+  {
+      float2  g_vLT;                      // Offset:    0, size:    8
+      float2  g_vLen;                     // Offset:    8, size:    8
+      float2  g_vOffset;                  // Offset:   16, size:    8
+      int     IsAnim2D;                   // Offset:   24, size:    4
+      int     padding2;                   // Offset:   28, size:    4
+  }
+  
+  cbuffer LIGHT2D : register(b3)
+  {
+      tLight2DInfo g_Light2D[100];        // Offset:    0, size: 6400
+      int     g_iLight2DCount;            // Offset: 6400, size:    4
+      int3    padding3;                   // Offset: 6404, size:   12
+  }
+  
+  cbuffer LIGHT3D : register(b4)
+  {
+      tLight3DInfo g_Light3D[100];        // Offset:    0, size: 9600
+      int     g_iLight3DCount;            // Offset: 9600, size:    4
+      int3    padding3DLight;             // Offset: 9604, size:   12
+  }
+  
+  cbuffer GLOBAL : register(b5)
+  {
+      float2  g_vResolution;              // Offset:    0, size:    8
+      float   g_fDT;                      // Offset:    8, size:    4
+      float   g_fAccTime;                 // Offset:   12, size:    4
+  }
+  
+  //
+  // 12 local object(s)
+  //
+  Texture2D g_tex_0;
+  Texture2D g_tex_1;
+  Texture2D g_tex_2;
+  Texture2D g_tex_3;
+  Texture2D g_tex_4;
+  Texture2D g_tex_5;
+  Texture2D g_tex_6;
+  StructuredBuffer g_arrFinalBoneMat;
+>>>>>>> yjs
   Texture2D g_tex_anim2D;
   SamplerState g_sam_0
   {
@@ -183,7 +293,11 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   }
   
   //
+<<<<<<< HEAD
   // 15 local object(s)
+=======
+  // 11 local object(s)
+>>>>>>> yjs
   //
   Texture2D g_tex_0;
   Texture2D g_tex_1;
@@ -192,11 +306,15 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   Texture2D g_tex_4;
   Texture2D g_tex_5;
   Texture2D g_tex_6;
+<<<<<<< HEAD
   Texture2D g_tex_7;
   Texture2DArray g_arrtex_0;
   Texture2DArray g_arrtex_1;
   Texture2DArray g_arrtex_2;
   Texture2DArray g_arrtex_3;
+=======
+  StructuredBuffer g_arrFinalBoneMat;
+>>>>>>> yjs
   Texture2D g_tex_anim2D;
   SamplerState g_sam_0
   {
@@ -286,7 +404,11 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   }
   
   //
+<<<<<<< HEAD
   // 15 local object(s)
+=======
+  // 11 local object(s)
+>>>>>>> yjs
   //
   Texture2D g_tex_0;
   Texture2D g_tex_1;
@@ -295,11 +417,15 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   Texture2D g_tex_4;
   Texture2D g_tex_5;
   Texture2D g_tex_6;
+<<<<<<< HEAD
   Texture2D g_tex_7;
   Texture2DArray g_arrtex_0;
   Texture2DArray g_arrtex_1;
   Texture2DArray g_arrtex_2;
   Texture2DArray g_arrtex_3;
+=======
+  StructuredBuffer g_arrFinalBoneMat;
+>>>>>>> yjs
   Texture2D g_tex_anim2D;
   SamplerState g_sam_0
   {
@@ -309,7 +435,10 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   };
   
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
+<<<<<<< HEAD
 C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\particle.fx(215,20-38): warning X3206: implicit truncation of vector type
+=======
+>>>>>>> yjs
   
   //
   // FX Version: fx_5_0
@@ -390,7 +519,11 @@ C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zom
   }
   
   //
+<<<<<<< HEAD
   // 18 local object(s)
+=======
+  // 14 local object(s)
+>>>>>>> yjs
   //
   Texture2D g_tex_0;
   Texture2D g_tex_1;
@@ -399,11 +532,15 @@ C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zom
   Texture2D g_tex_4;
   Texture2D g_tex_5;
   Texture2D g_tex_6;
+<<<<<<< HEAD
   Texture2D g_tex_7;
   Texture2DArray g_arrtex_0;
   Texture2DArray g_arrtex_1;
   Texture2DArray g_arrtex_2;
   Texture2DArray g_arrtex_3;
+=======
+  StructuredBuffer g_arrFinalBoneMat;
+>>>>>>> yjs
   Texture2D g_tex_anim2D;
   SamplerState g_sam_0
   {
@@ -417,6 +554,12 @@ C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zom
   
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
+<<<<<<< HEAD
+=======
+  compilation object save succeeded; see C:\Users\JeeHun\Desktop\JeeHun\DX12\DX12_2th\10th\DX12_10th_3(Shadow)\03. External\Library\Engine\posteffect.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+>>>>>>> yjs
   //
   // FX Version: fx_5_0
   //
@@ -496,7 +639,11 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   }
   
   //
+<<<<<<< HEAD
   // 15 local object(s)
+=======
+  // 11 local object(s)
+>>>>>>> yjs
   //
   Texture2D g_tex_0;
   Texture2D g_tex_1;
@@ -505,11 +652,15 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   Texture2D g_tex_4;
   Texture2D g_tex_5;
   Texture2D g_tex_6;
+<<<<<<< HEAD
   Texture2D g_tex_7;
   Texture2DArray g_arrtex_0;
   Texture2DArray g_arrtex_1;
   Texture2DArray g_arrtex_2;
   Texture2DArray g_arrtex_3;
+=======
+  StructuredBuffer g_arrFinalBoneMat;
+>>>>>>> yjs
   Texture2D g_tex_anim2D;
   SamplerState g_sam_0
   {
@@ -599,7 +750,11 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   }
   
   //
+<<<<<<< HEAD
   // 15 local object(s)
+=======
+  // 11 local object(s)
+>>>>>>> yjs
   //
   Texture2D g_tex_0;
   Texture2D g_tex_1;
@@ -608,11 +763,15 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   Texture2D g_tex_4;
   Texture2D g_tex_5;
   Texture2D g_tex_6;
+<<<<<<< HEAD
   Texture2D g_tex_7;
   Texture2DArray g_arrtex_0;
   Texture2DArray g_arrtex_1;
   Texture2DArray g_arrtex_2;
   Texture2DArray g_arrtex_3;
+=======
+  StructuredBuffer g_arrFinalBoneMat;
+>>>>>>> yjs
   Texture2D g_tex_anim2D;
   SamplerState g_sam_0
   {
@@ -702,7 +861,11 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   }
   
   //
+<<<<<<< HEAD
   // 15 local object(s)
+=======
+  // 11 local object(s)
+>>>>>>> yjs
   //
   Texture2D g_tex_0;
   Texture2D g_tex_1;
@@ -711,11 +874,15 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   Texture2D g_tex_4;
   Texture2D g_tex_5;
   Texture2D g_tex_6;
+<<<<<<< HEAD
   Texture2D g_tex_7;
   Texture2DArray g_arrtex_0;
   Texture2DArray g_arrtex_1;
   Texture2DArray g_arrtex_2;
   Texture2DArray g_arrtex_3;
+=======
+  StructuredBuffer g_arrFinalBoneMat;
+>>>>>>> yjs
   Texture2D g_tex_anim2D;
   SamplerState g_sam_0
   {
@@ -805,7 +972,11 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   }
   
   //
+<<<<<<< HEAD
   // 15 local object(s)
+=======
+  // 11 local object(s)
+>>>>>>> yjs
   //
   Texture2D g_tex_0;
   Texture2D g_tex_1;
@@ -814,11 +985,15 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   Texture2D g_tex_4;
   Texture2D g_tex_5;
   Texture2D g_tex_6;
+<<<<<<< HEAD
   Texture2D g_tex_7;
   Texture2DArray g_arrtex_0;
   Texture2DArray g_arrtex_1;
   Texture2DArray g_arrtex_2;
   Texture2DArray g_arrtex_3;
+=======
+  StructuredBuffer g_arrFinalBoneMat;
+>>>>>>> yjs
   Texture2D g_tex_anim2D;
   SamplerState g_sam_0
   {
@@ -831,7 +1006,10 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   Animation2D.cpp
   Animator2D.cpp
   Animator3D.cpp
+<<<<<<< HEAD
   BehaviourTree.cpp
+=======
+>>>>>>> yjs
   BulletScript.cpp
   Camera.cpp
   Collider2D.cpp
@@ -844,6 +1022,7 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   Entity.cpp
   EventMgr.cpp
   FBXLoader.cpp
+<<<<<<< HEAD
 C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\FBXLoader.cpp(361,100): warning C4244: '인수': 'fbxsdk::FbxDouble'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\FBXLoader.cpp(361,89): warning C4244: '인수': 'T'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
           with
@@ -899,24 +1078,37 @@ C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zom
               _Iter=std::_String_const_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
               _Alloc=std::allocator<char>
           ]
+=======
+>>>>>>> yjs
   Frustum.cpp
   func.cpp
   GameObject.cpp
   GridScript.cpp
+<<<<<<< HEAD
   컴파일하고 있습니다...
   KeyMgr.cpp
+=======
+  KeyMgr.cpp
+  컴파일하고 있습니다...
+>>>>>>> yjs
   Layer.cpp
   Light2D.cpp
   Light3D.cpp
   Material.cpp
   Mesh.cpp
   MeshData.cpp
+<<<<<<< HEAD
 C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MeshData.cpp(46,31): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   MeshRender.cpp
   MonsterScript.cpp
 C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MonsterScript.cpp(36,27): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   MRT.cpp
 C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MRT.cpp(51,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+=======
+  MeshRender.cpp
+  MonsterScript.cpp
+  MRT.cpp
+>>>>>>> yjs
   ParticleSystem.cpp
   PathMgr.cpp
   PlayerScript.cpp
@@ -927,6 +1119,7 @@ C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zom
   Resource.cpp
   Scene.cpp
   SceneMgr.cpp
+<<<<<<< HEAD
 C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(12,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
   컴파일하고 있습니다...
   Script.cpp
@@ -972,12 +1165,24 @@ C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zom
               _Iter=std::_String_const_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
               _Alloc=std::allocator<char>
           ]
+=======
+  Script.cpp
+  컴파일하고 있습니다...
+  Shader.cpp
+  SimpleMath.cpp
+  Sound.cpp
+>>>>>>> yjs
   StructuredBuffer.cpp
   TestScript.cpp
   Texture.cpp
   TimeMgr.cpp
   ToolCamScript.cpp
+<<<<<<< HEAD
 C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(12,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
 C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.cpp(96,21): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
   Transform.cpp
   Engine.vcxproj -> C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\03. External\Library\Engine\Engine.lib
+=======
+  Transform.cpp
+  Engine.vcxproj -> C:\Users\JeeHun\Desktop\JeeHun\DX12\DX12_2th\10th\DX12_10th_3(Shadow)\03. External\Library\Engine\Engine.lib
+>>>>>>> yjs

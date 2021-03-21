@@ -67,11 +67,11 @@ void CFBXLoader::LoadFbx(const wstring & _strPath)
 
 	m_pImporter->Import(m_pScene);
 
-	/*FbxAxisSystem originAxis = FbxAxisSystem::eMax;
-	originAxis = m_pScene->GetGlobalSettings().GetAxisSystem();
-	FbxAxisSystem DesireAxis = FbxAxisSystem::DirectX;
-	DesireAxis.ConvertScene(m_pScene);
-	originAxis = m_pScene->GetGlobalSettings().GetAxisSystem();*/
+	//FbxAxisSystem originAxis = FbxAxisSystem::eMax;
+	//originAxis = m_pScene->GetGlobalSettings().GetAxisSystem();
+	//FbxAxisSystem DesireAxis = FbxAxisSystem::DirectX;
+	//DesireAxis.ConvertScene(m_pScene);
+	//originAxis = m_pScene->GetGlobalSettings().GetAxisSystem();
 
 	m_pScene->GetGlobalSettings().SetAxisSystem(FbxAxisSystem::Max);
 
@@ -87,7 +87,7 @@ void CFBXLoader::LoadFbx(const wstring & _strPath)
 	// 삼각화(Triangulate)
 	Triangulate(m_pScene->GetRootNode());
 
-	// 메쉬 데이터 얻기
+	// 메쉬 데이터 LoadMeshDataFromNode얻기
 	LoadMeshDataFromNode(m_pScene->GetRootNode());
 
 	m_pImporter->Destroy();
@@ -128,6 +128,7 @@ void CFBXLoader::LoadMeshDataFromNode(FbxNode * _pNode)
 	{
 		LoadMeshDataFromNode(_pNode->GetChild(i));
 	}
+
 }
 
 void CFBXLoader::LoadMesh(FbxMesh * _pFbxMesh)
@@ -233,45 +234,50 @@ void CFBXLoader::GetTangent(FbxMesh * _pMesh
 	, int _iVtxOrder /*폴리곤 단위로 접근하는 순서*/)
 {
 	int iTangentCnt = _pMesh->GetElementTangentCount();
-	if (1 != iTangentCnt)
+	if (1 < iTangentCnt)
 		assert(NULL); // 정점 1개가 포함하는 탄젠트 정보가 2개 이상이다.
 
 	// 탄젠트 data 의 시작 주소
 	FbxGeometryElementTangent* pTangent = _pMesh->GetElementTangent();
 	UINT iTangentIdx = 0;
 	
-	if (pTangent->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+	if (pTangent != nullptr)
 	{
-		if (pTangent->GetReferenceMode() == FbxGeometryElement::eDirect)
-			iTangentIdx = _iVtxOrder;
-		else
-			iTangentIdx = pTangent->GetIndexArray().GetAt(_iVtxOrder);
-	}
-	else if (pTangent->GetMappingMode() == FbxGeometryElement::eByControlPoint)
-	{
-		if (pTangent->GetReferenceMode() == FbxGeometryElement::eDirect)
-			iTangentIdx = _iIdx;
-		else
-			iTangentIdx = pTangent->GetIndexArray().GetAt(_iIdx);
-	}
+		if (pTangent->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
+		{
+			if (pTangent->GetReferenceMode() == FbxGeometryElement::eDirect)
+				iTangentIdx = _iVtxOrder;
+			else
+				iTangentIdx = pTangent->GetIndexArray().GetAt(_iVtxOrder);
+		}
+		else if (pTangent->GetMappingMode() == FbxGeometryElement::eByControlPoint)
+		{
+			if (pTangent->GetReferenceMode() == FbxGeometryElement::eDirect)
+				iTangentIdx = _iIdx;
+			else
+				iTangentIdx = pTangent->GetIndexArray().GetAt(_iIdx);
+		}
 
-	FbxVector4 vTangent = pTangent->GetDirectArray().GetAt(iTangentIdx);
-	
-	_pContainer->vecTangent[_iIdx].x = (float)vTangent.mData[0];
-	_pContainer->vecTangent[_iIdx].y = (float)vTangent.mData[2];
-	_pContainer->vecTangent[_iIdx].z = (float)vTangent.mData[1];
+		FbxVector4 vTangent = pTangent->GetDirectArray().GetAt(iTangentIdx);
+
+		_pContainer->vecTangent[_iIdx].x = (float)vTangent.mData[0];
+		_pContainer->vecTangent[_iIdx].y = (float)vTangent.mData[2];
+		_pContainer->vecTangent[_iIdx].z = (float)vTangent.mData[1];
+	}
 }
 
 void CFBXLoader::GetBinormal(FbxMesh * _pMesh, tContainer * _pContainer, int _iIdx, int _iVtxOrder)
 {
 	int iBinormalCnt = _pMesh->GetElementBinormalCount();
-	if (1 != iBinormalCnt)
+	if (1 < iBinormalCnt)
 		assert(NULL); // 정점 1개가 포함하는 종법선 정보가 2개 이상이다.
 
 	// 종법선 data 의 시작 주소
 	FbxGeometryElementBinormal* pBinormal = _pMesh->GetElementBinormal();
 	UINT iBinormalIdx = 0;
 
+	if(pBinormal != nullptr)
+	{ 
 	if (pBinormal->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
 	{
 		if (pBinormal->GetReferenceMode() == FbxGeometryElement::eDirect)
@@ -292,6 +298,7 @@ void CFBXLoader::GetBinormal(FbxMesh * _pMesh, tContainer * _pContainer, int _iI
 	_pContainer->vecBinormal[_iIdx].x = (float)vBinormal.mData[0];
 	_pContainer->vecBinormal[_iIdx].y = (float)vBinormal.mData[2];
 	_pContainer->vecBinormal[_iIdx].z = (float)vBinormal.mData[1];
+	}
 }
 
 void CFBXLoader::GetNormal(FbxMesh * _pMesh, tContainer * _pContainer, int _iIdx, int _iVtxOrder)
@@ -396,17 +403,26 @@ void CFBXLoader::LoadTexture()
 			wstring strPath;
 			wstring strFileName;
 			
-			strPath = CPathMgr::GetRelativePath(m_vecContainer[i].vecMtrl[j].strDiff.c_str());
-			strFileName = CPathMgr::GetFileName(m_vecContainer[i].vecMtrl[j].strDiff.c_str());
-			CResMgr::GetInst()->Load<CTexture>(strFileName, strPath);
+			if (m_vecContainer[i].vecMtrl[j].strDiff.size() > 0)
+			{
+				strPath = CPathMgr::GetRelativePath(m_vecContainer[i].vecMtrl[j].strDiff.c_str());
+				strFileName = CPathMgr::GetFileName(m_vecContainer[i].vecMtrl[j].strDiff.c_str());
+				CResMgr::GetInst()->Load<CTexture>(strFileName, strPath);
+			}
 
-			strPath = CPathMgr::GetRelativePath(m_vecContainer[i].vecMtrl[j].strNormal.c_str());
-			strFileName = CPathMgr::GetFileName(m_vecContainer[i].vecMtrl[j].strNormal.c_str());
-			CResMgr::GetInst()->Load<CTexture>(strFileName, strPath);
+			if (m_vecContainer[i].vecMtrl[j].strNormal.size() > 0)
+			{
+				strPath = CPathMgr::GetRelativePath(m_vecContainer[i].vecMtrl[j].strNormal.c_str());
+				strFileName = CPathMgr::GetFileName(m_vecContainer[i].vecMtrl[j].strNormal.c_str());
+				CResMgr::GetInst()->Load<CTexture>(strFileName, strPath);
+			}
 
-			strPath = CPathMgr::GetRelativePath(m_vecContainer[i].vecMtrl[j].strSpec.c_str());
-			strFileName = CPathMgr::GetFileName(m_vecContainer[i].vecMtrl[j].strSpec.c_str());
-			CResMgr::GetInst()->Load<CTexture>(strFileName, strPath);
+			if (m_vecContainer[i].vecMtrl[j].strSpec.size() > 0)
+			{
+				strPath = CPathMgr::GetRelativePath(m_vecContainer[i].vecMtrl[j].strSpec.c_str());
+				strFileName = CPathMgr::GetFileName(m_vecContainer[i].vecMtrl[j].strSpec.c_str());
+				CResMgr::GetInst()->Load<CTexture>(strFileName, strPath);
+			}
 		}
 	}
 }
@@ -568,19 +584,22 @@ void CFBXLoader::LoadAnimationData(FbxMesh * _pMesh, tContainer * _pContainer)
 
 					// 현재 본 인덱스를 얻어온다.
 					int iBoneIdx = FindBoneIndex(pCluster->GetLink()->GetName());
-					if (-1 == iBoneIdx)
-						assert(NULL);
+					/*if (-1 == iBoneIdx)
+						assert(NULL);*/
 					
-					FbxAMatrix matNodeTransform = GetTransform(_pMesh->GetNode());
+					if (iBoneIdx >= 0)
+					{
+						FbxAMatrix matNodeTransform = GetTransform(_pMesh->GetNode());
 
-					// Weights And Indices 정보를 읽는다.
-					LoadWeightsAndIndices(pCluster, iBoneIdx, _pContainer);
+						// Weights And Indices 정보를 읽는다.
+						LoadWeightsAndIndices(pCluster, iBoneIdx, _pContainer);
 
-					// Bone 의 OffSet 행렬 구한다.
-					LoadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
+						// Bone 의 OffSet 행렬 구한다.
+						LoadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
 
-					// Bone KeyFrame 별 행렬을 구한다.
-					LoadKeyframeTransform(_pMesh->GetNode(), pCluster, matNodeTransform, iBoneIdx, _pContainer);
+						// Bone KeyFrame 별 행렬을 구한다.
+						LoadKeyframeTransform(_pMesh->GetNode(), pCluster, matNodeTransform, iBoneIdx, _pContainer);
+					}
 				}
 			}
 		}
