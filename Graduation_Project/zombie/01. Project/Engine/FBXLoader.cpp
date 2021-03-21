@@ -67,11 +67,11 @@ void CFBXLoader::LoadFbx(const wstring & _strPath)
 
 	m_pImporter->Import(m_pScene);
 
-	FbxAxisSystem originAxis = FbxAxisSystem::eMax;
-	originAxis = m_pScene->GetGlobalSettings().GetAxisSystem();
-	FbxAxisSystem DesireAxis = FbxAxisSystem::DirectX;
-	DesireAxis.ConvertScene(m_pScene);
-	originAxis = m_pScene->GetGlobalSettings().GetAxisSystem();
+	//FbxAxisSystem originAxis = FbxAxisSystem::eMax;
+	//originAxis = m_pScene->GetGlobalSettings().GetAxisSystem();
+	//FbxAxisSystem DesireAxis = FbxAxisSystem::DirectX;
+	//DesireAxis.ConvertScene(m_pScene);
+	//originAxis = m_pScene->GetGlobalSettings().GetAxisSystem();
 
 	m_pScene->GetGlobalSettings().SetAxisSystem(FbxAxisSystem::Max);
 
@@ -584,19 +584,22 @@ void CFBXLoader::LoadAnimationData(FbxMesh * _pMesh, tContainer * _pContainer)
 
 					// 현재 본 인덱스를 얻어온다.
 					int iBoneIdx = FindBoneIndex(pCluster->GetLink()->GetName());
-					if (-1 == iBoneIdx)
-						assert(NULL);
+					/*if (-1 == iBoneIdx)
+						assert(NULL);*/
 					
-					FbxAMatrix matNodeTransform = GetTransform(_pMesh->GetNode());
+					if (iBoneIdx >= 0)
+					{
+						FbxAMatrix matNodeTransform = GetTransform(_pMesh->GetNode());
 
-					// Weights And Indices 정보를 읽는다.
-					LoadWeightsAndIndices(pCluster, iBoneIdx, _pContainer);
+						// Weights And Indices 정보를 읽는다.
+						LoadWeightsAndIndices(pCluster, iBoneIdx, _pContainer);
 
-					// Bone 의 OffSet 행렬 구한다.
-					LoadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
+						// Bone 의 OffSet 행렬 구한다.
+						LoadOffsetMatrix(pCluster, matNodeTransform, iBoneIdx, _pContainer);
 
-					// Bone KeyFrame 별 행렬을 구한다.
-					LoadKeyframeTransform(_pMesh->GetNode(), pCluster, matNodeTransform, iBoneIdx, _pContainer);
+						// Bone KeyFrame 별 행렬을 구한다.
+						LoadKeyframeTransform(_pMesh->GetNode(), pCluster, matNodeTransform, iBoneIdx, _pContainer);
+					}
 				}
 			}
 		}

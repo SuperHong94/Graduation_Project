@@ -103,7 +103,7 @@ wchar_t * CPathMgr::GetRelativePath(const wchar_t * _pFullPath)
 	wmemset(g_szRelativePath, 0, 255);
 
 	wstring str = _pFullPath;
-	size_t iLen = wcslen(g_szResPath) - 2;
+	size_t iLen = wcslen(g_szResPath);
 	str = str.substr(iLen, str.length() - iLen).c_str();
 	wcscpy_s(g_szRelativePath, 255, str.c_str());
 	return g_szRelativePath;

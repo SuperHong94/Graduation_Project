@@ -169,10 +169,10 @@ void CSceneMgr::init()
 	// ===================
 	pPlayerObject = new CGameObject;
 
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\p1.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
+	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\s17.fbx");
+	pMeshData->Save(pMeshData->GetPath());
 
-	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\p1.mdat", L"MeshData\\p1.mdat");
+	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\s17.mdat", L"MeshData\\s17.mdat");
 
 	pPlayerObject = pMeshData->Instantiate();
 	pPlayerObject->SetName(L"Player Object");
@@ -180,9 +180,9 @@ void CSceneMgr::init()
 	//pPlayerObject->AddComponent(new CMeshRender);
 
 	// Transform 설정
-	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
+	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 100.f, 0.f));
 	pPlayerObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-	pPlayerObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2.f, 0.f, 0.f));
+	pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, -XM_PI / 2.f, 0.f));
 
 	// MeshRender 설정
 	pPlayerObject->MeshRender()->SetDynamicShadow(true);
