@@ -169,10 +169,10 @@ void CSceneMgr::init()
 	// ===================
 	pPlayerObject = new CGameObject;
 
-	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\temp4.fbx");
-	pMeshData->Save(pMeshData->GetPath());
+	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierRun.fbx");
+	//pMeshData->Save(pMeshData->GetPath());
 
-	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\temp4.mdat", L"MeshData\\temp4.mdat");
+	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
 
 	pPlayerObject = pMeshData->Instantiate();
 	pPlayerObject->SetName(L"Player Object");
@@ -180,9 +180,9 @@ void CSceneMgr::init()
 	//pPlayerObject->AddComponent(new CMeshRender);
 
 	// Transform 설정
-	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 100.f, 0.f));
-	pPlayerObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-	pPlayerObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2.f, 0.f, 0.f));
+	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 50.f, 0.f));
+	pPlayerObject->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
+	//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
 
 	// MeshRender 설정
 	pPlayerObject->MeshRender()->SetDynamicShadow(true);
@@ -233,26 +233,26 @@ void CSceneMgr::init()
 	//CreateTargetUI();
 
 
-	// =============
-	// FBX 파일 로드
-	// =============
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\monster.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
+	//// =============
+	//// FBX 파일 로드
+	//// =============
+	////pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\monster.fbx");
+	////pMeshData->Save(pMeshData->GetPath());
 
-	// MeshData 로드
-	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\monster.mdat", L"MeshData\\monster.mdat");
-	
-	pObject = pMeshData->Instantiate();
-	pObject->SetName(L"House");
-	pObject->FrustumCheck(false);
-	pObject->Transform()->SetLocalPos(Vec3(0.f, 100.f, 0.f));
-	pObject->Transform()->SetLocalScale(Vec3(2.f, 2.f, 2.f));
-	pObject->MeshRender()->SetDynamicShadow(true);
-	/*pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 0);
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
-	m_pCurScene->AddGameObject(L"Default", pObject, false);
+	//// MeshData 로드
+	//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1run.mdat", L"MeshData\\Zombie1run.mdat");
+	//
+	//pObject = pMeshData->Instantiate();
+	//pObject->SetName(L"House");
+	//pObject->FrustumCheck(false);
+	//pObject->Transform()->SetLocalPos(Vec3(0.f, 100.f, 0.f));
+	//pObject->Transform()->SetLocalScale(Vec3(2.f, 2.f, 2.f));
+	//pObject->MeshRender()->SetDynamicShadow(true);
+	///*pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 0);
+	//pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
+	//pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
+	//pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
+	//m_pCurScene->AddGameObject(L"Default", pObject, false);
 
 	
 	// ====================
@@ -260,7 +260,7 @@ void CSceneMgr::init()
 	// ====================
 	pObject = new CGameObject;
 
-	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\monster.mdat", L"MeshData\\monster.mdat");
+	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Run.mdat", L"MeshData\\Zombie1Run.mdat");
 
 	pObject = pMeshData->Instantiate();
 	pObject->SetName(L"Monster Object");
@@ -270,7 +270,7 @@ void CSceneMgr::init()
 
 	// Transform 설정
 	pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
-	pObject->Transform()->SetLocalScale(Vec3(3.f, 3.f, 3.f));
+	pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 	
 	pObject->MeshRender()->SetDynamicShadow(true);
 	/*pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 0);
