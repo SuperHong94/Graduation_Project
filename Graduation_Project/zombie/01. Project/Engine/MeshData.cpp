@@ -29,17 +29,26 @@ CMeshData * CMeshData::LoadFromFBX(const wstring& _strPath)
 	loader.LoadFbx(strFullPath);
 
 	// 메쉬 가져오기
-	CMesh* pMesh = CMesh::CreateFromContainer(loader);
+	vector<Ptr<CMesh>> vecMesh;
+	Ptr<CMesh> pMesh;
+	for (int i = 0; i < loader.GetContainerCount(); i++)
+	{
+		int n = loader.GetContainerCount();
+		pMesh = CMesh::CreateFromContainer(loader, i);
 
-	// ResMgr 에 메쉬 등록
-	wstring strMeshName = L"Mesh\\";
-	strMeshName += CPathMgr::GetFileName(strFullPath.c_str());
-	strMeshName += L".mesh";
+		// ResMgr 에 메쉬 등록
 
-	pMesh->SetName(strMeshName);
-	pMesh->SetPath(strMeshName);
+		wstring strMeshName = L"Mesh\\";
+		strMeshName += CPathMgr::GetFileName(strFullPath.c_str());
+		strMeshName += L".mesh";
+		strMeshName += i;
 
-	CResMgr::GetInst()->AddRes<CMesh>(pMesh->GetName(), pMesh);
+		pMesh->SetName(strMeshName);
+		pMesh->SetPath(strMeshName);
+
+		CResMgr::GetInst()->AddRes<CMesh>(pMesh->GetName(), pMesh);
+		vecMesh.push_back(pMesh);
+	}
 
 	vector<Ptr<CMaterial>> vecMtrl;
 

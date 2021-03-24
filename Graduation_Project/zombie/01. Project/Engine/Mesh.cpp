@@ -130,9 +130,9 @@ void CMesh::Create(UINT _iVtxSize, UINT _iVtxCount, BYTE* _pVtxSysMem
 }
 
 
-CMesh * CMesh::CreateFromContainer(CFBXLoader & _loader)
+CMesh * CMesh::CreateFromContainer(CFBXLoader & _loader, int n)
 {
-	const tContainer* container = &_loader.GetContainer(0);
+	const tContainer* container = &_loader.GetContainer(n);
 
 	ComPtr<ID3D12Resource> pVB = nullptr;
 	D3D12_VERTEX_BUFFER_VIEW tVtxView = {};

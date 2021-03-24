@@ -39,7 +39,7 @@ public:
 	void Create(UINT _iVtxSize, UINT _iVtxCount, BYTE* _pVtxSysMem
 		, DXGI_FORMAT _iIdxFormat, UINT _iIdxCount, BYTE* _pIdxSysMem);
 
-	static CMesh * CreateFromContainer(CFBXLoader & _loader);
+	static CMesh * CreateFromContainer(CFBXLoader & _loader, int n);
 
 	void render(UINT _iSubset = 0);
 	void render_instancing(UINT _iInstancCount, UINT _iSubset = 0);
