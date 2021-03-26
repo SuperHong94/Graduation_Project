@@ -49,7 +49,7 @@ private:
 public:
 	CheckPlayerInAttackRange(MonsterStatus* status) : status(status) {}
 	virtual bool run() override {
-		if (status->distanceToPlayer <= 50)
+		if (status->distanceToPlayer <= 100)
 		{
 			status->PlayerInAttackRange = true;
 			status->state = MonsterState::Attack;

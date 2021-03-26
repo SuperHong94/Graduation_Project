@@ -360,7 +360,7 @@ void CSceneMgr::init()
 
 	// Script ¼³Á¤	
 	pObject->GetScript<CGridScript>()->SetToolCamera(pMainCam);
-	pObject->GetScript<CGridScript>()->SetGridColor(Vec3(0.8f, 0.2f, 0.2f));
+	pObject->GetScript<CGridScript>()->SetGridColor(Vec3(1.f, 1.f, 1.f));
 
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Tool")->AddGameObject(pObject);

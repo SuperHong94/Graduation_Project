@@ -38,6 +38,7 @@ void CMonsterScript::update()
 	vDir.x = vTargetPos.x - vPos.x;
 	vDir.y = 0;
 	vDir.z = vTargetPos.z - vPos.z;
+	vDir = vDir.Normalize();
 
 	//if (vPos.x > 600.f)
 	//	m_iDir = -1;
@@ -53,10 +54,13 @@ void CMonsterScript::update()
 
 	if (status->state == MonsterState::Run)
 	{
-		vPos += DT * 0.2f * vDir;
+		vPos += DT * 200.f * vDir;
 	}
 
 	Transform()->SetLocalPos(vPos);
+	float temp = atan2(vTargetPos.z - vPos.z, vTargetPos.x - vPos.x);
+	Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
+	
 }
 
 void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
