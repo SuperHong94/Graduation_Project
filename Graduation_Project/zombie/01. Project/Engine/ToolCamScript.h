@@ -7,8 +7,8 @@ class CToolCamScript :
 private:
 	float		m_fSpeed;
 	float		m_fScaleSpeed;
-	float		m_fZoomScaleY = 1;
-	float		m_fZoomScaleZ = 1;
+	float		m_fZoomScaleY = 0.9;
+	float		m_fZoomScaleZ = 0.9;
 	float		m_fZoomSpeed = 0.005;
 
 	CGameObject* m_pShootObject;

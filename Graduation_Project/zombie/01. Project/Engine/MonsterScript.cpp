@@ -57,10 +57,11 @@ void CMonsterScript::update()
 		vPos += DT * 200.f * vDir;
 	}
 
-	Transform()->SetLocalPos(vPos);
+	// 이거 나중에 상태별로 포함되게 수정(run, attack??<- 이부분은 다시 생각)
 	float temp = atan2(vTargetPos.z - vPos.z, vTargetPos.x - vPos.x);
 	Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
-	
+
+	Transform()->SetLocalPos(vPos);
 }
 
 void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
