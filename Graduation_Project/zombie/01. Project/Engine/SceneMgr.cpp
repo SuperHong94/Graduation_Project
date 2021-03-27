@@ -162,6 +162,7 @@ void CSceneMgr::init()
 	pObject->Light3D()->SetLightRange(1000.f);
 
 	pObject->Transform()->SetLocalPos(Vec3(-1000.f, 1000.f, -1000.f));
+	pObject->Transform()->SetLocalScale(Vec3(2.f, 2.f, 2.f));
 	m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
 	// ===================
@@ -169,8 +170,8 @@ void CSceneMgr::init()
 	// ===================
 	pPlayerObject = new CGameObject;
 
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierRun.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
+	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierRun.fbx");
+	pMeshData->Save(pMeshData->GetPath());
 
 	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
 
@@ -196,7 +197,6 @@ void CSceneMgr::init()
 
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
-
 
 	// ==================
 	// Camera Object 생성
@@ -261,15 +261,15 @@ void CSceneMgr::init()
 	pObject = new CGameObject;
 
 	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Run.mdat", L"MeshData\\Zombie1Run.mdat");
-
 	pObject = pMeshData->Instantiate();
+
 	pObject->SetName(L"Monster Object");
 	pObject->FrustumCheck(false);
 	pObject->AddComponent(new CTransform);
 	//pObject->AddComponent(new CMeshRender);
 
 	// Transform 설정
-	pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
+	pObject->Transform()->SetLocalPos(Vec3(100.f, 0.f, 0.f));
 	pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 	
 	pObject->MeshRender()->SetDynamicShadow(true);
@@ -282,7 +282,7 @@ void CSceneMgr::init()
 	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
 
 	// Script 설정
-	pObject->AddComponent(new CMonsterScript(pPlayerObject));
+	pObject->AddComponent(new CMonsterScript(pPlayerObject, pObject, m_pCurScene));
 
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Monster")->AddGameObject(pObject);

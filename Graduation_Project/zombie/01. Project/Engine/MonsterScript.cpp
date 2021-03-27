@@ -1,17 +1,19 @@
 #include "stdafx.h"
 #include "MonsterScript.h"
 
-CMonsterScript::CMonsterScript(CGameObject* Object)
+CMonsterScript::CMonsterScript(CGameObject* targetObject, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
 {
-	TargetObejct = Object;
+	TargetObejct = targetObject;
+	pObject = Object;
 	status = new MonsterStatus;
+	pScene = pscene;
 
 	root = new Sequence;
 	sequence1 = new Sequence;
-	CCheckRange = new CheckPlayerInRange(status);
-	CCheckAttackRange = new CheckPlayerInAttackRange(status);
-	CAttackPlayer = new AttackPlayer(status);
+	CCheckRange = new CheckPlayerInRange(status, pObject, pScene);
+	CCheckAttackRange = new CheckPlayerInAttackRange(status, pObject, pScene);
+	CAttackPlayer = new AttackPlayer(status, pObject, pScene);
 
 	root->addChild(sequence1);
 
