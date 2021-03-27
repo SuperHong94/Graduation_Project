@@ -896,48 +896,8 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   {
   };
   
-  Animation2D.cpp
-  Animator2D.cpp
-  Animator3D.cpp
-  BulletScript.cpp
-  Camera.cpp
-  Collider2D.cpp
-  CollisionMgr.cpp
-  Component.cpp
-  EventMgr.cpp
-  Frustum.cpp
-  GameObject.cpp
-  GridScript.cpp
-  Layer.cpp
-  Light2D.cpp
-  Light3D.cpp
-  MeshData.cpp
-  MeshRender.cpp
-  MonsterScript.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MonsterScript.cpp(37,27): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MonsterScript.cpp(63,13): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  ParticleSystem.cpp
   PlayerScript.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\PlayerScript.cpp(85,13): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  RenderMgr.cpp
-  Scene.cpp
-  SceneMgr.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(10,23): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(11,23): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(12,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-  Script.cpp
-  TestScript.cpp
-  ToolCamScript.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(10,23): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(11,23): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(12,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.cpp(96,21): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
-  Transform.cpp
-  코드를 생성하고 있습니다...
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\PlayerScript.cpp(116,13): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Engine.vcxproj -> C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\03. External\Library\Engine\Engine_debug.lib
-  .\01. Project\Engine\GameObject.h
-  .\01. Project\Engine\MonsterScript.h
-  2개 파일이 복사되었습니다.
+  0개 파일이 복사되었습니다.
   0개 파일이 복사되었습니다.

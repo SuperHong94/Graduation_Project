@@ -4,11 +4,12 @@
 #include "BulletScript.h"
 #include "TestScript.h"
 
-CPlayerScript::CPlayerScript()
+CPlayerScript::CPlayerScript(CGameObject* Object)
 	: CScript((UINT)SCRIPT_TYPE::PLAYERSCRIPT)
 	, m_pOriginMtrl(nullptr)
 	, m_pCloneMtrl(nullptr)
 {	
+	pObject = Object;
 }
 
 CPlayerScript::~CPlayerScript()
@@ -29,29 +30,59 @@ void CPlayerScript::update()
 	Vec3 vPos = Transform()->GetLocalPos();
 	Vec3 vRot = Transform()->GetLocalRot();
 	POINT ptMousePos = CKeyMgr::GetInst()->GetMousePos();
+	bool isMove = false;
 
 	if (KEY_HOLD(KEY_TYPE::KEY_W))
 	{
 		vPos.z += DT * 300.f;
+		isMove = true;
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_S))
 	{
 		vPos.z -= DT * 300.f;
+		isMove = true;
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_A))
 	{
 		vPos.x -= DT * 300.f;
+		isMove = true;
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_D))
 	{
 		vPos.x += DT * 300.f;
+		isMove = true;
 	}
 
 	Transform()->SetLocalPos(vPos);
 	Transform()->SetLocalRot(vRot);
+
+	//애니메이션 설정
+	if (isMove)
+	{
+		//status->state = State::Run;
+		Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
+		pObject->ChangeAnimation(pMeshData);
+
+		// 이건 모델 피봇 잘못설정해서 임시로 설정
+		// 수정되면 지울 것
+		Vec3 temp = pObject->Transform()->GetLocalPos();
+		pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f, temp.z));
+	}
+
+	else
+	{
+		//status->state = State::Run;
+		Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+		pObject->ChangeAnimation(pMeshData);
+
+		// 이건 모델 피봇 잘못설정해서 임시로 설정
+	// 수정되면 지울 것
+		Vec3 temp = pObject->Transform()->GetLocalPos();
+		pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
+	}
 
 	//////////////////////////////////////////////////////////
 	// 마우스 방향으로 플레이어 방향 설정

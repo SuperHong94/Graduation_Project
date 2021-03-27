@@ -170,10 +170,10 @@ void CSceneMgr::init()
 	// ===================
 	pPlayerObject = new CGameObject;
 
-	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierRun.fbx");
+	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierIdle.fbx");
 	pMeshData->Save(pMeshData->GetPath());
 
-	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
+	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 
 	pPlayerObject = pMeshData->Instantiate();
 	pPlayerObject->SetName(L"Player Object");
@@ -181,7 +181,7 @@ void CSceneMgr::init()
 	//pPlayerObject->AddComponent(new CMeshRender);
 
 	// Transform 설정
-	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 50.f, 0.f));
+	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
 	pPlayerObject->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
 	//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
 
@@ -193,7 +193,7 @@ void CSceneMgr::init()
 	//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
 
 	// Script 설정
-	pPlayerObject->AddComponent(new CPlayerScript);
+	pPlayerObject->AddComponent(new CPlayerScript(pPlayerObject));
 
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
