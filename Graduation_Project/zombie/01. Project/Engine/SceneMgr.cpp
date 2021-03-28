@@ -126,10 +126,10 @@ void CSceneMgr::init()
 	pPM->SetData(SHADER_PARAM::TEX_2, pSky01.GetPointer());
 	
 	// ===============
-	// Test Scene 생성
+	// Main Scene 생성
 	// ===============
 	m_pCurScene = new CScene;
-	m_pCurScene->SetName(L"Test Scene");
+	m_pCurScene->SetName(L"Main Scene");
 
 	// ===============
 	// Layer 이름 지정
@@ -170,8 +170,8 @@ void CSceneMgr::init()
 	// ===================
 	pPlayerObject = new CGameObject;
 
-	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierBRun.fbx");
-	pMeshData->Save(pMeshData->GetPath());
+	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierBRun.fbx");
+	//pMeshData->Save(pMeshData->GetPath());
 
 	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 
@@ -186,7 +186,7 @@ void CSceneMgr::init()
 	//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
 
 	// MeshRender 설정
-	pPlayerObject->MeshRender()->SetDynamicShadow(true);
+	//pPlayerObject->MeshRender()->SetDynamicShadow(true);
 	//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 	//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
 	//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
@@ -272,14 +272,14 @@ void CSceneMgr::init()
 	pObject->Transform()->SetLocalPos(Vec3(100.f, 0.f, 0.f));
 	pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 	
-	pObject->MeshRender()->SetDynamicShadow(true);
+	//pObject->MeshRender()->SetDynamicShadow(true);
 	/*pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 0);
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
 
-	pObject->AddComponent(new CCollider2D);
-	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+	//pObject->AddComponent(new CCollider2D);
+	//pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
 
 	// Script 설정
 	pObject->AddComponent(new CMonsterScript(pPlayerObject, pObject, m_pCurScene));
@@ -290,15 +290,15 @@ void CSceneMgr::init()
 	// ====================
 	// Particle Object 생성
 	// ====================
-	pObject = new CGameObject;
-	pObject->SetName(L"Particle");
-	pObject->AddComponent(new CTransform);	
-	pObject->AddComponent(new CParticleSystem);
-	
-	pObject->FrustumCheck(false);
-	pObject->Transform()->SetLocalPos(Vec3(500.f, 0.f, 0.f));		
-	
-	m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+	//pObject = new CGameObject;
+	//pObject->SetName(L"Particle");
+	//pObject->AddComponent(new CTransform);	
+	//pObject->AddComponent(new CParticleSystem);
+	//
+	//pObject->FrustumCheck(false);
+	//pObject->Transform()->SetLocalPos(Vec3(500.f, 0.f, 0.f));		
+	//
+	//m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
 	// ====================
 	// Skybox 오브젝트 생성
@@ -451,32 +451,4 @@ bool Compare(CGameObject* _pLeft, CGameObject* _pRight)
 {
 	return (_pLeft->Transform()->GetWorldPos().z < _pRight->Transform()->GetWorldPos().z);
 }
-
-//void CSceneMgr::FindGameObjectByPoint(POINT _point, vector<CGameObject*>& _vecFindObj, CCamera* _pToolCam)
-//{
-//	CCamera* pCam = _pToolCam;
-//	if (CCore::GetInst()->GetSceneMod() == SCENE_MOD::SCENE_PLAY)
-//	{
-//		pCam = CRenderMgr::GetInst()->GetCamera(0);
-//	}
-//
-//	tResolution tRes = CRenderMgr::GetInst()->GetResolution();
-//	Vec3 vPickPos = Vec3((float)_point.x - (tRes.fWidth / 2.f), (tRes.fHeight / 2.f) - (float)_point.y, 0.f);
-//	vPickPos *= pCam->GetScale(); 
-//	vPickPos += pCam->Transform()->GetWorldPos();
-//
-//	for (int i = 0; i < MAX_LAYER; ++i)
-//	{
-//		const vector<CGameObject*>& vecObject = m_pCurScene->GetLayer(i)->GetObjects();
-//		for (size_t j = 0; j < vecObject.size(); ++j)
-//		{
-//			if (vecObject[j]->Transform()->IsCasting(vPickPos))
-//			{
-//				_vecFindObj.push_back(vecObject[j]);
-//			}
-//		}
-//	}
-//
-//	sort(_vecFindObj.begin(), _vecFindObj.end(), Compare);
-//}
 
