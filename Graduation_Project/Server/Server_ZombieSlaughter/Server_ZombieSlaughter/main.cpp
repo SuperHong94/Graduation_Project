@@ -8,7 +8,7 @@ void CALLBACK recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overla
 void CALLBACK send_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags);
 
 
-void Update(SOCKET);
+void Update(int);
 int get_new_id()
 {
 	for (int i = 0; i <= MAX_USER; ++i)
@@ -25,6 +25,10 @@ void recvData(int c_id)
 
 	//받는 데이터의 크기=전체버퍼크기-남은 데이터크기
 	clients[c_id].m_recv_over.wsaBuf[0].len = MAX_BUFFER - clients[c_id].m_prev_size;
+
+	memset(&clients[c_id].m_recv_over.over, 0, sizeof(clients[c_id].m_recv_over.over));
+	DWORD r_flag = 0;
+	WSARecv(clients[c_id].m_socket, clients[c_id].m_recv_over.wsaBuf, 1, NULL, &r_flag, &clients[c_id].m_recv_over.over, recv_callback);
 
 
 }
@@ -81,15 +85,16 @@ int main()
 			inet_ntoa(c_addr.sin_addr), ntohs(c_addr.sin_port));
 
 		int c_id = get_new_id();
-		clients[c_id]= CLIENT{};
+		clients[c_id] = CLIENT{};
 		clients[c_id].m_id = c_id;
 		clients[c_id].m_socket = c_sock;
 		clients[c_id].m_prev_size = 0;
+		clients[c_id].m_recv_over.m_id = c_id;
 
-		memset(&clients[c_sock].over, 0, sizeof(WSAOVERLAPPED));
+		while (1) {
 
-		DWORD flags = 0;
-		WSARecv(clients[c_sock].socket, &clients[c_sock].wsaBuf, 1, NULL, &flags, &(clients[c_sock].over), recv_callback);
+		recvData(c_id);
+		}
 
 	}
 	closesocket(listenSocket);
@@ -102,31 +107,32 @@ int main()
 void recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags)
 {
 	//socketInfo의 주소가 overlapped의 주소와 같다 왜냐하면 구조체의 첫번째가 overlapped이기 때문이다.
-	SOCKET clients_s = reinterpret_cast<SOCKETINFO*>(overlapped)->socket;
+	int c_id = reinterpret_cast<SOCKETINFO*>(overlapped)->m_id;
 
 	if (dataBytes == 0)
 	{
-		closesocket(clients[clients_s].socket);
-		clients.erase(clients_s);
+		closesocket(clients[c_id].m_socket);
+		clients.erase(c_id);
 		return;
 	}
-	
-	
-	Update(clients_s);
-	memset(&(clients[clients_s].over), 0, sizeof(WSAOVERLAPPED));
+
+
+	Update(c_id);
+	memset(&(clients[c_id].m_recv_over), 0, sizeof(WSAOVERLAPPED));
 
 }
-void Update(SOCKET c_sock)
+void Update(int c_id)
 {
-	switch (clients[c_sock].databuffer[1])
+	switch (clients[c_id].m_recv_over.databuffer[1])
 	{
 	case C2S_KEY_EVENT://클라에서 키이벤트가 들어왔을때
 	{
-		c2s_Key* keyEvent = reinterpret_cast<c2s_Key*>(clients[c_sock].databuffer);
+		c2s_Key* keyEvent = reinterpret_cast<c2s_Key*>(clients[c_id].m_recv_over.databuffer);
 		switch (keyEvent->key)
 		{
 		case 'w':
 		case 'W':
+			clients[c_id].z += 1.0f;
 			break;
 
 		case 'a':
@@ -137,6 +143,7 @@ void Update(SOCKET c_sock)
 			break;
 		case 'd':
 		case 'D':
+			clients[c_id].z -= 1.0f;
 			break;
 		default:
 			break;
@@ -146,7 +153,7 @@ void Update(SOCKET c_sock)
 	default:
 		break;
 	}
-	
+
 }
 void send_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags)
 {
