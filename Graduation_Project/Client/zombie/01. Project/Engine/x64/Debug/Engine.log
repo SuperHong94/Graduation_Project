@@ -1,0 +1,10 @@
+﻿  PlayerScript.cpp
+C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\PlayerScript.cpp(168,13): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  SceneMgr.cpp
+C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(10,23): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(11,23): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(12,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+  코드를 생성하고 있습니다...
+  Engine.vcxproj -> C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\Graduation_Project\zombie\03. External\Library\Engine\Engine_debug.lib
+  0개 파일이 복사되었습니다.
+  0개 파일이 복사되었습니다.

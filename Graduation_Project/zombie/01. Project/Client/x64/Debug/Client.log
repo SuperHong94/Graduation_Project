@@ -1,1 +1,3 @@
-﻿  Client.vcxproj -> C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\02. File\bin_debug\Client.exe
+﻿  stdafx.cpp
+  main.cpp
+LINK : fatal error LNK1104: 'FBXLoader/x64/debug/libfbxsdk-md.lib' 파일을 열 수 없습니다.
