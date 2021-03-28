@@ -10,14 +10,25 @@
 
 #define MAX_BUFFER        1024
 #define SERVER_PORT        3500
+constexpr int MAX_USER = 10;
 using namespace std;
 
 struct SOCKETINFO
 {
 	WSAOVERLAPPED over;
-	WSABUF wsaBuf;
-	SOCKET socket;
-	char databuffer[MAX_BUFFER];
+	WSABUF wsaBuf[1];
+	unsigned char databuffer[MAX_BUFFER];
+};
+
+struct CLIENT
+{
+	SOCKET m_socket;
+	int m_id;
+
+	SOCKETINFO m_recv_over;
+	unsigned int m_prev_size;
+
+	float x, y, z;
 };
 
 void err_display(char* msg);

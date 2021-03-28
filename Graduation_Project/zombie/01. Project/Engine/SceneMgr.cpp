@@ -170,12 +170,9 @@ void CSceneMgr::init()
 	// ===================
 	pPlayerObject = new CGameObject;
 
-<<<<<<< HEAD
 
-	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierIdle.fbx");
-=======
 	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierBRun.fbx");
->>>>>>> yjs
+
 	pMeshData->Save(pMeshData->GetPath());
 
 	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");

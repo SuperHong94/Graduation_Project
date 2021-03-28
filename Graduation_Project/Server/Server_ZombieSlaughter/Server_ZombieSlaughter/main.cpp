@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Protocol.h"
 
-unordered_map<SOCKET, SOCKETINFO> clients;
+unordered_map<int, CLIENT> clients;
 
 
 void CALLBACK recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags);
@@ -9,7 +9,25 @@ void CALLBACK send_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overla
 
 
 void Update(SOCKET);
+int get_new_id()
+{
+	for (int i = 0; i <= MAX_USER; ++i)
+	{
+		if (clients.count(i) == 0)return i;
+	}
+}
 
+void recvData(int c_id)
+{
+
+	//리시브 버퍼의 위치= 받는 리시브의 데이터위치+남은데이터의크기
+	clients[c_id].m_recv_over.wsaBuf[0].buf = reinterpret_cast<char*>(clients[c_id].m_recv_over.databuffer) + clients[c_id].m_prev_size;
+
+	//받는 데이터의 크기=전체버퍼크기-남은 데이터크기
+	clients[c_id].m_recv_over.wsaBuf[0].len = MAX_BUFFER - clients[c_id].m_prev_size;
+
+
+}
 int main()
 {
 
@@ -61,10 +79,12 @@ int main()
 
 		printf("\n[TCP 서버] 클라이언트 접속: IP 주소=%s, 포트 번호=%d\n",
 			inet_ntoa(c_addr.sin_addr), ntohs(c_addr.sin_port));
-		clients[c_sock]= SOCKETINFO{};
-		clients[c_sock].socket = c_sock;
-		clients[c_sock].wsaBuf.len = MAX_BUFFER;
-		clients[c_sock].wsaBuf.buf = clients[c_sock].databuffer;
+
+		int c_id = get_new_id();
+		clients[c_id]= CLIENT{};
+		clients[c_id].m_id = c_id;
+		clients[c_id].m_socket = c_sock;
+		clients[c_id].m_prev_size = 0;
 
 		memset(&clients[c_sock].over, 0, sizeof(WSAOVERLAPPED));
 
