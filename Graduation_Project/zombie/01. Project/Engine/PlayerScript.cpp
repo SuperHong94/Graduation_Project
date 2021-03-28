@@ -43,9 +43,9 @@ PlayerState CPlayerScript::setRunAni(Vec3 dir, Vec3 axis)
 	else if (dot.x <= -0.8)
 		runState = PlayerState::P_BRun;
 	else if (cross.y < 0)
-		runState = PlayerState::P_RRun;
-	else if (cross.y > 0)
 		runState = PlayerState::P_LRun;
+	else if (cross.y > 0)
+		runState = PlayerState::P_RRun;
 
 	return runState;
 }
