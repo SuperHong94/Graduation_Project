@@ -1,17 +1,19 @@
 #include "stdafx.h"
 #include "MonsterScript.h"
 
-CMonsterScript::CMonsterScript(CGameObject* Object)
+CMonsterScript::CMonsterScript(CGameObject* targetObject, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
 {
-	TargetObejct = Object;
+	TargetObejct = targetObject;
+	pObject = Object;
 	status = new MonsterStatus;
+	pScene = pscene;
 
 	root = new Sequence;
 	sequence1 = new Sequence;
-	CCheckRange = new CheckPlayerInRange(status);
-	CCheckAttackRange = new CheckPlayerInAttackRange(status);
-	CAttackPlayer = new AttackPlayer(status);
+	CCheckRange = new CheckPlayerInRange(status, pObject, pScene);
+	CCheckAttackRange = new CheckPlayerInAttackRange(status, pObject, pScene);
+	CAttackPlayer = new AttackPlayer(status, pObject, pScene);
 
 	root->addChild(sequence1);
 
@@ -38,6 +40,7 @@ void CMonsterScript::update()
 	vDir.x = vTargetPos.x - vPos.x;
 	vDir.y = 0;
 	vDir.z = vTargetPos.z - vPos.z;
+	vDir = vDir.Normalize();
 
 	//if (vPos.x > 600.f)
 	//	m_iDir = -1;
@@ -51,10 +54,14 @@ void CMonsterScript::update()
 
 	root->run();
 
-	if (status->state == MonsterState::Run)
+	if (status->state == State::Run)
 	{
-		vPos += DT * 0.2f * vDir;
+		vPos += DT * 200.f * vDir;
 	}
+
+	// 이거 나중에 상태별로 포함되게 수정(run, attack??<- 이부분은 다시 생각)
+	float temp = atan2(vTargetPos.z - vPos.z, vTargetPos.x - vPos.x);
+	Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
 
 	Transform()->SetLocalPos(vPos);
 }

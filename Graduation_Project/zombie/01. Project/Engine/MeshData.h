@@ -25,6 +25,9 @@ public:
 
 	CGameObject* Instantiate();	
 
+	Ptr<CMesh> getMesh() { return m_pMesh; }
+	vector<Ptr<CMaterial>> getMtrl() { return m_vecMtrl; }
+
 public:
 	CMeshData();
 	virtual ~CMeshData();

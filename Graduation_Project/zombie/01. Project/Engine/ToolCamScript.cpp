@@ -102,7 +102,7 @@ void CToolCamScript::update()
 	Vec3 vPlayerPos = m_pShootObject->Transform()->GetLocalPos();
 
 	vPos.x = vPlayerPos.x;
-	vPos.y = vPlayerPos.y + 500 * m_fZoomScaleY;
+	vPos.y = 500 * m_fZoomScaleY;
 	vPos.z = vPlayerPos.z  - 500 * m_fZoomScaleZ;
 
 	Transform()->SetLocalPos(vPos);

@@ -1,6 +1,8 @@
 #pragma once
 #include "Entity.h"
 
+#include "MeshData.h"
+
 class CComponent;
 class CTransform;
 class CMeshRender;
@@ -27,6 +29,7 @@ private:
 	bool					m_bDead;
 	bool					m_bActive;
 	bool					m_bFrustumCheck;
+	CAnimator3D*			pAnimator;
 public:
 	void awake();
 	void start();
@@ -71,7 +74,7 @@ public:
 	void SetDead();
 
 	void RegisterToLayer();
-
+	void ChangeAnimation(Ptr<CMeshData> pMeshData);
 
 public:
 	CLONE(CGameObject);

@@ -15,6 +15,16 @@
 #include "Scene.h"
 #include "Layer.h"
 
+enum class State
+{
+	Idle,
+	Wander,
+	Run,
+	Attack,
+	Damage,
+	Die,
+};
+
 enum class SCRIPT_TYPE
 {
 	BULLETSCRIPT,

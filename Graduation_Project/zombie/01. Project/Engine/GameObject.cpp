@@ -10,6 +10,8 @@
 #include "Scene.h"
 #include "Layer.h"
 
+#include "Animator3D.h"
+
 CGameObject::CGameObject()
 	: m_arrCom{}
 	, m_pParentObj(nullptr)
@@ -270,6 +272,22 @@ void CGameObject::RegisterToLayer()
 		m_vecChild[i]->RegisterToLayer();
 	}
 }
+
+void CGameObject::ChangeAnimation(Ptr<CMeshData> pMeshData)
+{
+	this->MeshRender()->SetMesh(pMeshData->getMesh());
+	for (UINT i = 0; i < pMeshData->getMtrl().size(); ++i)
+		this->MeshRender()->SetMaterial(pMeshData->getMtrl()[i], i);
+	CAnimator3D* pAnimator;
+	pAnimator = this->Animator3D();
+	if (pAnimator)
+	{
+		pAnimator->SetBones(pMeshData->getMesh()->GetBones());
+		pAnimator->SetAnimClip(pMeshData->getMesh()->GetAnimClip());
+	}
+}
+
+
 
 
 void CGameObject::enable()

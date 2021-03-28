@@ -32,6 +32,7 @@ CMeshData * CMeshData::LoadFromFBX(const wstring& _strPath)
 	CMesh* pMesh = CMesh::CreateFromContainer(loader);
 
 	// ResMgr 에 메쉬 등록
+
 	wstring strMeshName = L"Mesh\\";
 	strMeshName += CPathMgr::GetFileName(strFullPath.c_str());
 	strMeshName += L".mesh";
