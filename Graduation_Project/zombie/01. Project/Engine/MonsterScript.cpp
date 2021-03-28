@@ -54,7 +54,7 @@ void CMonsterScript::update()
 
 	root->run();
 
-	if (status->state == State::Run)
+	if (status->state == MonsterState::M_Run)
 	{
 		vPos += DT * 200.f * vDir;
 	}

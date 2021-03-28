@@ -1,10 +1,21 @@
 #pragma once
 #include "Script.h"
 
+enum PlayerState
+{
+	P_Idle,
+	P_FRun,
+	P_BRun,
+	P_LRun,
+	P_RRun,
+	P_Attack,
+	P_Die,
+};
+
 
 struct PlayerStatus
 {
-	State state;
+	PlayerState state;
 	float hp = 100;
 };
 
@@ -17,7 +28,7 @@ private:
 	float bulletHeight = 0;
 
 	CGameObject* pObject;
-	PlayerStatus* status;
+	PlayerStatus status;
 	
 public:
 	virtual void awake();	

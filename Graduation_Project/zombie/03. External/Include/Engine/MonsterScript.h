@@ -3,10 +3,18 @@
 #include "BehaviourTree.h"
 #include "Animator3D.h"
 
+enum MonsterState
+{
+	M_Wander,
+	M_Run,
+	M_Attack,
+	M_Damage,
+	M_Die,
+};
 
 struct MonsterStatus
 {
-	State state;
+	MonsterState state;
 	float distanceToPlayer = 0;
 	bool PlayerInRange = false;
 	bool PlayerInAttackRange = false;
@@ -27,7 +35,7 @@ public:
 		if (status->distanceToPlayer <= 1000)
 		{
 			status->PlayerInRange = true;
-			status->state = State::Run;
+			status->state = MonsterState::M_Run;
 
 			//애니메이션 변경
 			Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Run.mdat", L"MeshData\\Zombie1Run.mdat");
@@ -36,7 +44,7 @@ public:
 		else
 		{
 			status->PlayerInRange = false;
-			status->state = State::Wander;
+			status->state = MonsterState::M_Wander;
 		}
 		return status->PlayerInRange;
 	}
@@ -53,7 +61,7 @@ public:
 		if (status->distanceToPlayer <= 100)
 		{
 			status->PlayerInAttackRange = true;
-			status->state = State::Attack;
+			status->state = MonsterState::M_Attack;
 
 			//애니메이션 변경
 			Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Attack.mdat", L"MeshData\\Zombie1Attack.mdat");
@@ -65,12 +73,12 @@ public:
 			status->PlayerInAttackRange = false;
 			if (status->distanceToPlayer <= 1000)
 			{
-				status->state = State::Run;
+				status->state = MonsterState::M_Run;
 			}
 			else
 			{
 				status->PlayerInRange = false;
-				status->state = State::Wander;
+				status->state = MonsterState::M_Wander;
 			}
 		}
 		return status->PlayerInAttackRange;
@@ -90,7 +98,7 @@ public:
 
 			// 나중에 구현
 			status->PlayerInAttackRange = true;
-			status->state = State::Attack;
+			status->state = MonsterState::M_Attack;
 		}
 		return true;
 	}
