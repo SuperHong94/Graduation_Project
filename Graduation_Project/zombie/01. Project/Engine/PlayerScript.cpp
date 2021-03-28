@@ -28,12 +28,19 @@ void CPlayerScript::awake()
 PlayerState CPlayerScript::setRunAni(Vec3 dir, Vec3 axis)
 {
 	PlayerState runState;
-	Vec3 dot = XMVector3Dot(dir, axis);
-	float cos = dot.Length();
+
+	Vec2 dir2, axis2;
+	dir2.x = dir.x;
+	dir2.y = dir.z;
+	axis2.x = axis.x;
+	axis2.y = axis.z;
+
+	Vec2 dot = XMVector2Dot(dir2, axis2);
+
 	Vec3 cross = XMVector3Cross(dir, axis);
-	if (cos >= 0.8)
+	if (dot.x >= 0.8)
 		runState = PlayerState::P_FRun;
-	else if (cos <= -0.8)
+	else if (dot.x <= -0.8)
 		runState = PlayerState::P_BRun;
 	else if (cross.y < 0)
 		runState = PlayerState::P_RRun;
@@ -104,14 +111,14 @@ void CPlayerScript::update()
 	{
 		vPos.x -= DT * 300.f;
 		isMove = true;
-		status.state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
+		status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_D))
 	{
 		vPos.x += DT * 300.f;
 		isMove = true;
-		status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
+		status.state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
 	}
 
 	if (!isMove)
