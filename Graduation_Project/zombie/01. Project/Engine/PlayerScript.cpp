@@ -32,58 +32,6 @@ void CPlayerScript::update()
 	POINT ptMousePos = CKeyMgr::GetInst()->GetMousePos();
 	bool isMove = false;
 
-	if (KEY_HOLD(KEY_TYPE::KEY_W))
-	{
-		vPos.z += DT * 300.f;
-		isMove = true;
-	}
-
-	if (KEY_HOLD(KEY_TYPE::KEY_S))
-	{
-		vPos.z -= DT * 300.f;
-		isMove = true;
-	}
-
-	if (KEY_HOLD(KEY_TYPE::KEY_A))
-	{
-		vPos.x -= DT * 300.f;
-		isMove = true;
-	}
-
-	if (KEY_HOLD(KEY_TYPE::KEY_D))
-	{
-		vPos.x += DT * 300.f;
-		isMove = true;
-	}
-
-	Transform()->SetLocalPos(vPos);
-	Transform()->SetLocalRot(vRot);
-
-	//애니메이션 설정
-	if (isMove)
-	{
-		//status->state = State::Run;
-		Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
-		pObject->ChangeAnimation(pMeshData);
-
-		// 이건 모델 피봇 잘못설정해서 임시로 설정
-		// 수정되면 지울 것
-		Vec3 temp = pObject->Transform()->GetLocalPos();
-		pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f, temp.z));
-	}
-
-	else
-	{
-		//status->state = State::Run;
-		Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
-		pObject->ChangeAnimation(pMeshData);
-
-		// 이건 모델 피봇 잘못설정해서 임시로 설정
-	// 수정되면 지울 것
-		Vec3 temp = pObject->Transform()->GetLocalPos();
-		pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
-	}
-
 	//////////////////////////////////////////////////////////
 	// 마우스 방향으로 플레이어 방향 설정
 	// 총알 방향 계산
@@ -112,6 +60,110 @@ void CPlayerScript::update()
 	vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
 	vBulletTargetPos.z = (bulletHeight - vPickRayOrig.y) * vPickRayDir.z / vPickRayDir.y + vPickRayOrig.z;
 	//////////////////////////////////////////////////////////
+
+	// 플레이어 이동 및 방향 설정
+	Vec3 playerDir;
+	playerDir.x = vBulletTargetPos.x - vPos.x;
+	playerDir.y = 0;
+	playerDir.z = vBulletTargetPos.z - vPos.z;
+	playerDir = playerDir.Normalize();
+	bool isFBRun = false;
+
+	if (KEY_HOLD(KEY_TYPE::KEY_W))
+	{
+		vPos.x += playerDir.x * DT * 300.f;
+		vPos.z += playerDir.z * DT * 300.f;
+		isMove = true;
+		isFBRun = true;
+		status.state = PlayerState::P_FRun;
+	}
+
+	if (KEY_HOLD(KEY_TYPE::KEY_S))
+	{
+		vPos.x -= playerDir.x * DT * 300.f;
+		vPos.z -= playerDir.z * DT * 300.f;
+		isMove = true;
+		isFBRun = true;
+		status.state = PlayerState::P_BRun;
+	}
+
+	if (KEY_HOLD(KEY_TYPE::KEY_A))
+	{
+		Vec3 leftVec = XMVector3Cross(playerDir, Vec3(0.f, 1.f, 0.f));
+		if (!isFBRun)
+		{
+			vPos.x += leftVec.x * DT * 250.f;
+			vPos.z += leftVec.z * DT * 250.f;
+		}
+		else
+		{
+			vPos.x += leftVec.x * DT * 150.f;
+			vPos.z += leftVec.z * DT * 150.f;
+		}
+		status.state = PlayerState::P_LRun;
+		isMove = true;
+	}
+
+	if (KEY_HOLD(KEY_TYPE::KEY_D))
+	{
+		Vec3 rightVec = XMVector3Cross(playerDir, Vec3(0.f, -1.f, 0.f));
+		if (!isFBRun)
+		{
+			vPos.x += rightVec.x * DT * 250.f;
+			vPos.z += rightVec.z * DT * 250.f;
+		}
+		else
+		{
+			vPos.x += rightVec.x * DT * 150.f;
+			vPos.z += rightVec.z * DT * 150.f;
+		}
+		status.state = PlayerState::P_RRun;
+		isMove = true;
+	}
+
+	if (!isMove)
+		status.state = PlayerState::P_Idle;
+
+	Transform()->SetLocalPos(vPos);
+	Transform()->SetLocalRot(vRot);
+
+	//애니메이션 설정
+	if (isMove)
+	{
+		// 방향별 달리기 애니메이션 설정
+		Ptr<CMeshData> pMeshData;
+		if(status.state == PlayerState::P_FRun)
+			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
+
+		else if (status.state == PlayerState::P_BRun)
+			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierBRun.mdat", L"MeshData\\SoldierBRun.mdat");
+
+		else if (status.state == PlayerState::P_LRun)
+			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierLRun.mdat", L"MeshData\\SoldierLRun.mdat");
+
+		else if (status.state == PlayerState::P_RRun)
+			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRRun.mdat", L"MeshData\\SoldierRRun.mdat");
+		
+		if(pMeshData != NULL)
+			pObject->ChangeAnimation(pMeshData);
+
+		// 이건 모델 피봇 잘못설정해서 임시로 설정
+		// 수정되면 지울 것
+		Vec3 temp = pObject->Transform()->GetLocalPos();
+		pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f, temp.z));
+	}
+
+	else
+	{
+		//status->state = State::Run;
+		Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+		pObject->ChangeAnimation(pMeshData);
+
+		// 이건 모델 피봇 잘못설정해서 임시로 설정
+	// 수정되면 지울 것
+		Vec3 temp = pObject->Transform()->GetLocalPos();
+		pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
+	}
 
 	float temp = atan2(vBulletTargetPos.z - vPos.z, vBulletTargetPos.x - vPos.x);
 	Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI/2, 0.f));
