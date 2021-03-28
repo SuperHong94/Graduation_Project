@@ -169,10 +169,10 @@ void CSceneMgr::init()
 	// ===================
 	pPlayerObject = new CGameObject;
 
-	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\s17.fbx");
+	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\s21.fbx");
 	pMeshData->Save(pMeshData->GetPath());
 
-	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\s17.mdat", L"MeshData\\s17.mdat");
+	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\s21.mdat", L"MeshData\\s21.mdat");
 
 	pPlayerObject = pMeshData->Instantiate();
 	pPlayerObject->SetName(L"Player Object");
