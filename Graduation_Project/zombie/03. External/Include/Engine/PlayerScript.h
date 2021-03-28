@@ -34,6 +34,7 @@ public:
 	virtual void awake();	
 	virtual void update();
 
+	PlayerState setRunAni(Vec3 dir, Vec3 axis);
 public:
 	CLONE(CPlayerScript);
 

@@ -25,6 +25,24 @@ void CPlayerScript::awake()
 	m_pCloneMtrl->SetData(SHADER_PARAM::INT_0, &a);
 }
 
+PlayerState CPlayerScript::setRunAni(Vec3 dir, Vec3 axis)
+{
+	PlayerState runState;
+	Vec3 dot = XMVector3Dot(dir, axis);
+	float cos = dot.Length();
+	Vec3 cross = XMVector3Cross(dir, axis);
+	if (cos >= 0.8)
+		runState = PlayerState::P_FRun;
+	else if (cos <= -0.8)
+		runState = PlayerState::P_BRun;
+	else if (cross.y < 0)
+		runState = PlayerState::P_RRun;
+	else if (cross.y > 0)
+		runState = PlayerState::P_LRun;
+
+	return runState;
+}
+
 void CPlayerScript::update()
 {
 	Vec3 vPos = Transform()->GetLocalPos();
@@ -67,58 +85,33 @@ void CPlayerScript::update()
 	playerDir.y = 0;
 	playerDir.z = vBulletTargetPos.z - vPos.z;
 	playerDir = playerDir.Normalize();
-	bool isFBRun = false;
 
 	if (KEY_HOLD(KEY_TYPE::KEY_W))
 	{
-		vPos.x += playerDir.x * DT * 300.f;
-		vPos.z += playerDir.z * DT * 300.f;
+		vPos.z += DT * 300.f;
 		isMove = true;
-		isFBRun = true;
-		status.state = PlayerState::P_FRun;
+		status.state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_S))
 	{
-		vPos.x -= playerDir.x * DT * 300.f;
-		vPos.z -= playerDir.z * DT * 300.f;
+		vPos.z -= DT * 300.f;
 		isMove = true;
-		isFBRun = true;
-		status.state = PlayerState::P_BRun;
+		status.state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_A))
 	{
-		Vec3 leftVec = XMVector3Cross(playerDir, Vec3(0.f, 1.f, 0.f));
-		if (!isFBRun)
-		{
-			vPos.x += leftVec.x * DT * 250.f;
-			vPos.z += leftVec.z * DT * 250.f;
-		}
-		else
-		{
-			vPos.x += leftVec.x * DT * 150.f;
-			vPos.z += leftVec.z * DT * 150.f;
-		}
-		status.state = PlayerState::P_LRun;
+		vPos.x -= DT * 300.f;
 		isMove = true;
+		status.state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_D))
 	{
-		Vec3 rightVec = XMVector3Cross(playerDir, Vec3(0.f, -1.f, 0.f));
-		if (!isFBRun)
-		{
-			vPos.x += rightVec.x * DT * 250.f;
-			vPos.z += rightVec.z * DT * 250.f;
-		}
-		else
-		{
-			vPos.x += rightVec.x * DT * 150.f;
-			vPos.z += rightVec.z * DT * 150.f;
-		}
-		status.state = PlayerState::P_RRun;
+		vPos.x += DT * 300.f;
 		isMove = true;
+		status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
 	}
 
 	if (!isMove)
