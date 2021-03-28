@@ -39,3 +39,6 @@ ipch/
 *.suo
 *.exe
 
+*.pdb
+*.log
+*.idb
