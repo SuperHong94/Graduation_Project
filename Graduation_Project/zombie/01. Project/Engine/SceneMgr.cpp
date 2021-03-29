@@ -183,6 +183,7 @@ void CSceneMgr::init()
 	// Transform 설정
 	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
 	pPlayerObject->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
+	
 	//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
 
 	// MeshRender 설정
