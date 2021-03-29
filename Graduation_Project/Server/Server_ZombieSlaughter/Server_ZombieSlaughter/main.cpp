@@ -120,6 +120,19 @@ void recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWO
 	Update(c_id);
 	memset(&(clients[c_id].m_recv_over), 0, sizeof(WSAOVERLAPPED));
 
+	s2c_move packet;
+	packet.size = sizeof(s2c_move);
+	packet.type = S2C_MOVE;
+	packet.x = clients[c_id].x;
+	packet.y = clients[c_id].y;
+	packet.z = clients[c_id].z;
+	SOCKETINFO send_Info = {};
+	send_Info.wsaBuf[0].buf = reinterpret_cast<char*>(&packet);
+	send_Info.wsaBuf[0].len = packet.size;
+	memset(&send_Info.over, 0, sizeof(WSAOVERLAPPED));
+	DWORD s_flag = 0;
+	WSASend(clients[c_id].m_socket, send_Info.wsaBuf, 1, NULL, 0, &send_Info.over, send_callback);
+
 }
 void Update(int c_id)
 {
@@ -132,18 +145,21 @@ void Update(int c_id)
 		{
 		case 'w':
 		case 'W':
-			clients[c_id].z += 1.0f;
+			clients[c_id].z += 100.0f;
 			break;
 
 		case 'a':
 		case 'A':
+			clients[c_id].x -= 100.0f;
 			break;
 		case 's':
 		case 'S':
+			clients[c_id].z += 100.0f;
 			break;
 		case 'd':
 		case 'D':
-			clients[c_id].z -= 1.0f;
+			clients[c_id].x += 100.0f;
+			
 			break;
 		default:
 			break;
@@ -153,8 +169,13 @@ void Update(int c_id)
 	default:
 		break;
 	}
+	
+
+	
 
 }
 void send_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags)
 {
+	int c_id = reinterpret_cast<SOCKETINFO*>(overlapped)->m_id;
+	recvData(c_id);
 }

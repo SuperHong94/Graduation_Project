@@ -35,6 +35,8 @@
 
 #include "meshdata.h"
 
+#include "NetworkMgr.h"
+
 CScene* CSceneMgr::GetCurScene()
 {
 	return m_pCurScene;
@@ -200,6 +202,10 @@ void CSceneMgr::init()
 
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
+	
+
+	//network에 플레이어 등록
+	CNetworkMgr::GetInst()->SetPlayer(pPlayerObject);
 
 	// ==================
 	// Camera Object 생성

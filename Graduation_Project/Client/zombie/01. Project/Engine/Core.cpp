@@ -13,6 +13,8 @@
 #include "PathMgr.h"
 #include "ConstantBuffer.h"
 
+#include "NetworkMgr.h"
+
 
 CCore::CCore()
 	: m_hMainHwnd(nullptr)
@@ -52,11 +54,13 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b5), 0);
 		
 
+	CNetworkMgr::GetInst()->init();
 	CPathMgr::init();
 	CKeyMgr::GetInst()->init();
 	CTimeMgr::GetInst()->init();
 	CResMgr::GetInst()->init();
 	CSceneMgr::GetInst()->init();
+	
 	
 	//이부분에서  네트워크 생성?
 	return S_OK;

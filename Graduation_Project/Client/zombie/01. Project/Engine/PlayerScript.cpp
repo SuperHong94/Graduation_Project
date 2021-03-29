@@ -4,6 +4,7 @@
 #include "BulletScript.h"
 #include "TestScript.h"
 
+#include "NetworkMgr.h"
 CPlayerScript::CPlayerScript(CGameObject* Object)
 	: CScript((UINT)SCRIPT_TYPE::PLAYERSCRIPT)
 	, m_pOriginMtrl(nullptr)
@@ -99,6 +100,7 @@ void CPlayerScript::update()
 		vPos.z += DT * 300.f;
 		isMove = true;
 		status.state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
+		CNetworkMgr::GetInst()->SendData('W');
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_S))
@@ -106,6 +108,7 @@ void CPlayerScript::update()
 		vPos.z -= DT * 300.f;
 		isMove = true;
 		status.state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
+		CNetworkMgr::GetInst()->SendData('S');
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_A))
@@ -113,6 +116,7 @@ void CPlayerScript::update()
 		vPos.x -= DT * 300.f;
 		isMove = true;
 		status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
+		CNetworkMgr::GetInst()->SendData('A');
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_D))
@@ -120,11 +124,13 @@ void CPlayerScript::update()
 		vPos.x += DT * 300.f;
 		isMove = true;
 		status.state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
+		CNetworkMgr::GetInst()->SendData('D');
 	}
 
 	if (!isMove)
 		status.state = PlayerState::P_Idle;
 
+	vPos = CNetworkMgr::GetInst()->RecvData();
 	Transform()->SetLocalPos(vPos);
 	Transform()->SetLocalRot(vRot);
 
