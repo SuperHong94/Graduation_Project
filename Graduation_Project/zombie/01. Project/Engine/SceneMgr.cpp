@@ -171,7 +171,7 @@ void CSceneMgr::init()
 	pPlayerObject = new CGameObject;
 
 	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierBRun.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
+	//MeshData->Save(pMeshData->GetPath());
 
 	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 
@@ -254,39 +254,43 @@ void CSceneMgr::init()
 	//pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
 	//pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
 	//m_pCurScene->AddGameObject(L"Default", pObject, false);
-
+	
 	
 	// ====================
 	// Monster 오브젝트 생성
 	// ====================
-	pObject = new CGameObject;
+	for (int i = 0; i < 50; i++)
+	{
+		pObject = new CGameObject;
 
-	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Run.mdat", L"MeshData\\Zombie1Run.mdat");
-	pObject = pMeshData->Instantiate();
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Run.mdat", L"MeshData\\Zombie1Run.mdat");
+		pObject = pMeshData->Instantiate();
 
-	pObject->SetName(L"Monster Object");
-	pObject->FrustumCheck(false);
-	pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);
+		pObject->SetName(L"Monster Object");
+		pObject->FrustumCheck(false);
+		pObject->AddComponent(new CTransform);
+		//pObject->AddComponent(new CMeshRender);
 
-	// Transform 설정
-	pObject->Transform()->SetLocalPos(Vec3(100.f, 0.f, 0.f));
-	pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-	
-	//pObject->MeshRender()->SetDynamicShadow(true);
-	/*pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 0);
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
+		// Transform 설정
+		pObject->Transform()->SetLocalPos(Vec3(100.f + i *20, 0.f, 0.f));
+		pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 
-	//pObject->AddComponent(new CCollider2D);
-	//pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+		//pObject->MeshRender()->SetDynamicShadow(true);
+		/*pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 0);
+		pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
+		pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
+		pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
 
-	// Script 설정
-	pObject->AddComponent(new CMonsterScript(pPlayerObject, pObject, m_pCurScene));
+		//pObject->AddComponent(new CCollider2D);
+		//pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
 
-	// AddGameObject
-	m_pCurScene->FindLayer(L"Monster")->AddGameObject(pObject);
+		// Script 설정
+		pObject->AddComponent(new CMonsterScript(pPlayerObject, pObject, m_pCurScene));
+
+		// AddGameObject
+		m_pCurScene->FindLayer(L"Monster")->AddGameObject(pObject);
+
+	}
 
 	// ====================
 	// Particle Object 생성

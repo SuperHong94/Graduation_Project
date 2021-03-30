@@ -128,7 +128,6 @@ void CFBXLoader::LoadMeshDataFromNode(FbxNode * _pNode)
 	{
 		LoadMeshDataFromNode(_pNode->GetChild(i));
 	}
-
 }
 
 void CFBXLoader::LoadMesh(FbxMesh * _pFbxMesh)

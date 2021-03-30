@@ -15,7 +15,6 @@
 #include "Scene.h"
 #include "Layer.h"
 
-
 enum class SCRIPT_TYPE
 {
 	BULLETSCRIPT,
