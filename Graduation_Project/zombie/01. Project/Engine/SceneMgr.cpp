@@ -377,31 +377,30 @@ void CSceneMgr::init()
 	m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
 
-	//// ====================
-	//// Grid 오브젝트 생성
-	//// ====================
-	//pObject = new CGameObject;
-	//pObject->SetName(L"Grid");
-	//pObject->FrustumCheck(false);
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);
-	//pObject->AddComponent(new CGridScript);
+	// ====================
+	// Grid 오브젝트 생성
+	// ====================
+	pObject = new CGameObject;
+	pObject->SetName(L"Grid");
+	pObject->FrustumCheck(false);
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CGridScript);
 
-	//// Transform 설정
-	//pObject->Transform()->SetLocalScale(Vec3(100000.f, 100000.f, 1.f));
-	//pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
+	// Transform 설정
+	pObject->Transform()->SetLocalScale(Vec3(100000.f, 100000.f, 1.f));
+	pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
 
-	//// MeshRender 설정
-	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	//pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"GridMtrl"));
+	// MeshRender 설정
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"GridMtrl"));
 
-	//// Script 설정	
-	//pObject->GetScript<CGridScript>()->SetToolCamera(pMainCam);
-	//pObject->GetScript<CGridScript>()->SetGridColor(Vec3(1.f, 1.f, 1.f));
+	// Script 설정	
+	pObject->GetScript<CGridScript>()->SetToolCamera(pMainCam);
+	pObject->GetScript<CGridScript>()->SetGridColor(Vec3(1.f, 1.f, 1.f));
 
-	//// AddGameObject
-	//m_pCurScene->FindLayer(L"Tool")->AddGameObject(pObject);
-		
+	// AddGameObject
+	m_pCurScene->FindLayer(L"Tool")->AddGameObject(pObject);
 
 	// ==========================
 	// Distortion Object 만들기
