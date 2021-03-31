@@ -28,13 +28,14 @@ void CResMgr::CreateDefaultShader()
 	// ==============
 	pShader = new CShader;
 	pShader->CreateVertexShader(L"Shader\\std.fx", "VS_Tex", "vs_5_0");
+	pShader->CreateVertexInstShader(L"Shader\\std.fx", "VS_Tex_Inst", "vs_5_0");
 	pShader->CreatePixelShader(L"Shader\\std.fx", "PS_Tex", "ps_5_0");
 
 	// BlendState 설정
 	// pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
 
 	// DSState
-	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::NO_DEPTHTEST_NO_WRITE);
+	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS);
 
 	// Shader Parameter 알림
 	pShader->AddShaderParam(tShaderParam{ L"Output Texture", SHADER_PARAM::TEX_0 });
@@ -93,6 +94,7 @@ void CResMgr::CreateDefaultShader()
 	// ============
 	pShader = new CShader;
 	pShader->CreateVertexShader(L"Shader\\std3d.fx", "VS_Std3D", "vs_5_0");
+	pShader->CreateVertexInstShader(L"Shader\\std3d.fx", "VS_Std3D_Inst", "vs_5_0");
 	pShader->CreatePixelShader(L"Shader\\std3d.fx", "PS_Std3D", "ps_5_0");
 	
 	pShader->Create(SHADER_POV::DEFERRED);
@@ -225,6 +227,24 @@ void CResMgr::CreateDefaultShader()
 
 	AddRes(L"ParticleShader", pShader);
 
+
+	// ==========================
+	// Tesselation Test Shader
+	// ==========================
+	pShader = new CShader;
+	pShader->CreateVertexShader(L"Shader\\tessellation.fx", "VS_Tess", "vs_5_0");
+	pShader->CreateHullShader(L"Shader\\tessellation.fx", "HS_Tess", "hs_5_0");
+	pShader->CreateDomainShader(L"Shader\\tessellation.fx", "DS_Tess", "ds_5_0");
+	pShader->CreatePixelShader(L"Shader\\tessellation.fx", "PS_Tess", "ps_5_0");
+
+	pShader->SetRasterizerType(RS_TYPE::WIRE_FRAME);	
+	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS);
+
+	pShader->Create(SHADER_POV::FORWARD, D3D_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
+
+	AddRes(L"TessShader", pShader);
+
+
 	// ======================
 	// Particle Update Shader
 	// ======================
@@ -238,6 +258,15 @@ void CResMgr::CreateDefaultShader()
 	pShader = new CShader;
 	pShader->CreateComputeShader(L"Shader\\animation.fx", "CS_Animation3D", "cs_5_0");
 	AddRes(L"Animaion3DUpdateShader", pShader);
+
+	// =======================
+	// Copy Bone Matrix Shader
+	// =======================
+	pShader = new CShader;
+	pShader->CreateComputeShader(L"Shader\\compute.fx", "CS_CopyBoneMatrix", "cs_5_0");
+	pShader->AddShaderParam(tShaderParam{ L"Bone Count", SHADER_PARAM::INT_0 });
+	pShader->AddShaderParam(tShaderParam{ L"Row Index", SHADER_PARAM::INT_1 });
+	AddRes(L"CopyBoneMatrixShader", pShader);
 	
 	// =================
 	// Distortion Shader
@@ -319,6 +348,12 @@ void CResMgr::CreateDefaultMaterial()
 	//Ptr<CTexture> pPositionTargetTex = CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex");
 	//pMtrl->SetData(SHADER_PARAM::TEX_0, pPositionTargetTex.GetPointer());
 	AddRes(L"GridMtrl", pMtrl);
+
+	// Tess Mtrl
+	pMtrl = new CMaterial;
+	pMtrl->DisableFileSave();
+	pMtrl->SetShader(FindRes<CShader>(L"TessShader"));
+	AddRes(L"TessMtrl", pMtrl);
 
 	{
 		pMtrl = new CMaterial;
@@ -412,6 +447,12 @@ void CResMgr::CreateDefaultMaterial()
 	pMtrl->DisableFileSave();
 	pMtrl->SetShader(FindRes<CShader>(L"Animaion3DUpdateShader"));
 	AddRes(L"Animation3DUpdateMtrl", pMtrl);
+
+	// Copy Bone Matrix
+	pMtrl = new CMaterial;
+	pMtrl->DisableFileSave();
+	pMtrl->SetShader(FindRes<CShader>(L"CopyBoneMatrixShader"));
+	AddRes(L"CopyBoneMatrixMtrl", pMtrl);
 
 	//pMtrl = new CMaterial;
 	////pMtrl->DisableFileSave();

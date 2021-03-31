@@ -1,7 +1,6 @@
 #pragma once
 #include "Script.h"
 #include "BehaviourTree.h"
-#include "Animator3D.h"
 
 enum MonsterState
 {
@@ -10,12 +9,14 @@ enum MonsterState
 	M_Attack,
 	M_Damage,
 	M_Die,
+	M_Respawn,
 };
 
 struct MonsterStatus
 {
 	MonsterState state;
 	float distanceToPlayer = 0;
+	float attackRange = 100;
 	bool PlayerInRange = false;
 	bool PlayerInAttackRange = false;
 	bool isAttack = false;
@@ -30,16 +31,21 @@ private:
 	CGameObject* pObject;
 	CScene* pScene;
 public:
-	CheckPlayerInRange(MonsterStatus* status, CGameObject* pObject, CScene* pscene) : status(status), pObject(pObject), pScene(pscene){}
+	CheckPlayerInRange(MonsterStatus* status, CGameObject* pObject, CScene* pscene) : status(status), pObject(pObject), pScene(pscene) {}
 	virtual bool run() override {
 		if (status->distanceToPlayer <= 1000)
 		{
 			status->PlayerInRange = true;
-			status->state = MonsterState::M_Run;
 
-			//애니메이션 변경
-			Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Run.mdat", L"MeshData\\Zombie1Run.mdat");
-			pObject->ChangeAnimation(pMeshData);
+			//상태 변경
+			if (status->state != MonsterState::M_Run && status->distanceToPlayer > status->attackRange)
+			{
+				status->state = MonsterState::M_Run;
+
+				//애니메이션 변경
+				Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Run.mdat", L"MeshData\\Zombie1Run.mdat");
+				pObject->ChangeAnimation(pMeshData);
+			}
 		}
 		else
 		{
@@ -58,14 +64,19 @@ private:
 public:
 	CheckPlayerInAttackRange(MonsterStatus* status, CGameObject* pObject, CScene* pscene) : status(status), pObject(pObject), pScene(pscene) {}
 	virtual bool run() override {
-		if (status->distanceToPlayer <= 100)
+		if (status->distanceToPlayer <= status->attackRange)
 		{
 			status->PlayerInAttackRange = true;
-			status->state = MonsterState::M_Attack;
 
-			//애니메이션 변경
-			Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Attack.mdat", L"MeshData\\Zombie1Attack.mdat");
-			pObject->ChangeAnimation(pMeshData);
+			//상태변경
+			if (status->state != MonsterState::M_Attack)
+			{
+				status->state = MonsterState::M_Attack;
+
+				//애니메이션 변경
+				Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Attack.mdat", L"MeshData\\Zombie1Attack.mdat");
+				pObject->ChangeAnimation(pMeshData);
+			}
 		}
 
 		else

@@ -79,7 +79,7 @@ void CMaterial::SetData(SHADER_PARAM _eParam, void * _pData)
 	//}
 }
 
-void CMaterial::UpdateData()
+void CMaterial::UpdateData(bool _bInstancing)
 {
 	// Material 이 참조하는 쉐이더가 없는 경우
 	assert(m_pShader.GetPointer());
@@ -103,7 +103,7 @@ void CMaterial::UpdateData()
 	static CConstantBuffer* pCB = CDevice::GetInst()->GetCB(CONST_REGISTER::b1);
 	CDevice::GetInst()->SetConstBufferToRegister(pCB, pCB->AddData(&m_tParam));	
 
-	m_pShader->UpdateData();	
+	m_pShader->UpdateData(_bInstancing);
 }
 
 void CMaterial::UpdateData_CS()

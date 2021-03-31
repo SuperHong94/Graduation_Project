@@ -6,6 +6,7 @@
 #include "Collider2D.h"
 #include "Animator2D.h"
 #include "Animation2D.h"
+#include "Animator3D.h"
 
 #include "EventMgr.h"
 #include "TimeMgr.h"
@@ -33,6 +34,7 @@ private:
 
 public:
 	UINT GetScriptType() { return m_iScriptType; }
+	bool isAniChange = false;
 
 public:
 	virtual void update() = 0;

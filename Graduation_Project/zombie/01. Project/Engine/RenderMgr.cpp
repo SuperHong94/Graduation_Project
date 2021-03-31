@@ -141,7 +141,7 @@ CCamera * CRenderMgr::GetMainCam()
 void CRenderMgr::CopySwapToPosteffect()
 {
 	static CTexture* pPostEffectTex = CResMgr::GetInst()->FindRes<CTexture>(L"PosteffectTargetTex").GetPointer();
-	
+
 	UINT iIdx = CDevice::GetInst()->GetSwapchainIdx();
 
 	// SwapChain Target Texture 를 RenderTarget -> CopySource 상태로 변경

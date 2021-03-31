@@ -1,5 +1,6 @@
 #pragma once
 #include "Script.h"
+#include "Scene.h"
 
 enum PlayerState
 {
@@ -10,12 +11,12 @@ enum PlayerState
 	P_RRun,
 	P_Attack,
 	P_Die,
+	P_Spawn,
 };
-
 
 struct PlayerStatus
 {
-	PlayerState state;
+	PlayerState state = P_Spawn;
 	float hp = 100;
 };
 
@@ -25,13 +26,16 @@ class CPlayerScript :
 private:
 	Ptr<CMaterial>		m_pOriginMtrl;
 	Ptr<CMaterial>		m_pCloneMtrl;
+
 	float bulletHeight = 0;
 
 	CGameObject* pObject;
 	PlayerStatus status;
-	
+
+	PlayerState previousState = P_Spawn; // 플레이어의 이전 프레임 애니메이션 상태
+
 public:
-	virtual void awake();	
+	virtual void awake();
 	virtual void update();
 
 	PlayerState setRunAni(Vec3 dir, Vec3 axis);

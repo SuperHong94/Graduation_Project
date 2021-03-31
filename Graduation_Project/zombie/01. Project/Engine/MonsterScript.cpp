@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "MonsterScript.h"
 
+
 CMonsterScript::CMonsterScript(CGameObject* targetObject, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
 {
 	TargetObejct = targetObject;
 	pObject = Object;
 	status = new MonsterStatus;
+	status->state = MonsterState::M_Respawn;
 	pScene = pscene;
 
 	root = new Sequence;

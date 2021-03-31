@@ -38,21 +38,26 @@ void CTimeMgr::update()
 		m_fDeltaTime = 1.f / 60.f;
 	}
 
+	static int i = 0;
+	++i;
 	if (m_fAccTime > 1.f)
 	{
 		QueryPerformanceFrequency(&m_llFrequency);
 		m_fAccTime = 0.f;
 		m_fFPS = 1 / m_fDeltaTime;
+
+		// FPS 출력
+		wchar_t szFPS[50] = L"";
+		wsprintf(szFPS, L"FPS : %d", i / 2);
+		SetWindowText(CCore::GetInst()->m_hMainHwnd, szFPS);
+		i = 0;
 	}
 
 	// 전역 상수버퍼에 전달 될 값
 	g_global.fDT = m_fDeltaTime;
 	g_global.fAccTime += m_fDeltaTime;
 
-	// FPS 출력
-	wchar_t szFPS[50] = L"";
-	wsprintf(szFPS, L"FPS : %d", (int)m_fFPS);
-	SetWindowText(CCore::GetInst()->m_hMainHwnd, szFPS);
+
 }
 //
 //void CTimeMgr::render(HDC _dc)

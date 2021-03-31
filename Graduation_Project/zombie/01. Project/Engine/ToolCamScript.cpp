@@ -103,7 +103,7 @@ void CToolCamScript::update()
 
 	vPos.x = vPlayerPos.x;
 	vPos.y = 500 * m_fZoomScaleY;
-	vPos.z = vPlayerPos.z  - 500 * m_fZoomScaleZ;
+	vPos.z = vPlayerPos.z - 500 * m_fZoomScaleZ;
 
 	Transform()->SetLocalPos(vPos);
 }
