@@ -174,23 +174,7 @@ void CSceneMgr::init()
 	// ===================
 	pPlayerObject = new CGameObject;
 
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierBRun.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierIdle.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierLRun.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierRRun.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierRun.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Zombie1Attack.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Zombie1Run.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
-
 	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
-
 	pPlayerObject = pMeshData->Instantiate();
 
 	pPlayerObject->SetName(L"Player Object");
@@ -280,7 +264,7 @@ void CSceneMgr::init()
 	pObject = pMeshData->Instantiate();
 
 	pObject->SetName(L"Monster Object");
-	pObject->FrustumCheck(false);
+	pObject->FrustumCheck(true);
 	pObject->AddComponent(new CTransform);
 	//pObject->AddComponent(new CMeshRender);
 
@@ -434,6 +418,13 @@ void CSceneMgr::init()
 
 	pCSMtrl->Dispatch(1, 1024, 1); // --> 컴퓨트 쉐이더 수행	
 
+
+	// =================================
+	// Map 생성
+	// =================================
+	setMap();
+
+
 	// =================================
 	// CollisionMgr 충돌 그룹(Layer) 지정
 	// =================================
@@ -481,7 +472,6 @@ void CSceneMgr::FindGameObjectByTag(const wstring& _strTag, vector<CGameObject*>
 	}	
 }
 
-
 bool Compare(CGameObject* _pLeft, CGameObject* _pRight)
 {
 	return (_pLeft->Transform()->GetWorldPos().z < _pRight->Transform()->GetWorldPos().z);
@@ -515,3 +505,40 @@ bool Compare(CGameObject* _pLeft, CGameObject* _pRight)
 //	sort(_vecFindObj.begin(), _vecFindObj.end(), Compare);
 //}
 
+void CSceneMgr::setMap()
+{
+	// =================================
+	// Map 생성
+	// =================================
+	CGameObject* pObject = nullptr;
+	Ptr<CMeshData> pMeshData;
+	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Fence.fbx");
+	//pMeshData->Save(pMeshData->GetPath());
+	
+	for (int i = 0; i < 260; i++)
+	{
+		pObject = new CGameObject;
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Fence.mdat", L"MeshData\\Fence.mdat");
+		pObject = pMeshData->Instantiate();
+		pObject->SetName(L"Fence");
+		pObject->FrustumCheck(false);
+		pObject->AddComponent(new CTransform);
+		if (i < 65)
+			pObject->Transform()->SetLocalPos(Vec3(5050.f, 0.f, -5050.f + 155 * i));
+		else if (i < 130)
+			pObject->Transform()->SetLocalPos(Vec3(-5050.f, 0.f, -5050.f + 155 * (i - 65)));
+		else if (i < 195)
+			pObject->Transform()->SetLocalPos(Vec3(-5050.f + 155 * (i - 130), 0.f, 5050.f));
+		else
+			pObject->Transform()->SetLocalPos(Vec3(-5050.f + 155 * (i - 195), 0.f, -5050.f));
+
+		pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+		if (i < 130)
+			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
+		else
+			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f, 0.f));
+		//pObject->MeshRender()->SetDynamicShadow(true);
+
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+	}
+}

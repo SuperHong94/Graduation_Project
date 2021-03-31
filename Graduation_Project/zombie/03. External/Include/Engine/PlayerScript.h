@@ -17,7 +17,8 @@ enum PlayerState
 struct PlayerStatus
 {
 	PlayerState state = P_Spawn;
-	float hp = 100;
+	float hp = 100.f;
+	float speed = 2000.f;
 };
 
 class CPlayerScript :

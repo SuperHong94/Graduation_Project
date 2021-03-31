@@ -100,7 +100,7 @@ void CPlayerScript::update()
 	if (KEY_HOLD(KEY_TYPE::KEY_W))
 	{
 		keyHold[0] = 1;
-		vPos.z += DT * 300.f;
+		vPos.z += DT * status.speed;
 		isMove = true;
 		if (status.state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)))
 			status.state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
@@ -109,7 +109,7 @@ void CPlayerScript::update()
 	if (KEY_HOLD(KEY_TYPE::KEY_S))
 	{
 		keyHold[1] = 1;
-		vPos.z -= DT * 300.f;
+		vPos.z -= DT * status.speed;
 		isMove = true;
 		if (status.state != setRunAni(playerDir, Vec3(0.f, 0.f, -1.f)))
 			status.state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
@@ -118,7 +118,7 @@ void CPlayerScript::update()
 	if (KEY_HOLD(KEY_TYPE::KEY_A))
 	{
 		keyHold[2] = 1;
-		vPos.x -= DT * 300.f;
+		vPos.x -= DT * status.speed;
 		isMove = true;
 		if (status.state != setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f)))
 			status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
@@ -127,7 +127,7 @@ void CPlayerScript::update()
 	if (KEY_HOLD(KEY_TYPE::KEY_D))
 	{
 		keyHold[3] = 1;
-		vPos.x += DT * 300.f;
+		vPos.x += DT * status.speed;
 		isMove = true;
 		if (status.state != setRunAni(playerDir, Vec3(1.f, 0.f, 0.f)))
 			status.state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));

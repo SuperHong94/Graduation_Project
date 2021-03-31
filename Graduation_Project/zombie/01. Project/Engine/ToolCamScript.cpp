@@ -84,11 +84,11 @@ void CToolCamScript::update()
 
 	if (KEY_HOLD(KEY_TYPE::KEY_SUBTRACT) || KEY_HOLD(KEY_TYPE::KEY_NEXT))
 	{
-		if (m_fZoomScaleY <= 1.3)
-		{
+	/*	if (m_fZoomScaleY <= 1.3)
+		{*/
 			m_fZoomScaleY += m_fZoomSpeed;
 			m_fZoomScaleZ += m_fZoomSpeed;
-		}
+	/*	}*/
 	}
 
 	Vec3 CameraDir;
