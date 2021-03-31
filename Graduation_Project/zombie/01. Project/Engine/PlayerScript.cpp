@@ -186,6 +186,7 @@ void CPlayerScript::update()
 	{
 		if (isMove)
 		{
+			float revise = 0;
 			// 방향별 달리기 애니메이션 설정
 			Ptr<CMeshData> pMeshData;
 			if (status.state == PlayerState::P_FRun)
@@ -195,10 +196,16 @@ void CPlayerScript::update()
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierBRun.mdat", L"MeshData\\SoldierBRun.mdat");
 
 			else if (status.state == PlayerState::P_LRun)
+			{
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierLRun.mdat", L"MeshData\\SoldierLRun.mdat");
+				revise = 4;
+			}
 
 			else if (status.state == PlayerState::P_RRun)
+			{
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRRun.mdat", L"MeshData\\SoldierRRun.mdat");
+				revise = 4;
+			}
 
 			if (pMeshData != NULL)
 			{
@@ -208,7 +215,7 @@ void CPlayerScript::update()
 			// 이건 모델 피봇 잘못설정해서 임시로 설정
 			// 수정되면 지울 것
 			Vec3 temp = pObject->Transform()->GetLocalPos();
-			pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f, temp.z));
+			pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f + revise, temp.z));
 		}
 
 		else

@@ -19,7 +19,7 @@ CGridScript::~CGridScript()
 void CGridScript::update()
 {
 	m_vToolCamPos = m_pToolCam->Transform()->GetWorldPos();
-	Transform()->SetLocalPos(Vec3(0.f, 1.f, 0.f));
+	Transform()->SetLocalPos(Vec3(0.f, 5.f, 0.f));
 
 	CalculateGrid();
 }

@@ -75,7 +75,7 @@ void CToolCamScript::update()
 
 	if (KEY_HOLD(KEY_TYPE::KEY_ADD) || KEY_HOLD(KEY_TYPE::KEY_PRIOR))
 	{
-		if (m_fZoomScaleY >= 0.3)
+		if (m_fZoomScaleY >= 0.5)
 		{
 			m_fZoomScaleY -= m_fZoomSpeed;
 			m_fZoomScaleZ -= m_fZoomSpeed;
