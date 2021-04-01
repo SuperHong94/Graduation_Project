@@ -337,28 +337,28 @@ void CSceneMgr::init()
 	//m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
 
-	//// ===================
-	//// Ground 오브젝트 생성
-	//// ===================
-	//pObject = new CGameObject;
-	//pObject->SetName(L"Ground Object");
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);
+	// ===================
+	// Ground 오브젝트 생성
+	// ===================
+	pObject = new CGameObject;
+	pObject->SetName(L"Ground Object");
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
 
-	//// Transform 설정
-	//pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
-	//pObject->Transform()->SetLocalScale(Vec3(10000.f, 10000.f, 1.f));
-	//pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
+	// Transform 설정
+	pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
+	pObject->Transform()->SetLocalScale(Vec3(16000.f, 16000.f, 1.f));
+	pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
 
-	//// MeshRender 설정
-	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	//pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3DMtrl"));
-	//pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
-	//pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
-	//pObject->MeshRender()->SetDynamicShadow(true);
+	// MeshRender 설정
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3DMtrl"));
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+	pObject->MeshRender()->SetDynamicShadow(true);
 
-	//// AddGameObject
-	//m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+	// AddGameObject
+	m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
 
 	// ====================
@@ -516,7 +516,7 @@ void CSceneMgr::setMap()
 	//pMeshData->Save(pMeshData->GetPath());
 	
 	//울타리 생성
-	for (int i = 0; i < 259; i++)
+	for (int i = 1; i < 260; i++)
 	{
 		pObject = new CGameObject;
 		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Fence.mdat", L"MeshData\\Fence.mdat");
@@ -529,9 +529,9 @@ void CSceneMgr::setMap()
 		else if (i < 130)
 			pObject->Transform()->SetLocalPos(Vec3(-5050.f, 0.f, -5050.f + 155 * (i - 65)));
 		else if (i < 195)
-			pObject->Transform()->SetLocalPos(Vec3(-5050.f + 155 * (i - 130), 0.f, 5050.f));
+			pObject->Transform()->SetLocalPos(Vec3(-4930.f + 155 * (i - 130), 0.f, 5050.f));
 		else
-			pObject->Transform()->SetLocalPos(Vec3(-5050.f + 155 * (i - 195), 0.f, -5050.f));
+			pObject->Transform()->SetLocalPos(Vec3(-4940.f + 155 * (i - 195), 0.f, -5050.f));
 
 		pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 		if (i < 130)
@@ -555,21 +555,21 @@ void CSceneMgr::setMap()
 
 		if (i < 3)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(-5700.f, 0.f, -3000 + (i * 3000)));
+			pObject->Transform()->SetLocalPos(Vec3(-5500.f, 0.f, -3000 + (i * 3000)));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
 		}
 		else if (i < 6)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(5700.f, 0.f, -3000 + ((i-3) * 3000)));
+			pObject->Transform()->SetLocalPos(Vec3(5500.f, 0.f, -3000 + ((i-3) * 3000)));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI / 2, 0.f));
 		}
 		else
 		{
-			pObject->Transform()->SetLocalPos(Vec3(-3000 + ((i - 6) * 3000), 0.f,-5700.f));
+			pObject->Transform()->SetLocalPos(Vec3(-3000 + ((i - 6) * 3000), 0.f,-5500.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI, 0.f));
 		}
 
-		pObject->Transform()->SetLocalScale(Vec3(1.5f, 1.5f, 1.5f));
+		pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 
 	
 		//pObject->MeshRender()->SetDynamicShadow(true);
@@ -577,22 +577,24 @@ void CSceneMgr::setMap()
 		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 	}
 
-	//그라운드 생성
-	for (int i = 0; i < 16; i++)
-		for (int j = 0; j < 16; j++)
-		{
-			pObject = new CGameObject;
-			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Ground.mdat", L"MeshData\\Ground.mdat");
-			pObject = pMeshData->Instantiate();
-			pObject->SetName(L"Ground");
-			pObject->FrustumCheck(false);
-			pObject->AddComponent(new CTransform);
-			pObject->Transform()->SetLocalPos(Vec3(-8000 + i * 1000, 0.f, -8000 + j * 1000));
-			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
-			pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			//pObject->MeshRender()->SetDynamicShadow(true);
-			m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
-		}
+
+	////그라운드 생성
+	//for (int i = 0; i < 16; i++)
+	//	for (int j = 0; j < 16; j++)
+	//	{
+	//		pObject = new CGameObject;
+	//		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Ground.mdat", L"MeshData\\Ground.mdat");
+	//		pObject = pMeshData->Instantiate();
+	//		pObject->SetName(L"Ground");
+	//		pObject->FrustumCheck(false);
+	//		pObject->AddComponent(new CTransform);
+	//		pObject->Transform()->SetLocalPos(Vec3(-8000 + i * 1000, 0.f, -8000 + j * 1000));
+	//		pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
+	//		pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+	//		//pObject->MeshRender()->SetDynamicShadow(true);
+	//		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+	//	}
+
 
 	//길 생성
 	for (int i = 0; i < 6; i++)

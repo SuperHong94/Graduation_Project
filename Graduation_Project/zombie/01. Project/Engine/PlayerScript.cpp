@@ -178,6 +178,14 @@ void CPlayerScript::update()
 		isAniChange = false;
 
 	// 플레이어 위치 방향 설정
+	if (vPos.x > 4990)
+		vPos.x = 4990;
+	if (vPos.x < -4990)
+		vPos.x = -4990;
+	if (vPos.z > 4990)
+		vPos.z = 4990;
+	if (vPos.z < -4990)
+		vPos.z = -4990;
 	Transform()->SetLocalPos(vPos);
 	Transform()->SetLocalRot(vRot);
 

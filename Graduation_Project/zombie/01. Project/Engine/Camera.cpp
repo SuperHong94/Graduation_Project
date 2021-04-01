@@ -137,12 +137,12 @@ void CCamera::SortGameObject()
 							else
 								continue;
 
-							uInstID uID = {};
-							uID.llID = vecObj[i]->MeshRender()->GetInstID(iMtrl);
-							map<ULONG64, vector<tInstObj>>::iterator iter = pMap->find(uID.llID);
+							uInstID uIntanceID = {};
+							uIntanceID.llID = vecObj[i]->MeshRender()->GetInstID(iMtrl);
+							map<ULONG64, vector<tInstObj>>::iterator iter = pMap->find(uIntanceID.llID);
 							if (iter == pMap->end())
 							{
-								pMap->insert(make_pair(uID.llID, vector<tInstObj>{tInstObj{ vecObj[i], iMtrl }}));
+								pMap->insert(make_pair(uIntanceID.llID, vector<tInstObj>{tInstObj{ vecObj[i], iMtrl }}));
 							}
 							else
 							{
