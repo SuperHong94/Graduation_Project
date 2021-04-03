@@ -25,12 +25,46 @@ enum class SCRIPT_TYPE
 	END,
 };
 
+enum PlayerState
+{
+	P_Idle,
+	P_FRun,
+	P_BRun,
+	P_LRun,
+	P_RRun,
+	P_Attack,
+	P_Die,
+	P_Spawn,
+};
+
+enum BulletState
+{
+	B_Normal,
+	B_Fire,
+	B_Ice,
+	B_Thunder,
+};
+
+enum MonsterState
+{
+	M_Wander,
+	M_Run,
+	M_Attack,
+	M_Damage,
+	M_Die,
+	M_Respawn,
+};
+
+
 class CScript :
 	public CComponent
 {
 private:
 	UINT		m_iScriptType;
 	float		damage = 0;
+
+protected:
+	BulletState bulletState = BulletState::B_Normal;
 
 public:
 	UINT GetScriptType() { return m_iScriptType; }
@@ -75,6 +109,7 @@ public:
 
 	void setDamage(float d) { damage = d; };
 	float getDamage() { return damage; };
+	virtual BulletState GetBulletState() { return bulletState; };
 
 public:
 	CScript(UINT _iScriptType);

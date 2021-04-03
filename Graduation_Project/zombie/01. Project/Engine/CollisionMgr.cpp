@@ -176,10 +176,10 @@ bool CCollisionMgr::IsCollision(CCollider2D * _pCollider1, CCollider2D * _pColli
 bool CCollisionMgr::CollisionRect(CCollider2D * _pCollider1, CCollider2D * _pCollider2)
 {
 	static Vec3 arrLocal[4] = {					// 0 -- 1
-		  Vec3(-0.5f, 0.5f, 0.f)				// |	|
-		, Vec3(0.5f, 0.5f, 0.f)					// 3 -- 2
-		, Vec3(0.5f, -0.5f, 0.f)
-		, Vec3(-0.5f, -0.5f, 0.f)};	
+		  Vec3(-0.5f, 0.f, 0.5f)				// |	|
+		, Vec3(0.5f, 0.f, 0.5f)					// 3 -- 2
+		, Vec3(0.5f, 0.f, -0.5f)
+		, Vec3(-0.5f, 0.f, -0.5f)};
 	
 
 	const Matrix& matCol1 = _pCollider1->GetColliderWorldMat();
@@ -195,14 +195,14 @@ bool CCollisionMgr::CollisionRect(CCollider2D * _pCollider1, CCollider2D * _pCol
 		arrCol2[i] = XMVector3TransformCoord(arrLocal[i], matCol2);
 
 		// 2D 충돌이기 때문에 같은 Z 좌표상에서 충돌을 계산한다.
-		arrCol1[i].z = 0.f;
-		arrCol2[i].z = 0.f;
+		arrCol1[i].y = 0.f;
+		arrCol2[i].y = 0.f;
 	}
 
 	arrCenter[0] = XMVector3TransformCoord(Vec3(0.f, 0.f, 0.f), matCol1);
 	arrCenter[1] = XMVector3TransformCoord(Vec3(0.f, 0.f, 0.f), matCol2);
-	arrCenter[0].z = 0.f;
-	arrCenter[1].z = 0.f;
+	arrCenter[0].y = 0.f;
+	arrCenter[1].y = 0.f;
 
 	Vec3 vCenter = arrCenter[1] - arrCenter[0];
 	

@@ -278,9 +278,10 @@ void CSceneMgr::init()
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
 
-	//pObject->AddComponent(new CCollider2D);
-	//pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
-
+	pObject->AddComponent(new CCollider2D);
+	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+	pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 100.f, 0.f));
+	pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
 	// Script ¼³Á¤
 	pObject->AddComponent(new CMonsterScript(pPlayerObject, pObject, m_pCurScene));
 

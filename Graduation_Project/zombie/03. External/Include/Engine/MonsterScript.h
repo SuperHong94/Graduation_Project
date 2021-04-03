@@ -2,15 +2,6 @@
 #include "Script.h"
 #include "BehaviourTree.h"
 
-enum MonsterState
-{
-	M_Wander,
-	M_Run,
-	M_Attack,
-	M_Damage,
-	M_Die,
-	M_Respawn,
-};
 
 struct MonsterStatus
 {

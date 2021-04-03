@@ -520,6 +520,29 @@ void CResMgr::CreateDefaultMesh()
 	v.vUV = Vec2(0.f, 1.f);
 	vecVTX.push_back(v);
 
+	v.vPos = Vec3(-0.5f, 0.f, 0.5f);
+	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
+	v.vUV = Vec2(0.f, 0.f);
+	v.vNormal = Vec3(0.f, 0.f, -1.f);
+	v.vTangent = Vec3(1.f, 0.f, 0.f);
+	v.vBinormal = Vec3(0.f, 1.f, 0.f);
+	vecVTX.push_back(v);
+
+	v.vPos = Vec3(0.5f, 0.f, 0.5f);
+	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
+	v.vUV = Vec2(1.f, 0.f);
+	vecVTX.push_back(v);
+
+	v.vPos = Vec3(0.5f, 0.f, -0.5f);
+	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
+	v.vUV = Vec2(1.f, 1.f);
+	vecVTX.push_back(v);
+
+	v.vPos = Vec3(-0.5f, 0.f, -0.5f);
+	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
+	v.vUV = Vec2(0.f, 1.f);
+	vecVTX.push_back(v);
+
 	vecIdx.push_back(0); vecIdx.push_back(1); vecIdx.push_back(2);
 	vecIdx.push_back(0); vecIdx.push_back(2); vecIdx.push_back(3);
 
@@ -535,13 +558,14 @@ void CResMgr::CreateDefaultMesh()
 	pMesh = new CMesh;
 
 	vecIdx.clear();
-	vecIdx.push_back(0); vecIdx.push_back(1);
-	vecIdx.push_back(2); vecIdx.push_back(3); vecIdx.push_back(0);
+	vecIdx.push_back(4); vecIdx.push_back(5);
+	vecIdx.push_back(6); vecIdx.push_back(7); vecIdx.push_back(4);
 
 	pMesh->Create(sizeof(VTX), (UINT)vecVTX.size(), (BYTE*)vecVTX.data()
 		, DXGI_FORMAT_R32_UINT, (UINT)vecIdx.size(), (BYTE*)vecIdx.data()); //D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP
 
 	AddRes(L"ColRectMesh", pMesh);
+
 
 	//				       3
 	// ===========	//    /

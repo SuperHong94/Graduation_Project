@@ -2,21 +2,11 @@
 #include "Script.h"
 #include "Scene.h"
 
-enum PlayerState
-{
-	P_Idle,
-	P_FRun,
-	P_BRun,
-	P_LRun,
-	P_RRun,
-	P_Attack,
-	P_Die,
-	P_Spawn,
-};
 
 struct PlayerStatus
 {
 	PlayerState state = P_Spawn;
+	BulletState bulletState = B_Normal;
 	float hp = 100.f;
 	//float speed = 4000.f;
 	float speed = 300.f;
