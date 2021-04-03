@@ -4,6 +4,8 @@ class CNetworkMgr
 {
 	SINGLE(CNetworkMgr);
 private:
+
+	
 	WSADATA m_wsa;
 	SOCKET m_sock;
 	char recv_buf[BUFSIZ];
@@ -11,6 +13,11 @@ private:
 
 	CGameObject* m_pPlayerObject;
 public:
+
+	//static CNetworkMgr* GetInst()
+	//{
+
+	//}
 	void init();
 	void SetPlayer(CGameObject* pPlayer);
 	void SendData(char key);

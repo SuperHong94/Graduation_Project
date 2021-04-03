@@ -1,6 +1,10 @@
 #pragma once
 
-
+#define SERVER_IP "127.0.0.1"
+constexpr int MAX_USER = 10;
+constexpr int MAX_NAME = 100;
+constexpr int MAX_BUFFER = 1024;
+constexpr short  SERVER_PORT = 3500;
 
 constexpr unsigned char C2S_LOGIN = 1;
 constexpr unsigned char C2S_KEY_EVENT = 2;

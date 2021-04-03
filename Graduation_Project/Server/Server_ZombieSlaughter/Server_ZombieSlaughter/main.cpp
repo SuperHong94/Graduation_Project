@@ -1,6 +1,27 @@
 #include "stdafx.h"
 #include "Protocol.h"
 
+struct SOCKETINFO
+{
+	WSAOVERLAPPED over;
+	WSABUF wsaBuf[1];
+	unsigned char databuffer[MAX_BUFFER];
+	int m_id;
+
+};
+
+struct CLIENT
+{
+	SOCKETINFO m_recv_over;
+	SOCKET m_socket;
+	int m_id;
+
+
+	unsigned int m_prev_size;
+
+	float x, y, z;
+};
+
 unordered_map<int, CLIENT> clients;
 
 

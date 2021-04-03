@@ -232,11 +232,11 @@
     <ClInclude Include="BehaviourTree.h">
       <Filter>04. GameObject\BehaviourTree</Filter>
     </ClInclude>
-    <ClInclude Include="Protocol.h">
-      <Filter>Network\Protocol</Filter>
-    </ClInclude>
     <ClInclude Include="NetworkMgr.h">
       <Filter>Network\NetworkMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\Protocol.h">
+      <Filter>Network\Protocol</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

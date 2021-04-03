@@ -1,8 +1,20 @@
 #include "stdafx.h"
 #include "NetworkMgr.h"
-#include "Protocol.h"
+#include "..\..\..\..\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\Protocol.h"
 #include "Component.h"
 #include "Transform.h"
+
+CNetworkMgr::CNetworkMgr()
+{
+	
+}
+
+CNetworkMgr::~CNetworkMgr()
+{
+
+}
+
+
 void CNetworkMgr::init()
 {
 	WSAStartup(MAKEWORD(2, 2), &m_wsa);
@@ -10,16 +22,20 @@ void CNetworkMgr::init()
 
 	int retval = 0;
 	m_sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (m_sock == INVALID_SOCKET)err_display("socket()");
+	if (m_sock == INVALID_SOCKET)
+		err_display("socket()");
 
+	unsigned long noblock = 1;
+	ioctlsocket(m_sock, FIONBIO, &noblock);
 	//connec();
 	SOCKADDR_IN serveraddr;
 	ZeroMemory(&serveraddr, sizeof(serveraddr));
 	serveraddr.sin_family = AF_INET;
 	serveraddr.sin_addr.s_addr = inet_addr(SERVER_IP);
 	serveraddr.sin_port = htons(SERVER_PORT);
-	retval = connect(m_sock, (SOCKADDR*)&serveraddr, sizeof(serveraddr));
-	if (retval == SOCKET_ERROR)err_display("connect()");
+	retval = connect(m_sock, reinterpret_cast<SOCKADDR*>(&serveraddr), sizeof(serveraddr));
+	if (retval == SOCKET_ERROR)
+		err_display("connect()");
 
 	//최초 초기화 좌표 받기
 	//this->RecvData();

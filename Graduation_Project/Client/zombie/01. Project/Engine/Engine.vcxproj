@@ -166,6 +166,7 @@ call EngineCopy.bat</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\Protocol.h" />
     <ClInclude Include="Animation2D.h" />
     <ClInclude Include="Animator2D.h" />
     <ClInclude Include="Animator3D.h" />
@@ -203,7 +204,6 @@ call EngineCopy.bat</Command>
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="PathMgr.h" />
     <ClInclude Include="PlayerScript.h" />
-    <ClInclude Include="Protocol.h" />
     <ClInclude Include="Ptr.h" />
     <ClInclude Include="RenderMgr.h" />
     <ClInclude Include="ResMgr.h" />

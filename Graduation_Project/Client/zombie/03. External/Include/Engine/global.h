@@ -19,8 +19,7 @@
 #include <MSWSock.h>//acceptEx를위해서
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "MSWSock.lib") //acceptEx를위해서
-#define SERVER_IP        "127.0.0.1"
-#define SERVER_PORT        3500
+
 /////////////////////////////////
 
 #pragma comment(lib, "d3d12")

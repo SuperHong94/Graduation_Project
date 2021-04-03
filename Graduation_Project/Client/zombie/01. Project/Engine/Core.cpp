@@ -52,10 +52,10 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b3), 0);
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b4), 0);
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b5), 0);
-		
 
 	CNetworkMgr::GetInst()->init();
 	CPathMgr::init();
+
 	CKeyMgr::GetInst()->init();
 	CTimeMgr::GetInst()->init();
 	CResMgr::GetInst()->init();
