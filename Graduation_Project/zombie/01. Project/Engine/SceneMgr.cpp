@@ -522,7 +522,7 @@ void CSceneMgr::setMap()
 		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Fence.mdat", L"MeshData\\Fence.mdat");
 		pObject = pMeshData->Instantiate();
 		pObject->SetName(L"Fence");
-		pObject->FrustumCheck(false);
+		pObject->FrustumCheck(true);
 		pObject->AddComponent(new CTransform);
 		if (i < 65)
 			pObject->Transform()->SetLocalPos(Vec3(5050.f, 0.f, -5050.f + 155 * i));
@@ -550,7 +550,7 @@ void CSceneMgr::setMap()
 		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Tomb.mdat", L"MeshData\\Tomb.mdat");
 		pObject = pMeshData->Instantiate();
 		pObject->SetName(L"Tomb");
-		pObject->FrustumCheck(false);
+		pObject->FrustumCheck(true);
 		pObject->AddComponent(new CTransform);
 
 		if (i < 3)
@@ -608,8 +608,8 @@ void CSceneMgr::setMap()
 					pObject = new CGameObject;
 					pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Path1.mdat", L"MeshData\\Path1.mdat");
 					pObject = pMeshData->Instantiate();
-					pObject->SetName(L"Ground");
-					pObject->FrustumCheck(false);
+					pObject->SetName(L"Path");
+					pObject->FrustumCheck(true);
 					pObject->AddComponent(new CTransform);
 					pObject->Transform()->SetLocalPos(Vec3(-4800.f + j * 200, -7.f, -200 + i * 200));
 					pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
@@ -621,8 +621,8 @@ void CSceneMgr::setMap()
 				{
 					pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Path2.mdat", L"MeshData\\Path2.mdat");
 					pObject = pMeshData->Instantiate();
-					pObject->SetName(L"Ground");
-					pObject->FrustumCheck(false);
+					pObject->SetName(L"Path");
+					pObject->FrustumCheck(true);
 					pObject->AddComponent(new CTransform);
 					pObject->Transform()->SetLocalPos(Vec3(-4800.f + j * 200, -7.f, -200 + i * 200));
 					pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
@@ -640,8 +640,8 @@ void CSceneMgr::setMap()
 						pObject = new CGameObject;
 						pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Path1.mdat", L"MeshData\\Path1.mdat");
 						pObject = pMeshData->Instantiate();
-						pObject->SetName(L"Ground");
-						pObject->FrustumCheck(false);
+						pObject->SetName(L"Path");
+						pObject->FrustumCheck(true);
 						pObject->AddComponent(new CTransform);
 						pObject->Transform()->SetLocalPos(Vec3(-200 + (i - 3) * 200, -7.f, -4800.f + j * 200));
 						pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
@@ -653,8 +653,8 @@ void CSceneMgr::setMap()
 					{
 						pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Path2.mdat", L"MeshData\\Path2.mdat");
 						pObject = pMeshData->Instantiate();
-						pObject->SetName(L"Ground");
-						pObject->FrustumCheck(false);
+						pObject->SetName(L"Path");
+						pObject->FrustumCheck(true);
 						pObject->AddComponent(new CTransform);
 						pObject->Transform()->SetLocalPos(Vec3(-200 + (i - 3) * 200, -7.f, -4800.f + j * 200));
 						pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
