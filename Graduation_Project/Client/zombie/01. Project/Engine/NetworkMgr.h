@@ -22,7 +22,7 @@ public:
 	void SetPlayer(CGameObject* pPlayer);
 	void SendData(char key);
 	Vec3 RecvData();
-	void err_display(char* msg);
+	void err_display(const char* msg);
 };
 
 //class CKeyMgr

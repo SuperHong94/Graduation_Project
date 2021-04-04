@@ -30,6 +30,7 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	m_hMainHwnd = _hWnd;
 	ChangeWindowSize(m_hMainHwnd, _resolution);
 	ShowWindow(_hWnd, true);
+	CNetworkMgr::GetInst()->init();
 
 	if(FAILED(CDevice::GetInst()->init(_hWnd, _resolution, _bWindow)))
 	{
@@ -53,7 +54,7 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b4), 0);
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b5), 0);
 
-	CNetworkMgr::GetInst()->init();
+
 	CPathMgr::init();
 
 	CKeyMgr::GetInst()->init();

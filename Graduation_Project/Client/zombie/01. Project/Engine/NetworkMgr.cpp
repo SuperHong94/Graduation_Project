@@ -17,16 +17,22 @@ CNetworkMgr::~CNetworkMgr()
 
 void CNetworkMgr::init()
 {
-	WSAStartup(MAKEWORD(2, 2), &m_wsa);
-
 
 	int retval = 0;
+
+	retval =WSAStartup(MAKEWORD(2, 2), &m_wsa);
+	if (retval != NO_ERROR)
+		return;
+
+	
 	m_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (m_sock == INVALID_SOCKET)
 		err_display("socket()");
 
 	unsigned long noblock = 1;
-	ioctlsocket(m_sock, FIONBIO, &noblock);
+	retval=ioctlsocket(m_sock, FIONBIO, &noblock);
+	if (retval != NO_ERROR)
+		err_display("iotclscoet");
 	//connec();
 	SOCKADDR_IN serveraddr;
 	ZeroMemory(&serveraddr, sizeof(serveraddr));
@@ -81,7 +87,7 @@ Vec3 CNetworkMgr::RecvData()
 	return pos;
 }
 
-void CNetworkMgr::err_display(char* msg)
+void CNetworkMgr::err_display(const char* msg)
 {
 	WCHAR* lpMsgBuf;
 	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
@@ -90,4 +96,5 @@ void CNetworkMgr::err_display(char* msg)
 		(LPTSTR)&lpMsgBuf, 0, NULL);
 	MessageBox(NULL, (LPCTSTR)lpMsgBuf, (LPCTSTR)msg, MB_ICONERROR);
 	LocalFree(lpMsgBuf);
+	while (true);
 }
