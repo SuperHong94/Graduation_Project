@@ -79,7 +79,6 @@ void CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, void* _p
 
 		// Buffer Create
 		CD3DX12_HEAP_PROPERTIES tUploadHeap = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
-
 		DEVICE->CreateCommittedResource(
 			&tUploadHeap,
 			D3D12_HEAP_FLAG_NONE,

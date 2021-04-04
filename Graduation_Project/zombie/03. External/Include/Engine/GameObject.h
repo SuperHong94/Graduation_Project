@@ -21,15 +21,15 @@ class CGameObject :
 	public CEntity
 {
 private:
-	CComponent*				m_arrCom[(UINT)COMPONENT_TYPE::END];
+	CComponent* m_arrCom[(UINT)COMPONENT_TYPE::END];
 	vector<CScript*>		m_vecScript;
 	vector<CGameObject*>	m_vecChild;
-	CGameObject*			m_pParentObj;
+	CGameObject* m_pParentObj;
 	int						m_iLayerIdx;
 	bool					m_bDead;
 	bool					m_bActive;
 	bool					m_bFrustumCheck;
-	CAnimator3D*			pAnimator;
+	CAnimator3D* pAnimator;
 public:
 	void awake();
 	void start();
@@ -92,7 +92,7 @@ public:
 };
 
 template<typename T>
-inline T * CGameObject::GetScript()
+inline T* CGameObject::GetScript()
 {
 	T* pScript = nullptr;
 	for (size_t i = 0; i < m_vecScript.size(); ++i)

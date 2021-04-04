@@ -47,6 +47,36 @@ void CMeshRender::render()
 	}
 }
 
+void CMeshRender::render(UINT _iMtrlIdx)
+{
+	if (IsActive() == false || nullptr == m_pMesh)
+		return;
+
+	int a = 1;
+
+	if (nullptr == m_vecMtrl[_iMtrlIdx] || nullptr == m_vecMtrl[_iMtrlIdx]->GetShader())
+		return;
+
+	// Transform 정보 업데이트
+	Transform()->UpdateData();
+
+	// Animator3D 컴포넌트가 있는 경우...
+	if (Animator3D())
+	{
+		Animator3D()->UpdateData();		
+		Animator3D()->GetFinalBoneMat()->UpdateData(TEXTURE_REGISTER::t7); // t7 레지스터에 최종행렬 데이터(구조버퍼) 바인딩
+
+		a = 1;
+		m_vecMtrl[_iMtrlIdx]->SetData(SHADER_PARAM::INT_0, &a); // Animation Mesh 알리기
+	}
+
+	m_vecMtrl[_iMtrlIdx]->UpdateData();
+	m_pMesh->render((UINT)_iMtrlIdx);
+
+	a = 0;
+	m_vecMtrl[_iMtrlIdx]->SetData(SHADER_PARAM::INT_0, &a); // Animation Mesh 알리기
+}
+
 void CMeshRender::render_shadowmap()
 {
 	int a = 1;
@@ -88,6 +118,16 @@ void CMeshRender::SetMaterial(Ptr<CMaterial> _pMtrl, UINT _iSubset)
 		m_vecMtrl.resize(_iSubset + 1);
 
 	m_vecMtrl[_iSubset] = _pMtrl;
+}
+
+
+ULONG64 CMeshRender::GetInstID(UINT _iMtrlIdx)
+{
+	if (m_pMesh == NULL || m_vecMtrl[_iMtrlIdx] == NULL)
+		return 0;
+
+	uInstID id{ m_pMesh->GetID(), (WORD)m_vecMtrl[_iMtrlIdx]->GetID(), (WORD)_iMtrlIdx };
+	return id.llID;
 }
 
 void CMeshRender::SaveToScene(FILE * _pFile)

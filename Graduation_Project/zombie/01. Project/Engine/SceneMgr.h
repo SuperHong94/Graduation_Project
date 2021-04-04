@@ -21,6 +21,7 @@ public:
 	CScene* GetCurScene();
 	void ChangeScene(CScene* _pNextScene);
 	void FindGameObjectByTag( const wstring& _strTag, vector<CGameObject*>& _vecFindObj);
+	void setMap();
 	//void FindGameObjectByPoint(POINT _point, vector<CGameObject*>& _vecFindObj, CCamera* _pToolCam = nullptr);
 
 

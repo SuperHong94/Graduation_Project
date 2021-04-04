@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "MonsterScript.h"
 
+
 CMonsterScript::CMonsterScript(CGameObject* targetObject, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
 {
 	TargetObejct = targetObject;
 	pObject = Object;
 	status = new MonsterStatus;
+	status->state = MonsterState::M_Respawn;
 	pScene = pscene;
 
 	root = new Sequence;
@@ -34,6 +36,27 @@ void CMonsterScript::update()
 	Vec3 vTargetPos = TargetObejct->Transform()->GetLocalPos();
 	Vec3 vDir;
 
+	//// 총알 충돌 확인
+	//vector<CGameObject*> vBobjects = pScene->FindLayer(L"Bullet")->GetObjects();
+	//int bb = vBobjects.size();
+	//for (int i = 0; i < vBobjects.size(); i++)
+	//{
+	//	if (vBobjects[i])
+	//	{
+	//		//Vec3 vBPos = vBobjects[i]->Transform()->GetLocalPos();
+	//		//if (vPos.x - 30 <= vBPos.x && vPos.x + 30 >= vBPos.x &&
+	//		//	vPos.z - 30 <= vBPos.z && vPos.z + 30 >= vBPos.z)
+	//		//{
+	//		//	//*vBobjects[i]disable();
+	//		//	status->hp -= 40;
+	//		//	if (status->hp <= 0)
+	//		//		DeleteObject(GetObj());
+	//		//}
+	//	}
+	//}
+
+
+	// 좀비 방향 설정
 	float XZdistanceToTarget = sqrt(((vPos.x - vTargetPos.x) * (vPos.x - vTargetPos.x)) + ((vPos.z - vTargetPos.z) * (vPos.z - vTargetPos.z)));
 	status->distanceToPlayer = XZdistanceToTarget;
 
@@ -42,15 +65,6 @@ void CMonsterScript::update()
 	vDir.z = vTargetPos.z - vPos.z;
 	vDir = vDir.Normalize();
 
-	//if (vPos.x > 600.f)
-	//	m_iDir = -1;
-	//else if(vPos.x < -600.f)
-	//	m_iDir = 1;
-
-	//vPos.x += DT * 100.f * m_iDir;
-
-	// 수정된 좌표를 다시 세팅하기.
-	//Transform()->SetLocalPos(vPos);
 
 	root->run();
 
@@ -72,15 +86,18 @@ void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 	if (L"Bullet Object" == _pOther->GetObj()->GetName())
 	{
 		float damage = 0;
+		BulletState bulletState;
 		vector<CScript*>  m_vecScript = _pOther->GetObj()->GetScripts();
 		for (int i = 0; i < m_vecScript.size(); i++)
 		{
 			if (L"BulletScript" == m_vecScript[i]->GetName())
 			{
-				damage = m_vecScript[i]->getDamage();
+				bulletState = m_vecScript[i]->GetBulletState();
 			}
 		}
 
+		if (bulletState == BulletState::B_Normal)
+			damage = 40;
 		status->hp -= damage;
 		if (status->hp <= 0)
 			DeleteObject(GetObj());	// -->삭제 이벤트 등록	

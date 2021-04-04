@@ -12,7 +12,7 @@
 
 #include "PathMgr.h"
 #include "ConstantBuffer.h"
-
+#include "InstancingMgr.h"
 
 CCore::CCore()
 	: m_hMainHwnd(nullptr)
@@ -50,8 +50,11 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b3), 0);
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b4), 0);
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b5), 0);
-		
-
+	
+	// InstancingBuffer 초기화
+	CInstancingMgr::GetInst()->init();
+	
+	// Manager 초기화
 	CPathMgr::init();
 	CKeyMgr::GetInst()->init();
 	CTimeMgr::GetInst()->init();
@@ -82,4 +85,7 @@ void CCore::progress()
 		CRenderMgr::GetInst()->render();
 	}
 	CEventMgr::GetInst()->update();
+
+	// 인스턴싱 버퍼 클리어
+	CInstancingMgr::GetInst()->clear();
 }

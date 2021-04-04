@@ -87,7 +87,7 @@ void CParticleSystem::render()
 	m_pMtrl->SetData(SHADER_PARAM::FLOAT_1, &m_fEndScale);
 	
 	m_pMtrl->UpdateData();		
-	m_pMesh->render_instancing(m_iMaxParticle);	
+	m_pMesh->render_particle(m_iMaxParticle);	
 }
 
 void CParticleSystem::SaveToScene(FILE * _pFile)
