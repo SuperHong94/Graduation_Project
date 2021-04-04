@@ -47,7 +47,7 @@ PlayerState CPlayerScript::setRunAni(Vec3 dir, Vec3 axis)
 		runState = PlayerState::P_BRun;
 	else if (cross.y < 0)
 		runState = PlayerState::P_LRun;
-	else if (cross.y > 0)
+	else
 		runState = PlayerState::P_RRun;
 
 	return runState;
@@ -71,6 +71,10 @@ void CPlayerScript::update()
 
 	//XMMATRIX m;
 	//XMVECTOR xmVec = XMMatrixDeterminant(m);
+	
+	float a1 = g_transform.matViewInv._41;
+	float a2 = g_transform.matViewInv._42;
+	float a3 = g_transform.matViewInv._43;
 	XMMATRIX InverseM = XMMatrixInverse(NULL, g_transform.matView);
 
 	Vec3 vPickRayDir;
