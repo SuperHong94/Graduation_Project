@@ -55,8 +55,39 @@ struct tParticleShared
 	int arrPading[3];
 };
 
+// ===========
+// Instancing
+// ===========
+union uInstID
+{
+	struct {
+		UINT iMesh;
+		WORD iMtrl;
+		WORD iMtrlIdx;
+	};
+	ULONG64 llID;
+};
 
+union uInstBufferID
+{
+	struct {
+		UINT iMesh;
+		UINT iMtrl;
+	};
+	ULONG64 llID;
+};
+
+class CGameObject;
+
+struct tInstObj
+{
+	CGameObject*	pObj;
+	UINT			iMtrlIdx;
+};
+
+// ==============
 // 상수버퍼 메모리
+// ==============
 struct tTransform
 {
 	Matrix matWorld;

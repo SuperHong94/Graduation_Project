@@ -13,6 +13,7 @@ private:
 public:
 	const std::list<Node*>& getChildren() const { return children; }
 	void addChild(Node* child) { children.emplace_back(child); }
+
 };
 
 class Selector : public CompositeNode {

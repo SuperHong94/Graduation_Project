@@ -39,6 +39,15 @@ ipch/
 *.suo
 *.exe
 
+<<<<<<< HEAD
 *.pdb
 *.log
 *.idb
+*.VC
+v16/
+=======
+<<<<<<< HEAD
+=======
+*.zip
+>>>>>>> 88dbfa575dbb348b7896cedeaecd70ed458f5884
+>>>>>>> yjs

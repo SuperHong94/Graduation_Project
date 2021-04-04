@@ -77,9 +77,9 @@ inline void CResMgr::AddRes(const wstring & _strKey, Ptr<T> _pRes)
 {
 	Ptr<T> pRes = FindRes<T>(_strKey);
 
-	// 중복키 문제
-	/*if (nullptr != pRes)
-		assert(nullptr);*/
+	//// 중복키 문제
+	//if (nullptr != pRes)
+	//	assert(nullptr);
 
 	RES_TYPE eType = GetType<T>();
 

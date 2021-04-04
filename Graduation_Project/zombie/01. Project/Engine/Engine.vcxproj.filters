@@ -56,8 +56,11 @@
     <Filter Include="Rendering\MRT">
       <UniqueIdentifier>{4f14963d-c0d9-4fff-8025-3322001b56a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Manager\InstancingMgr">
+      <UniqueIdentifier>{0ae4f142-d1de-4bcc-82a0-71d64f24681e}</UniqueIdentifier>
+    </Filter>
     <Filter Include="04. GameObject\BehaviourTree">
-      <UniqueIdentifier>{5c510952-2140-4223-a4d5-cefae2e91e2b}</UniqueIdentifier>
+      <UniqueIdentifier>{00c1eb54-e378-48d5-ae8f-12978e2d7bb9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +223,12 @@
     <ClInclude Include="ParticleSystem.h">
       <Filter>04. GameObject\Component</Filter>
     </ClInclude>
+    <ClInclude Include="InstancingMgr.h">
+      <Filter>Manager\InstancingMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="InstancingBuffer.h">
+      <Filter>Manager\InstancingMgr</Filter>
+    </ClInclude>
     <ClInclude Include="BehaviourTree.h">
       <Filter>04. GameObject\BehaviourTree</Filter>
     </ClInclude>
@@ -373,6 +382,12 @@
     <ClCompile Include="ParticleSystem.cpp">
       <Filter>04. GameObject\Component</Filter>
     </ClCompile>
+    <ClCompile Include="InstancingMgr.cpp">
+      <Filter>Manager\InstancingMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="InstancingBuffer.cpp">
+      <Filter>Manager\InstancingMgr</Filter>
+    </ClCompile>
     <ClCompile Include="BehaviourTree.cpp">
       <Filter>04. GameObject\BehaviourTree</Filter>
     </ClCompile>
@@ -406,6 +421,9 @@
       <Filter>ShaderCode</Filter>
     </FxCompile>
     <FxCompile Include="posteffect.fx">
+      <Filter>ShaderCode</Filter>
+    </FxCompile>
+    <FxCompile Include="tessellation.fx">
       <Filter>ShaderCode</Filter>
     </FxCompile>
   </ItemGroup>

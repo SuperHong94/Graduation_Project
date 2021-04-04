@@ -25,8 +25,11 @@ public:
 	void SetMaterial(Ptr<CMaterial> _pMtrl, UINT _iSubset = 0);	
 	void SetDynamicShadow(bool _bTrue) { m_bDynamicShadow = _bTrue; }
 	bool IsDynamicShadow() { return m_bDynamicShadow; }
+	ULONG64 GetInstID(UINT _iMtrlIdx);
+
 public:
 	void render();
+	void render(UINT _iMtrlIdx);
 	void render_shadowmap();
 
 	virtual void SaveToScene(FILE* _pFile);
