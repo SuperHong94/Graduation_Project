@@ -42,3 +42,4 @@ ipch/
 *.pdb
 *.log
 *.idb
+*.VC
