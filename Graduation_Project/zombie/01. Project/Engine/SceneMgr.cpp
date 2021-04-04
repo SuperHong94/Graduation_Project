@@ -175,6 +175,7 @@ void CSceneMgr::init()
 	pPlayerObject = new CGameObject;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierBRun.fbx");
 
@@ -184,6 +185,11 @@ void CSceneMgr::init()
 
 
 =======
+=======
+	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Zombie1Death.fbx");
+	//pMeshData->Save(pMeshData->GetPath());
+
+>>>>>>> yjs
 	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 >>>>>>> yjs
 	pPlayerObject = pMeshData->Instantiate();
@@ -292,7 +298,9 @@ void CSceneMgr::init()
 	pObject->AddComponent(new CCollider2D);
 	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
 	pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 100.f, 0.f));
+	//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, -5000.f, 0.f));
 	pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
+	
 	// Script ¼³Á¤
 	pObject->AddComponent(new CMonsterScript(pPlayerObject, pObject, m_pCurScene));
 

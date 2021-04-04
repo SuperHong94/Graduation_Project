@@ -12,6 +12,7 @@ struct MonsterStatus
 	bool PlayerInAttackRange = false;
 	bool isAttack = false;
 	float hp = 100;
+	float disappearCnt = 0;
 };
 
 

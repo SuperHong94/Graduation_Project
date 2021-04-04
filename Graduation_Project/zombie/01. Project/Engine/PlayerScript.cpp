@@ -271,6 +271,7 @@ void CPlayerScript::update()
 
 		pBullet->AddComponent(new CCollider2D);
 		pBullet->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+		//pBullet->Collider2D()->SetOffsetPos(Vec3(0.f, -bulletHeight - 5000.f, 0.f));
 
 		pBullet->AddComponent(new CBulletScript(vNBulletDir, status.bulletState));
 
