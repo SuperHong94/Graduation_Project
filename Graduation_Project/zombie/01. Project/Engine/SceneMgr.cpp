@@ -174,6 +174,9 @@ void CSceneMgr::init()
 	// ===================
 	pPlayerObject = new CGameObject;
 
+	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Zombie1Death.fbx");
+	//pMeshData->Save(pMeshData->GetPath());
+
 	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 	pPlayerObject = pMeshData->Instantiate();
 
