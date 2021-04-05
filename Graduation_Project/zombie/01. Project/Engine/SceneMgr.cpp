@@ -97,7 +97,7 @@ void CSceneMgr::CreateTargetUI()
 	//	// AddGameObject
 	//	m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
 	//}
-	Ptr<CTexture> pTex = CResMgr::GetInst()->Load<CTexture>(L"test1", L"Texture\\test1.png");
+	Ptr<CTexture> pTex = CResMgr::GetInst()->Load<CTexture>(L"test5", L"Texture\\test5.png");
 
 	CGameObject* pObject = new CGameObject;
 	pObject->SetName(L"test");
