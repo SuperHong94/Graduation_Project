@@ -902,9 +902,6 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   {
   };
   
-<<<<<<< HEAD
-  Engine.vcxproj -> C:\Users\gustm\OneDrive\문서\GitHub\Graduation_Project\Graduation_Project\zombie\03. External\Library\Engine\Engine_debug.lib
-=======
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
   //
@@ -1004,10 +1001,6 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   {
   };
   
-  MonsterScript.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MonsterScript.cpp(61,28): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MonsterScript.cpp(78,14): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Engine.vcxproj -> C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\03. External\Library\Engine\Engine_debug.lib
->>>>>>> yjs
+  Engine.vcxproj -> C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\03. External\Library\Engine\Engine_debug.lib
   0개 파일이 복사되었습니다.
   0개 파일이 복사되었습니다.

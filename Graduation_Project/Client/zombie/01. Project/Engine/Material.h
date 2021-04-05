@@ -19,7 +19,7 @@ public:
 	void SetShader(Ptr<CShader> _pShader);
 	void SetData(SHADER_PARAM _eParam, void* _pData);
 	void DisableFileSave() { m_bFileSave = false; };
-	void UpdateData();
+	void UpdateData(bool _bInstancing = false);
 	void UpdateData_CS();
 	void Dispatch(UINT _x, UINT _y, UINT _z);
 

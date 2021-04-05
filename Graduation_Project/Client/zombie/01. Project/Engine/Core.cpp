@@ -12,10 +12,9 @@
 
 #include "PathMgr.h"
 #include "ConstantBuffer.h"
+#include "InstancingMgr.h"
 
 #include "NetworkMgr.h"
-
-
 CCore::CCore()
 	: m_hMainHwnd(nullptr)
 {
@@ -27,10 +26,12 @@ CCore::~CCore()
 
 int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 {
+	std::wcout.imbue(std::locale("korean"));//오류코드 한국어로 표현
+	CNetworkMgr::GetInst()->init();
+
 	m_hMainHwnd = _hWnd;
 	ChangeWindowSize(m_hMainHwnd, _resolution);
 	ShowWindow(_hWnd, true);
-	CNetworkMgr::GetInst()->init();
 
 	if(FAILED(CDevice::GetInst()->init(_hWnd, _resolution, _bWindow)))
 	{
@@ -53,17 +54,18 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b3), 0);
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b4), 0);
 	CDevice::GetInst()->SetGlobalConstBufferToRegister(CDevice::GetInst()->GetCB(CONST_REGISTER::b5), 0);
-
-
+	
+	// InstancingBuffer 초기화
+	CInstancingMgr::GetInst()->init();
+	
+	// Manager 초기화
 	CPathMgr::init();
-
 	CKeyMgr::GetInst()->init();
 	CTimeMgr::GetInst()->init();
 	CResMgr::GetInst()->init();
 	CSceneMgr::GetInst()->init();
 	
-	
-	//이부분에서  네트워크 생성?
+
 	return S_OK;
 }
 
@@ -87,4 +89,7 @@ void CCore::progress()
 		CRenderMgr::GetInst()->render();
 	}
 	CEventMgr::GetInst()->update();
+
+	// 인스턴싱 버퍼 클리어
+	CInstancingMgr::GetInst()->clear();
 }

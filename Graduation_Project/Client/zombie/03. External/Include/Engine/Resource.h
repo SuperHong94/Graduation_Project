@@ -1,7 +1,6 @@
 #pragma once
 #include "Entity.h"
 
-
 class CResource :
 	public CEntity
 {
@@ -31,9 +30,7 @@ public:
 	virtual CResource* Clone() { return nullptr; }
 	void SaveToScene(FILE* _pFile);
 
-	template<typename T>
-	bool LoadFromScene(FILE* _pFile); // return false : 이미 리소스가 로딩이 되어있는 경우
-
+	
 public:
 	CResource(RES_TYPE _eType);
 	CResource(const CResource & _res);

@@ -3,13 +3,13 @@
 
 #include "BulletScript.h"
 #include "TestScript.h"
+#include "Scene.h"
 
-#include "NetworkMgr.h"
 CPlayerScript::CPlayerScript(CGameObject* Object)
 	: CScript((UINT)SCRIPT_TYPE::PLAYERSCRIPT)
 	, m_pOriginMtrl(nullptr)
 	, m_pCloneMtrl(nullptr)
-{	
+{
 	pObject = Object;
 }
 
@@ -26,27 +26,29 @@ void CPlayerScript::awake()
 	m_pCloneMtrl->SetData(SHADER_PARAM::INT_0, &a);
 }
 
+
 PlayerState CPlayerScript::setRunAni(Vec3 dir, Vec3 axis)
 {
 	PlayerState runState;
 
+	Vec3 axis1 = axis.Normalize();
 	Vec2 dir2, axis2;
 	dir2.x = dir.x;
 	dir2.y = dir.z;
-	axis2.x = axis.x;
-	axis2.y = axis.z;
+	axis2.x = axis1.x;
+	axis2.y = axis1.z;
 
 	Vec2 dot = XMVector2Dot(dir2, axis2);
 
-	Vec3 cross = XMVector3Cross(dir, axis);
+	Vec3 cross = XMVector3Cross(dir, axis1);
 	if (dot.x >= 0.8)
 		runState = PlayerState::P_FRun;
 	else if (dot.x <= -0.8)
 		runState = PlayerState::P_BRun;
 	else if (cross.y < 0)
-		runState = PlayerState::P_RRun;
-	else if (cross.y > 0)
 		runState = PlayerState::P_LRun;
+	else if (cross.y > 0)
+		runState = PlayerState::P_RRun;
 
 	return runState;
 }
@@ -57,6 +59,7 @@ void CPlayerScript::update()
 	Vec3 vRot = Transform()->GetLocalRot();
 	POINT ptMousePos = CKeyMgr::GetInst()->GetMousePos();
 	bool isMove = false;
+	int keyHold[4] = { 0, };
 
 	//////////////////////////////////////////////////////////
 	// 마우스 방향으로 플레이어 방향 설정
@@ -96,88 +99,151 @@ void CPlayerScript::update()
 
 	if (KEY_HOLD(KEY_TYPE::KEY_W))
 	{
-		
-		vPos.z += DT * 300.f;
+		keyHold[0] = 1;
+		vPos.z += DT * status.speed;
 		isMove = true;
-		status.state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
-		CNetworkMgr::GetInst()->SendData('W');
+		if (status.state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)))
+			status.state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_S))
 	{
-		vPos.z -= DT * 300.f;
+		keyHold[1] = 1;
+		vPos.z -= DT * status.speed;
 		isMove = true;
-		status.state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
-		CNetworkMgr::GetInst()->SendData('S');
+		if (status.state != setRunAni(playerDir, Vec3(0.f, 0.f, -1.f)))
+			status.state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_A))
 	{
-		vPos.x -= DT * 300.f;
+		keyHold[2] = 1;
+		vPos.x -= DT * status.speed;
 		isMove = true;
-		status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
-		CNetworkMgr::GetInst()->SendData('A');
+		if (status.state != setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f)))
+			status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_D))
 	{
-		vPos.x += DT * 300.f;
+		keyHold[3] = 1;
+		vPos.x += DT * status.speed;
 		isMove = true;
-		status.state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
-		CNetworkMgr::GetInst()->SendData('D');
+		if (status.state != setRunAni(playerDir, Vec3(1.f, 0.f, 0.f)))
+			status.state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
 	}
 
-	if (!isMove)
-		status.state = PlayerState::P_Idle;
+	// 대각선 애니메이션 체크
+	//좌상
+	if (keyHold[0] == 1 && keyHold[1] == 0 && keyHold[2] == 1 && keyHold[3] == 0)
+	{
+		if (status.state != setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f)))
+			status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f));
+	}
+	//우상
+	else if (keyHold[0] == 1 && keyHold[1] == 0 && keyHold[2] == 0 && keyHold[3] == 1)
+	{
+		if (status.state != setRunAni(playerDir, Vec3(1.f, 0.f, 1.f)))
+			status.state = setRunAni(playerDir, Vec3(1.f, 0.f, 1.f));
+	}
+	//좌하
+	else if (keyHold[0] == 0 && keyHold[1] == 1 && keyHold[2] == 1 && keyHold[3] == 0)
+	{
+		if (status.state != setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f)))
+			status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f));
+	}
+	//우하
+	else if (keyHold[0] == 0 && keyHold[1] == 1 && keyHold[2] == 0 && keyHold[3] == 1)
+	{
+		if (status.state != setRunAni(playerDir, Vec3(1.f, 0.f, -1.f)))
+			status.state = setRunAni(playerDir, Vec3(1.f, 0.f, -1.f));
+	}
 
-	vPos = CNetworkMgr::GetInst()->RecvData();
+
+	// 아이들 애니메이션 상태인지 확인
+	if (!isMove)
+	{
+		if (status.state != PlayerState::P_Idle)
+			status.state = PlayerState::P_Idle;
+	}
+
+
+	// 애니메이션 상태가 바뀌었는지 확인
+	if (previousState != status.state)
+	{
+		isAniChange = true;
+		previousState = status.state;
+	}
+	else
+		isAniChange = false;
+
+	// 플레이어 위치 방향 설정
+	if (vPos.x > 4990)
+		vPos.x = 4990;
+	if (vPos.x < -4990)
+		vPos.x = -4990;
+	if (vPos.z > 4990)
+		vPos.z = 4990;
+	if (vPos.z < -4990)
+		vPos.z = -4990;
 	Transform()->SetLocalPos(vPos);
 	Transform()->SetLocalRot(vRot);
 
 	//애니메이션 설정
-	if (isMove)
+	if (isAniChange)
 	{
-		// 방향별 달리기 애니메이션 설정
-		Ptr<CMeshData> pMeshData;
-		if(status.state == PlayerState::P_FRun)
-			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
+		if (isMove)
+		{
+			float revise = 0;
+			// 방향별 달리기 애니메이션 설정
+			Ptr<CMeshData> pMeshData;
+			if (status.state == PlayerState::P_FRun)
+				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
 
-		else if (status.state == PlayerState::P_BRun)
-			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierBRun.mdat", L"MeshData\\SoldierBRun.mdat");
+			else if (status.state == PlayerState::P_BRun)
+				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierBRun.mdat", L"MeshData\\SoldierBRun.mdat");
 
-		else if (status.state == PlayerState::P_LRun)
-			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierLRun.mdat", L"MeshData\\SoldierLRun.mdat");
+			else if (status.state == PlayerState::P_LRun)
+			{
+				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierLRun.mdat", L"MeshData\\SoldierLRun.mdat");
+				revise = 4;
+			}
 
-		else if (status.state == PlayerState::P_RRun)
-			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRRun.mdat", L"MeshData\\SoldierRRun.mdat");
-		
-		if(pMeshData != NULL)
+			else if (status.state == PlayerState::P_RRun)
+			{
+				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRRun.mdat", L"MeshData\\SoldierRRun.mdat");
+				revise = 4;
+			}
+
+			if (pMeshData != NULL)
+			{
+				pObject->ChangeAnimation(pMeshData);
+			}
+
+			// 이건 모델 피봇 잘못설정해서 임시로 설정
+			// 수정되면 지울 것
+			Vec3 temp = pObject->Transform()->GetLocalPos();
+			pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f + revise, temp.z));
+		}
+
+		else
+		{
+			Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 			pObject->ChangeAnimation(pMeshData);
 
-		// 이건 모델 피봇 잘못설정해서 임시로 설정
-		// 수정되면 지울 것
-		Vec3 temp = pObject->Transform()->GetLocalPos();
-		pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f, temp.z));
-	}
-
-	else
-	{
-		//status->state = State::Run;
-		Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
-		pObject->ChangeAnimation(pMeshData);
-
-		// 이건 모델 피봇 잘못설정해서 임시로 설정
-	// 수정되면 지울 것
-		Vec3 temp = pObject->Transform()->GetLocalPos();
-		pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
+			// 이건 모델 피봇 잘못설정해서 임시로 설정
+			// 수정되면 지울 것
+			Vec3 temp = pObject->Transform()->GetLocalPos();
+			pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
+		}
 	}
 
 	float temp = atan2(vBulletTargetPos.z - vPos.z, vBulletTargetPos.x - vPos.x);
-	Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI/2, 0.f));
+	Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
 
 	if (KEY_TAB(KEY_TYPE::KEY_LBTN))
 	{
-		bulletHeight = vPos.y;
+		bulletHeight = 100;
 
 		vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
 		vBulletTargetPos.z = (bulletHeight - vPickRayOrig.y) * vPickRayDir.z / vPickRayDir.y + vPickRayOrig.z;
@@ -195,9 +261,8 @@ void CPlayerScript::update()
 		CGameObject* pBullet = new CGameObject;
 		pBullet->SetName(L"Bullet Object");
 
-		vPos.y += 15;
 		pBullet->AddComponent(new CTransform());
-		pBullet->Transform()->SetLocalPos(vPos);
+		pBullet->Transform()->SetLocalPos(Vec3(vPos.x, bulletHeight, vPos.z));
 		pBullet->Transform()->SetLocalScale(Vec3(5.f, 5.f, 5.f));
 
 		pBullet->AddComponent(new CMeshRender);
@@ -206,8 +271,9 @@ void CPlayerScript::update()
 
 		pBullet->AddComponent(new CCollider2D);
 		pBullet->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+		//pBullet->Collider2D()->SetOffsetPos(Vec3(0.f, -bulletHeight - 5000.f, 0.f));
 
-		pBullet->AddComponent(new CBulletScript(vNBulletDir, 40));
+		pBullet->AddComponent(new CBulletScript(vNBulletDir, status.bulletState));
 
 		CreateObject(pBullet, L"Bullet");
 	}

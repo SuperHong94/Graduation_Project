@@ -5,6 +5,9 @@
 #include "PathMgr.h"
 #include "StructuredBuffer.h"
 
+#include "InstancingMgr.h"
+#include "InstancingBuffer.h"
+
 CMesh::CMesh()
 	: CResource(RES_TYPE::MESH)
 	, m_pVB(nullptr)
@@ -349,6 +352,8 @@ CMesh * CMesh::CreateFromContainer(CFBXLoader & _loader)
 
 void CMesh::render(UINT _iSubset)
 {
+	assert(_iSubset < m_vecIdxInfo.size());
+
 	CDevice::GetInst()->UpdateTable();	
 		
 	CMDLIST->IASetVertexBuffers(0, 1, &m_tVtxView);
@@ -356,13 +361,31 @@ void CMesh::render(UINT _iSubset)
 	CMDLIST->DrawIndexedInstanced(m_vecIdxInfo[_iSubset].iIdxCount, 1, 0, 0, 0);
 }
 
-void CMesh::render_instancing(UINT _iInstanceCount, UINT _iSubset)
+void CMesh::render_particle(UINT _iInstanceCount, UINT _iSubset)
 {
+	assert(_iSubset < m_vecIdxInfo.size());
+
 	CDevice::GetInst()->UpdateTable();
 
 	CMDLIST->IASetVertexBuffers(0, 1, &m_tVtxView);
 	CMDLIST->IASetIndexBuffer(&m_vecIdxInfo[_iSubset].tIdxView);
 	CMDLIST->DrawIndexedInstanced(m_vecIdxInfo[_iSubset].iIdxCount, _iInstanceCount, 0, 0, 0);
+}
+
+void CMesh::render_instancing(UINT _iSubset, CInstancingBuffer* _pInstBuffer)
+{
+	assert(_iSubset < m_vecIdxInfo.size());
+
+	CDevice::GetInst()->UpdateTable();
+
+	D3D12_VERTEX_BUFFER_VIEW arrBuffer[2] = { m_tVtxView, *_pInstBuffer->GetBufferView()};
+	
+	UINT		  iStride[2] = { m_iVtxSize	, sizeof(tInstancingData) };
+	UINT		  iOffset[2] = { 0, 0 };
+
+	CMDLIST->IASetVertexBuffers(0, 2, arrBuffer);
+	CMDLIST->IASetIndexBuffer(&m_vecIdxInfo[_iSubset].tIdxView);
+	CMDLIST->DrawIndexedInstanced(m_vecIdxInfo[_iSubset].iIdxCount, _pInstBuffer->GetInstanceCount(), 0, 0, 0);
 }
 
 void CMesh::Load(const wstring & _strFilePath)

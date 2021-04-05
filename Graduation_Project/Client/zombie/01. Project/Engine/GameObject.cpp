@@ -22,7 +22,7 @@ CGameObject::CGameObject()
 {
 }
 
-CGameObject::CGameObject(const CGameObject & _origin)
+CGameObject::CGameObject(const CGameObject& _origin)
 	: CEntity(_origin)
 	, m_arrCom{}
 	, m_iLayerIdx(-1)
@@ -46,7 +46,7 @@ CGameObject::~CGameObject()
 	Safe_Delete_Vector(m_vecScript);
 }
 
-void CGameObject::AddChild(CGameObject * _pChildObj)
+void CGameObject::AddChild(CGameObject* _pChildObj)
 {
 	// 예외 1
 	// 자기자신이 자식이 되는 경우
@@ -68,7 +68,7 @@ void CGameObject::AddChild(CGameObject * _pChildObj)
 	}
 }
 
-bool CGameObject::IsAncestor(CGameObject * _pObj)
+bool CGameObject::IsAncestor(CGameObject* _pObj)
 {
 	CGameObject* pParent = m_pParentObj;
 
@@ -148,7 +148,7 @@ void CGameObject::SetDead()
 	}
 }
 
-void CGameObject::AddComponent(CComponent * _pCom)
+void CGameObject::AddComponent(CComponent* _pCom)
 {
 	COMPONENT_TYPE eType = _pCom->GetComponentType();
 
@@ -273,18 +273,22 @@ void CGameObject::RegisterToLayer()
 	}
 }
 
+
 void CGameObject::ChangeAnimation(Ptr<CMeshData> pMeshData)
 {
 	this->MeshRender()->SetMesh(pMeshData->getMesh());
 	for (UINT i = 0; i < pMeshData->getMtrl().size(); ++i)
 		this->MeshRender()->SetMaterial(pMeshData->getMtrl()[i], i);
-	CAnimator3D* pAnimator;
+
+	if (false == pMeshData->getMesh()->IsAnimMesh())
+		return;
+
+
+	CAnimator3D* pAnimator = new CAnimator3D;
 	pAnimator = this->Animator3D();
-	if (pAnimator)
-	{
-		pAnimator->SetBones(pMeshData->getMesh()->GetBones());
-		pAnimator->SetAnimClip(pMeshData->getMesh()->GetAnimClip());
-	}
+
+	pAnimator->SetBones(pMeshData->getMesh()->GetBones());
+	pAnimator->SetAnimClip(pMeshData->getMesh()->GetAnimClip());
 }
 
 

@@ -14,14 +14,6 @@
 #include <algorithm>
 #include "SimpleMath.h"
 
-//네트워크를 위해서/////////////
-#include <WS2tcpip.h>
-#include <MSWSock.h>//acceptEx를위해서
-#pragma comment(lib, "Ws2_32.lib")
-#pragma comment(lib, "MSWSock.lib") //acceptEx를위해서
-
-/////////////////////////////////
-
 #pragma comment(lib, "d3d12")
 #pragma comment(lib, "dxgi")
 #pragma comment(lib, "dxguid")
@@ -36,17 +28,29 @@ using namespace Microsoft::WRL;
 #include "fbxsdk.h"
 
 #ifdef _DEBUG
+//콘솔창 나오게 하기
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+
 #pragma comment(lib, "FBXLoader/x64/debug/libfbxsdk-md.lib")
 #else
 #pragma comment(lib, "FBXLoader/x64/release/libfbxsdk-md.lib")
 #endif
+
+
+
 
 #include <string>
 #include <vector>
 #include <list>
 #include <map>
 
+//서버 관련 헤더, lib////////////////
+#include <WS2tcpip.h>
+#include <iostream> //서버관련 콘솔창에 출력하기
+#pragma comment(lib, "ws2_32")
 
+
+/////////////////////////////////
 using std::vector;
 using std::list;
 using std::map;

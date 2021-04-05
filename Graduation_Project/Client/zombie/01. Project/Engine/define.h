@@ -1,5 +1,7 @@
 #pragma once
 
+#define INSTANCING_COUNT 2 // 인스턴싱 제한조건( n 개 이상 중복 시 인스턴싱으로 전환)
+
 #define SINGLE(type) private: type(); ~type();\
 public:\
 static type* GetInst()\
@@ -23,7 +25,6 @@ static type* GetInst()\
 #define KEY_NONE(Key) KEY(Key, KEY_STATE::STATE_NONE)
 
 #define DT CTimeMgr::GetInst()->GetDeltaTime()
-
 
 #define CLONE(type) public: type* Clone() { return new type(*this); }
 #define CLONE_DISABLE(type) type* Clone() { assert(nullptr); return nullptr;} \

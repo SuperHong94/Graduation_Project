@@ -75,7 +75,7 @@ void CToolCamScript::update()
 
 	if (KEY_HOLD(KEY_TYPE::KEY_ADD) || KEY_HOLD(KEY_TYPE::KEY_PRIOR))
 	{
-		if (m_fZoomScaleY >= 0.3)
+		if (m_fZoomScaleY >= 0.5)
 		{
 			m_fZoomScaleY -= m_fZoomSpeed;
 			m_fZoomScaleZ -= m_fZoomSpeed;
@@ -84,11 +84,11 @@ void CToolCamScript::update()
 
 	if (KEY_HOLD(KEY_TYPE::KEY_SUBTRACT) || KEY_HOLD(KEY_TYPE::KEY_NEXT))
 	{
-		if (m_fZoomScaleY <= 1.3)
-		{
+	/*	if (m_fZoomScaleY <= 1.3)
+		{*/
 			m_fZoomScaleY += m_fZoomSpeed;
 			m_fZoomScaleZ += m_fZoomSpeed;
-		}
+	/*	}*/
 	}
 
 	Vec3 CameraDir;
@@ -98,12 +98,12 @@ void CToolCamScript::update()
 	CameraDir.z = 0;
 
 	Transform()->SetLocalRot(CameraDir);
-
+	
 	Vec3 vPlayerPos = m_pShootObject->Transform()->GetLocalPos();
-
-	vPos.x = vPlayerPos.x;
+	
+	vPos.x = vPos.x * (1 - 0.3) + vPlayerPos.x * 0.3;
 	vPos.y = 500 * m_fZoomScaleY;
-	vPos.z = vPlayerPos.z  - 500 * m_fZoomScaleZ;
+	vPos.z = vPos.z * (1 - 0.3) + (vPlayerPos.z - 500 * m_fZoomScaleZ) * 0.3;
 
 	Transform()->SetLocalPos(vPos);
 }

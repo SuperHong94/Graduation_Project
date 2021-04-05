@@ -5,6 +5,8 @@
 #include "Ptr.h"
 #include "StructuredBuffer.h"
 
+class CInstancingBuffer;
+
 struct tIndexInfo
 {
 	ComPtr<ID3D12Resource>		pIB;
@@ -42,7 +44,8 @@ public:
 	static CMesh * CreateFromContainer(CFBXLoader & _loader);
 
 	void render(UINT _iSubset = 0);
-	void render_instancing(UINT _iInstancCount, UINT _iSubset = 0);
+	void render_particle(UINT _iInstancCount, UINT _iSubset = 0);
+	void render_instancing(UINT _iSubset, CInstancingBuffer* _pInstBuffer);
 
 public:
 	UINT GetSubsetCount() { return (UINT)m_vecIdxInfo.size(); }

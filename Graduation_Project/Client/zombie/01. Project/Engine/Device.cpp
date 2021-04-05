@@ -85,6 +85,7 @@ int CDevice::init(HWND _hWnd, const tResolution & _res, bool _bWindow)
 	m_pDevice->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_COMPUTE, m_pCmdAllocCompute.Get(), nullptr, IID_PPV_ARGS(&m_pCmdListCompute));
 
 	m_pCmdListGraphic->Close();
+	m_pCmdListCompute->Close();
 
 	m_pCmdAllocCompute->Reset();
 	m_pCmdListCompute->Reset(m_pCmdAllocCompute.Get(), nullptr);
@@ -442,6 +443,7 @@ void CDevice::SetTextureToRegister(CTexture * _pTex, TEXTURE_REGISTER _eRegister
 		CMDLIST_CS->ResourceBarrier(1, &resurceBarrier);
 		_pTex->SetResState(D3D12_RESOURCE_STATE_COMMON);
 	}
+
 }
 
 void CDevice::SetBufferToRegister(CStructuredBuffer * _pBuffer, TEXTURE_REGISTER _eRegisterNum)

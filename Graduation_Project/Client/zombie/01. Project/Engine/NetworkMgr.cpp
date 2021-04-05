@@ -1,100 +1,61 @@
 #include "stdafx.h"
 #include "NetworkMgr.h"
 #include "..\..\..\..\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\Protocol.h"
-#include "Component.h"
-#include "Transform.h"
 
+
+
+//생성자 
 CNetworkMgr::CNetworkMgr()
-{
-	
-}
-
+{};
 CNetworkMgr::~CNetworkMgr()
+{};
+
+void CNetworkMgr::err_display(const char* msg, int error)
 {
-
-}
-
-
-void CNetworkMgr::init()
-{
-
-	int retval = 0;
-
-	retval =WSAStartup(MAKEWORD(2, 2), &m_wsa);
-	if (retval != NO_ERROR)
-		return;
-
 	
-	m_sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (m_sock == INVALID_SOCKET)
-		err_display("socket()");
-
-	unsigned long noblock = 1;
-	retval=ioctlsocket(m_sock, FIONBIO, &noblock);
-	if (retval != NO_ERROR)
-		err_display("iotclscoet");
-	//connec();
-	SOCKADDR_IN serveraddr;
-	ZeroMemory(&serveraddr, sizeof(serveraddr));
-	serveraddr.sin_family = AF_INET;
-	serveraddr.sin_addr.s_addr = inet_addr(SERVER_IP);
-	serveraddr.sin_port = htons(SERVER_PORT);
-	retval = connect(m_sock, reinterpret_cast<SOCKADDR*>(&serveraddr), sizeof(serveraddr));
-	if (retval == SOCKET_ERROR)
-		err_display("connect()");
-
-	//최초 초기화 좌표 받기
-	//this->RecvData();
-}
-
-void CNetworkMgr::SetPlayer(CGameObject* pPlayer)
-{
-	m_pPlayerObject = pPlayer;
-}
-
-void CNetworkMgr::SendData(char key)
-{
-	c2s_Key packet;
-	packet.size = sizeof(packet);
-	packet.type = key;
-	send(m_sock, reinterpret_cast<char*>(&packet),packet.size, 0);
-
-}
-
-
-Vec3 CNetworkMgr::RecvData()
-{
-	ZeroMemory(recv_buf, 0);
-	Vec3 pos = { 0.f,0.f,0.f };
-	int retval = recv(m_sock, recv_buf, sizeof(recv_buf) - 1, 0);
-	if (retval == SOCKET_ERROR)
-	{
-		err_display("recv()");
-	}
-	// recv_buf[retval] = '\0';
-	switch (recv_buf[1])
-	{
-	case S2C_MOVE:
-	{
-		if (m_pPlayerObject != nullptr) {
-			s2c_move* data = reinterpret_cast<s2c_move*>(recv_buf);
-			Vec3 pos = { data->x,data->y,data->z };
-		}
-	}
-	default:
-		break;
-	}
-	return pos;
-}
-
-void CNetworkMgr::err_display(const char* msg)
-{
 	WCHAR* lpMsgBuf;
-	FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-		NULL, WSAGetLastError(),
+	FormatMessage(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+		NULL, error,
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		(LPTSTR)&lpMsgBuf, 0, NULL);
-	MessageBox(NULL, (LPCTSTR)lpMsgBuf, (LPCTSTR)msg, MB_ICONERROR);
+	std::cout << msg;
+	std::wcout << lpMsgBuf << std::endl;
+	//while (true);
 	LocalFree(lpMsgBuf);
-	while (true);
+	while (true);//디버그해야함
+}
+void CNetworkMgr::init()
+{
+	using namespace std;
+	if (WSAStartup(MAKEWORD(2, 2), &m_wsa) != 0)
+	{
+		cout << "WSAStartUp 실패" << endl;
+		exit(-1); //종료시키기
+	}
+
+	m_sock =WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, NULL);
+	if (m_sock == INVALID_SOCKET)
+	{
+		err_display("WSASocket()", WSAGetLastError());
+		exit(-1);
+	}
+
+	//connect()
+	SOCKADDR_IN serveraddr;
+	memset(&serveraddr, 0, sizeof(serveraddr));
+	serveraddr.sin_family = AF_INET;
+	serveraddr.sin_port = htons(SERVER_PORT);
+	inet_pton(AF_INET, SERVER_IP, &serveraddr.sin_addr);
+	int retval = connect(m_sock, reinterpret_cast<SOCKADDR*>(&serveraddr), sizeof(serveraddr));
+	if (retval == SOCKET_ERROR)
+	{
+		err_display("connect()", WSAGetLastError());
+		exit(-1);
+	}
+	else
+#ifdef _DEBUG
+		cout << "서버와 connect 성공" << endl;
+#endif // _DEBUG
+
 }

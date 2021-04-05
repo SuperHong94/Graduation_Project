@@ -13,4 +13,4 @@ using namespace std;
 
 
 
-void err_display(char* msg);
+void err_display(const char* msg,int code);

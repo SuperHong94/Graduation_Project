@@ -129,6 +129,13 @@ struct TEX_INPUT
 {
     float3 vPos : POSITION;
     float2 vUV : TEXCOORD;
+    
+    // Instancing
+    row_major matrix matWorld : WORLD;
+    row_major matrix matWV : WV;
+    row_major matrix matWVP : WVP;
+    
+    uint iInstanceID : SV_InstanceID;
 };
 
 struct TEX_OUTPUT
@@ -151,6 +158,21 @@ TEX_OUTPUT VS_Tex(TEX_INPUT _input)
 
     return output;
 }
+
+
+TEX_OUTPUT VS_Tex_Inst(TEX_INPUT _input)
+{
+    TEX_OUTPUT output = (TEX_OUTPUT) 0;
+    
+    // 투영좌표계를 반환할 때에는 float4 4번째 w 요소에 1.f 을 넣어준다.   
+    float4 vProjPos = mul(float4(_input.vPos, 1.f), _input.matWVP);
+
+    output.vOutPos = vProjPos;
+    output.vUV = _input.vUV;
+
+    return output;
+}
+
 
 float4 PS_Tex(TEX_OUTPUT _input) : SV_Target
 {
@@ -188,7 +210,7 @@ float4 PS_Collider2D(TEX_OUTPUT _input) : SV_Target
     if (g_int_0)
         return float4(1.f, 0.2f, 0.f, 1.f);
     else
-        return float4(0.f, 1.f, 0.f, 1.f);
+        return float4(0.f, 1.f, 0.f, 0.f);
 }
 
 // ==================

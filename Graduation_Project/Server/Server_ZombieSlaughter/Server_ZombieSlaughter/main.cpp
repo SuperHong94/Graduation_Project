@@ -1,18 +1,22 @@
 #include "stdafx.h"
 #include "Protocol.h"
 
-struct SOCKETINFO
+
+
+enum EOP_TYPE { OP_RECV, OP_SEND, OP_ACCEPT };
+struct MY_OVER
 {
-	WSAOVERLAPPED over;
-	WSABUF wsaBuf[1];
-	unsigned char databuffer[MAX_BUFFER];
-	int m_id;
+	//send recv할때 마다 overlapped, 버퍼는 독립적이어야한다.
+	WSAOVERLAPPED m_over;
+	WSABUF m_wsabuf[1];
+	unsigned char m_buf[MAX_BUFFER];  //왜 unsigned이냐면 마이너스 값이 오지 않는다.
+	EOP_TYPE m_eOP;//send인지 recv인지 구분한다.
 
 };
 
 struct CLIENT
 {
-	SOCKETINFO m_recv_over;
+	MY_OVER m_recv_over;
 	SOCKET m_socket;
 	int m_id;
 
@@ -22,6 +26,7 @@ struct CLIENT
 	float x, y, z;
 };
 
+constexpr int SERVER_ID = 0;
 unordered_map<int, CLIENT> clients;
 
 
@@ -42,30 +47,103 @@ void recvData(int c_id)
 {
 
 	//리시브 버퍼의 위치= 받는 리시브의 데이터위치+남은데이터의크기
-	clients[c_id].m_recv_over.wsaBuf[0].buf = reinterpret_cast<char*>(clients[c_id].m_recv_over.databuffer) + clients[c_id].m_prev_size;
+	clients[c_id].m_recv_over.m_wsabuf[0].buf = reinterpret_cast<char*>(clients[c_id].m_recv_over.m_buf) + clients[c_id].m_prev_size;
 
 	//받는 데이터의 크기=전체버퍼크기-남은 데이터크기
-	clients[c_id].m_recv_over.wsaBuf[0].len = MAX_BUFFER - clients[c_id].m_prev_size;
+	clients[c_id].m_recv_over.m_wsabuf[0].len = MAX_BUFFER - clients[c_id].m_prev_size;
 
-	memset(&clients[c_id].m_recv_over.over, 0, sizeof(clients[c_id].m_recv_over.over));
+	memset(&clients[c_id].m_recv_over.m_over, 0, sizeof(clients[c_id].m_recv_over.m_over));
 	DWORD r_flag = 0;
-	WSARecv(clients[c_id].m_socket, clients[c_id].m_recv_over.wsaBuf, 1, NULL, &r_flag, &clients[c_id].m_recv_over.over, recv_callback);
+	WSARecv(clients[c_id].m_socket, clients[c_id].m_recv_over.m_wsabuf, 1, NULL, &r_flag, &clients[c_id].m_recv_over.m_over, recv_callback);
 
 
 }
+
+void send_packet(int c_id, void* packet)
+{
+
+	int bufSize = reinterpret_cast<unsigned char*>(packet)[0];
+	int bufType = reinterpret_cast<unsigned char*>(packet)[1];
+#ifdef _DEBUG
+	std::cout << "send pacekt[" << bufType << "]" << " to [" << c_id << "]client\n";
+#endif // _DEBUG
+
+	MY_OVER* send_over = new MY_OVER;
+	memset(&send_over->m_over, 0, sizeof(send_over->m_over));
+	memcpy(send_over->m_buf, packet, bufSize);
+	send_over->m_eOP = EOP_TYPE::OP_SEND;
+	send_over->m_wsabuf[0].buf = reinterpret_cast<char*>(send_over->m_buf);
+	send_over->m_wsabuf[0].len = bufSize;
+
+	int retval = WSASend(clients[c_id].m_socket, send_over->m_wsabuf, 1, NULL, 0, &send_over->m_over, 0);
+	if (retval != NO_ERROR)
+	{
+		int err_code = WSAGetLastError();
+		if (err_code != WSA_IO_PENDING)
+			err_display("WSASEND()", err_code);
+	}
+}
+
+void send_login_result(int c_id)
+{
+	s2c_loginOK packet;
+	packet.size = sizeof(packet);
+	packet.type = S2C_LOGIN_OK;
+	packet.x = 0.0f; packet.y = 0.0f; packet.z = 0.0f;
+
+	send_packet(c_id, &packet);
+}
+void proccess_packet(int c_id, unsigned char* buf)
+{
+	//buf[1]에 type이 들어감
+	switch (buf[1])
+	{
+	case C2S_LOGIN: //클라에서 로그인요청
+	{
+		c2s_login* packet = reinterpret_cast<c2s_login*>(buf);
+		send_login_result(c_id);
+	}
+	default:
+		break;
+	}
+}
+void do_recv(int c_id)
+{
+	clients[c_id].m_recv_over.m_wsabuf[0].buf = reinterpret_cast<char*>(clients[c_id].m_recv_over.m_buf) + clients[c_id].m_prev_size;
+	clients[c_id].m_recv_over.m_wsabuf[0].len = MAX_BUFFER - clients[c_id].m_prev_size;
+	memset(&clients[c_id].m_recv_over.m_over, 0, sizeof(clients[c_id].m_recv_over.m_over));
+	DWORD rFlag = 0;
+	int retval = WSARecv(clients[c_id].m_socket, clients[c_id].m_recv_over.m_wsabuf, 1, NULL, &rFlag, &clients[c_id].m_recv_over.m_over, 0);
+	if (retval != NO_ERROR)
+	{
+		int err_code = WSAGetLastError();
+		if (err_code != WSA_IO_PENDING)
+			err_display("WSARecv()", err_code);
+	}
+}
 int main()
 {
+	wcout.imbue(locale("korean"));
+
 
 	int ret = 0;
 	WSADATA WSAdata;
-	WSAStartup(MAKEWORD(2, 2), &WSAdata);
+	if (WSAStartup(MAKEWORD(2, 2), &WSAdata) != 0)
+	{
+		cout << "WSAStartUp 실패" << endl;
+		exit(-1); //종료시키기
+	}
+
+	HANDLE h_iocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0); //iocp핸들
 
 	SOCKET listenSocket = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
 	if (listenSocket == SOCKET_ERROR)
 	{
-		err_display("WSASocket()");
+		err_display("WSASocket()",WSAGetLastError());
 		return 0;
 	}
+	CreateIoCompletionPort(reinterpret_cast<HANDLE>(listenSocket), h_iocp, 0, 0);//iocp에 소켓등록
+
 	SOCKADDR_IN serverAddr;
 	memset(&serverAddr, 0, sizeof(SOCKADDR_IN));
 	serverAddr.sin_family = AF_INET;
@@ -76,7 +154,7 @@ int main()
 	ret = bind(listenSocket, reinterpret_cast<SOCKADDR*>(&serverAddr), sizeof(serverAddr));
 	if (ret == SOCKET_ERROR)
 	{
-		err_display("bind()");
+		err_display("bind()", WSAGetLastError());
 		return 0;
 	}
 
@@ -84,37 +162,99 @@ int main()
 	ret = listen(listenSocket, SOMAXCONN);
 	if (ret == SOCKET_ERROR)
 	{
-		err_display("listen()");
+		err_display("listen()", WSAGetLastError());
 		return 0;
 	}
 
 
-	SOCKET c_sock; //클라이언트 소켓
-	SOCKADDR_IN c_addr;
-	int addrlen = sizeof(c_addr);
+	MY_OVER accept_over; //accept용 overlapped 구조체
+	accept_over.m_eOP = OP_ACCEPT; //이 overlapped가 무슨용도인지를 나타낸다.
+	memset(&accept_over.m_over, 0, sizeof(accept_over.m_over));
 
-
-	while (1)
+	//클라이언트 소켓
+	SOCKET c_sock = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+	if (c_sock == INVALID_SOCKET) {
+		err_display("WSASocket()", WSAGetLastError());
+		return;
+	}
+	BOOL b_ret = AcceptEx(listenSocket, c_sock, accept_over.m_buf, SERVER_ID, 32, 32, NULL, &accept_over.m_over);
+	if (b_ret == FALSE)
 	{
-		c_sock = accept(listenSocket, reinterpret_cast<SOCKADDR*>(&c_addr), &addrlen);
-		if (c_sock == INVALID_SOCKET) {
-			err_display("accept()");
+		err_display("AcceptEx()", WSAGetLastError());
+		while (true);
+	}
+
+	while (true)
+	{
+
+		DWORD numBytes;
+		ULONG_PTR ikey;
+		WSAOVERLAPPED* over;
+		b_ret = GetQueuedCompletionStatus(h_iocp, &numBytes, &ikey, &over, INFINITE);//완료검사
+
+		int key = static_cast<int>(ikey);
+		if (b_ret == FALSE)
+		{
+			if (key == SERVER_ID) {//서버오류
+				err_display("GetQueuedCompletionStatus()", WSAGetLastError());
+				cout << "서버오류\n";
+				while (true);
+				exit(-1);
+			}
+
+		}
+		MY_OVER* my_over = reinterpret_cast<MY_OVER*> (over);
+
+		switch (my_over->m_eOP)
+		{
+		case OP_RECV:
+		{
+			//패킷 조립, 수행
+			unsigned char* packet_ptr = my_over->m_buf;
+			int num_data = numBytes + clients[key].m_prev_size; //처리해야할 데이터의 크기=지금받은데이터+지난번에 받은데이터의 나머지
+
+			int packet_size = packet_ptr[0]; //지금 처리해야하는 패킷의 크기
+
+
+
+			while (packet_size <= num_data) {
+				proccess_packet(key, packet_ptr);
+				num_data -= packet_size;
+				packet_ptr += packet_size;
+				if (0 >= num_data)
+					break;
+				packet_size = packet_ptr[0];
+			}
+			clients[key].m_prev_size = num_data;//남은 찌꺼기 보존
+			if (0 != num_data)
+				memcpy(my_over->m_buf, packet_ptr, sizeof(num_data));//맨앞으로 복사
+
+			do_recv(key);
+		}
+		break;
+		case OP_SEND:
+			delete my_over;
+			break;
+		case OP_ACCEPT:
+			break;
+		default:
 			break;
 		}
+#ifdef _DEBUG
+		printf("[TCP 서버] 클라이언트 접속");
+#endif // _DEBUG
 
-		printf("\n[TCP 서버] 클라이언트 접속: IP 주소=%s, 포트 번호=%d\n",
-			inet_ntoa(c_addr.sin_addr), ntohs(c_addr.sin_port));
+
 
 		int c_id = get_new_id();
 		clients[c_id] = CLIENT{};
 		clients[c_id].m_id = c_id;
 		clients[c_id].m_socket = c_sock;
 		clients[c_id].m_prev_size = 0;
-		clients[c_id].m_recv_over.m_id = c_id;
 
 		while (1) {
 
-		recvData(c_id);
+			recvData(c_id);
 		}
 
 	}
@@ -123,80 +263,4 @@ int main()
 
 
 
-}
-
-void recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags)
-{
-	//socketInfo의 주소가 overlapped의 주소와 같다 왜냐하면 구조체의 첫번째가 overlapped이기 때문이다.
-	int c_id = reinterpret_cast<SOCKETINFO*>(overlapped)->m_id;
-
-	if (dataBytes == 0)
-	{
-		closesocket(clients[c_id].m_socket);
-		clients.erase(c_id);
-		return;
-	}
-
-
-	Update(c_id);
-	memset(&(clients[c_id].m_recv_over), 0, sizeof(WSAOVERLAPPED));
-
-	s2c_move packet;
-	packet.size = sizeof(s2c_move);
-	packet.type = S2C_MOVE;
-	packet.x = clients[c_id].x;
-	packet.y = clients[c_id].y;
-	packet.z = clients[c_id].z;
-	SOCKETINFO send_Info = {};
-	send_Info.wsaBuf[0].buf = reinterpret_cast<char*>(&packet);
-	send_Info.wsaBuf[0].len = packet.size;
-	memset(&send_Info.over, 0, sizeof(WSAOVERLAPPED));
-	DWORD s_flag = 0;
-	WSASend(clients[c_id].m_socket, send_Info.wsaBuf, 1, NULL, 0, &send_Info.over, send_callback);
-
-}
-void Update(int c_id)
-{
-	switch (clients[c_id].m_recv_over.databuffer[1])
-	{
-	case C2S_KEY_EVENT://클라에서 키이벤트가 들어왔을때
-	{
-		c2s_Key* keyEvent = reinterpret_cast<c2s_Key*>(clients[c_id].m_recv_over.databuffer);
-		switch (keyEvent->key)
-		{
-		case 'w':
-		case 'W':
-			clients[c_id].z += 100.0f;
-			break;
-
-		case 'a':
-		case 'A':
-			clients[c_id].x -= 100.0f;
-			break;
-		case 's':
-		case 'S':
-			clients[c_id].z += 100.0f;
-			break;
-		case 'd':
-		case 'D':
-			clients[c_id].x += 100.0f;
-			
-			break;
-		default:
-			break;
-		}
-	}
-
-	default:
-		break;
-	}
-	
-
-	
-
-}
-void send_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags)
-{
-	int c_id = reinterpret_cast<SOCKETINFO*>(overlapped)->m_id;
-	recvData(c_id);
 }
