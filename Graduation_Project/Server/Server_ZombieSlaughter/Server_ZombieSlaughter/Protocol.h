@@ -18,7 +18,7 @@ constexpr unsigned char S2C_REMOVE_CLIENT= 6;
 
 enum EKEY_EVENT
 {
-	DOWN_UP,DOWN_LEFT,DOWN_RIGHT,DOWN_LEFT
+	DOWN_UP=0,DOWN_DOWN,DOWN_RIGHT,DOWN_LEFT
 };
 
 #pragma pack(push,1)

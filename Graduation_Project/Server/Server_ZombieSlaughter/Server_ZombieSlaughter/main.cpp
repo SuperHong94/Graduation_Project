@@ -30,34 +30,19 @@ constexpr int SERVER_ID = 0;
 unordered_map<int, CLIENT> clients;
 
 
-void CALLBACK recv_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags);
-void CALLBACK send_callback(DWORD Error, DWORD dataBytes, LPWSAOVERLAPPED overlapped, DWORD lnFlags);
 
 
-void Update(int);
+
 int get_new_id()
 {
-	for (int i = 0; i <= MAX_USER; ++i)
+	for (int i = SERVER_ID + 1; i <= MAX_USER; ++i)
 	{
 		if (clients.count(i) == 0)return i;
 	}
 }
 
-void recvData(int c_id)
-{
-
-	//리시브 버퍼의 위치= 받는 리시브의 데이터위치+남은데이터의크기
-	clients[c_id].m_recv_over.m_wsabuf[0].buf = reinterpret_cast<char*>(clients[c_id].m_recv_over.m_buf) + clients[c_id].m_prev_size;
-
-	//받는 데이터의 크기=전체버퍼크기-남은 데이터크기
-	clients[c_id].m_recv_over.m_wsabuf[0].len = MAX_BUFFER - clients[c_id].m_prev_size;
-
-	memset(&clients[c_id].m_recv_over.m_over, 0, sizeof(clients[c_id].m_recv_over.m_over));
-	DWORD r_flag = 0;
-	WSARecv(clients[c_id].m_socket, clients[c_id].m_recv_over.m_wsabuf, 1, NULL, &r_flag, &clients[c_id].m_recv_over.m_over, recv_callback);
 
 
-}
 
 void send_packet(int c_id, void* packet)
 {
@@ -89,7 +74,7 @@ void send_login_result(int c_id)
 	s2c_loginOK packet;
 	packet.size = sizeof(packet);
 	packet.type = S2C_LOGIN_OK;
-	packet.x = 0.0f; packet.y = 0.0f; packet.z = 0.0f;
+	packet.x = 1000.0f; packet.y = 1000.0f; packet.z = 0.0f;
 
 	send_packet(c_id, &packet);
 }
@@ -139,7 +124,7 @@ int main()
 	SOCKET listenSocket = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
 	if (listenSocket == SOCKET_ERROR)
 	{
-		err_display("WSASocket()",WSAGetLastError());
+		err_display("WSASocket()", WSAGetLastError());
 		return 0;
 	}
 	CreateIoCompletionPort(reinterpret_cast<HANDLE>(listenSocket), h_iocp, 0, 0);//iocp에 소켓등록
@@ -175,14 +160,14 @@ int main()
 	SOCKET c_sock = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
 	if (c_sock == INVALID_SOCKET) {
 		err_display("WSASocket()", WSAGetLastError());
-		return;
+		return 0;
 	}
 	BOOL b_ret = AcceptEx(listenSocket, c_sock, accept_over.m_buf, SERVER_ID, 32, 32, NULL, &accept_over.m_over);
-	if (b_ret == FALSE)
+	/*if (b_ret == FALSE)
 	{
 		err_display("AcceptEx()", WSAGetLastError());
 		while (true);
-	}
+	}*/
 
 	while (true)
 	{
@@ -236,26 +221,31 @@ int main()
 			delete my_over;
 			break;
 		case OP_ACCEPT:
-			break;
+		{
+
+
+			int c_id = get_new_id();
+#ifdef _DEBUG
+			std::cout << "[TCP 서버] " << c_id << "번 클라이언트 접속" << endl;
+#endif // _DEBUG
+
+			clients[c_id] = CLIENT{};
+			clients[c_id].m_id = c_id;
+			clients[c_id].m_socket = c_sock;
+			clients[c_id].m_prev_size = 0;
+			clients[c_id].m_recv_over.m_eOP = EOP_TYPE::OP_RECV;
+			CreateIoCompletionPort(reinterpret_cast<HANDLE>(c_sock), h_iocp, c_id, 0);
+			do_recv(c_id);
+
+		}
+		break;
 		default:
 			break;
 		}
-#ifdef _DEBUG
-		printf("[TCP 서버] 클라이언트 접속");
-#endif // _DEBUG
 
 
 
-		int c_id = get_new_id();
-		clients[c_id] = CLIENT{};
-		clients[c_id].m_id = c_id;
-		clients[c_id].m_socket = c_sock;
-		clients[c_id].m_prev_size = 0;
 
-		while (1) {
-
-			recvData(c_id);
-		}
 
 	}
 	closesocket(listenSocket);

@@ -25,6 +25,98 @@ void CNetworkMgr::err_display(const char* msg, int error)
 	LocalFree(lpMsgBuf);
 	while (true);//디버그해야함
 }
+
+void CNetworkMgr::client_main()
+{
+	char recvBuf[MAX_BUFFER];
+	WSABUF recvWsaBuf[1];
+	recvWsaBuf[0].buf = recvBuf;
+	recvWsaBuf[0].len = MAX_BUFFER;
+
+	DWORD dataBytes=0;
+	DWORD rFlag = 0;
+	int retval = WSARecv(m_sock, recvWsaBuf, 1, &dataBytes, &rFlag, NULL, 0);
+	if (retval == SOCKET_ERROR)
+	{
+		err_display("WSARecv()", WSAGetLastError());
+		while (true);
+	}
+	if (dataBytes > 0)
+		processPacket(recvBuf,dataBytes);
+}
+
+void CNetworkMgr::processPacket(char* buf, DWORD bufsize)
+{
+	char* ptr = buf;
+	static DWORD inPacketSize = 0; //새패킷
+	static DWORD savedPacketSize = 0; //잔여패킷
+	static char packetBuffer[MAX_BUFFER];
+	while (bufsize != 0)
+	{
+		if (inPacketSize == 0)
+			inPacketSize = buf[0];
+		if (bufsize + savedPacketSize >= inPacketSize)
+		{
+			memcpy(packetBuffer + savedPacketSize, ptr, inPacketSize - savedPacketSize);
+			process(packetBuffer);
+			ptr += inPacketSize - savedPacketSize;
+			bufsize -= inPacketSize - savedPacketSize;
+			inPacketSize = 0;
+			savedPacketSize = 0;
+		}
+		else
+		{
+			memcpy(packetBuffer + savedPacketSize, ptr, bufsize);
+			savedPacketSize += bufsize;
+			bufsize = 0;
+		}
+	}
+}
+
+void CNetworkMgr::process(char* buf)
+{
+
+
+	switch (buf[1])//타입확인
+	{
+	case S2C_LOGIN_OK:
+	{
+		s2c_loginOK* p = reinterpret_cast<s2c_loginOK*>(buf);
+		std::cout << p->x << ' ' << p->y << ' ' << p->z << std::endl;
+	}
+		break;
+	default:
+		break;
+	}
+}
+
+void CNetworkMgr::send_login_packet()
+{
+	c2s_login packet;
+	packet.size = sizeof(packet);
+	packet.type = C2S_LOGIN;
+	send_packet(&packet);
+}
+
+void CNetworkMgr::send_packet(void* packet)
+{
+	int SendSize = reinterpret_cast<unsigned char*>(packet)[0];
+	char* buf = reinterpret_cast<char*>(packet);
+	WSABUF sendWsaBuf[1];
+	sendWsaBuf[0].buf = buf;
+	sendWsaBuf[0].len = SendSize;
+	DWORD databytes = 0;
+	DWORD sFlag = 0;
+	int retval = WSASend(m_sock, sendWsaBuf, 1, &databytes,sFlag,NULL,0);
+	if (retval == SOCKET_ERROR)
+	{
+		err_display("WSASend()", WSAGetLastError());
+	}
+}
+
+
+
+
 void CNetworkMgr::init()
 {
 	using namespace std;
@@ -58,4 +150,6 @@ void CNetworkMgr::init()
 		cout << "서버와 connect 성공" << endl;
 #endif // _DEBUG
 
+	send_login_packet();
+	client_main();
 }

@@ -9,6 +9,17 @@ private:
 public:
 	void init();
 	void err_display(const char* msg, int error);
+
+	/// <summary>
+	/// 리시브하기
+	/// </summary>
+	void client_main();
+
+	void processPacket(char* buf, DWORD bufsize);
+
+	void process(char* buf);
+	void send_login_packet();
+	void send_packet(void* packet);
 };
 
 
