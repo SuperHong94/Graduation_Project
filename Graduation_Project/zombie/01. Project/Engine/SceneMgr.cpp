@@ -97,7 +97,7 @@ void CSceneMgr::CreateTargetUI()
 	//	// AddGameObject
 	//	m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
 	//}
-	Ptr<CTexture> pTex = CResMgr::GetInst()->Load<CTexture>(L"test5", L"Texture\\test5.png");
+	Ptr<CTexture> pTex = CResMgr::GetInst()->Load<CTexture>(L"BlockingView", L"Texture\\BlockingView.png");
 
 	CGameObject* pObject = new CGameObject;
 	pObject->SetName(L"test");
@@ -133,7 +133,7 @@ void CSceneMgr::init()
 	// Texture ·Îµå
 	Ptr<CTexture> pTex = CResMgr::GetInst()->Load<CTexture>(L"TestTex", L"Texture\\Health.png");
 	Ptr<CTexture> pExplosionTex = CResMgr::GetInst()->Load<CTexture>(L"Explosion", L"Texture\\Explosion\\Explosion80.png");	
-	Ptr<CTexture> pBlackTex = CResMgr::GetInst()->Load<CTexture>(L"Black", L"Texture\\asd.png");
+
 	Ptr<CTexture> pSky01 = CResMgr::GetInst()->Load<CTexture>(L"Sky01", L"Texture\\Skybox\\Sky01.png");
 	Ptr<CTexture> pSky02 = CResMgr::GetInst()->Load<CTexture>(L"Sky02", L"Texture\\Skybox\\Sky02.jpg");
 
