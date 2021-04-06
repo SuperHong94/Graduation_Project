@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "NetworkMgr.h"
-#include "..\..\..\..\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\Protocol.h"
 
 
 
@@ -112,6 +111,14 @@ void CNetworkMgr::send_packet(void* packet)
 	{
 		err_display("WSASend()", WSAGetLastError());
 	}
+}
+
+void CNetworkMgr::send_Key_packet(EKEY_EVENT key)
+{
+	c2s_Key packet;
+	packet.type = C2S_KEY_EVENT;
+	packet.size = sizeof(packet);
+	packet.key = key;
 }
 
 
