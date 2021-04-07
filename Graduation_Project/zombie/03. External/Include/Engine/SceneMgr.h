@@ -1,4 +1,5 @@
 #pragma once
+#include "GameMgr.h"
 
 class CScene;
 class CCamera;
@@ -10,6 +11,7 @@ class CSceneMgr
 	SINGLE(CSceneMgr);
 private:
 	CScene*		m_pCurScene;	
+	GameMgr* m_pGameManager;
 
 public:
 	void init();

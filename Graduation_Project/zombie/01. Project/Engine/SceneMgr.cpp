@@ -260,8 +260,8 @@ void CSceneMgr::init()
 
 	m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
 
-	// ====================
-	// UI 오브젝트 생성
+	//====================
+	//UI 오브젝트 생성
 	// ====================
 	// UI Camera
 	CGameObject* pUICam = new CGameObject;
@@ -298,37 +298,50 @@ void CSceneMgr::init()
 	// Monster 오브젝트 생성
 	// ====================
 
-	pObject = new CGameObject;
+	CGameObject* monsterArr[40];
+	int monsterCnt = 40;
+	for (int i = 0; i < monsterCnt; i++)
+	{
+		pObject = new CGameObject;
 
-	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Run.mdat", L"MeshData\\Zombie1Run.mdat");
-	pObject = pMeshData->Instantiate();
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Run.mdat", L"MeshData\\Zombie1Run.mdat");
+		pObject = pMeshData->Instantiate();
 
-	pObject->SetName(L"Monster Object");
-	pObject->FrustumCheck(true);
-	pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);
+		pObject->SetName(L"Monster Object");
+		pObject->FrustumCheck(false);
+		pObject->AddComponent(new CTransform);
+		//pObject->AddComponent(new CMeshRender);
 
-	// Transform 설정
-	pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
-	pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+		// Transform 설정
+		pObject->Transform()->SetLocalPos(Vec3(-500.f + 300 *i, 0.f, 0.f));
+		pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 
-	//pObject->MeshRender()->SetDynamicShadow(true);
-	/*pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 0);
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
+		//pObject->MeshRender()->SetDynamicShadow(true);
+		/*pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 0);
+		pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
+		pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
+		pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
 
-	pObject->AddComponent(new CCollider2D);
-	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
-	pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 100.f, 0.f));
-	//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, -5000.f, 0.f));
-	pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
-	
-	// Script 설정
-	pObject->AddComponent(new CMonsterScript(pPlayerObject, pObject, m_pCurScene));
+		pObject->AddComponent(new CCollider2D);
+		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+		pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 100.f, 0.f));
+		//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, -5000.f, 0.f));
+		pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
 
-	// AddGameObject
-	m_pCurScene->FindLayer(L"Monster")->AddGameObject(pObject);
+		// Script 설정
+		pObject->AddComponent(new CMonsterScript(pPlayerObject, pObject, m_pCurScene));
+
+		// AddGameObject
+		m_pCurScene->FindLayer(L"Monster")->AddGameObject(pObject);
+
+		monsterArr[i] = pObject;
+	}
+
+
+	// ====================
+	// Game Manager 생성
+	// ====================
+	m_pGameManager = new GameMgr(m_pCurScene, monsterArr, monsterCnt);
 
 
 	// ====================
@@ -480,7 +493,7 @@ void CSceneMgr::init()
 }
 
 void CSceneMgr::update()
-{		
+{
 	m_pCurScene->update();
 	m_pCurScene->lateupdate();
 
@@ -491,6 +504,9 @@ void CSceneMgr::update()
 	   
 	// 충돌 처리
 	CCollisionMgr::GetInst()->update();
+
+	// 좀비 리스폰 관리
+	m_pGameManager->CheckZombieRespawn();
 }
 
 void CSceneMgr::update_tool()
@@ -555,64 +571,72 @@ void CSceneMgr::setMap()
 	// =================================
 	CGameObject* pObject = nullptr;
 	Ptr<CMeshData> pMeshData;
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Path2.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
+	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Tomb2.fbx");
+	pMeshData->Save(pMeshData->GetPath());
 	
 	//울타리 생성
 	for (int i = 1; i < 260; i++)
 	{
-		pObject = new CGameObject;
-		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Fence.mdat", L"MeshData\\Fence.mdat");
-		pObject = pMeshData->Instantiate();
-		pObject->SetName(L"Fence");
-		pObject->FrustumCheck(true);
-		pObject->AddComponent(new CTransform);
-		if (i < 65)
-			pObject->Transform()->SetLocalPos(Vec3(5050.f, 0.f, -5050.f + 155 * i));
-		else if (i < 130)
-			pObject->Transform()->SetLocalPos(Vec3(-5050.f, 0.f, -5050.f + 155 * (i - 65)));
-		else if (i < 195)
-			pObject->Transform()->SetLocalPos(Vec3(-4930.f + 155 * (i - 130), 0.f, 5050.f));
-		else
-			pObject->Transform()->SetLocalPos(Vec3(-4940.f + 155 * (i - 195), 0.f, -5050.f));
+		if (((i <= 30 || i >= 35) && i >= 1 && i < 65) || ((i <= 95 || i >= 100) && i >= 65 && i < 130) || ((i <= 159 || i >= 165) && i >= 130 && i < 195) || ((i <= 224 || i >= 230) && i >= 195 && i < 260))
+		{
+			pObject = new CGameObject;
+			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Fence.mdat", L"MeshData\\Fence.mdat");
+			pObject = pMeshData->Instantiate();
+			pObject->SetName(L"Fence");
+			pObject->FrustumCheck(true);
+			pObject->AddComponent(new CTransform);
+			if (i < 65)
+				pObject->Transform()->SetLocalPos(Vec3(5050.f, 0.f, -5050.f + 155 * i));
+			else if (i < 130)
+				pObject->Transform()->SetLocalPos(Vec3(-5050.f, 0.f, -5050.f + 155 * (i - 65)));
+			else if (i < 195)
+				pObject->Transform()->SetLocalPos(Vec3(-4930.f + 155 * (i - 130), 0.f, 5050.f));
+			else
+				pObject->Transform()->SetLocalPos(Vec3(-4940.f + 155 * (i - 195), 0.f, -5050.f));
 
-		pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-		if (i < 130)
-			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
-		else
-			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f, 0.f));
-		//pObject->MeshRender()->SetDynamicShadow(true);
+			pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			if (i < 130)
+				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
+			else
+				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f, 0.f));
+			//pObject->MeshRender()->SetDynamicShadow(true);
 
-		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+			m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		}
 	}
 
 	//무덤 생성
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		pObject = new CGameObject;
-		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Tomb.mdat", L"MeshData\\Tomb.mdat");
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Tomb2.mdat", L"MeshData\\Tomb2.mdat");
 		pObject = pMeshData->Instantiate();
 		pObject->SetName(L"Tomb");
 		pObject->FrustumCheck(true);
 		pObject->AddComponent(new CTransform);
 
-		if (i < 3)
+		if (i == 0)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(-5500.f, 0.f, -3000 + (i * 3000)));
+			pObject->Transform()->SetLocalPos(Vec3(-5250.f, -0.f, 0.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
 		}
-		else if (i < 6)
+		else if (i == 1)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(5500.f, 0.f, -3000 + ((i-3) * 3000)));
+			pObject->Transform()->SetLocalPos(Vec3(5250.f, -0.f, 0.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI / 2, 0.f));
+		}
+		else if (i == 2)
+		{
+			pObject->Transform()->SetLocalPos(Vec3(0.f, -0.f,-5250.f));
+			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI, 0.f));
 		}
 		else
 		{
-			pObject->Transform()->SetLocalPos(Vec3(-3000 + ((i - 6) * 3000), 0.f,-5500.f));
-			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI, 0.f));
+			pObject->Transform()->SetLocalPos(Vec3(0.f, -0.f, 5250.f));
+			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f, 0.f));
 		}
 
-		pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+		pObject->Transform()->SetLocalScale(Vec3(2.0f, 1.5f, 2.0f));
 
 	
 		//pObject->MeshRender()->SetDynamicShadow(true);
@@ -664,7 +688,7 @@ void CSceneMgr::setMap()
 				{
 					pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Path2.mdat", L"MeshData\\Path2.mdat");
 					pObject = pMeshData->Instantiate();
-					pObject->SetName(L"Path");
+					pObject->SetName(L"Path2");
 					pObject->FrustumCheck(true);
 					pObject->AddComponent(new CTransform);
 					pObject->Transform()->SetLocalPos(Vec3(-4800.f + j * 200, -7.f, -200 + i * 200));
@@ -696,7 +720,7 @@ void CSceneMgr::setMap()
 					{
 						pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Path2.mdat", L"MeshData\\Path2.mdat");
 						pObject = pMeshData->Instantiate();
-						pObject->SetName(L"Path");
+						pObject->SetName(L"Path2");
 						pObject->FrustumCheck(true);
 						pObject->AddComponent(new CTransform);
 						pObject->Transform()->SetLocalPos(Vec3(-200 + (i - 3) * 200, -7.f, -4800.f + j * 200));
