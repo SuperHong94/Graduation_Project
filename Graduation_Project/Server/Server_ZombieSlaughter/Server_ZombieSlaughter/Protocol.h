@@ -52,4 +52,11 @@ struct s2c_loginOK
 	float x, y, z;  //초기위치
 
 };
+
+struct s2c_remove_client
+{
+	unsigned char size;
+	unsigned char type;
+	int m_id;
+};
 #pragma pack(pop)

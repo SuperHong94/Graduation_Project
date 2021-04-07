@@ -106,6 +106,23 @@ void do_recv(int c_id)
 			err_display("WSARecv()", err_code);
 	}
 }
+
+
+void send_remove_client(int p_id, int other_id)
+{
+	s2c_remove_client packet;
+	packet.size = sizeof(packet);
+	packet.type = S2C_REMOVE_CLIENT;
+	packet.m_id = other_id;
+	send_packet(p_id, &packet);
+}
+void disconnect(int key)
+{
+	closesocket(clients[key].m_socket);
+	clients.erase(key);
+	for (auto& c : clients)
+		send_remove_client(c.second.m_id, key); //c.sencond.m_id에게 key가 종료되었음을 알림
+}
 int main()
 {
 	wcout.imbue(locale("korean"));
@@ -185,6 +202,11 @@ int main()
 				cout << "서버오류\n";
 				while (true);
 				exit(-1);
+			}
+			else {
+				err_display("GetQueuedCompletionStatus()", WSAGetLastError());
+				cout << key << " client 접속종료\n";
+				disconnect(key);
 			}
 
 		}
