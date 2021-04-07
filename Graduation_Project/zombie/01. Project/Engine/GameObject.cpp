@@ -148,6 +148,16 @@ void CGameObject::SetDead()
 	}
 }
 
+void CGameObject::SetAlive()
+{
+	m_bDead = false;
+
+	for (size_t i = 0; i < m_vecChild.size(); ++i)
+	{
+		m_vecChild[i]->SetDead();
+	}
+}
+
 void CGameObject::AddComponent(CComponent* _pCom)
 {
 	COMPONENT_TYPE eType = _pCom->GetComponentType();

@@ -186,6 +186,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="FBXLoader.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="func.h" />
+    <ClInclude Include="GameMgr.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="GridScript.h" />
@@ -244,6 +245,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="FBXLoader.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="func.cpp" />
+    <ClCompile Include="GameMgr.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GridScript.cpp" />
     <ClCompile Include="InstancingBuffer.cpp" />

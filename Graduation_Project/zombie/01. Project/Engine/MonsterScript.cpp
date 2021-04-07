@@ -5,6 +5,7 @@
 CMonsterScript::CMonsterScript(CGameObject* targetObject, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
 {
+	this->SetName(L"MonsterScript");
 	TargetObejct = targetObject;
 	pObject = Object;
 	status = new MonsterStatus;
@@ -96,9 +97,18 @@ void CMonsterScript::update()
 	if (status->hp <= 0 && status->state == MonsterState::M_Die)
 	{
 		status->disappearCnt += DT;
-		if(status->disappearCnt > 3.2)
-			DeleteObject(GetObj());
+		if (status->disappearCnt > 3.2)
+		{
+			//DeleteObject(GetObj());
+			//pObject->SetDead();
+			if (!status->IsDisappear)
+			{
+				status->IsDisappear = true;
+			}
+		}
 	}
+
+
 }
 
 void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
@@ -131,4 +141,17 @@ void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 
 void CMonsterScript::OnCollisionExit(CCollider2D* _pOther)
 {
+}
+
+void CMonsterScript::SetStatus(MonsterStatus* st)
+{
+	status->state = st->state;
+	status->distanceToPlayer = st->distanceToPlayer;
+	status->attackRange = st->attackRange;
+	status->PlayerInRange = st->PlayerInRange;
+	status->PlayerInAttackRange = st->PlayerInAttackRange;
+	status->isAttack = st->isAttack;
+	status->hp = st->hp;
+	status->disappearCnt = st->disappearCnt;
+	status->IsDisappear = st->IsDisappear;
 }
