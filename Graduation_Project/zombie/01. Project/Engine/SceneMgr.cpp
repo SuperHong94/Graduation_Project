@@ -571,64 +571,72 @@ void CSceneMgr::setMap()
 	// =================================
 	CGameObject* pObject = nullptr;
 	Ptr<CMeshData> pMeshData;
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Path2.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
+	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Tomb2.fbx");
+	pMeshData->Save(pMeshData->GetPath());
 	
 	//匡鸥府 积己
 	for (int i = 1; i < 260; i++)
 	{
-		pObject = new CGameObject;
-		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Fence.mdat", L"MeshData\\Fence.mdat");
-		pObject = pMeshData->Instantiate();
-		pObject->SetName(L"Fence");
-		pObject->FrustumCheck(true);
-		pObject->AddComponent(new CTransform);
-		if (i < 65)
-			pObject->Transform()->SetLocalPos(Vec3(5050.f, 0.f, -5050.f + 155 * i));
-		else if (i < 130)
-			pObject->Transform()->SetLocalPos(Vec3(-5050.f, 0.f, -5050.f + 155 * (i - 65)));
-		else if (i < 195)
-			pObject->Transform()->SetLocalPos(Vec3(-4930.f + 155 * (i - 130), 0.f, 5050.f));
-		else
-			pObject->Transform()->SetLocalPos(Vec3(-4940.f + 155 * (i - 195), 0.f, -5050.f));
+		if (((i <= 30 || i >= 35) && i >= 1 && i < 65) || ((i <= 95 || i >= 100) && i >= 65 && i < 130) || ((i <= 159 || i >= 165) && i >= 130 && i < 195) || ((i <= 224 || i >= 230) && i >= 195 && i < 260))
+		{
+			pObject = new CGameObject;
+			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Fence.mdat", L"MeshData\\Fence.mdat");
+			pObject = pMeshData->Instantiate();
+			pObject->SetName(L"Fence");
+			pObject->FrustumCheck(true);
+			pObject->AddComponent(new CTransform);
+			if (i < 65)
+				pObject->Transform()->SetLocalPos(Vec3(5050.f, 0.f, -5050.f + 155 * i));
+			else if (i < 130)
+				pObject->Transform()->SetLocalPos(Vec3(-5050.f, 0.f, -5050.f + 155 * (i - 65)));
+			else if (i < 195)
+				pObject->Transform()->SetLocalPos(Vec3(-4930.f + 155 * (i - 130), 0.f, 5050.f));
+			else
+				pObject->Transform()->SetLocalPos(Vec3(-4940.f + 155 * (i - 195), 0.f, -5050.f));
 
-		pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-		if (i < 130)
-			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
-		else
-			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f, 0.f));
-		//pObject->MeshRender()->SetDynamicShadow(true);
+			pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+			if (i < 130)
+				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
+			else
+				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f, 0.f));
+			//pObject->MeshRender()->SetDynamicShadow(true);
 
-		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+			m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		}
 	}
 
 	//公待 积己
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		pObject = new CGameObject;
-		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Tomb.mdat", L"MeshData\\Tomb.mdat");
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Tomb2.mdat", L"MeshData\\Tomb2.mdat");
 		pObject = pMeshData->Instantiate();
 		pObject->SetName(L"Tomb");
 		pObject->FrustumCheck(true);
 		pObject->AddComponent(new CTransform);
 
-		if (i < 3)
+		if (i == 0)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(-5500.f, 0.f, -3000 + (i * 3000)));
+			pObject->Transform()->SetLocalPos(Vec3(-5250.f, -0.f, 0.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
 		}
-		else if (i < 6)
+		else if (i == 1)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(5500.f, 0.f, -3000 + ((i-3) * 3000)));
+			pObject->Transform()->SetLocalPos(Vec3(5250.f, -0.f, 0.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI / 2, 0.f));
+		}
+		else if (i == 2)
+		{
+			pObject->Transform()->SetLocalPos(Vec3(0.f, -0.f,-5250.f));
+			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI, 0.f));
 		}
 		else
 		{
-			pObject->Transform()->SetLocalPos(Vec3(-3000 + ((i - 6) * 3000), 0.f,-5500.f));
-			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI, 0.f));
+			pObject->Transform()->SetLocalPos(Vec3(0.f, -0.f, 5250.f));
+			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f, 0.f));
 		}
 
-		pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+		pObject->Transform()->SetLocalScale(Vec3(2.0f, 1.5f, 2.0f));
 
 	
 		//pObject->MeshRender()->SetDynamicShadow(true);
