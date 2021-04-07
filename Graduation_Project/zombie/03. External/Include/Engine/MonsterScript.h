@@ -13,6 +13,7 @@ struct MonsterStatus
 	bool isAttack = false;
 	float hp = 100;
 	float disappearCnt = 0;
+	bool IsDisappear = false;
 };
 
 
@@ -23,6 +24,7 @@ private:
 	CGameObject* pObject;
 	CScene* pScene;
 public:
+
 	CheckPlayerInRange(MonsterStatus* status, CGameObject* pObject, CScene* pscene) : status(status), pObject(pObject), pScene(pscene) {}
 	virtual bool run() override {
 		if (status->distanceToPlayer <= 1000)
@@ -130,13 +132,16 @@ public:
 	virtual void OnCollisionEnter(CCollider2D* _pOther);
 	virtual void OnCollisionExit(CCollider2D* _pOther);
 
-
+	MonsterStatus* GetStatus() { return status; };
+	void SetStatus(MonsterStatus* st);
 public:
 	CLONE(CMonsterScript);
 
 public:
 	CMonsterScript(CGameObject* TargetObject, CGameObject* Object, CScene* pscene);
 	virtual ~CMonsterScript();
+
+	int aa = 0;
 };
 
 

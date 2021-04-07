@@ -232,6 +232,9 @@
     <ClInclude Include="BehaviourTree.h">
       <Filter>04. GameObject\BehaviourTree</Filter>
     </ClInclude>
+    <ClInclude Include="GameMgr.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -390,6 +393,9 @@
     </ClCompile>
     <ClCompile Include="BehaviourTree.cpp">
       <Filter>04. GameObject\BehaviourTree</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMgr.cpp">
+      <Filter>Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

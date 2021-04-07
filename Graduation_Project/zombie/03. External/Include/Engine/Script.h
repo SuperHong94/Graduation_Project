@@ -70,6 +70,7 @@ public:
 	UINT GetScriptType() { return m_iScriptType; }
 	bool isAniChange = false;
 
+
 public:
 	virtual void update() = 0;
 

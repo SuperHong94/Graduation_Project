@@ -31,8 +31,8 @@ void CResMgr::CreateDefaultShader()
 	pShader->CreateVertexInstShader(L"Shader\\std.fx", "VS_Tex_Inst", "vs_5_0");
 	pShader->CreatePixelShader(L"Shader\\std.fx", "PS_Tex", "ps_5_0");
 
-	// BlendState 설정
-	// pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
+	 //BlendState 설정
+	 pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
 
 	// DSState
 	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS);
