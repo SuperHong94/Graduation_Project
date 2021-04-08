@@ -27,7 +27,7 @@ CCore::~CCore()
 int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 {
 	std::wcout.imbue(std::locale("korean"));//오류코드 한국어로 표현
-	CNetworkMgr::GetInst()->init();
+
 
 	m_hMainHwnd = _hWnd;
 	ChangeWindowSize(m_hMainHwnd, _resolution);
@@ -65,7 +65,8 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	CResMgr::GetInst()->init();
 	CSceneMgr::GetInst()->init();
 	
-
+	//우선은 여기다하는데 나중에는 가장먼저로 올려야 함
+	CNetworkMgr::GetInst()->init();
 	return S_OK;
 }
 
@@ -79,10 +80,10 @@ void CCore::ChangeWindowSize(HWND _hWnd, const tResolution & _resolution)
 
 void CCore::progress()
 {
+	CNetworkMgr::GetInst()->client_main();
 	CKeyMgr::GetInst()->update();
 	CTimeMgr::GetInst()->update();
 	CSound::g_pFMOD->update();
-
 	CEventMgr::GetInst()->clear();
 	{
 		CSceneMgr::GetInst()->update();

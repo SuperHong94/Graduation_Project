@@ -68,13 +68,21 @@ void send_packet(int c_id, void* packet)
 			err_display("WSASEND()", err_code);
 	}
 }
-
+void send_move_packet(int c_id)
+{
+	CLIENT& client = clients[c_id];
+	s2c_move packet;
+	packet.size = sizeof(packet);
+	packet.type = S2C_MOVE;
+	packet.x = client.x; packet.y = client.y, packet.z = client.z;
+	send_packet(c_id, &packet);
+}
 void send_login_result(int c_id)
 {
 	s2c_loginOK packet;
 	packet.size = sizeof(packet);
 	packet.type = S2C_LOGIN_OK;
-	packet.x = 1000.0f; packet.y = 1000.0f; packet.z = 0.0f;
+	packet.x = 0.f; packet.y = 0.f; packet.z = 0.0f;
 
 	send_packet(c_id, &packet);
 }
@@ -87,7 +95,7 @@ void send_key_result(int c_id, c2s_Key* packet)
 	switch (packet->key)
 	{
 	case DOWN_UP:
-		z += 500.f;
+		z += 10.f;
 		break;
 	case DOWN_DOWN:
 		break;
@@ -98,7 +106,7 @@ void send_key_result(int c_id, c2s_Key* packet)
 	default:
 		break;
 	}
-
+	send_move_packet(c_id);
 }
 void proccess_packet(int c_id, unsigned char* buf)
 {
@@ -110,10 +118,11 @@ void proccess_packet(int c_id, unsigned char* buf)
 		c2s_login* packet = reinterpret_cast<c2s_login*>(buf);
 		send_login_result(c_id);
 	}
+	break;
 	case C2S_KEY_EVENT:
 	{
 		c2s_Key* packet = reinterpret_cast<c2s_Key*>(buf);
-		send_key_result(c_id,packet);
+		send_key_result(c_id, packet);
 	}
 	break;
 	default:

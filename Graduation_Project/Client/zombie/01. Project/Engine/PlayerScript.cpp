@@ -191,7 +191,11 @@ void CPlayerScript::update()
 		vPos.z = 4990;
 	if (vPos.z < -4990)
 		vPos.z = -4990;
-	Transform()->SetLocalPos(vPos);
+#ifdef _DEBUG
+	std::cout << "현재 플레이어의 위치 " << vPos.x << '	' << vPos.y << '	' << vPos.z << '\r';
+#endif // _DEBUG
+
+	Transform()->SetLocalPos(CNetworkMgr::GetInst()->playerPos);
 	Transform()->SetLocalRot(vRot);
 
 	//애니메이션 설정

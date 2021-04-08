@@ -38,6 +38,8 @@
 #include "ResMgr.h"
 #include "PathMgr.h"
 
+//네트워크
+#include "NetworkMgr.h"
 
 CScene* CSceneMgr::GetCurScene()
 {
@@ -205,6 +207,7 @@ void CSceneMgr::init()
 	// AddGameObject
 	m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
 
+	CNetworkMgr::GetInst()->SetPlayer(pPlayerObject);
 
 	//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 
