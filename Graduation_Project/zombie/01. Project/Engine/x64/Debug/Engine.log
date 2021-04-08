@@ -1004,7 +1004,6 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   {
   };
   
-<<<<<<< HEAD
   stdafx.cpp
   Animation2D.cpp
   Animator2D.cpp
@@ -1018,6 +1017,7 @@ C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie
   Component.cpp
   ConstantBuffer.cpp
   Core.cpp
+  desc.cpp
   Device.cpp
   Entity.cpp
   EventMgr.cpp
@@ -1062,45 +1062,55 @@ C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie
               _Alloc=std::allocator<char>
           ]
   Frustum.cpp
+  func.cpp
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(203,11): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(209,11): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(213,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(216,52): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(216,31): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(217,52): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(217,31): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(219,52): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(219,31): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(220,52): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(220,31): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  GameMgr.cpp
   GameObject.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
   GridScript.cpp
   InstancingBuffer.cpp
   InstancingMgr.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
   KeyMgr.cpp
   Layer.cpp
   Light2D.cpp
   Light3D.cpp
-  MRT.cpp
   Material.cpp
   Mesh.cpp
   MeshData.cpp
   MeshRender.cpp
   MonsterScript.cpp
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MonsterScript.cpp(61,28): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MonsterScript.cpp(78,14): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MonsterScript.cpp(62,28): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MonsterScript.cpp(79,14): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  MRT.cpp
   ParticleSystem.cpp
   PathMgr.cpp
   PlayerScript.cpp
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\PlayerScript.cpp(241,13): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\PlayerScript.cpp(245,13): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   RenderMgr.cpp
   RenderMgrInit.cpp
   ResMgr.cpp
   ResMgrInit.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
   Resource.cpp
   Scene.cpp
   SceneMgr.cpp
 C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(14,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(566,63): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(571,62): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(576,49): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(622,75): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(635,75): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(654,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(667,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(683,75): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(696,75): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(715,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(728,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Script.cpp
   Shader.cpp
   SimpleMath.cpp
@@ -1154,37 +1164,7 @@ C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie
 C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.cpp(104,30): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.cpp(106,30): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Transform.cpp
-  desc.cpp
-  func.cpp
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(203,11): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(209,11): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(213,12): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(216,52): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(216,31): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(217,52): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(217,31): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(219,52): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(219,31): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(220,52): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\func.cpp(220,31): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   코드를 생성하고 있습니다...
   Engine.vcxproj -> C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\03. External\Library\Engine\Engine_debug.lib
   0개 파일이 복사되었습니다.
-=======
-  SceneMgr.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(14,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(681,75): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(694,75): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(713,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(726,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  ToolCamScript.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(14,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.cpp(96,21): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.cpp(104,30): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.cpp(106,30): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
-  Engine.vcxproj -> C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\03. External\Library\Engine\Engine_debug.lib
-  .\01. Project\Engine\ToolCamScript.h
-  1개 파일이 복사되었습니다.
->>>>>>> yjs
   0개 파일이 복사되었습니다.

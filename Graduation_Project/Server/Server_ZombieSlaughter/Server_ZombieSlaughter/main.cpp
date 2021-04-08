@@ -78,6 +78,28 @@ void send_login_result(int c_id)
 
 	send_packet(c_id, &packet);
 }
+void send_key_result(int c_id, c2s_Key* packet)
+{
+	auto& x = clients[c_id].x;
+	auto& y = clients[c_id].y;
+	auto& z = clients[c_id].z;
+
+	switch (packet->key)
+	{
+	case DOWN_UP:
+		z += 500.f;
+		break;
+	case DOWN_DOWN:
+		break;
+	case DOWN_RIGHT:
+		break;
+	case DOWN_LEFT:
+		break;
+	default:
+		break;
+	}
+
+}
 void proccess_packet(int c_id, unsigned char* buf)
 {
 	//buf[1]에 type이 들어감
@@ -88,6 +110,12 @@ void proccess_packet(int c_id, unsigned char* buf)
 		c2s_login* packet = reinterpret_cast<c2s_login*>(buf);
 		send_login_result(c_id);
 	}
+	case C2S_KEY_EVENT:
+	{
+		c2s_Key* packet = reinterpret_cast<c2s_Key*>(buf);
+		send_key_result(c_id,packet);
+	}
+	break;
 	default:
 		break;
 	}
@@ -116,6 +144,7 @@ void send_remove_client(int p_id, int other_id)
 	packet.m_id = other_id;
 	send_packet(p_id, &packet);
 }
+
 void disconnect(int key)
 {
 	closesocket(clients[key].m_socket);
@@ -123,6 +152,7 @@ void disconnect(int key)
 	for (auto& c : clients)
 		send_remove_client(c.second.m_id, key); //c.sencond.m_id에게 key가 종료되었음을 알림
 }
+
 int main()
 {
 	wcout.imbue(locale("korean"));

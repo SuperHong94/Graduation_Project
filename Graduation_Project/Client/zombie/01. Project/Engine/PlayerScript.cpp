@@ -105,7 +105,7 @@ void CPlayerScript::update()
 		keyHold[0] = 1;
 
 		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_UP);
-		vPos.z += DT * status.speed;
+		//vPos.z += DT * status.speed;
 		isMove = true;
 		if (status.state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)))
 			status.state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));

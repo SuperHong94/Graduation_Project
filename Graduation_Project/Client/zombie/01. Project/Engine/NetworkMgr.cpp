@@ -119,6 +119,8 @@ void CNetworkMgr::send_Key_packet(EKEY_EVENT key)
 	packet.type = C2S_KEY_EVENT;
 	packet.size = sizeof(packet);
 	packet.key = key;
+
+	send_packet(&packet);
 }
 
 
