@@ -70,7 +70,8 @@ void CMonsterScript::update()
 
 		root->run();
 
-		if (status->state == MonsterState::M_Run)
+		//if (status->state == MonsterState::M_Run)
+		if (status->state == MonsterState::M_Run && !status->IsCollide)
 		{
 			vPos += DT * 200.f * vDir;
 		}
@@ -137,10 +138,57 @@ void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 		//	//DeleteObject(GetObj());	// -->삭제 이벤트 등록	
 		//}
 	}
+
+	if (L"Monster Object" == _pOther->GetObj()->GetName() && !_pOther->GetObj()->GetScript<CMonsterScript>()->status->IsCollide)
+	{
+		status->IsCollide = true;
+
+		Vec3 vPos = Transform()->GetLocalPos();
+		Vec3 vDir = Transform()->GetLocalDir(DIR_TYPE::FRONT);
+
+		Vec3 vOtherPos = _pOther->GetObj()->Transform()->GetLocalPos();
+		Vec3 vOtherDir = _pOther->GetObj()->Transform()->GetLocalDir(DIR_TYPE::FRONT);
+
+		vPos += 7.f * vDir;
+		Transform()->SetLocalPos(vPos);
+
+	/*	if (vDir == vOtherDir)
+		{
+			vOtherPos -= DT * 2000.f * vOtherDir;
+			_pOther->GetObj()->Transform()->SetLocalPos(vOtherPos);
+		}*/
+	}
 }
 
 void CMonsterScript::OnCollisionExit(CCollider2D* _pOther)
 {
+	if (L"Monster Object" == _pOther->GetObj()->GetName())
+	{
+		status->IsCollide = false;
+	}
+}
+
+void CMonsterScript::OnCollision(CCollider2D* _pOther)
+{
+	if (L"Monster Object" == _pOther->GetObj()->GetName() && !_pOther->GetObj()->GetScript<CMonsterScript>()->status->IsCollide)
+	{
+		status->IsCollide = true;
+
+		Vec3 vPos = Transform()->GetLocalPos();
+		Vec3 vDir = Transform()->GetLocalDir(DIR_TYPE::FRONT);
+
+		Vec3 vOtherPos = _pOther->GetObj()->Transform()->GetLocalPos();
+		Vec3 vOtherDir = _pOther->GetObj()->Transform()->GetLocalDir(DIR_TYPE::FRONT);
+
+		vPos += DT * 20.f * vDir;
+		Transform()->SetLocalPos(vPos);
+
+	/*	if (vDir == vOtherDir)
+		{
+			vOtherPos -= DT * 2.f * vOtherDir;
+			_pOther->GetObj()->Transform()->SetLocalPos(vOtherPos);
+		}*/
+	}
 }
 
 void CMonsterScript::SetStatus(MonsterStatus* st)
