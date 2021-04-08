@@ -7,7 +7,7 @@ struct MonsterStatus
 {
 	MonsterState state;
 	float distanceToPlayer = 0;
-	float attackRange = 150;
+	float attackRange = 100;
 	bool PlayerInRange = false;
 	bool PlayerInAttackRange = false;
 	bool isAttack = false;

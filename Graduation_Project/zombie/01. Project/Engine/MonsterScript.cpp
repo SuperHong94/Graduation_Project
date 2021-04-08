@@ -150,7 +150,9 @@ void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 		Vec3 vOtherDir = _pOther->GetObj()->Transform()->GetLocalDir(DIR_TYPE::FRONT);
 
 		vPos += 7.f * vDir;
-		Transform()->SetLocalPos(vPos);
+		vDir = Transform()->GetLocalDir(DIR_TYPE::RIGHT);
+		//vPos += 7.f * vDir;
+		//Transform()->SetLocalPos(vPos);
 
 	/*	if (vDir == vOtherDir)
 		{
@@ -180,7 +182,9 @@ void CMonsterScript::OnCollision(CCollider2D* _pOther)
 		Vec3 vOtherPos = _pOther->GetObj()->Transform()->GetLocalPos();
 		Vec3 vOtherDir = _pOther->GetObj()->Transform()->GetLocalDir(DIR_TYPE::FRONT);
 
-		vPos += DT * 20.f * vDir;
+		vPos += DT * 70.f * vDir;
+		vDir = Transform()->GetLocalDir(DIR_TYPE::RIGHT);
+		vPos += DT * 100.f * vDir;
 		Transform()->SetLocalPos(vPos);
 
 	/*	if (vDir == vOtherDir)
