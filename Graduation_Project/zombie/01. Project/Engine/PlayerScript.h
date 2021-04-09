@@ -8,8 +8,10 @@ struct PlayerStatus
 	PlayerState state = P_Spawn;
 	BulletState bulletState = B_Normal;
 	float hp = 100.f;
-	float speed = 4000.f;
-	//float speed = 300.f;
+	//float speed = 4000.f;
+	float speed = 300.f;
+	float RollCoolTime = 0.f;
+	bool IsRoll = false;
 };
 
 class CPlayerScript :
@@ -20,6 +22,9 @@ private:
 	Ptr<CMaterial>		m_pCloneMtrl;
 
 	float bulletHeight = 0;
+	float shiftCoolTime = 1.2f;
+
+	Vec3 rollDir;
 
 	CGameObject* pObject;
 	PlayerStatus status;
