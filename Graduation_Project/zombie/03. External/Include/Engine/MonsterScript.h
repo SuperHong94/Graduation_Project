@@ -14,6 +14,7 @@ struct MonsterStatus
 	float hp = 100;
 	float disappearCnt = 0;
 	bool IsDisappear = false;
+	bool IsCollide = false;
 };
 
 
@@ -131,6 +132,7 @@ public:
 
 	virtual void OnCollisionEnter(CCollider2D* _pOther);
 	virtual void OnCollisionExit(CCollider2D* _pOther);
+	virtual void OnCollision(CCollider2D* _pOther);
 
 	MonsterStatus* GetStatus() { return status; };
 	void SetStatus(MonsterStatus* st);

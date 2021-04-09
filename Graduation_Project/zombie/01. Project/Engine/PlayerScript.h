@@ -8,8 +8,8 @@ struct PlayerStatus
 	PlayerState state = P_Spawn;
 	BulletState bulletState = B_Normal;
 	float hp = 100.f;
-	//float speed = 4000.f;
-	float speed = 300.f;
+	float speed = 4000.f;
+	//float speed = 300.f;
 };
 
 class CPlayerScript :
