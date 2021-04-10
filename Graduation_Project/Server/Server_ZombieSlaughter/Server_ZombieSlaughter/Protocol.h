@@ -21,6 +21,17 @@ enum EKEY_EVENT
 	DOWN_UP=0,DOWN_DOWN,DOWN_RIGHT,DOWN_LEFT
 };
 
+enum EPlayerState
+{
+	eP_Idle,
+	eP_FRun,
+	eP_BRun,
+	eP_LRun,
+	eP_RRun,
+	eP_Attack,
+	eP_Die,
+	eP_Spawn,
+};
 #pragma pack(push,1)
 //client->Serve
 struct c2s_login

@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "Protocol.h"
 
+#include "PlayerObject.h"
 
 
 enum EOP_TYPE { OP_RECV, OP_SEND, OP_ACCEPT };
@@ -23,7 +23,7 @@ struct CLIENT
 
 	unsigned int m_prev_size;
 
-	float x, y, z;
+	CPlayerObject* pPlayer;
 };
 
 constexpr int SERVER_ID = 0;
@@ -74,7 +74,8 @@ void send_move_packet(int c_id)
 	s2c_move packet;
 	packet.size = sizeof(packet);
 	packet.type = S2C_MOVE;
-	packet.x = client.x; packet.y = client.y, packet.z = client.z;
+	Vec3 pos = client.pPlayer->GetPostion();
+	packet.x = pos.x; packet.y = pos.y; packet.z = pos.z;
 	send_packet(c_id, &packet);
 }
 void send_login_result(int c_id)

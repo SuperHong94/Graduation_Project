@@ -141,10 +141,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PlayerObject.cpp" />
+    <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="global.h" />
+    <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="Protocol.h" />
+    <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
