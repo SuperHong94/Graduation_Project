@@ -67,7 +67,6 @@ void CMonsterScript::update()
 		vDir.z = vTargetPos.z - vPos.z;
 		vDir = vDir.Normalize();
 
-
 		root->run();
 
 		//if (status->state == MonsterState::M_Run)
@@ -77,10 +76,14 @@ void CMonsterScript::update()
 		}
 
 		// 이거 나중에 상태별로 포함되게 수정(run, attack??<- 이부분은 다시 생각)
-		float temp = atan2(vTargetPos.z - vPos.z, vTargetPos.x - vPos.x);
-		Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
 
-		Transform()->SetLocalPos(vPos);
+		// 플레이어가 좀비 인지 범위에 있을 경우에만 움직임 설정
+		if (XZdistanceToTarget <= status->recognizeRange)
+		{
+			float temp = atan2(vTargetPos.z - vPos.z, vTargetPos.x - vPos.x);
+			Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
+			Transform()->SetLocalPos(vPos);
+		}
 	}
 
 	// 몬스터 죽을시 애니메이션 변경
@@ -116,7 +119,7 @@ void CMonsterScript::update()
 		if (status->attackCoolTime <= 0)
 		{
 			status->isAttack = false;
-			status->attackCoolTime = 3.f;
+			status->attackCoolTime = 2.6f;
 		}
 	}
 }

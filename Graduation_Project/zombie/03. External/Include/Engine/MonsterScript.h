@@ -9,11 +9,12 @@ struct MonsterStatus
 	MonsterState state;
 	float distanceToPlayer = 0;
 	float attackRange = 100;
-	float attackDamage = 30.f;
+	float attackDamage = 3.f;
 	bool PlayerInRange = false;
 	bool PlayerInAttackRange = false;
 	bool isAttack = false;
-	float attackCoolTime = 3.f;
+	float attackCoolTime = 2.6f;
+	float attackDelay = 1.2f;	// 정확한 공격 타이밍을 계산하기 위한 변수
 	float hp = 100;
 	float disappearCnt = 0;
 	bool IsDisappear = false;
@@ -78,18 +79,28 @@ public:
 			}
 
 			// 공격
-			if (!status->isAttack)
+			if (!status->isAttack && status->attackDelay <= 0)
 			{
 				status->isAttack = true;
 				{
+					status->attackDelay = 1.2f;
 					// 플레이어 데미지
 					status->TargetObject->GetScript<CPlayerScript>()->getDamage(status->attackDamage);
 				}
+			}
+
+			else
+			{
+				status->attackDelay -= DT;
 			}
 		}
 
 		else
 		{
+			// 공격 쿨타임 초기화
+			status->attackDelay = 1.2f;
+			status->attackCoolTime = 2.6f;
+
 			status->PlayerInAttackRange = false;
 			if (status->distanceToPlayer <= 1000)
 			{

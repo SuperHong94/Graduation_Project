@@ -9,11 +9,13 @@ struct MonsterStatus
 	MonsterState state;
 	float distanceToPlayer = 0;
 	float attackRange = 100;
-	float attackDamage = 3.f;
+	float attackDamage = 30.f;
 	bool PlayerInRange = false;
 	bool PlayerInAttackRange = false;
 	bool isAttack = false;
-	float attackCoolTime = 3.f;
+	float recognizeRange = 1000.f;	// 인지 범위
+	float attackCoolTime = 2.6f;
+	float attackDelay = 1.2f;	// 정확한 공격 타이밍을 계산하기 위한 변수
 	float hp = 100;
 	float disappearCnt = 0;
 	bool IsDisappear = false;
@@ -28,11 +30,12 @@ private:
 	MonsterStatus* status;
 	CGameObject* pObject;
 	CScene* pScene;
+
 public:
 
 	CheckPlayerInRange(MonsterStatus* status, CGameObject* pObject, CScene* pscene) : status(status), pObject(pObject), pScene(pscene) {}
 	virtual bool run() override {
-		if (status->distanceToPlayer <= 1000)
+		if (status->distanceToPlayer <= status->recognizeRange)
 		{
 			status->PlayerInRange = true;
 
@@ -49,7 +52,15 @@ public:
 		else
 		{
 			status->PlayerInRange = false;
-			status->state = MonsterState::M_Wander;
+
+			if (status->state != MonsterState::M_Wander)
+			{
+				status->state = MonsterState::M_Wander;
+
+				//애니메이션 변경
+				Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Run.mdat", L"MeshData\\Zombie1Run.mdat");
+				pObject->ChangeAnimation(pMeshData);
+			}
 		}
 		return status->PlayerInRange;
 	}
@@ -78,18 +89,28 @@ public:
 			}
 
 			// 공격
-			if (!status->isAttack)
+			if (!status->isAttack && status->attackDelay <= 0)
 			{
 				status->isAttack = true;
 				{
+					status->attackDelay = 1.2f;
 					// 플레이어 데미지
 					status->TargetObject->GetScript<CPlayerScript>()->getDamage(status->attackDamage);
 				}
+			}
+
+			else
+			{
+				status->attackDelay -= DT;
 			}
 		}
 
 		else
 		{
+			// 공격 쿨타임 초기화
+			status->attackDelay = 1.2f;
+			status->attackCoolTime = 2.6f;
+
 			status->PlayerInAttackRange = false;
 			if (status->distanceToPlayer <= 1000)
 			{
