@@ -46,9 +46,9 @@ ipch/
 *.VC
 #폴더 무시
 v16/
-zombie/.vs/
-01. Project/Client/x64/
-Client/x64/
+/zombie/.vs/
+/01. Project/Client/x64/
+/Client/x64/
 
 *.log
 *.idb
