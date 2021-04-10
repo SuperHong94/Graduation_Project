@@ -1,6 +1,7 @@
 #pragma once
 #include "Script.h"
 #include "BehaviourTree.h"
+#include "PlayerScript.h"
 
 
 struct MonsterStatus
@@ -8,12 +9,16 @@ struct MonsterStatus
 	MonsterState state;
 	float distanceToPlayer = 0;
 	float attackRange = 100;
+	float attackDamage = 3.f;
 	bool PlayerInRange = false;
 	bool PlayerInAttackRange = false;
 	bool isAttack = false;
+	float attackCoolTime = 3.f;
 	float hp = 100;
 	float disappearCnt = 0;
 	bool IsDisappear = false;
+	bool IsCollide = false;
+	CGameObject* TargetObject;
 };
 
 
@@ -71,6 +76,16 @@ public:
 				Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Attack.mdat", L"MeshData\\Zombie1Attack.mdat");
 				pObject->ChangeAnimation(pMeshData);
 			}
+
+			// 공격
+			if (!status->isAttack)
+			{
+				status->isAttack = true;
+				{
+					// 플레이어 데미지
+					status->TargetObject->GetScript<CPlayerScript>()->getDamage(status->attackDamage);
+				}
+			}
 		}
 
 		else
@@ -85,6 +100,9 @@ public:
 				status->PlayerInRange = false;
 				status->state = MonsterState::M_Wander;
 			}
+
+			// 공격 취소
+			status->isAttack = false;
 		}
 		return status->PlayerInAttackRange;
 	}
@@ -123,7 +141,6 @@ private:
 	CheckPlayerInAttackRange* CCheckAttackRange;
 	AttackPlayer* CAttackPlayer;
 
-	CGameObject* TargetObejct;
 	CGameObject* pObject;
 	CScene* pScene;
 public:
@@ -131,6 +148,7 @@ public:
 
 	virtual void OnCollisionEnter(CCollider2D* _pOther);
 	virtual void OnCollisionExit(CCollider2D* _pOther);
+	virtual void OnCollision(CCollider2D* _pOther);
 
 	MonsterStatus* GetStatus() { return status; };
 	void SetStatus(MonsterStatus* st);

@@ -35,6 +35,8 @@ enum PlayerState
 	P_Attack,
 	P_Die,
 	P_Spawn,
+	P_Roll,
+	p_None,
 };
 
 enum BulletState
