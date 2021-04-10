@@ -12,6 +12,7 @@ struct PlayerStatus
 	float speed = 300.f;
 	float RollCoolTime = 0.f;
 	bool IsRoll = false;
+	bool IsDead = false;
 };
 
 class CPlayerScript :
@@ -22,7 +23,9 @@ private:
 	Ptr<CMaterial>		m_pCloneMtrl;
 
 	float bulletHeight = 0;
-	float shiftCoolTime = 1.35f;
+	float shiftCoolTime = 1.2f;
+
+	Vec3 rollDir;
 
 	CGameObject* pObject;
 	PlayerStatus status;
@@ -34,6 +37,8 @@ public:
 	virtual void update();
 
 	PlayerState setRunAni(Vec3 dir, Vec3 axis);
+
+	void getDamage(float damage);
 public:
 	CLONE(CPlayerScript);
 

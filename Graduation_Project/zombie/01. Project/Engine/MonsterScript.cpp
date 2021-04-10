@@ -6,10 +6,10 @@ CMonsterScript::CMonsterScript(CGameObject* targetObject, CGameObject* Object, C
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
 {
 	this->SetName(L"MonsterScript");
-	TargetObejct = targetObject;
 	pObject = Object;
 	status = new MonsterStatus;
 	status->state = MonsterState::M_Respawn;
+	status->TargetObject = targetObject;
 	pScene = pscene;
 
 	root = new Sequence;
@@ -34,7 +34,7 @@ void CMonsterScript::update()
 {
 	//// Transform 월드 좌표정보 얻기
 	Vec3 vPos = Transform()->GetLocalPos();
-	Vec3 vTargetPos = TargetObejct->Transform()->GetLocalPos();
+	Vec3 vTargetPos = status->TargetObject->Transform()->GetLocalPos();
 	Vec3 vDir;
 
 	//// 총알 충돌 확인
@@ -109,7 +109,16 @@ void CMonsterScript::update()
 		}
 	}
 
-
+	// 공격 쿨 타임 체크
+	if (status->isAttack)
+	{
+		status->attackCoolTime -= DT;
+		if (status->attackCoolTime <= 0)
+		{
+			status->isAttack = false;
+			status->attackCoolTime = 3.f;
+		}
+	}
 }
 
 void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)

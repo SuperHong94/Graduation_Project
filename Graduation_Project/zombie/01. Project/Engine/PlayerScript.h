@@ -12,6 +12,7 @@ struct PlayerStatus
 	float speed = 300.f;
 	float RollCoolTime = 0.f;
 	bool IsRoll = false;
+	bool IsDead = false;
 };
 
 class CPlayerScript :
@@ -36,6 +37,8 @@ public:
 	virtual void update();
 
 	PlayerState setRunAni(Vec3 dir, Vec3 axis);
+
+	void getDamage(float damage);
 public:
 	CLONE(CPlayerScript);
 
