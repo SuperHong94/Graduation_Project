@@ -47,6 +47,7 @@ struct c2s_Key
 	unsigned char size;
 	unsigned char type;
 	EKEY_EVENT key;
+	float dT; //deltatime
 };
 //////////////////
 //Server->Client
@@ -54,6 +55,7 @@ struct s2c_move
 {
 	unsigned char size;
 	unsigned char type;
+	EKEY_EVENT key;
 	float x, y, z;
 };
 

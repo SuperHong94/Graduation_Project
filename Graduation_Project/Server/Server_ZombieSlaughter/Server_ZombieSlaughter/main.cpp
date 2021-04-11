@@ -23,7 +23,8 @@ struct CLIENT
 
 	unsigned int m_prev_size;
 
-	CPlayerObject* pPlayer;
+	//이부분 포인터로 해야할까 다른것으로 해야할까?
+	CPlayerObject* m_pPlayer;
 };
 
 constexpr int SERVER_ID = 0;
@@ -68,14 +69,15 @@ void send_packet(int c_id, void* packet)
 			err_display("WSASEND()", err_code);
 	}
 }
-void send_move_packet(int c_id)
+void send_move_packet(int c_id,EKEY_EVENT key)
 {
 	CLIENT& client = clients[c_id];
 	s2c_move packet;
 	packet.size = sizeof(packet);
 	packet.type = S2C_MOVE;
-	Vec3 pos = client.pPlayer->GetPostion();
+	Vec3 pos = client.m_pPlayer->GetPostion();
 	packet.x = pos.x; packet.y = pos.y; packet.z = pos.z;
+	packet.key = key;
 	send_packet(c_id, &packet);
 }
 void send_login_result(int c_id)
@@ -83,31 +85,42 @@ void send_login_result(int c_id)
 	s2c_loginOK packet;
 	packet.size = sizeof(packet);
 	packet.type = S2C_LOGIN_OK;
-	packet.x = 0.f; packet.y = 0.f; packet.z = 0.0f;
+	
+	Vec3 vPos= clients[c_id].m_pPlayer->GetPostion();
+	packet.x = vPos.x; packet.y = vPos.y; packet.z = vPos.z;
 
 	send_packet(c_id, &packet);
 }
 void send_key_result(int c_id, c2s_Key* packet)
 {
-	auto& x = clients[c_id].x;
-	auto& y = clients[c_id].y;
-	auto& z = clients[c_id].z;
 
+	auto& pos = clients[c_id].m_pPlayer->GetPostion();
+	int speed = clients[c_id].m_pPlayer->GetSpeed();
+	EKEY_EVENT send_key;
+	float dt = packet->dT;
 	switch (packet->key)
 	{
 	case DOWN_UP:
-		z += 10.f;
+		pos.z += dt*speed;
+		send_key = EKEY_EVENT::DOWN_UP;
 		break;
 	case DOWN_DOWN:
+		pos.z -= dt * speed;
+		send_key = EKEY_EVENT::DOWN_DOWN;
 		break;
 	case DOWN_RIGHT:
+		pos.x += dt * speed;
+		send_key = EKEY_EVENT::DOWN_RIGHT;
 		break;
 	case DOWN_LEFT:
+		pos.x -= dt * speed;
+		send_key = EKEY_EVENT::DOWN_LEFT;
 		break;
 	default:
 		break;
 	}
-	send_move_packet(c_id);
+	clients[c_id].m_pPlayer->SetPostion(pos);
+	send_move_packet(c_id, send_key);
 }
 void proccess_packet(int c_id, unsigned char* buf)
 {
@@ -158,6 +171,7 @@ void send_remove_client(int p_id, int other_id)
 void disconnect(int key)
 {
 	closesocket(clients[key].m_socket);
+	delete clients[key].m_pPlayer;
 	clients.erase(key);
 	for (auto& c : clients)
 		send_remove_client(c.second.m_id, key); //c.sencond.m_id에게 key가 종료되었음을 알림
@@ -192,8 +206,7 @@ int main()
 	serverAddr.sin_port = htons(SERVER_PORT);
 	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-
-	ret = bind(listenSocket, reinterpret_cast<SOCKADDR*>(&serverAddr), sizeof(serverAddr));
+	ret = ::bind(listenSocket, reinterpret_cast<SOCKADDR*>(&serverAddr), sizeof(serverAddr));
 	if (ret == SOCKET_ERROR)
 	{
 		err_display("bind()", WSAGetLastError());
@@ -296,6 +309,8 @@ int main()
 			clients[c_id].m_socket = c_sock;
 			clients[c_id].m_prev_size = 0;
 			clients[c_id].m_recv_over.m_eOP = EOP_TYPE::OP_RECV;
+			clients[c_id].m_pPlayer = new CPlayerObject;
+			clients[c_id].m_pPlayer->init();
 			CreateIoCompletionPort(reinterpret_cast<HANDLE>(c_sock), h_iocp, c_id, 0);
 			do_recv(c_id);
 

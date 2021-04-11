@@ -11,21 +11,16 @@
 #include "Protocol.h"
 
 
-
-
-
-
-
-#include <d3d12.h>
-#pragma comment(lib, "d3d12")
-#include <DirectXMath.h>
-#include <DirectXPackedVector.h>
+//¼öÇÐ
 #include "SimpleMath.h"
 
-#include "SimpleMath.h"
 
 typedef DirectX::SimpleMath::Vector2 Vec2;
 typedef DirectX::SimpleMath::Vector3 Vec3;
 typedef DirectX::SimpleMath::Vector4 Vec4;
 using DirectX::SimpleMath::Matrix;
 using namespace std;
+
+
+
+

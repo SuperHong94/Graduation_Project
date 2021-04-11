@@ -18,6 +18,7 @@ public:
 	void processPacket(char* buf, DWORD bufsize);
 
 	void process(char* buf);
+	void process_key(s2c_move* p);
 	void send_login_packet();
 	void send_packet(void* packet);
 	void send_Key_packet(EKEY_EVENT key);

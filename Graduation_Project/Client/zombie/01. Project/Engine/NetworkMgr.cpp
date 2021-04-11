@@ -2,7 +2,7 @@
 #include "NetworkMgr.h"
 #include "GameObject.h"
 #include "Transform.h" //이동을위한 헤더
-
+#include "TimeMgr.h" //DT를 위해서
 
 //생성자 
 CNetworkMgr::CNetworkMgr()
@@ -99,8 +99,10 @@ void CNetworkMgr::process(char* buf)
 	break;
 	case S2C_MOVE:
 	{
+
 		s2c_move* p = reinterpret_cast<s2c_move*>(buf);
 
+		process_key(p);
 #ifdef _DEBUG
 		std::cout << "키 정보결과로 " << p->x << ',' << p->y << ',' << p->z << std::endl;
 #endif // _DEBUG
@@ -111,12 +113,34 @@ void CNetworkMgr::process(char* buf)
 		//	//m_pPlayer->GetComponent(COMPONENT_TYPE::TRANSFORM)->Transform()->SetLocalPos(vPos);
 		//	m_pPlayer->Transform()->SetLocalPos(vPos);
 		//}
-		playerPos = Vec3(p->x, p->y, p->z);
+		//playerPos = Vec3(p->x, p->y, p->z);
 	}
 	break;
 	default:
 		break;
 	}
+}
+
+void CNetworkMgr::process_key(s2c_move* p)
+{
+	playerPos = { p->x,p->y,p->z };
+	//switch (p->key)
+	//{
+	//case DOWN_UP:
+	//	playerPos.z = DT * p->z;
+	//	break;
+	//case DOWN_DOWN:
+	//	playerPos.z = DT * p->z;
+	//	break;
+	//case DOWN_RIGHT:
+	//	playerPos.x = DT * p->z;
+	//	break;
+	//case DOWN_LEFT:
+	//	playerPos.x = DT * p->z;
+	//	break;
+	//default:
+	//	break;
+	//}
 }
 
 void CNetworkMgr::send_login_packet()
@@ -149,6 +173,7 @@ void CNetworkMgr::send_Key_packet(EKEY_EVENT key)
 	packet.type = C2S_KEY_EVENT;
 	packet.size = sizeof(packet);
 	packet.key = key;
+	packet.dT = DT;
 
 #ifdef _DEBUG
 	std::cout << "서버에게" << key << " 키 정보를 보낸다.\n";

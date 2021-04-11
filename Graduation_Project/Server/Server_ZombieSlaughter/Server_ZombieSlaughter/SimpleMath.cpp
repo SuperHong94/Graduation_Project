@@ -1,4 +1,7 @@
-#include "stdafx.h"
+
+
+
+//#include "stdafx.h"
 //-------------------------------------------------------------------------------------
 // SimpleMath.cpp -- Simplified C++ Math wrapper for DirectXMath
 //
@@ -8,7 +11,7 @@
 // http://go.microsoft.com/fwlink/?LinkId=248929
 // http://go.microsoft.com/fwlink/?LinkID=615561
 //-------------------------------------------------------------------------------------
-#include "global.h"
+//#include "global.h"
 #include "SimpleMath.h"
 
 /****************************************************************************
