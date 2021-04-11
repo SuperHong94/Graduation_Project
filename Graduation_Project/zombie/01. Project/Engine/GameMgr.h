@@ -7,6 +7,7 @@ class GameMgr
 private:
 	int DeathZombieCnt = 0;
 	int monsterCnt;
+	float spawnPosition[4][2] = { 0, };
 
 	CScene* Scene;
 	CGameObject* monsterArr[100];
