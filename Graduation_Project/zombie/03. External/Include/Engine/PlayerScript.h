@@ -13,6 +13,8 @@ struct PlayerStatus
 	float RollCoolTime = 0.f;
 	bool IsRoll = false;
 	bool IsDead = false;
+	float disappearCnt = 0;
+	bool isDisappear = false;
 };
 
 class CPlayerScript :
@@ -28,7 +30,7 @@ private:
 	Vec3 rollDir;
 
 	CGameObject* pObject;
-	PlayerStatus status;
+	PlayerStatus* status;
 
 	PlayerState previousState = P_Spawn; // 플레이어의 이전 프레임 애니메이션 상태
 
@@ -39,6 +41,9 @@ public:
 	PlayerState setRunAni(Vec3 dir, Vec3 axis);
 
 	void getDamage(float damage);
+
+	PlayerStatus* GetStatus() { return status; };
+	void SetStatus(PlayerStatus* st);
 public:
 	CLONE(CPlayerScript);
 

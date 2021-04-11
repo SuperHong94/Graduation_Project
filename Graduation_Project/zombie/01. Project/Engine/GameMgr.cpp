@@ -29,7 +29,10 @@ void GameMgr::CheckZombieRespawn()
 	{
 		if (monsterArr[i]->GetScript<CMonsterScript>()->GetStatus()->IsDisappear)
 		{
-			monsterArr[i]->Transform()->SetLocalPos(Vec3(0, 0, 0));
+			Vec3 vPos = monsterArr[i]->Transform()->GetLocalPos();
+			int respawnNum = FindNearRespawnPostion(vPos);
+
+			monsterArr[i]->Transform()->SetLocalPos(Vec3(spawnPosition[respawnNum][0], 0, spawnPosition[respawnNum][1]));
 
 			MonsterStatus* status = monsterArr[i]->GetScript<CMonsterScript>()->GetStatus();
 
@@ -46,5 +49,23 @@ void GameMgr::CheckZombieRespawn()
 			monsterArr[i]->GetScript<CMonsterScript>()->SetStatus(status);
 		}
 	}
+}
+
+int GameMgr::FindNearRespawnPostion(Vec3 pos)
+{
+	int n = 0;
+	float distance = 99999999;
+
+	for (int i = 0; i < 4; i++)
+	{
+		float temp = sqrt((pos.x - spawnPosition[i][0]) * (pos.x - spawnPosition[i][0]) + (pos.z - spawnPosition[i][1]) * (pos.z - spawnPosition[i][1]));
+		if (temp < distance)
+		{
+			distance = temp;
+			n = i;
+		}
+	}
+
+	return n;
 }
 

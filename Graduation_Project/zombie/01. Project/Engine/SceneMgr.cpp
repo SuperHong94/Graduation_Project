@@ -27,6 +27,7 @@
 #include "RenderMgr.h"
 #include "Device.h"
 #include "Core.h"
+#include "time.h"
 
 #include "PlayerScript.h"
 #include "MonsterScript.h"
@@ -298,8 +299,8 @@ void CSceneMgr::init()
 	// Monster 오브젝트 생성
 	// ====================
 
-	CGameObject* monsterArr[40];
-	int monsterCnt = 40;
+	CGameObject* monsterArr[60];
+	int monsterCnt = 60;
 	for (int i = 0; i < monsterCnt; i++)
 	{
 		pObject = new CGameObject;
@@ -313,7 +314,10 @@ void CSceneMgr::init()
 		//pObject->AddComponent(new CMeshRender);
 
 		// Transform 설정
-		pObject->Transform()->SetLocalPos(Vec3(-500.f + 300 *i, 0.f, 0.f));
+		float randomXPos = rand() % 9000 - 4500;
+		float randomZPos = rand() % 9000 - 4500;
+
+		pObject->Transform()->SetLocalPos(Vec3(randomXPos, 0.f, randomZPos));
 		pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 
 		//pObject->MeshRender()->SetDynamicShadow(true);
