@@ -2,6 +2,7 @@
 #include "ToolCamScript.h"
 
 #include "Camera.h"
+#include "PlayerScript.h"
 
 CToolCamScript::CToolCamScript(CGameObject* _pShootObject)
 	: CScript(0)
@@ -92,18 +93,24 @@ void CToolCamScript::update()
 	}
 
 	Vec3 CameraDir;
-
+	Vec3 vPlayerPos;
 	CameraDir.x = 0.785;
 	CameraDir.y = 0;
 	CameraDir.z = 0;
 
 	Transform()->SetLocalRot(CameraDir);
-	
-	Vec3 vPlayerPos = m_pShootObject->Transform()->GetLocalPos();
+
+	// 플레이어가 죽어서 없을 수 도 있기 때문에 하는 체크
+	if (!m_pShootObject->GetScript<CPlayerScript>()->GetStatus()->isDisappear)
+		vPlayerPos = m_pShootObject->Transform()->GetLocalPos();
+	else
+		vPlayerPos = vPreviousPlayerPos;
 	
 	vPos.x = vPos.x * (1 - 0.3) + vPlayerPos.x * 0.3;
 	vPos.y = 500 * m_fZoomScaleY;
 	vPos.z = vPos.z * (1 - 0.3) + (vPlayerPos.z - 500 * m_fZoomScaleZ) * 0.3;
 
 	Transform()->SetLocalPos(vPos);
+
+	vPreviousPlayerPos = vPlayerPos;
 }

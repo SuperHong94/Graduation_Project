@@ -15,6 +15,7 @@ private:
 
 	CGameObject* m_pShootObject;
 
+	Vec3 vPreviousPlayerPos = Vec3(0.f, 0.f, 0.f);
 public:
 	virtual void update();
 	void SetShootObject(CGameObject* _pShootObject) { m_pShootObject = _pShootObject; }

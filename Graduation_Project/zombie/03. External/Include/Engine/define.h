@@ -1,6 +1,6 @@
 #pragma once
 
-#define INSTANCING_COUNT 30 // 인스턴싱 제한조건( n 개 이상 중복 시 인스턴싱으로 전환)
+#define INSTANCING_COUNT 100 // 인스턴싱 제한조건( n 개 이상 중복 시 인스턴싱으로 전환)
 
 #define SINGLE(type) private: type(); ~type();\
 public:\

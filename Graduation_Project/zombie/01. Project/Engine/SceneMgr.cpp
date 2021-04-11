@@ -27,6 +27,7 @@
 #include "RenderMgr.h"
 #include "Device.h"
 #include "Core.h"
+#include "time.h"
 
 #include "PlayerScript.h"
 #include "MonsterScript.h"
@@ -137,8 +138,8 @@ void CSceneMgr::init()
 	Ptr<CTexture> pSky01 = CResMgr::GetInst()->Load<CTexture>(L"Sky01", L"Texture\\Skybox\\Sky01.png");
 	Ptr<CTexture> pSky02 = CResMgr::GetInst()->Load<CTexture>(L"Sky02", L"Texture\\Skybox\\Sky02.jpg");
 
-	Ptr<CTexture> pColor = CResMgr::GetInst()->Load<CTexture>(L"Tile", L"Texture\\Tile\\TILE_03.tga");
-	Ptr<CTexture> pNormal = CResMgr::GetInst()->Load<CTexture>(L"Tile_n", L"Texture\\Tile\\TILE_03_N.tga");
+	Ptr<CTexture> pColor = CResMgr::GetInst()->Load<CTexture>(L"Ground", L"Texture\\Ground\\Ground.tga");
+	Ptr<CTexture> pNormal = CResMgr::GetInst()->Load<CTexture>(L"Ground_n", L"Texture\\Ground\\Ground_n.tga");
 
 	Ptr<CTexture> pDiffuseTargetTex = CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex");
 	Ptr<CTexture> pNormalTargetTex = CResMgr::GetInst()->FindRes<CTexture>(L"NormalTargetTex");
@@ -200,8 +201,8 @@ void CSceneMgr::init()
 	// ===================
 	pPlayerObject = new CGameObject;
 
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Zombie1Death.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
+	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
+	pMeshData->Save(pMeshData->GetPath());
 
 	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 	pPlayerObject = pMeshData->Instantiate();
@@ -298,8 +299,8 @@ void CSceneMgr::init()
 	// Monster 오브젝트 생성
 	// ====================
 
-	CGameObject* monsterArr[40];
-	int monsterCnt = 40;
+	CGameObject* monsterArr[60];
+	int monsterCnt = 60;
 	for (int i = 0; i < monsterCnt; i++)
 	{
 		pObject = new CGameObject;
@@ -313,7 +314,10 @@ void CSceneMgr::init()
 		//pObject->AddComponent(new CMeshRender);
 
 		// Transform 설정
-		pObject->Transform()->SetLocalPos(Vec3(-500.f + 300 *i, 0.f, 0.f));
+		float randomXPos = rand() % 9000 - 4500;
+		float randomZPos = rand() % 9000 - 4500;
+
+		pObject->Transform()->SetLocalPos(Vec3(randomXPos, 0.f, randomZPos));
 		pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 
 		//pObject->MeshRender()->SetDynamicShadow(true);
@@ -393,28 +397,31 @@ void CSceneMgr::init()
 	//m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
 
-	//// ===================
-	//// Ground 오브젝트 생성
-	//// ===================
-	//pObject = new CGameObject;
-	//pObject->SetName(L"Ground Object");
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CMeshRender);
+	// ===================
+	// Ground 오브젝트 생성
+	// ===================
+	for (int i = 0; i < 13; i++)
+		for (int j = 0; j < 13; j++)
+		{
+			pObject = new CGameObject;
+			pObject->SetName(L"Ground Object");
+			pObject->AddComponent(new CTransform);
+			pObject->AddComponent(new CMeshRender);
 
-	//// Transform 설정
-	//pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
-	//pObject->Transform()->SetLocalScale(Vec3(16000.f, 16000.f, 1.f));
-	//pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
+			// Transform 설정
+			pObject->Transform()->SetLocalPos(Vec3(-6000 + i * 1000, 0.f, -6000 + j * 1000));
+			pObject->Transform()->SetLocalScale(Vec3(1000.f, 1000.f, 1.f));
+			pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
 
-	//// MeshRender 설정
-	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	//pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3DMtrl"));
-	//pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
-	//pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
-	//pObject->MeshRender()->SetDynamicShadow(true);
+			// MeshRender 설정
+			pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std3DMtrl"));
+			pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
+			pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
 
-	//// AddGameObject
-	//m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+			// AddGameObject
+			m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		}
 
 
 	//// ====================
@@ -646,22 +653,22 @@ void CSceneMgr::setMap()
 	}
 
 
-	//그라운드 생성
-	for (int i = 0; i < 16; i++)
-		for (int j = 0; j < 16; j++)
-		{
-			pObject = new CGameObject;
-			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Ground.mdat", L"MeshData\\Ground.mdat");
-			pObject = pMeshData->Instantiate();
-			pObject->SetName(L"Ground");
-			pObject->FrustumCheck(false);
-			pObject->AddComponent(new CTransform);
-			pObject->Transform()->SetLocalPos(Vec3(-8000 + i * 1000, 0.f, -8000 + j * 1000));
-			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
-			pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-			//pObject->MeshRender()->SetDynamicShadow(true);
-			m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
-		}
+	////그라운드 생성
+	//for (int i = 0; i < 6; i++)
+	//	for (int j = 0; j < 6; j++)
+	//	{
+	//		pObject = new CGameObject;
+	//		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Ground.mdat", L"MeshData\\Ground.mdat");
+	//		pObject = pMeshData->Instantiate();
+	//		pObject->SetName(L"Ground");
+	//		pObject->FrustumCheck(false);
+	//		pObject->AddComponent(new CTransform);
+	//		pObject->Transform()->SetLocalPos(Vec3(-5000 + i * 2000, 0.f, -5000 + j * 2000));
+	//		pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
+	//		pObject->Transform()->SetLocalScale(Vec3(2.f, 2.f, 1.f));
+	//		//pObject->MeshRender()->SetDynamicShadow(true);
+	//		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+	//	}
 
 
 	//길 생성
