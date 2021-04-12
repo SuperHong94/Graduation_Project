@@ -155,6 +155,7 @@ enum class COLLIDER2D_TYPE
 {
 	RECT,
 	CIRCLE,
+	RRECT
 };
 
 enum class SHADER_PARAM
