@@ -27,7 +27,7 @@ void CBulletScript::update()
 	vPos += vBulletDir * BulletSpeed * DT;
 	Transform()->SetLocalPos(vPos);
 
-	if (vPos.x >= 5000 || vPos.x <= -5000 || vPos.z >= 5000 || vPos.z <= -5000)
+	if (vPos.x >= 6000 || vPos.x <= -6000 || vPos.z >= 6000 || vPos.z <= -6000)
 	{
 		DeleteObject(GetObj());
 	}
@@ -35,7 +35,13 @@ void CBulletScript::update()
 
 void CBulletScript::OnCollisionEnter(CCollider2D* _pOther)
 {
+	wstring s = _pOther->GetObj()->GetName();
 	if (L"Monster Object" == _pOther->GetObj()->GetName())
+	{
+		DeleteObject(GetObj());
+	}
+
+	if (L"Tomb Object" == _pOther->GetObj()->GetName())
 	{
 		DeleteObject(GetObj());
 	}

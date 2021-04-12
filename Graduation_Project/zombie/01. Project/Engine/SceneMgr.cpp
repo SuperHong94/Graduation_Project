@@ -169,6 +169,7 @@ void CSceneMgr::init()
 	m_pCurScene->GetLayer(1)->SetName(L"Player");
 	m_pCurScene->GetLayer(2)->SetName(L"Monster");
 	m_pCurScene->GetLayer(3)->SetName(L"Bullet");
+	m_pCurScene->GetLayer(4)->SetName(L"Tomb");
 
 	m_pCurScene->GetLayer(30)->SetName(L"UI");
 	m_pCurScene->GetLayer(31)->SetName(L"Tool");
@@ -495,6 +496,7 @@ void CSceneMgr::init()
 	//CCollisionMgr::GetInst()->CheckCollisionLayer(L"Player", L"Monster");
 	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Monster");
 	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Monster", L"Monster");
+	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Tomb");
 	
 	m_pCurScene->awake();
 	m_pCurScene->start();
@@ -619,37 +621,41 @@ void CSceneMgr::setMap()
 		pObject = new CGameObject;
 		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Tomb2.mdat", L"MeshData\\Tomb2.mdat");
 		pObject = pMeshData->Instantiate();
-		pObject->SetName(L"Tomb");
-		pObject->FrustumCheck(true);
+		pObject->SetName(L"Tomb Object");
+		pObject->FrustumCheck(false);
 		pObject->AddComponent(new CTransform);
 
 		if (i == 0)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(-5250.f, -0.f, 0.f));
+			pObject->Transform()->SetLocalPos(Vec3(-5250.f, 0.f, 0.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
 		}
 		else if (i == 1)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(5250.f, -0.f, 0.f));
+			pObject->Transform()->SetLocalPos(Vec3(5250.f, 0.f, 0.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI / 2, 0.f));
 		}
 		else if (i == 2)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(0.f, -0.f,-5250.f));
+			pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f,-5250.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI, 0.f));
 		}
 		else
 		{
-			pObject->Transform()->SetLocalPos(Vec3(0.f, -0.f, 5250.f));
+			pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 5250.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f, 0.f));
 		}
 
 		pObject->Transform()->SetLocalScale(Vec3(2.0f, 1.5f, 2.0f));
-
 	
 		//pObject->MeshRender()->SetDynamicShadow(true);
 
-		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		pObject->AddComponent(new CCollider2D);
+		pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 100.f));
+		pObject->Collider2D()->SetOffsetScale(Vec3(300.f, 300.f, 0.f));
+		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RRECT);
+
+		m_pCurScene->FindLayer(L"Tomb")->AddGameObject(pObject);
 	}
 
 
