@@ -83,18 +83,13 @@ void CNetworkMgr::process(char* buf)
 	case S2C_LOGIN_OK:
 	{
 		s2c_loginOK* p = reinterpret_cast<s2c_loginOK*>(buf);
-		/*if (m_pPlayer != nullptr)
-		{
-
-			m_pPlayer->Transform()->SetLocalPos(Vec3(p->x, p->y, p->z));
-		}*/
+		
 		playerPos = Vec3(p->x, p->y, p->z);
 
 #ifdef _DEBUG
 		std::cout << "서버에서 접속 성공 초기좌표" << p->x << ',' << p->y << ',' << p->z << std::endl;
 #endif // _DEBUG
 
-		//std::cout << p->x << ' ' << p->y << ' ' << p->z << std::endl;
 	}
 	break;
 	case S2C_MOVE:
@@ -105,15 +100,7 @@ void CNetworkMgr::process(char* buf)
 		process_key(p);
 #ifdef _DEBUG
 		std::cout << "키 정보결과로 " << p->x << ',' << p->y << ',' << p->z << std::endl;
-#endif // _DEBUG
-
-		//if (m_pPlayer != nullptr)
-		//{
-		//	Vec3 vPos = Vec3(p->x, p->y, p->z);
-		//	//m_pPlayer->GetComponent(COMPONENT_TYPE::TRANSFORM)->Transform()->SetLocalPos(vPos);
-		//	m_pPlayer->Transform()->SetLocalPos(vPos);
-		//}
-		//playerPos = Vec3(p->x, p->y, p->z);
+#endif 
 	}
 	break;
 	default:
