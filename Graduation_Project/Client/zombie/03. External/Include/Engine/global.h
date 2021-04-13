@@ -47,6 +47,8 @@ using namespace Microsoft::WRL;
 //서버 관련 헤더, lib////////////////
 #include <WS2tcpip.h>
 #include <iostream> //서버관련 콘솔창에 출력하기
+#include "..\..\..\..\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\Protocol.h" //프로토콜
+
 #pragma comment(lib, "ws2_32")
 
 
@@ -64,5 +66,3 @@ using std::make_pair;
 #include "extern.h" // extern 변수
 #include "func.h"   // 전역 함수
 
-#define FRAME_BUFFER_WIDTH		1280
-#define FRAME_BUFFER_HEIGHT		768

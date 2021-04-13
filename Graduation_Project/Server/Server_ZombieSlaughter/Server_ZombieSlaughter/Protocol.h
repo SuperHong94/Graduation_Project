@@ -4,6 +4,18 @@
 constexpr int MAX_USER = 10;
 constexpr int MAX_NAME = 100;
 constexpr int MAX_BUFFER = 1024;
+
+//클라크기
+constexpr int FRAME_BUFFER_WIDTH = 1024;
+constexpr int FRAME_BUFFER_HEIGHT = 768;
+//맵 크기
+constexpr int MAX_MAP_X = 4990;
+constexpr int MIN_MAP_X = -4990;
+constexpr int MAX_MAP_Z = 4990;
+constexpr int MIN_MAP_Z = -4990;
+
+
+constexpr unsigned short MAX_BULLET = 200;
 constexpr short  SERVER_PORT = 3500;
 
 constexpr unsigned char C2S_LOGIN = 1;
@@ -16,9 +28,11 @@ constexpr unsigned char S2C_MOVE = 5;
 
 constexpr unsigned char S2C_REMOVE_CLIENT= 6;
 
+constexpr unsigned char C2S_MOUSE_EVENT= 7;
+
 enum EKEY_EVENT
 {
-	DOWN_UP=0,DOWN_DOWN,DOWN_RIGHT,DOWN_LEFT
+	DOWN_UP=0,DOWN_DOWN,DOWN_RIGHT,DOWN_LEFT,DOWN_LB,NO_EVENT
 };
 
 enum EPlayerState
@@ -55,8 +69,9 @@ struct s2c_move
 {
 	unsigned char size;
 	unsigned char type;
-	EKEY_EVENT key;
 	float x, y, z;
+	float rx, ry, rz;
+	POINT mousePos;
 };
 
 struct s2c_loginOK

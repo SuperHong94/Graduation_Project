@@ -187,14 +187,7 @@ void CPlayerScript::update()
 		isAniChange = false;
 
 	// 플레이어 위치 방향 설정
-	if (vPos.x > 4990)
-		vPos.x = 4990;
-	if (vPos.x < -4990)
-		vPos.x = -4990;
-	if (vPos.z > 4990)
-		vPos.z = 4990;
-	if (vPos.z < -4990)
-		vPos.z = -4990;
+
 #ifdef _DEBUG
 	std::cout << "현재 플레이어의 위치 " << vPos.x << '	' << vPos.y << '	' << vPos.z << '\r';
 #endif // _DEBUG

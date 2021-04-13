@@ -20,5 +20,3 @@
 
 // 여기서 프로그램에 필요한 추가 헤더를 참조합니다.
 
-#define FRAME_BUFFER_WIDTH		1280
-#define FRAME_BUFFER_HEIGHT		768

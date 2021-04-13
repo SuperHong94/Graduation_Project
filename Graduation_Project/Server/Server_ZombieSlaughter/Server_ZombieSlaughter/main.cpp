@@ -69,7 +69,7 @@ void send_packet(int c_id, void* packet)
 			err_display("WSASEND()", err_code);
 	}
 }
-void send_move_packet(int c_id,EKEY_EVENT key)
+void send_move_packet(int c_id)
 {
 	CLIENT& client = clients[c_id];
 	s2c_move packet;
@@ -77,7 +77,6 @@ void send_move_packet(int c_id,EKEY_EVENT key)
 	packet.type = S2C_MOVE;
 	Vec3 pos = client.m_pPlayer->GetPostion();
 	packet.x = pos.x; packet.y = pos.y; packet.z = pos.z;
-	packet.key = key;
 	send_packet(c_id, &packet);
 }
 void send_login_result(int c_id)
@@ -93,34 +92,9 @@ void send_login_result(int c_id)
 }
 void send_key_result(int c_id, c2s_Key* packet)
 {
-
-	auto& pos = clients[c_id].m_pPlayer->GetPostion();
-	int speed = clients[c_id].m_pPlayer->GetSpeed();
-	EKEY_EVENT send_key;
-	float dt = packet->dT;
-	switch (packet->key)
-	{
-	case DOWN_UP:
-		pos.z += dt*speed;
-		send_key = EKEY_EVENT::DOWN_UP;
-		break;
-	case DOWN_DOWN:
-		pos.z -= dt * speed;
-		send_key = EKEY_EVENT::DOWN_DOWN;
-		break;
-	case DOWN_RIGHT:
-		pos.x += dt * speed;
-		send_key = EKEY_EVENT::DOWN_RIGHT;
-		break;
-	case DOWN_LEFT:
-		pos.x -= dt * speed;
-		send_key = EKEY_EVENT::DOWN_LEFT;
-		break;
-	default:
-		break;
-	}
-	clients[c_id].m_pPlayer->SetPostion(pos);
-	send_move_packet(c_id, send_key);
+	clients[c_id].m_pPlayer->Update(packet);
+	
+	send_move_packet(c_id);
 }
 void proccess_packet(int c_id, unsigned char* buf)
 {
