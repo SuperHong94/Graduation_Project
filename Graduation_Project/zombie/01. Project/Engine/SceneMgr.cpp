@@ -200,7 +200,12 @@ void CSceneMgr::init()
 	// ===================
 	// Player 오브젝트 생성
 	// ===================
+
+	// 서버와 통신 해야됨
 	int playerNum = 4;
+	// 임시 설정 
+	int controlPlayerNum = 0;
+
 	for (int i = 0; i < playerNum; i++)
 	{
 		m_pPlayerArr[i] = new CGameObject;
@@ -238,7 +243,11 @@ void CSceneMgr::init()
 		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
 
 		// Script 설정
-		m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i]));
+		// 플레이어 일시
+		if(i == controlPlayerNum)
+			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
+		else
+			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], false));
 
 		// AddGameObject
 		m_pCurScene->FindLayer(L"Player")->AddGameObject(m_pPlayerArr[i]);
@@ -299,7 +308,7 @@ void CSceneMgr::init()
 	pMainCam->SetName(L"MainCam");
 	pMainCam->AddComponent(new CTransform);
 	pMainCam->AddComponent(new CCamera);
-	pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
+	pMainCam->AddComponent(new CToolCamScript(m_pPlayerArr[0]));
 
 	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 	pMainCam->Camera()->SetFar(100000.f);
@@ -347,8 +356,7 @@ void CSceneMgr::init()
 		pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
 
 		// Script 설정
-		if(i == 0)
-			pObject->AddComponent(new CMonsterScript(m_pPlayerArr, playerNum, pObject, m_pCurScene));
+		pObject->AddComponent(new CMonsterScript(m_pPlayerArr, playerNum, pObject, m_pCurScene));
 
 		// AddGameObject
 		m_pCurScene->FindLayer(L"Monster")->AddGameObject(pObject);

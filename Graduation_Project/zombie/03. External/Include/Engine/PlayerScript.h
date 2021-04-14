@@ -34,6 +34,8 @@ private:
 
 	PlayerState previousState = P_Spawn; // 플레이어의 이전 프레임 애니메이션 상태
 
+	bool isPlayer;
+
 public:
 	virtual void awake();
 	virtual void update();
@@ -48,7 +50,7 @@ public:
 	CLONE(CPlayerScript);
 
 public:
-	CPlayerScript(CGameObject* Object);
+	CPlayerScript(CGameObject* Object, bool player);
 	virtual ~CPlayerScript();
 };
 

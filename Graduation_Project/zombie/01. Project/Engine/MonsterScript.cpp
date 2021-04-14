@@ -2,12 +2,15 @@
 #include "MonsterScript.h"
 
 
-CMonsterScript::CMonsterScript(CGameObject* targetObject[4], int targetNum, CGameObject* Object, CScene* pscene)
+CMonsterScript::CMonsterScript(CGameObject* targetObject[], int ntargetNum, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
 {
-	targetNum = targetNum;
+	targetNum = ntargetNum;
 	for (int i = 0; i < targetNum; i++)
+	{
+		targetObjects[i] = new CGameObject;
 		targetObjects[i] = targetObject[i];
+	}
 
 	this->SetName(L"MonsterScript");
 	pObject = Object;
@@ -36,12 +39,13 @@ CMonsterScript::~CMonsterScript()
 
 void CMonsterScript::update()
 {
+	int a = findNearTarget();
+	status->TargetObject = targetObjects[findNearTarget()];
+
 	//// Transform 월드 좌표정보 얻기
 	Vec3 vPos = Transform()->GetLocalPos();
 	Vec3 vTargetPos = status->TargetObject->Transform()->GetLocalPos();
 	Vec3 vDir;
-
-	status->TargetObject = targetObjects[findNearTarget()];
 
 	//// 총알 충돌 확인
 	//vector<CGameObject*> vBobjects = pScene->FindLayer(L"Bullet")->GetObjects();

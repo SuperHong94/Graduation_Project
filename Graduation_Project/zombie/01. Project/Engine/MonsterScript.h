@@ -9,7 +9,7 @@ struct MonsterStatus
 	MonsterState state;
 	float distanceToPlayer = 0;
 	float attackRange = 100;
-	float attackDamage = 3.f;
+	float attackDamage = 10.f;
 	bool PlayerInRange = false;
 	bool PlayerInAttackRange = false;
 	bool isAttack = false;
@@ -182,7 +182,7 @@ public:
 	CLONE(CMonsterScript);
 
 public:
-	CMonsterScript(CGameObject* TargetObject[4], int targetNum, CGameObject* Object, CScene* pscene);
+	CMonsterScript(CGameObject* TargetObject[], int ntargetNum, CGameObject* Object, CScene* pscene);
 	virtual ~CMonsterScript();
 
 	int aa = 0;
