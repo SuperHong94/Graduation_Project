@@ -2,14 +2,18 @@
 #include "MonsterScript.h"
 
 
-CMonsterScript::CMonsterScript(CGameObject* targetObject, CGameObject* Object, CScene* pscene)
+CMonsterScript::CMonsterScript(CGameObject* targetObject[4], int targetNum, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
 {
+	targetNum = targetNum;
+	for (int i = 0; i < targetNum; i++)
+		targetObjects[i] = targetObject[i];
+
 	this->SetName(L"MonsterScript");
 	pObject = Object;
 	status = new MonsterStatus;
 	status->state = MonsterState::M_Respawn;
-	status->TargetObject = targetObject;
+	status->TargetObject = targetObject[0];
 	pScene = pscene;
 
 	root = new Sequence;
@@ -36,6 +40,8 @@ void CMonsterScript::update()
 	Vec3 vPos = Transform()->GetLocalPos();
 	Vec3 vTargetPos = status->TargetObject->Transform()->GetLocalPos();
 	Vec3 vDir;
+
+	status->TargetObject = targetObjects[findNearTarget()];
 
 	//// 총알 충돌 확인
 	//vector<CGameObject*> vBobjects = pScene->FindLayer(L"Bullet")->GetObjects();
@@ -122,6 +128,26 @@ void CMonsterScript::update()
 			status->attackCoolTime = 2.6f;
 		}
 	}
+}
+
+int CMonsterScript::findNearTarget()
+{
+	Vec3 vPos = Transform()->GetLocalPos();
+	int nearNum = -1;
+	float distance = 99999999;
+
+	for (int i = 0; i < targetNum; i++)
+	{
+		Vec3 temp = targetObjects[i]->Transform()->GetLocalPos();
+		float tempDistance = sqrt((vPos.x - temp.x) * (vPos.x - temp.x) + (vPos.z - temp.z) * (vPos.z - temp.z));
+
+		if (distance > tempDistance)
+		{
+			nearNum = i;
+			distance = tempDistance;
+		}
+	}
+	return nearNum;
 }
 
 void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)

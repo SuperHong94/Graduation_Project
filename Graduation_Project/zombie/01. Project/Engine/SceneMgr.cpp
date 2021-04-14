@@ -200,37 +200,50 @@ void CSceneMgr::init()
 	// ===================
 	// Player 오브젝트 생성
 	// ===================
-	pPlayerObject = new CGameObject;
+	int playerNum = 4;
+	for (int i = 0; i < playerNum; i++)
+	{
+		m_pPlayerArr[i] = new CGameObject;
 
-	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
-	pMeshData->Save(pMeshData->GetPath());
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
+		pMeshData->Save(pMeshData->GetPath());
 
-	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
-	pPlayerObject = pMeshData->Instantiate();
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+		m_pPlayerArr[i] = pMeshData->Instantiate();
 
-	pPlayerObject->SetName(L"Player Object");
-	pPlayerObject->AddComponent(new CTransform);
-	//pPlayerObject->AddComponent(new CMeshRender);
+		m_pPlayerArr[i]->SetName(L"Player Object");
+		m_pPlayerArr[i]->AddComponent(new CTransform);
+		//pPlayerObject->AddComponent(new CMeshRender);
 
-	// Transform 설정
-	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
-	pPlayerObject->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
+		// Transform 설정
 
-	//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
+		if(i == 0)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
+		else if (i == 1)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, 200.f));
+		else if (i == 2)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, -200.f));
+		else if (i == 3)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, -200.f));
 
-	// MeshRender 설정
-	//pPlayerObject->MeshRender()->SetDynamicShadow(true);
-	//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
-	//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
-	//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+		m_pPlayerArr[i]->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
 
-	// Script 설정
-	pPlayerObject->AddComponent(new CPlayerScript(pPlayerObject));
+		//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
 
-	// AddGameObject
-	m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
+		// MeshRender 설정
+		//pPlayerObject->MeshRender()->SetDynamicShadow(true);
+		//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+		//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
+		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
+		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
 
+		// Script 설정
+		m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i]));
+
+		// AddGameObject
+		m_pCurScene->FindLayer(L"Player")->AddGameObject(m_pPlayerArr[i]);
+
+	}
 
 	//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 
@@ -253,7 +266,7 @@ void CSceneMgr::init()
 	pMainCam->SetName(L"MainCam");
 	pMainCam->AddComponent(new CTransform);
 	pMainCam->AddComponent(new CCamera);
-	pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
+	pMainCam->AddComponent(new CToolCamScript(m_pPlayerArr[0]));
 
 	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 	pMainCam->Camera()->SetFar(100000.f);
@@ -334,7 +347,8 @@ void CSceneMgr::init()
 		pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
 
 		// Script 설정
-		pObject->AddComponent(new CMonsterScript(pPlayerObject, pObject, m_pCurScene));
+		if(i == 0)
+			pObject->AddComponent(new CMonsterScript(m_pPlayerArr, playerNum, pObject, m_pCurScene));
 
 		// AddGameObject
 		m_pCurScene->FindLayer(L"Monster")->AddGameObject(pObject);
