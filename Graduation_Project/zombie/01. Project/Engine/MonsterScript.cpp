@@ -2,14 +2,21 @@
 #include "MonsterScript.h"
 
 
-CMonsterScript::CMonsterScript(CGameObject* targetObject, CGameObject* Object, CScene* pscene)
+CMonsterScript::CMonsterScript(CGameObject* targetObject[], int ntargetNum, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
 {
+	targetNum = ntargetNum;
+	for (int i = 0; i < targetNum; i++)
+	{
+		targetObjects[i] = new CGameObject;
+		targetObjects[i] = targetObject[i];
+	}
+
 	this->SetName(L"MonsterScript");
 	pObject = Object;
 	status = new MonsterStatus;
 	status->state = MonsterState::M_Respawn;
-	status->TargetObject = targetObject;
+	status->TargetObject = targetObject[0];
 	pScene = pscene;
 
 	root = new Sequence;
@@ -32,6 +39,9 @@ CMonsterScript::~CMonsterScript()
 
 void CMonsterScript::update()
 {
+	int a = findNearTarget();
+	status->TargetObject = targetObjects[findNearTarget()];
+
 	//// Transform 월드 좌표정보 얻기
 	Vec3 vPos = Transform()->GetLocalPos();
 	Vec3 vTargetPos = status->TargetObject->Transform()->GetLocalPos();
@@ -67,7 +77,6 @@ void CMonsterScript::update()
 		vDir.z = vTargetPos.z - vPos.z;
 		vDir = vDir.Normalize();
 
-
 		root->run();
 
 		//if (status->state == MonsterState::M_Run)
@@ -77,10 +86,14 @@ void CMonsterScript::update()
 		}
 
 		// 이거 나중에 상태별로 포함되게 수정(run, attack??<- 이부분은 다시 생각)
-		float temp = atan2(vTargetPos.z - vPos.z, vTargetPos.x - vPos.x);
-		Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
 
-		Transform()->SetLocalPos(vPos);
+		// 플레이어가 좀비 인지 범위에 있을 경우에만 움직임 설정
+		if (XZdistanceToTarget <= status->recognizeRange)
+		{
+			float temp = atan2(vTargetPos.z - vPos.z, vTargetPos.x - vPos.x);
+			Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
+			Transform()->SetLocalPos(vPos);
+		}
 	}
 
 	// 몬스터 죽을시 애니메이션 변경
@@ -116,9 +129,29 @@ void CMonsterScript::update()
 		if (status->attackCoolTime <= 0)
 		{
 			status->isAttack = false;
-			status->attackCoolTime = 3.f;
+			status->attackCoolTime = 2.6f;
 		}
 	}
+}
+
+int CMonsterScript::findNearTarget()
+{
+	Vec3 vPos = Transform()->GetLocalPos();
+	int nearNum = -1;
+	float distance = 99999999;
+
+	for (int i = 0; i < targetNum; i++)
+	{
+		Vec3 temp = targetObjects[i]->Transform()->GetLocalPos();
+		float tempDistance = sqrt((vPos.x - temp.x) * (vPos.x - temp.x) + (vPos.z - temp.z) * (vPos.z - temp.z));
+
+		if (distance > tempDistance)
+		{
+			nearNum = i;
+			distance = tempDistance;
+		}
+	}
+	return nearNum;
 }
 
 void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
