@@ -83,7 +83,7 @@ void CNetworkMgr::process(char* buf)
 	case S2C_LOGIN_OK:
 	{
 		s2c_loginOK* p = reinterpret_cast<s2c_loginOK*>(buf);
-		
+
 		playerPos = Vec3(p->x, p->y, p->z);
 
 #ifdef _DEBUG
@@ -99,7 +99,7 @@ void CNetworkMgr::process(char* buf)
 
 		process_key(p);
 #ifdef _DEBUG
-		std::cout << "키 정보결과로 " << p->x << ',' << p->y << ',' << p->z << std::endl;
+		std::cout << "키 정보결과로 " << p->x << ',' << p->y << ',' << p->z <<"를 받았다"<< std::endl;
 #endif 
 	}
 	break;
@@ -110,24 +110,16 @@ void CNetworkMgr::process(char* buf)
 
 void CNetworkMgr::process_key(s2c_move* p)
 {
-	playerPos = { p->x,p->y,p->z };
-	//switch (p->key)
-	//{
-	//case DOWN_UP:
-	//	playerPos.z = DT * p->z;
-	//	break;
-	//case DOWN_DOWN:
-	//	playerPos.z = DT * p->z;
-	//	break;
-	//case DOWN_RIGHT:
-	//	playerPos.x = DT * p->z;
-	//	break;
-	//case DOWN_LEFT:
-	//	playerPos.x = DT * p->z;
-	//	break;
-	//default:
-	//	break;
-	//}
+
+	Vec3 packetPos = { p->x,p->y,p->z };
+	if (packetPos == playerPos)
+		m_isChange = false;
+	else
+		m_isChange = true;
+
+	if (m_isChange)
+		playerPos = packetPos;
+
 }
 
 void CNetworkMgr::send_login_packet()
@@ -154,17 +146,21 @@ void CNetworkMgr::send_packet(void* packet)
 	}
 }
 
-void CNetworkMgr::send_Key_packet(EKEY_EVENT key)
+
+
+void CNetworkMgr::send_Key_packet(EKEY_EVENT key, Vec3 Rotation)
 {
 	c2s_Key packet;
 	packet.type = C2S_KEY_EVENT;
 	packet.size = sizeof(packet);
 	packet.key = key;
 	packet.dT = DT;
-
-#ifdef _DEBUG
-	std::cout << "서버에게" << key << " 키 정보를 보낸다.\n";
-#endif // _DEBUG
+	packet.rX = Rotation.x;
+	packet.rY = Rotation.y;
+	packet.rZ = Rotation.z;
+//#ifdef _DEBUG
+//	std::cout << "서버에게" << key << " 키 정보를 보낸다.\n";
+//#endif // _DEBUG
 
 	send_packet(&packet);
 }

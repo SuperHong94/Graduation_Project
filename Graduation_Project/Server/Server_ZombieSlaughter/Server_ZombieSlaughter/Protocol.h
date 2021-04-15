@@ -62,6 +62,8 @@ struct c2s_Key
 	unsigned char type;
 	EKEY_EVENT key;
 	float dT; //deltatime
+	float rX, rY, rZ;// 회전정보
+	unsigned char isMove; //0이면 안움직임 1이면 움직임
 };
 //////////////////
 //Server->Client
@@ -71,7 +73,7 @@ struct s2c_move
 	unsigned char type;
 	float x, y, z;
 	float rx, ry, rz;
-	POINT mousePos;
+	//POINT mousePos;
 };
 
 struct s2c_loginOK

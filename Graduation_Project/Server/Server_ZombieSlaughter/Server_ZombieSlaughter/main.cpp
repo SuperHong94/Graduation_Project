@@ -77,6 +77,8 @@ void send_move_packet(int c_id)
 	packet.type = S2C_MOVE;
 	Vec3 pos = client.m_pPlayer->GetPostion();
 	packet.x = pos.x; packet.y = pos.y; packet.z = pos.z;
+	Vec3 rot = client.m_pPlayer->GetRotation();
+	packet.rx = rot.x; packet.ry = rot.y; packet.rz = rot.z;
 	send_packet(c_id, &packet);
 }
 void send_login_result(int c_id)

@@ -21,12 +21,13 @@ public:
 	void process_key(s2c_move* p);
 	void send_login_packet();
 	void send_packet(void* packet);
-	void send_Key_packet(EKEY_EVENT key);
 
+	void send_Key_packet(EKEY_EVENT key, Vec3 Rotation);
 
 public: //오브젝트 관련 메소드
 	void SetPlayer(CGameObject* pPlayer);
 
+	bool m_isChange = false;
 	Vec3 playerPos;
 
 };

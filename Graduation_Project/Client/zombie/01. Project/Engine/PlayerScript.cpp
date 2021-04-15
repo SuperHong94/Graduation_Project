@@ -104,7 +104,7 @@ void CPlayerScript::update()
 	{
 		keyHold[0] = 1;
 
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_UP);
+		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_UP, vRot);
 		//vPos.z += DT * status.speed;
 		isMove = true;
 		if (status.state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)))
@@ -115,7 +115,7 @@ void CPlayerScript::update()
 	{
 		keyHold[1] = 1;
 
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_DOWN);
+		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_DOWN, vRot);
 		//vPos.z -= DT * status.speed;
 		isMove = true;
 		if (status.state != setRunAni(playerDir, Vec3(0.f, 0.f, -1.f)))
@@ -125,7 +125,7 @@ void CPlayerScript::update()
 	if (KEY_HOLD(KEY_TYPE::KEY_A))
 	{
 		keyHold[2] = 1;
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_LEFT);
+		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_LEFT, vRot);
 		//vPos.x -= DT * status.speed;
 		isMove = true;
 		if (status.state != setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f)))
@@ -135,12 +135,16 @@ void CPlayerScript::update()
 	if (KEY_HOLD(KEY_TYPE::KEY_D))
 	{
 		keyHold[3] = 1;
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_RIGHT);
+		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_RIGHT, vRot);
 		//vPos.x += DT * status.speed;
 		isMove = true;
 		if (status.state != setRunAni(playerDir, Vec3(1.f, 0.f, 0.f)))
 			status.state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
 	}
+
+
+
+
 
 	// 대각선 애니메이션 체크
 	//좌상
@@ -188,12 +192,20 @@ void CPlayerScript::update()
 
 	// 플레이어 위치 방향 설정
 
-#ifdef _DEBUG
-	std::cout << "현재 플레이어의 위치 " << vPos.x << '	' << vPos.y << '	' << vPos.z << '\r';
-#endif // _DEBUG
+//#ifdef _DEBUG
+//	std::cout << "현재 플레이어의 위치 " << vPos.x << '	' << vPos.y << '	' << vPos.z << '\r';
+//#endif // _DEBUG
 
+	if (CNetworkMgr::GetInst()->m_isChange) {
+
+
+		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::NO_EVENT, vRot);
+
+	}
+	if (isMove) CNetworkMgr::GetInst()->playerPos.y = 53.f;
 	Transform()->SetLocalPos(CNetworkMgr::GetInst()->playerPos);
-	Transform()->SetLocalRot(vRot);
+
+	//Transform()->SetLocalRot(vRot);
 
 	//애니메이션 설정
 	if (isAniChange)
@@ -245,7 +257,9 @@ void CPlayerScript::update()
 	}
 
 	float temp = atan2(vBulletTargetPos.z - vPos.z, vBulletTargetPos.x - vPos.x);
-	Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
+	Vec3 send_rot = Vec3(0.f, -temp - XM_PI / 2, 0.f);
+	Transform()->SetLocalRot(send_rot);
+	//CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::NO_EVENT, send_rot); //회전정보 보내기
 
 	if (KEY_TAB(KEY_TYPE::KEY_LBTN))
 	{
