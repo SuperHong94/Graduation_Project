@@ -55,7 +55,6 @@ struct c2s_login
 };
 
 
-
 struct c2s_Key
 {
 	unsigned char size;

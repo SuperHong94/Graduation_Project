@@ -12,6 +12,7 @@ struct PlayerStatus
 	float speed = 300.f;
 };
 
+
 class CPlayerScript :
 	public CScript
 {
