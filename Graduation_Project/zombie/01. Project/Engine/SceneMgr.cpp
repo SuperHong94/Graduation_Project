@@ -213,6 +213,8 @@ void CSceneMgr::init()
 		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
 		pMeshData->Save(pMeshData->GetPath());
 
+		// 모델을 플레이어별로 따로 설정할수도 있음
+		// 아직 보류
 		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 		m_pPlayerArr[i] = pMeshData->Instantiate();
 
