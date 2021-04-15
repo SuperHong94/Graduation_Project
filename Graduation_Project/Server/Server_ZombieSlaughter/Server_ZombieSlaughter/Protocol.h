@@ -1,6 +1,8 @@
 #pragma once
 
 #define SERVER_IP "127.0.0.1"
+
+
 constexpr int MAX_USER = 10;
 constexpr int MAX_NAME = 100;
 constexpr int MAX_BUFFER = 1024;
@@ -64,6 +66,8 @@ struct c2s_Key
 	float rX, rY, rZ;// 회전정보
 	unsigned char isMove; //0이면 안움직임 1이면 움직임
 };
+
+
 //////////////////
 //Server->Client
 struct s2c_move
