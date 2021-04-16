@@ -204,7 +204,7 @@ void CSceneMgr::init()
 	// 서버와 통신 해야됨
 	int playerNum = 4;
 	// 임시 설정 
-	int controlPlayerNum = 0;
+	int playerID = 0;
 
 	for (int i = 0; i < playerNum; i++)
 	{
@@ -246,7 +246,7 @@ void CSceneMgr::init()
 
 		// Script 설정
 		// 플레이어 일시
-		if(i == controlPlayerNum)
+		if(i == playerID)
 			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
 		else
 			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], false));
@@ -370,7 +370,7 @@ void CSceneMgr::init()
 	// ====================
 	// Game Manager 생성
 	// ====================
-	m_pGameManager = new GameMgr(m_pCurScene, monsterArr, monsterCnt);
+	m_pGameManager = new GameMgr(m_pCurScene, monsterArr, monsterCnt, m_pPlayerArr, playerNum, playerID);
 
 
 	// ====================
@@ -539,8 +539,8 @@ void CSceneMgr::update()
 	// 충돌 처리
 	CCollisionMgr::GetInst()->update();
 
-	// 좀비 리스폰 관리
-	m_pGameManager->CheckZombieRespawn();
+	// 게임 매니저 업데이트
+	m_pGameManager->GameMgrUpdate();
 }
 
 void CSceneMgr::update_tool()

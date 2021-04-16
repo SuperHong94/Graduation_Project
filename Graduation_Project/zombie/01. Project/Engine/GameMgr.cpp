@@ -8,15 +8,25 @@
 #include "MonsterScript.h"
 
 
-GameMgr::GameMgr(CScene* pScene, CGameObject* monsters[], int monsterCount)
+GameMgr::GameMgr(CScene* pScene, CGameObject* monsters[], int monsterCount, CGameObject* PlayerArr[], int PlayerCnt, int PlayerID)
 {
-	Scene = pScene;
-	monsterCnt = monsterCount;
+	Gstatus->Scene = new CScene;
+	Gstatus->Scene = pScene;
+	Gstatus->monsterCnt = monsterCount;
 
-	for (int i = 0; i < monsterCnt; i++)
+	for (int i = 0; i < Gstatus->monsterCnt; i++)
 	{
-		monsterArr[i] = monsters[i];
+		Gstatus->monsterArr[i] = monsters[i];
 	}
+
+	Gstatus->playerCnt = PlayerCnt;
+
+	for (int i = 0; i < Gstatus->playerCnt; i++)
+	{
+		Gstatus->playerArr[i] = PlayerArr[i];
+	}
+
+	Gstatus->playerID = PlayerID;
 }
 
 GameMgr::~GameMgr()
@@ -25,16 +35,16 @@ GameMgr::~GameMgr()
 
 void GameMgr::CheckZombieRespawn()
 {
-	for (int i = 0; i < monsterCnt; i++)
+	for (int i = 0; i < Gstatus->monsterCnt; i++)
 	{
-		if (monsterArr[i]->GetScript<CMonsterScript>()->GetStatus()->IsDisappear)
+		if (Gstatus->monsterArr[i]->GetScript<CMonsterScript>()->GetStatus()->IsDisappear)
 		{
-			Vec3 vPos = monsterArr[i]->Transform()->GetLocalPos();
+			Vec3 vPos = Gstatus->monsterArr[i]->Transform()->GetLocalPos();
 			int respawnNum = FindNearRespawnPostion(vPos);
 
-			monsterArr[i]->Transform()->SetLocalPos(Vec3(spawnPosition[respawnNum][0], 0, spawnPosition[respawnNum][1]));
+			Gstatus->monsterArr[i]->Transform()->SetLocalPos(Vec3(Gstatus->spawnPosition[respawnNum][0], 0, Gstatus->spawnPosition[respawnNum][1]));
 
-			MonsterStatus* status = monsterArr[i]->GetScript<CMonsterScript>()->GetStatus();
+			MonsterStatus* status = Gstatus->monsterArr[i]->GetScript<CMonsterScript>()->GetStatus();
 
 			status->state = MonsterState::M_Respawn;
 			status->distanceToPlayer = 0;
@@ -46,10 +56,38 @@ void GameMgr::CheckZombieRespawn()
 			status->disappearCnt = 0;
 			status->IsDisappear = false;
 
-			monsterArr[i]->GetScript<CMonsterScript>()->SetStatus(status);
+			Gstatus->monsterArr[i]->GetScript<CMonsterScript>()->SetStatus(status);
 		}
 	}
 }
+
+
+void GameMgr::GameMgrUpdate()
+{
+	IsGameClear();
+
+	IsGameOver();
+
+	CheckZombieRespawn();
+}
+
+void GameMgr::IsGameClear()
+{
+}
+
+void GameMgr::IsGameOver()
+{
+	int cnt = 0;
+	for (int i = 0; i < Gstatus->playerCnt; i++)
+	{
+		if (Gstatus->playerArr[i]->GetScript<CPlayerScript>()->GetStatus()->isDisappear)
+			cnt++;
+	}
+
+	if (cnt == Gstatus->playerCnt && !Gstatus->isGameOver)
+		Gstatus->isGameOver = true;
+}
+
 
 int GameMgr::FindNearRespawnPostion(Vec3 pos)
 {
@@ -58,7 +96,7 @@ int GameMgr::FindNearRespawnPostion(Vec3 pos)
 
 	for (int i = 0; i < 4; i++)
 	{
-		float temp = sqrt((pos.x - spawnPosition[i][0]) * (pos.x - spawnPosition[i][0]) + (pos.z - spawnPosition[i][1]) * (pos.z - spawnPosition[i][1]));
+		float temp = sqrt((pos.x - Gstatus->spawnPosition[i][0]) * (pos.x - Gstatus->spawnPosition[i][0]) + (pos.z - Gstatus->spawnPosition[i][1]) * (pos.z - Gstatus->spawnPosition[i][1]));
 		if (temp < distance)
 		{
 			distance = temp;
