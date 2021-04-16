@@ -97,6 +97,10 @@ void CCollider2D::SetCollider2DType(COLLIDER2D_TYPE _eType)
 	{
 		m_pColMesh = CResMgr::GetInst()->FindRes<CMesh>(L"ColCircleMesh");
 	}
+	else if (COLLIDER2D_TYPE::RRECT == m_eType)
+	{
+		m_pColMesh = CResMgr::GetInst()->FindRes<CMesh>(L"ColRRectMesh");
+	}
 }
 
 void CCollider2D::OnCollisionEnter(CCollider2D * _pOther)

@@ -31,6 +31,7 @@ private:
 	void CollisionLayer(const CLayer* _pLayer1, const CLayer* _pLayer2);
 	bool IsCollision(CCollider2D* _pCollider1, CCollider2D* _pCollider2);
 	bool CollisionRect(CCollider2D* _pCollider1, CCollider2D* _pCollider2);
+	bool CollisionRRect(CCollider2D* _pCollider1, CCollider2D* _pCollider2);
 	bool CollisionCircle(CCollider2D* _pCollider1, CCollider2D* _pCollider2);
 	bool CollisionRectCircle(CCollider2D* _pCollider1, CCollider2D* _pCollider2);
 };

@@ -27,6 +27,7 @@
 #include "RenderMgr.h"
 #include "Device.h"
 #include "Core.h"
+#include "time.h"
 
 #include "PlayerScript.h"
 #include "MonsterScript.h"
@@ -168,6 +169,7 @@ void CSceneMgr::init()
 	m_pCurScene->GetLayer(1)->SetName(L"Player");
 	m_pCurScene->GetLayer(2)->SetName(L"Monster");
 	m_pCurScene->GetLayer(3)->SetName(L"Bullet");
+	m_pCurScene->GetLayer(4)->SetName(L"Tomb");
 
 	m_pCurScene->GetLayer(30)->SetName(L"UI");
 	m_pCurScene->GetLayer(31)->SetName(L"Tool");
@@ -198,39 +200,68 @@ void CSceneMgr::init()
 	// ===================
 	// Player 오브젝트 생성
 	// ===================
-	pPlayerObject = new CGameObject;
 
-	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
-	pMeshData->Save(pMeshData->GetPath());
+	// 서버와 통신 해야됨
+	int playerNum = 4;
+	// 임시 설정 
+	int controlPlayerNum = 0;
 
+<<<<<<< HEAD
 
 	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 
 	pPlayerObject = pMeshData->Instantiate();
+=======
+	for (int i = 0; i < playerNum; i++)
+	{
+		m_pPlayerArr[i] = new CGameObject;
+>>>>>>> yjs
 
-	pPlayerObject->SetName(L"Player Object");
-	pPlayerObject->AddComponent(new CTransform);
-	//pPlayerObject->AddComponent(new CMeshRender);
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
+		pMeshData->Save(pMeshData->GetPath());
 
-	// Transform 설정
-	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
-	pPlayerObject->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
+		// 모델을 플레이어별로 따로 설정할수도 있음
+		// 아직 보류
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+		m_pPlayerArr[i] = pMeshData->Instantiate();
 
-	//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
+		m_pPlayerArr[i]->SetName(L"Player Object");
+		m_pPlayerArr[i]->AddComponent(new CTransform);
+		//pPlayerObject->AddComponent(new CMeshRender);
 
-	// MeshRender 설정
-	//pPlayerObject->MeshRender()->SetDynamicShadow(true);
-	//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
-	//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
-	//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+		// Transform 설정
 
-	// Script 설정
-	pPlayerObject->AddComponent(new CPlayerScript(pPlayerObject));
+		if(i == 0)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
+		else if (i == 1)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, 200.f));
+		else if (i == 2)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, -200.f));
+		else if (i == 3)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, -200.f));
 
-	// AddGameObject
-	m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
+		m_pPlayerArr[i]->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
 
+		//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
+
+		// MeshRender 설정
+		//pPlayerObject->MeshRender()->SetDynamicShadow(true);
+		//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+		//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
+		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
+		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+
+		// Script 설정
+		// 플레이어 일시
+		if(i == controlPlayerNum)
+			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
+		else
+			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], false));
+
+		// AddGameObject
+		m_pCurScene->FindLayer(L"Player")->AddGameObject(m_pPlayerArr[i]);
+
+	}
 
 	//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 
@@ -253,7 +284,7 @@ void CSceneMgr::init()
 	pMainCam->SetName(L"MainCam");
 	pMainCam->AddComponent(new CTransform);
 	pMainCam->AddComponent(new CCamera);
-	pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
+	pMainCam->AddComponent(new CToolCamScript(m_pPlayerArr[0]));
 
 	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 	pMainCam->Camera()->SetFar(100000.f);
@@ -286,7 +317,7 @@ void CSceneMgr::init()
 	pMainCam->SetName(L"MainCam");
 	pMainCam->AddComponent(new CTransform);
 	pMainCam->AddComponent(new CCamera);
-	pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
+	pMainCam->AddComponent(new CToolCamScript(m_pPlayerArr[0]));
 
 	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 	pMainCam->Camera()->SetFar(100000.f);
@@ -300,8 +331,8 @@ void CSceneMgr::init()
 	// Monster 오브젝트 생성
 	// ====================
 
-	CGameObject* monsterArr[40];
-	int monsterCnt = 40;
+	CGameObject* monsterArr[60];
+	int monsterCnt = 60;
 	for (int i = 0; i < monsterCnt; i++)
 	{
 		pObject = new CGameObject;
@@ -315,7 +346,10 @@ void CSceneMgr::init()
 		//pObject->AddComponent(new CMeshRender);
 
 		// Transform 설정
-		pObject->Transform()->SetLocalPos(Vec3(-500.f + 300 *i, 0.f, 0.f));
+		float randomXPos = rand() % 9000 - 4500;
+		float randomZPos = rand() % 9000 - 4500;
+
+		pObject->Transform()->SetLocalPos(Vec3(randomXPos, 0.f, randomZPos));
 		pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 
 		//pObject->MeshRender()->SetDynamicShadow(true);
@@ -331,7 +365,7 @@ void CSceneMgr::init()
 		pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
 
 		// Script 설정
-		pObject->AddComponent(new CMonsterScript(pPlayerObject, pObject, m_pCurScene));
+		pObject->AddComponent(new CMonsterScript(m_pPlayerArr, playerNum, pObject, m_pCurScene));
 
 		// AddGameObject
 		m_pCurScene->FindLayer(L"Monster")->AddGameObject(pObject);
@@ -493,6 +527,7 @@ void CSceneMgr::init()
 	//CCollisionMgr::GetInst()->CheckCollisionLayer(L"Player", L"Monster");
 	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Monster");
 	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Monster", L"Monster");
+	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Tomb");
 	
 	m_pCurScene->awake();
 	m_pCurScene->start();
@@ -617,37 +652,41 @@ void CSceneMgr::setMap()
 		pObject = new CGameObject;
 		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Tomb2.mdat", L"MeshData\\Tomb2.mdat");
 		pObject = pMeshData->Instantiate();
-		pObject->SetName(L"Tomb");
-		pObject->FrustumCheck(true);
+		pObject->SetName(L"Tomb Object");
+		pObject->FrustumCheck(false);
 		pObject->AddComponent(new CTransform);
 
 		if (i == 0)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(-5250.f, -0.f, 0.f));
+			pObject->Transform()->SetLocalPos(Vec3(-5250.f, 0.f, 0.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
 		}
 		else if (i == 1)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(5250.f, -0.f, 0.f));
+			pObject->Transform()->SetLocalPos(Vec3(5250.f, 0.f, 0.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI / 2, 0.f));
 		}
 		else if (i == 2)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(0.f, -0.f,-5250.f));
+			pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f,-5250.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI, 0.f));
 		}
 		else
 		{
-			pObject->Transform()->SetLocalPos(Vec3(0.f, -0.f, 5250.f));
+			pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 5250.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f, 0.f));
 		}
 
 		pObject->Transform()->SetLocalScale(Vec3(2.0f, 1.5f, 2.0f));
-
 	
 		//pObject->MeshRender()->SetDynamicShadow(true);
 
-		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		pObject->AddComponent(new CCollider2D);
+		pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 100.f));
+		pObject->Collider2D()->SetOffsetScale(Vec3(300.f, 300.f, 0.f));
+		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RRECT);
+
+		m_pCurScene->FindLayer(L"Tomb")->AddGameObject(pObject);
 	}
 
 

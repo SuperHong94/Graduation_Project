@@ -12,6 +12,7 @@ class CSceneMgr
 private:
 	CScene*		m_pCurScene;	
 	GameMgr* m_pGameManager;
+	CGameObject* m_pPlayerArr[4];
 
 public:
 	void init();
