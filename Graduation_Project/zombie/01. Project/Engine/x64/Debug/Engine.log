@@ -1001,7 +1001,16 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   {
   };
   
-  BulletScript.cpp
+  SceneMgr.cpp
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(14,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(351,20): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(352,20): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(446,72): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(446,49): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(740,75): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(753,75): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(772,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(785,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Engine.vcxproj -> C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\03. External\Library\Engine\Engine_debug.lib
   0개 파일이 복사되었습니다.
   0개 파일이 복사되었습니다.

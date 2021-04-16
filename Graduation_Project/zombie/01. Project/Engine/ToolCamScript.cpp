@@ -10,6 +10,7 @@ CToolCamScript::CToolCamScript(CGameObject* _pShootObject)
 	, m_fScaleSpeed(1.f)
 {
 	m_pShootObject = _pShootObject;
+	int a = 3;
 }
 
 CToolCamScript::~CToolCamScript()

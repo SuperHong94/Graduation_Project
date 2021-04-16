@@ -39,7 +39,6 @@ ipch/
 *.suo
 *.exe
 
-<<<<<<< HEAD
-=======
+
 *.zip
->>>>>>> 88dbfa575dbb348b7896cedeaecd70ed458f5884
+

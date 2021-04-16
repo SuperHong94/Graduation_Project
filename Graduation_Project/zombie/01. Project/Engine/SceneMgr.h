@@ -10,11 +10,20 @@ class CSceneMgr
 {
 	SINGLE(CSceneMgr);
 private:
-	CScene*		m_pCurScene;	
-	GameMgr* m_pGameManager;
+	CScene*		m_pStartScene;
+	CScene*		m_pEndScene;
+	CScene*		m_pGameScene;	
 
+	CScene* m_pCurScene;
+
+	GameMgr* m_pGameManager;
+	CGameObject* m_pPlayerArr[4];
+	int			sceneNum = 0;
 public:
 	void init();
+	void initGameScene();
+	void initStartScene();
+	void initEndScene();
 
 	void update();	 // Player Mod ¿œ∂ß
 	void update_tool(); 

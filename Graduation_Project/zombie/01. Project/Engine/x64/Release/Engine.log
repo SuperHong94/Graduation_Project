@@ -1001,14 +1001,41 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   {
   };
   
+  BulletScript.cpp
+  Camera.cpp
+  Collider2D.cpp
+  CollisionMgr.cpp
+  Core.cpp
+  EventMgr.cpp
+  GameMgr.cpp
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\GameMgr.cpp(57,27): warning C4305: '초기화 중': 'int'에서 'float'(으)로 잘립니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\GameMgr.cpp(61,14): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  GameObject.cpp
+  GridScript.cpp
+  Layer.cpp
+  MonsterScript.cpp
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MonsterScript.cpp(72,28): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MonsterScript.cpp(93,15): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MonsterScript.cpp(141,27): warning C4305: '초기화 중': 'int'에서 'float'(으)로 잘립니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\MonsterScript.cpp(146,22): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  PlayerScript.cpp
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\PlayerScript.cpp(339,15): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  RenderMgr.cpp
   SceneMgr.cpp
 C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(14,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(317,20): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(318,20): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(412,72): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(412,49): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(689,75): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(702,75): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(721,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(734,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(342,20): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(343,20): warning C4244: '초기화 중': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(437,72): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(437,49): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(719,75): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(732,75): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(751,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\SceneMgr.cpp(764,51): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Script.cpp
+  TestScript.cpp
+  ToolCamScript.cpp
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.h(14,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.cpp(98,21): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.cpp(110,30): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\01. Project\Engine\ToolCamScript.cpp(112,30): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Engine.vcxproj -> C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\03. External\Library\Engine\Engine.lib

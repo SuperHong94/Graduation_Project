@@ -2,14 +2,21 @@
 #include "MonsterScript.h"
 
 
-CMonsterScript::CMonsterScript(CGameObject* targetObject, CGameObject* Object, CScene* pscene)
+CMonsterScript::CMonsterScript(CGameObject* targetObject[], int ntargetNum, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
 {
+	targetNum = ntargetNum;
+	for (int i = 0; i < targetNum; i++)
+	{
+		targetObjects[i] = new CGameObject;
+		targetObjects[i] = targetObject[i];
+	}
+
 	this->SetName(L"MonsterScript");
 	pObject = Object;
 	status = new MonsterStatus;
 	status->state = MonsterState::M_Respawn;
-	status->TargetObject = targetObject;
+	status->TargetObject = targetObject[0];
 	pScene = pscene;
 
 	root = new Sequence;
@@ -32,6 +39,9 @@ CMonsterScript::~CMonsterScript()
 
 void CMonsterScript::update()
 {
+	int a = findNearTarget();
+	status->TargetObject = targetObjects[findNearTarget()];
+
 	//// Transform 월드 좌표정보 얻기
 	Vec3 vPos = Transform()->GetLocalPos();
 	Vec3 vTargetPos = status->TargetObject->Transform()->GetLocalPos();
@@ -122,6 +132,26 @@ void CMonsterScript::update()
 			status->attackCoolTime = 2.6f;
 		}
 	}
+}
+
+int CMonsterScript::findNearTarget()
+{
+	Vec3 vPos = Transform()->GetLocalPos();
+	int nearNum = -1;
+	float distance = 99999999;
+
+	for (int i = 0; i < targetNum; i++)
+	{
+		Vec3 temp = targetObjects[i]->Transform()->GetLocalPos();
+		float tempDistance = sqrt((vPos.x - temp.x) * (vPos.x - temp.x) + (vPos.z - temp.z) * (vPos.z - temp.z));
+
+		if (distance > tempDistance)
+		{
+			nearNum = i;
+			distance = tempDistance;
+		}
+	}
+	return nearNum;
 }
 
 void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
