@@ -41,5 +41,7 @@ public:
 
 	// 게임 패배 조건 확인
 	void IsGameOver();
+
+	void GameInit();
 };
 

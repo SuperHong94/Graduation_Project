@@ -57,6 +57,10 @@ void GameMgr::CheckZombieRespawn()
 			status->IsDisappear = false;
 
 			Gstatus->monsterArr[i]->GetScript<CMonsterScript>()->SetStatus(status);
+
+			// 멀티 시에는 서버가 계산할 것
+			// 임시로 여기서 함
+			Gstatus->DeathZombieCnt++;
 		}
 	}
 }
@@ -64,15 +68,29 @@ void GameMgr::CheckZombieRespawn()
 
 void GameMgr::GameMgrUpdate()
 {
-	IsGameClear();
-
 	IsGameOver();
+	if (Gstatus->isGameOver)
+	{
+		//씬 체인지
+		return;
+	}
+
+	IsGameClear();
+	if (Gstatus->isGameOver)
+	{
+		//씬 체인지
+		return;
+	}
 
 	CheckZombieRespawn();
 }
 
 void GameMgr::IsGameClear()
 {
+	if (Gstatus->DeathZombieCnt >= 20)
+	{
+		Gstatus->isGameClear = true;
+	}
 }
 
 void GameMgr::IsGameOver()
