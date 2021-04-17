@@ -235,6 +235,9 @@
     <ClInclude Include="GameMgr.h">
       <Filter>Manager</Filter>
     </ClInclude>
+    <ClInclude Include="StartSceneScript.h">
+      <Filter>04. GameObject\Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -396,6 +399,9 @@
     </ClCompile>
     <ClCompile Include="GameMgr.cpp">
       <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="StartSceneScript.cpp">
+      <Filter>04. GameObject\Script</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

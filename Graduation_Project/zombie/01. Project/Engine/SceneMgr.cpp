@@ -33,7 +33,7 @@
 #include "MonsterScript.h"
 #include "ToolCamScript.h"
 #include "GridScript.h"
-
+#include "StartSceneScript.h"
 #include "meshdata.h"
 
 #include "ResMgr.h"
@@ -128,10 +128,12 @@ void CSceneMgr::CreateTargetUI()
 
 void CSceneMgr::init()
 {
-	initStartScene();
+	//initStartScene();
 	initGameScene();
 	initEndScene();
 
+	//m_pCurScene = m_pStartScene;
+	m_pCurScene = m_pGameScene;
 }
 
 void CSceneMgr::initGameScene()
@@ -168,7 +170,7 @@ void CSceneMgr::initGameScene()
 	// GameScene 생성
 	// ===============
 	m_pGameScene = new CScene;
-	m_pGameScene->SetName(L"Test Scene");
+	m_pGameScene->SetName(L"Game Scene");
 	m_pCurScene = m_pGameScene;
 
 	// ===============
@@ -537,6 +539,69 @@ void CSceneMgr::initGameScene()
 
 void CSceneMgr::initStartScene()
 {
+	// ===============
+	// GameScene 생성
+	// ===============
+	m_pStartScene = new CScene;
+	m_pStartScene->SetName(L"Start Scene");
+	m_pCurScene = m_pStartScene;
+
+	// ===============
+	// Layer 이름 지정
+	// ===============
+	m_pStartScene->GetLayer(0)->SetName(L"Default");
+
+	m_pStartScene->GetLayer(30)->SetName(L"UI");
+
+	CGameObject* pObject = nullptr;
+
+	//====================
+	//UI 오브젝트 생성
+	// ====================
+	// UI Camera
+	CGameObject* pUICam = new CGameObject;
+	pUICam->SetName(L"MainCam");
+	pUICam->AddComponent(new CTransform);
+	pUICam->AddComponent(new CCamera);
+
+	pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
+	pUICam->Camera()->SetFar(100.f);
+	pUICam->Camera()->SetLayerCheck(30, true);
+	pUICam->Camera()->SetWidth(CRenderMgr::GetInst()->GetResolution().fWidth);
+	pUICam->Camera()->SetHeight(CRenderMgr::GetInst()->GetResolution().fHeight);
+
+	m_pStartScene->FindLayer(L"Default")->AddGameObject(pUICam);
+
+	Vec3 vScale(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 1.f);
+
+	// UI Object
+	Ptr<CTexture> pTex = CResMgr::GetInst()->Load<CTexture>(L"BlockingView", L"Texture\\test6.png");
+
+	pObject = new CGameObject;
+	pObject->SetName(L"Test1");
+	pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+
+	// Transform 설정
+	tResolution res = CRenderMgr::GetInst()->GetResolution();
+
+	//pObject->Transform()->SetLocalPos(Vec3(-(res.fWidth / 2.f) + (vScale.x / 2.f)
+	//									, (res.fHeight / 2.f) - (vScale.y / 2.f)
+	//									, 1.f));
+	pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 1.0f));
+
+	pObject->Transform()->SetLocalScale(vScale);
+
+	// MeshRender 설정
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
+	pObject->MeshRender()->SetMaterial(pMtrl->Clone());
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pTex.GetPointer());
+	//pObject->AddComponent(new CStartSceneScript(this));
+	
+	// AddGameObject
+	m_pStartScene->FindLayer(L"UI")->AddGameObject(pObject);
 }
 
 void CSceneMgr::initEndScene()
@@ -545,8 +610,12 @@ void CSceneMgr::initEndScene()
 
 void CSceneMgr::update()
 {
+
 	// GameScene 업데이트
+	
 	m_pCurScene->update();
+
+	
 	m_pCurScene->lateupdate();
 
 	// rendermgr 카메라 초기화
@@ -562,6 +631,8 @@ void CSceneMgr::update()
 
 	// 게임 매니저 업데이트
 	m_pGameManager->GameMgrUpdate();
+
+	isChange = false;
 }
 
 void CSceneMgr::update_tool()
