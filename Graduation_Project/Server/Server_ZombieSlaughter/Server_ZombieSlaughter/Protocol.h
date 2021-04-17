@@ -3,18 +3,32 @@
 #define SERVER_IP "127.0.0.1"
 
 
-constexpr int MAX_USER = 10;
+constexpr int MAX_USER = 5; //0번은 서버
+
+
 constexpr int MAX_NAME = 100;
 constexpr int MAX_BUFFER = 1024;
+
+
+enum PlayerState
+{
+	P_Idle,
+	P_FRun,
+	P_BRun,
+	P_LRun,
+	P_RRun,
+	P_Attack,
+	P_Die,
+	P_Spawn,
+};
 
 //클라크기
 constexpr int FRAME_BUFFER_WIDTH = 1024;
 constexpr int FRAME_BUFFER_HEIGHT = 768;
 //맵 크기
-constexpr int MAX_MAP_X = 4990;
-constexpr int MIN_MAP_X = -4990;
-constexpr int MAX_MAP_Z = 4990;
-constexpr int MIN_MAP_Z = -4990;
+constexpr int MAX_MAP = 4990;
+constexpr int MIN_MAP = -4990;
+
 
 
 constexpr unsigned short MAX_BULLET = 200;
@@ -74,6 +88,7 @@ struct s2c_move
 {
 	unsigned char size;
 	unsigned char type;
+	PlayerState ePlayerState;
 	float x, y, z;
 	float rx, ry, rz;
 	//POINT mousePos;

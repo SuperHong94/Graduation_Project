@@ -117,8 +117,10 @@ void CNetworkMgr::process_key(s2c_move* p)
 	else
 		m_isChange = true;
 
-	if (m_isChange)
+	if (m_isChange){
 		playerPos = packetPos;
+		m_ePState = p->ePlayerState;
+	}
 
 }
 

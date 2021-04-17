@@ -25,17 +25,7 @@ enum class SCRIPT_TYPE
 	END,
 };
 
-enum PlayerState
-{
-	P_Idle,
-	P_FRun,
-	P_BRun,
-	P_LRun,
-	P_RRun,
-	P_Attack,
-	P_Die,
-	P_Spawn,
-};
+
 
 enum BulletState
 {

@@ -16,40 +16,41 @@ void CPlayerObject::Update(c2s_Key* packet)
 	{
 	case DOWN_UP:
 		m_postion.z += dt * m_speed;
-		m_postion.y = 53.f;
-		send_key = EKEY_EVENT::DOWN_UP;
+
+		m_ePState = PlayerState::P_FRun;
 		break;
 	case DOWN_DOWN:
 		m_postion.z -= dt * m_speed;
-		m_postion.y = 53.f;
-		send_key = EKEY_EVENT::DOWN_DOWN;
+
+		m_ePState = PlayerState::P_BRun;
 		break;
 	case DOWN_RIGHT:
 		m_postion.x += dt * m_speed;
-		m_postion.y = 53.f;
-		send_key = EKEY_EVENT::DOWN_RIGHT;
+
+		m_ePState = PlayerState::P_RRun;
 		break;
 	case DOWN_LEFT:
 		m_postion.x -= dt * m_speed;
-		m_postion.y = 53.f;
-		send_key = EKEY_EVENT::DOWN_LEFT;
+
+		m_ePState = PlayerState::P_LRun;
 		break;
 	case NO_EVENT:
-		m_postion.y = 0.f;
+
 		m_rotation = { packet->rX,packet->rY,packet->rZ };
+		m_ePState = PlayerState::P_Idle;
 		break;
 	default:
 		break;
 	}
 
-	/*if (m_postion.x > 4990)
-		m_postion.x = 4990;
-	if (m_postion.x < -4990)
-		m_postion.x = -4990;
-	if (m_postion.z > 4990)
-		m_postion.z = 4990;
-	if (m_postion.z < -4990)
-		m_postion.z = -4990;*/
+	if (m_postion.x > MAX_MAP)
+		m_postion.x = MAX_MAP;
+	if (m_postion.x < MIN_MAP)
+		m_postion.x = MIN_MAP;
+	if (m_postion.z > MAX_MAP)
+		m_postion.z = MAX_MAP;
+	if (m_postion.z < MIN_MAP)
+		m_postion.z = MIN_MAP;
 
 
 }

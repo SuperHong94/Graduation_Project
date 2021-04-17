@@ -5,7 +5,7 @@ private:
 	Vec3 m_postion;
 	Vec3 m_rotation;
 	int m_speed;
-
+	PlayerState m_ePState;
 public:
 	void init();
 	Vec3 GetPostion() { return m_postion; };
@@ -16,5 +16,8 @@ public:
 
 	int GetSpeed() { return m_speed; };
 	void SetSpped(int speed) { m_speed = speed; };
+
+	PlayerState GetState() { return m_ePState; };
+	void SetState(PlayerState ePState) { m_ePState = ePState; };
 };
 

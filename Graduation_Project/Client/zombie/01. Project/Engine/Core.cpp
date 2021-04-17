@@ -32,7 +32,7 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	m_hMainHwnd = _hWnd;
 	ChangeWindowSize(m_hMainHwnd, _resolution);
 	ShowWindow(_hWnd, true);
-
+	CNetworkMgr::GetInst()->init();
 	if(FAILED(CDevice::GetInst()->init(_hWnd, _resolution, _bWindow)))
 	{
 		return E_FAIL;
@@ -66,7 +66,7 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	CSceneMgr::GetInst()->init();
 	
 	//우선은 여기다하는데 나중에는 가장먼저로 올려야 함
-	CNetworkMgr::GetInst()->init();
+
 	return S_OK;
 }
 

@@ -19,8 +19,6 @@ struct CLIENT
 	MY_OVER m_recv_over;
 	SOCKET m_socket;
 	int m_id;
-
-
 	unsigned int m_prev_size;
 
 	//이부분 포인터로 해야할까 다른것으로 해야할까?

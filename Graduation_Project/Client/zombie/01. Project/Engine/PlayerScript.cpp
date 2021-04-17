@@ -58,7 +58,9 @@ PlayerState CPlayerScript::setRunAni(Vec3 dir, Vec3 axis)
 
 void CPlayerScript::update()
 {
-	Vec3 vPos = Transform()->GetLocalPos();
+	Vec3 vPos = CNetworkMgr::GetInst()->playerPos;
+	status.state = CNetworkMgr::GetInst()->m_ePState;
+	PlayerState playerState = CNetworkMgr::GetInst()->m_ePState;
 	Vec3 vRot = Transform()->GetLocalRot();
 	POINT ptMousePos = CKeyMgr::GetInst()->GetMousePos();
 	bool isMove = false;
@@ -180,7 +182,12 @@ void CPlayerScript::update()
 			status.state = PlayerState::P_Idle;
 	}
 
+	if (CNetworkMgr::GetInst()->m_isChange) {
 
+
+		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::NO_EVENT, vRot);
+
+	}
 	// 애니메이션 상태가 바뀌었는지 확인
 	if (previousState != status.state)
 	{
@@ -196,14 +203,7 @@ void CPlayerScript::update()
 //	std::cout << "현재 플레이어의 위치 " << vPos.x << '	' << vPos.y << '	' << vPos.z << '\r';
 //#endif // _DEBUG
 
-	if (CNetworkMgr::GetInst()->m_isChange) {
 
-
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::NO_EVENT, vRot);
-
-	}
-	if (isMove) CNetworkMgr::GetInst()->playerPos.y = 53.f;
-	Transform()->SetLocalPos(CNetworkMgr::GetInst()->playerPos);
 
 	//Transform()->SetLocalRot(vRot);
 
@@ -215,9 +215,10 @@ void CPlayerScript::update()
 			float revise = 0;
 			// 방향별 달리기 애니메이션 설정
 			Ptr<CMeshData> pMeshData;
-			if (status.state == PlayerState::P_FRun)
+			if (status.state == PlayerState::P_FRun) {
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
 
+			}
 			else if (status.state == PlayerState::P_BRun)
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierBRun.mdat", L"MeshData\\SoldierBRun.mdat");
 
@@ -240,8 +241,9 @@ void CPlayerScript::update()
 
 			// 이건 모델 피봇 잘못설정해서 임시로 설정
 			// 수정되면 지울 것
-			Vec3 temp = pObject->Transform()->GetLocalPos();
-			pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f + revise, temp.z));
+			//Vec3 temp = pObject->Transform()->GetLocalPos();
+			//pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f + revise, temp.z));
+		
 		}
 
 		else
@@ -249,12 +251,20 @@ void CPlayerScript::update()
 			Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 			pObject->ChangeAnimation(pMeshData);
 
-			// 이건 모델 피봇 잘못설정해서 임시로 설정
-			// 수정되면 지울 것
-			Vec3 temp = pObject->Transform()->GetLocalPos();
-			pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
+			//// 이건 모델 피봇 잘못설정해서 임시로 설정
+			//// 수정되면 지울 것
+			//Vec3 temp = pObject->Transform()->GetLocalPos();
+			//pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
 		}
 	}
+	if (status.state != PlayerState::P_Idle){
+		vPos.y = 53.f;
+		Transform()->SetLocalPos(vPos);
+	}
+	else {
+		Transform()->SetLocalPos(vPos);
+	}
+
 
 	float temp = atan2(vBulletTargetPos.z - vPos.z, vBulletTargetPos.x - vPos.x);
 	Vec3 send_rot = Vec3(0.f, -temp - XM_PI / 2, 0.f);
@@ -297,4 +307,7 @@ void CPlayerScript::update()
 
 		CreateObject(pBullet, L"Bullet");
 	}
+
+
+
 }

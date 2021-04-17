@@ -152,6 +152,7 @@ void CSceneMgr::init()
 	CGameObject* pPlayerObject = nullptr;
 	Ptr<CMeshData> pMeshData;
 
+
 	// ====================
 	// 3D Light Object Ãß°¡
 	// ====================

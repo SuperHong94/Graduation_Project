@@ -43,7 +43,7 @@ using namespace Microsoft::WRL;
 #include <vector>
 #include <list>
 #include <map>
-
+#include <array>
 //서버 관련 헤더, lib////////////////
 #include <WS2tcpip.h>
 #include <iostream> //서버관련 콘솔창에 출력하기
