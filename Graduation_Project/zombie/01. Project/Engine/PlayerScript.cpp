@@ -17,6 +17,7 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 
 CPlayerScript::~CPlayerScript()
 {
+	delete status;
 }
 
 void CPlayerScript::awake()

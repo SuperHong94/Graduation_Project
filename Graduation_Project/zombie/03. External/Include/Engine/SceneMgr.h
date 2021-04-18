@@ -5,28 +5,41 @@ class CScene;
 class CCamera;
 class CGameObject;
 
+enum class SCENE_STATE 
+{
+	START_SCENE,
+	GAME_SCENE,
+	END_SCENE,
+};
 
 class CSceneMgr
 {
 	SINGLE(CSceneMgr);
 private:
-	CScene*		m_pStartScene;
-	CScene*		m_pEndScene;
-	CScene*		m_pGameScene;	
-
 	CScene* m_pCurScene;
 
 	GameMgr* m_pGameManager;
 	CGameObject* m_pPlayerArr[4];
 	int			sceneNum = 0;
+	bool		isChange = false;
+
+	SCENE_STATE SceneState = SCENE_STATE::START_SCENE;
 public:
+	SCENE_STATE setSceneNum(SCENE_STATE s) { SceneState = s; }
 	void init();
 	void initGameScene();
 	void initStartScene();
 	void initEndScene();
 
 	void update();	 // Player Mod ¿œ∂ß
-	void update_tool(); 
+	void update_tool();
+
+	/*CScene* GetStartScene() { return m_pStartScene; }
+	CScene* GetGameScene() { return m_pGameScene; }
+	CScene* GetEndScene() { return m_pEndScene; }*/
+
+	bool CheckIsChange(){return isChange;}
+	void SetIsChange(bool b) { isChange = b; }
 
 public:
 	CScene* GetCurScene();
