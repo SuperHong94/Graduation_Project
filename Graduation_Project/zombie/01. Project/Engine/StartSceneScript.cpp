@@ -17,11 +17,5 @@ void CStartSceneScript::update()
 
 void CStartSceneScript::finalupdate()
 {
-	if (KEY_TAB(KEY_TYPE::KEY_SPACE))
-	{
-		sceneMgr->setaa(3);
-		sceneMgr->SetIsChange(true);    
-		sceneMgr->ChangeScene(sceneMgr->GetGameScene());
-	}
 }
 
