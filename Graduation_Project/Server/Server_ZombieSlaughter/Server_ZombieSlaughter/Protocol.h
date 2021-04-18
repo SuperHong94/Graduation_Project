@@ -108,4 +108,13 @@ struct s2c_remove_client
 	unsigned char type;
 	int m_id;
 };
+
+struct s2c_add_client
+{
+	unsigned char size;
+	unsigned char type;
+	int id;//추가할 클라ID
+	float x, y, z; //추가할 클라의 좌표값
+	float rx, ry, rz; //추가할 클라의 회전값
+};
 #pragma pack(pop)

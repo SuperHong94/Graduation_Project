@@ -84,8 +84,8 @@ void send_login_result(int c_id)
 	s2c_loginOK packet;
 	packet.size = sizeof(packet);
 	packet.type = S2C_LOGIN_OK;
-	
-	Vec3 vPos= clients[c_id].m_pPlayer->GetPostion();
+
+	Vec3 vPos = clients[c_id].m_pPlayer->GetPostion();
 	packet.x = vPos.x; packet.y = vPos.y; packet.z = vPos.z;
 
 	send_packet(c_id, &packet);
@@ -93,8 +93,26 @@ void send_login_result(int c_id)
 void send_key_result(int c_id, c2s_Key* packet)
 {
 	clients[c_id].m_pPlayer->Update(packet);
-	
+
 	send_move_packet(c_id);
+}
+/// <summary>
+/// c_id가 other_id를 추가한다.
+/// </summary>
+/// <param name="c_id"> 주체</param>
+/// <param name="other_id"> 대상</param>
+void send_add_client(int c_id, int other_id)
+{
+	Vec3& otherRotation = clients[other_id].m_pPlayer->GetRotation();
+	Vec3& otherPos = clients[other_id].m_pPlayer->GetPostion();
+	s2c_add_client packet;
+	packet.size = sizeof(packet);
+	packet.type = S2C_ADD_PLAYER;
+	packet.id = other_id;
+	packet.rx = otherRotation.x; packet.ry = otherRotation.y; packet.rz = otherRotation.z;
+	packet.x = otherPos.x; packet.y = otherPos.y; packet.z = otherPos.z;
+
+	send_packet(c_id, &packet);
 }
 void proccess_packet(int c_id, unsigned char* buf)
 {
@@ -105,6 +123,17 @@ void proccess_packet(int c_id, unsigned char* buf)
 	{
 		c2s_login* packet = reinterpret_cast<c2s_login*>(buf);
 		send_login_result(c_id);
+
+
+		//
+		for (auto& c : clients)
+		{
+			if (c.second.m_id != c_id)//자기자신한테는 보내면 안됨
+			{ 
+				send_add_client(c_id, c.second.m_id);//새로접속한 클라이언트에게 이미접속한 클라이언트 정보보내기
+				send_add_client(c.second.m_id, c_id);//이미접속한 클라이언트들에게 새로접속한 클라이언트 정보보내기
+			}
+		}
 	}
 	break;
 	case C2S_KEY_EVENT:
