@@ -28,6 +28,7 @@ void CNetworkMgr::err_display(const char* msg, int error)
 
 void CNetworkMgr::client_main()
 {
+	
 	char recvBuf[MAX_BUFFER];
 	WSABUF recvWsaBuf[1];
 	recvWsaBuf[0].buf = recvBuf;

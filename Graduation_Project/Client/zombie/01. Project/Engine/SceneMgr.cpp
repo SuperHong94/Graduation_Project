@@ -175,6 +175,10 @@ void CSceneMgr::init()
 	// ===================
 	// Player 오브젝트 생성
 	// ===================
+
+	std::array<CGameObject*, MAX_USER> players = CNetworkMgr::GetInst()->GetPlayerArray();
+
+
 	pPlayerObject = new CGameObject;
 
 	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Zombie1Death.fbx");

@@ -98,6 +98,7 @@ struct s2c_loginOK
 {
 	unsigned char size;
 	unsigned char type;
+	int id;
 	float x, y, z;  //초기위치
 
 };
