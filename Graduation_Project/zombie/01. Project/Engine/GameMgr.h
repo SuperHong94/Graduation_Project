@@ -37,11 +37,14 @@ public:
 	int FindNearRespawnPostion(Vec3 pos);
 
 	// 게임 승리 조건 확인
-	void IsGameClear();
+	void CheckGameClear();
 
 	// 게임 패배 조건 확인
-	void IsGameOver();
+	void CheckGameOver();
 
 	void GameInit();
+
+	bool GetGameOver() { return Gstatus->isGameOver; };
+	bool GetGameClear() { return Gstatus->isGameClear; };
 };
 

@@ -66,70 +66,15 @@ void CSceneMgr::CreateTargetUI()
 {
 	Vec3 vScale(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 1.f);
 
-//	Ptr<CTexture> pTex[100];
-//	pTex[0] = CResMgr::GetInst()->Load<CTexture>(L"BlockingView", L"Texture\\BlockingView.png");
-//	pTex[1] = CResMgr::GetInst()->Load<CTexture>(L"BlockingView", L"Texture\\test6.png");
-//	
-//	
-//	Ptr<CMaterial> pMtrl;
-//	CGameObject* pObject = new CGameObject;
-//	pObject->SetName(L"UI");
-//	pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
-//	pObject->AddComponent(new CTransform);
-//	pObject->AddComponent(new CMeshRender);
-//
-//	// Transform 설정
-//	tResolution res = CRenderMgr::GetInst()->GetResolution();
-//
-//	//pObject->Transform()->SetLocalPos(Vec3(-(res.fWidth / 2.f) + (vScale.x / 2.f)
-////									, (res.fHeight / 2.f) - (vScale.y / 2.f)
-////									, 1.f));
-//	pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 1.1f));
-//
-//	pObject->Transform()->SetLocalScale(vScale);
-//
-//	// MeshRender 설정
-//	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-//	pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
-//	pObject->MeshRender()->SetMaterial(pMtrl->Clone());
-//	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pTex[0].GetPointer());
-//
-//	// AddGameObject
-//	m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
-//
-//
-//
-//
-//
-//
-//	//pTex = CResMgr::GetInst()->Load<CTexture>(L"BlockingView", L"Texture\\test6.png");
-//
-//	pObject = new CGameObject;
-//	pObject->SetName(L"UI2");
-//	pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
-//	pObject->AddComponent(new CTransform);
-//	pObject->AddComponent(new CMeshRender);
-//
-//	pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 1.0f));
-//
-//	pObject->Transform()->SetLocalScale(vScale);
-//
-//	// MeshRender 설정
-//	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-//	pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
-//	pObject->MeshRender()->SetMaterial(pMtrl->Clone());
-//	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pTex[1].GetPointer());
-//
-//	// AddGameObject
-//	m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
-
-	//Vec3 vScale(150.f, 150.f, 1.f);
 	Ptr<CTexture> GameSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"TestTex", L"Texture\\BlockingView.png") };
 
 	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"TestTex2", L"Texture\\test6.png") };
 
+	Ptr<CTexture> EndSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"TestTex3", L"Texture\\test7.png") };
+
 	int NumgameSceneUI = 1;
 	int NumStartSceneUI = 1;
+	int NumEndSceneUI = 1;
 
 	if (SceneState == SCENE_STATE::GAME_SCENE)
 	{
@@ -159,6 +104,9 @@ void CSceneMgr::CreateTargetUI()
 		}
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	else if (SceneState == SCENE_STATE::START_SCENE)
 	{
 		for (UINT i = 0; i < NumStartSceneUI; ++i)
@@ -186,6 +134,37 @@ void CSceneMgr::CreateTargetUI()
 			m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
 		}
 	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	else if (SceneState == SCENE_STATE::END_SCENE)
+	{
+		for (UINT i = 0; i < NumStartSceneUI; ++i)
+		{
+			CGameObject* pObject = new CGameObject;
+			pObject->SetName(L"EndUI");
+			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
+			pObject->AddComponent(new CTransform);
+			pObject->AddComponent(new CMeshRender);
+
+			// Transform 설정
+			tResolution res = CRenderMgr::GetInst()->GetResolution();
+
+			pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 1.f));
+
+			pObject->Transform()->SetLocalScale(vScale);
+
+			// MeshRender 설정
+			pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+			Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
+			pObject->MeshRender()->SetMaterial(pMtrl->Clone());
+			pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, EndSceneArrTex[i].GetPointer());
+
+			// AddGameObject
+			m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
+		}
+	}
 }
 
 
@@ -205,6 +184,28 @@ void CSceneMgr::init()
 
 void CSceneMgr::initGameScene()
 {
+	// ===============
+	// GameScene 생성
+	// ===============
+	m_pCurScene = new CScene;
+
+	// ===============
+	// Layer 이름 지정
+	// ===============
+	m_pCurScene->GetLayer(0)->SetName(L"Default");
+	m_pCurScene->GetLayer(1)->SetName(L"Player");
+	m_pCurScene->GetLayer(2)->SetName(L"Monster");
+	m_pCurScene->GetLayer(3)->SetName(L"Bullet");
+	m_pCurScene->GetLayer(4)->SetName(L"Tomb");
+
+	m_pCurScene->GetLayer(30)->SetName(L"UI");
+	m_pCurScene->GetLayer(31)->SetName(L"Tool");
+
+	CGameObject* pObject = nullptr;
+	CGameObject* pPlayerObject = nullptr;
+	Ptr<CMeshData> pMeshData;
+
+
 	if (SceneState == SCENE_STATE::GAME_SCENE)
 	{
 		// =================
@@ -238,24 +239,7 @@ void CSceneMgr::initGameScene()
 		// ===============
 		// GameScene 생성
 		// ===============
-		m_pCurScene = new CScene;
 		m_pCurScene->SetName(L"Game Scene");
-
-		// ===============
-		// Layer 이름 지정
-		// ===============
-		m_pCurScene->GetLayer(0)->SetName(L"Default");
-		m_pCurScene->GetLayer(1)->SetName(L"Player");
-		m_pCurScene->GetLayer(2)->SetName(L"Monster");
-		m_pCurScene->GetLayer(3)->SetName(L"Bullet");
-		m_pCurScene->GetLayer(4)->SetName(L"Tomb");
-
-		m_pCurScene->GetLayer(30)->SetName(L"UI");
-		m_pCurScene->GetLayer(31)->SetName(L"Tool");
-
-		CGameObject* pObject = nullptr;
-		CGameObject* pPlayerObject = nullptr;
-		Ptr<CMeshData> pMeshData;
 
 		// ====================
 		// 3D Light Object 추가
@@ -604,77 +588,28 @@ void CSceneMgr::initGameScene()
 		//m_pCurScene->start();
 	}
 
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	else if (SceneState == SCENE_STATE::START_SCENE)
 	{
 		// ===============
 		// GameScene 생성
 		// ===============
-		m_pCurScene = new CScene;
 		m_pCurScene->SetName(L"Start Scene");
-
-		// ===============
-		// Layer 이름 지정
-		// ===============
-		m_pCurScene->GetLayer(0)->SetName(L"Default");
-		m_pCurScene->GetLayer(1)->SetName(L"Player");
-		m_pCurScene->GetLayer(2)->SetName(L"Monster");
-		m_pCurScene->GetLayer(3)->SetName(L"Bullet");
-		m_pCurScene->GetLayer(4)->SetName(L"Tomb");
-
-		m_pCurScene->GetLayer(30)->SetName(L"UI");
-		m_pCurScene->GetLayer(31)->SetName(L"Tool");
-
-		CGameObject* pObject = nullptr;
-		CGameObject* pPlayerObject = nullptr;
-		Ptr<CMeshData> pMeshData;
-
-
-		// ====================
-		// 3D Light Object 추가
-		// ====================
-		pObject = new CGameObject;
-		pObject->AddComponent(new CTransform);
-		pObject->AddComponent(new CLight3D);
-
-		pObject->Light3D()->SetLightPos(Vec3(0.f, 500.f, 0.f));
-		pObject->Light3D()->SetLightType(LIGHT_TYPE::DIR);
-		pObject->Light3D()->SetDiffuseColor(Vec3(1.f, 1.f, 1.f));
-		pObject->Light3D()->SetSpecular(Vec3(0.3f, 0.3f, 0.3f));
-		pObject->Light3D()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
-		pObject->Light3D()->SetLightDir(Vec3(1.f, -1.f, 1.f));
-		pObject->Light3D()->SetLightRange(1000.f);
-
-		pObject->Transform()->SetLocalPos(Vec3(-1000.f, 1000.f, -1000.f));
-		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
-
-
-		//////////////////////////////////
-		///////////////////////////
-
 
 		// ===================
 		// Player 오브젝트 생성
 		// ===================
 
 		pPlayerObject = new CGameObject;
-
-		// 모델을 플레이어별로 따로 설정할수도 있음
-		// 아직 보류
 		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 		pPlayerObject = pMeshData->Instantiate();
-
 		pPlayerObject->SetName(L"Player Object");
 		pPlayerObject->AddComponent(new CTransform);
-		//pPlayerObject->AddComponent(new CMeshRender);
-
-		// Transform 설정
 		pPlayerObject->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
-		pPlayerObject->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
-
-
 		pPlayerObject->AddComponent(new CPlayerScript(pPlayerObject, false));
-
-		// AddGameObject
 		m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
 
 		// ==================
@@ -711,43 +646,7 @@ void CSceneMgr::initGameScene()
 
 		m_pCurScene->FindLayer(L"Default")->AddGameObject(pUICam);
 
-	
-		///////////////
-		//////////////
 		CreateTargetUI();
-
-
-		//Vec3 vScale(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 1.f);
-
-		//Ptr<CTexture> pTex = CResMgr::GetInst()->Load<CTexture>(L"BlockingView", L"Texture\\test6.png");
-
-		//pObject = new CGameObject;
-		//pObject->SetName(L"UI");
-		//pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
-		//pObject->AddComponent(new CTransform);
-		//pObject->AddComponent(new CMeshRender);
-
-		//// Transform 설정
-		//tResolution res = CRenderMgr::GetInst()->GetResolution();
-
-		////pObject->Transform()->SetLocalPos(Vec3(-(res.fWidth / 2.f) + (vScale.x / 2.f)
-		////									, (res.fHeight / 2.f) - (vScale.y / 2.f)
-		////									, 1.f));
-		//pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 1.0f));
-
-		//pObject->Transform()->SetLocalScale(vScale);
-
-		//// MeshRender 설정
-		//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-		//Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
-		//pObject->MeshRender()->SetMaterial(pMtrl->Clone());
-		//pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pTex.GetPointer());
-
-		//// AddGameObject
-		//m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
-		//////////////
-		//////////////
-
 
 		// Main Camera
 		pMainCam = new CGameObject;
@@ -762,11 +661,78 @@ void CSceneMgr::initGameScene()
 		pMainCam->Camera()->SetLayerCheck(30, false);
 
 		m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
+	}
 
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	else if (SceneState == SCENE_STATE::END_SCENE)
+	{
+	// ===================
+	// Player 오브젝트 생성
+	// ===================
+	pPlayerObject = new CGameObject;
+	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+	pPlayerObject = pMeshData->Instantiate();
+	pPlayerObject->SetName(L"Player Object");
+	pPlayerObject->AddComponent(new CTransform);
+	pPlayerObject->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
+	pPlayerObject->AddComponent(new CPlayerScript(pPlayerObject, false));
 
-		////////////////////////////
-		////////////////////////////
+	// AddGameObject
+	m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
+
+	// ==================
+	// Camera Object 생성
+	// ==================
+	// Main Camera
+	CGameObject* pMainCam = new CGameObject;
+	pMainCam->SetName(L"MainCam");
+	pMainCam->AddComponent(new CTransform);
+	pMainCam->AddComponent(new CCamera);
+	pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
+
+	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+	pMainCam->Camera()->SetFar(100000.f);
+	pMainCam->Camera()->SetLayerAllCheck();
+	pMainCam->Camera()->SetLayerCheck(30, false);
+
+	m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
+
+	//====================
+	//UI 오브젝트 생성
+	// ====================
+	// UI Camera
+	CGameObject* pUICam = new CGameObject;
+	pUICam->SetName(L"MainCam");
+	pUICam->AddComponent(new CTransform);
+	pUICam->AddComponent(new CCamera);
+
+	pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
+	pUICam->Camera()->SetFar(100.f);
+	pUICam->Camera()->SetLayerCheck(30, true);
+	pUICam->Camera()->SetWidth(CRenderMgr::GetInst()->GetResolution().fWidth);
+	pUICam->Camera()->SetHeight(CRenderMgr::GetInst()->GetResolution().fHeight);
+
+	m_pCurScene->FindLayer(L"Default")->AddGameObject(pUICam);
+
+	CreateTargetUI();
+
+	// Main Camera
+	pMainCam = new CGameObject;
+	pMainCam->SetName(L"MainCam");
+	pMainCam->AddComponent(new CTransform);
+	pMainCam->AddComponent(new CCamera);
+	pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
+
+	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+	pMainCam->Camera()->SetFar(100000.f);
+	pMainCam->Camera()->SetLayerAllCheck();
+	pMainCam->Camera()->SetLayerCheck(30, false);
+
+	m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
+
 	}
 }
 
@@ -872,25 +838,7 @@ void CSceneMgr::update()
 	// 충돌 처리
 	CCollisionMgr::GetInst()->update();
 
-
-	if (SceneState == SCENE_STATE::GAME_SCENE)
-	{
-		// 게임 매니저 업데이트
-		m_pGameManager->GameMgrUpdate();
-
-		if (KEY_TAB(KEY_TYPE::KEY_SPACE))
-		{
-			//SAFE_DELETE(m_pCurScene);
-			m_pCurScene = new CScene;
-
-			SceneState = SCENE_STATE::START_SCENE;
-			init();
-
-			isChange = true;
-		}
-	}
-
-	else if (SceneState == SCENE_STATE::START_SCENE)
+	if (SceneState == SCENE_STATE::START_SCENE)
 	{
 		if (KEY_TAB(KEY_TYPE::KEY_SPACE))
 		{
@@ -898,6 +846,37 @@ void CSceneMgr::update()
 			m_pCurScene = new CScene;
 			//delete m_pCurScene;
 			SceneState = SCENE_STATE::GAME_SCENE;
+			init();
+
+			isChange = true;
+		}
+	}
+
+	else if (SceneState == SCENE_STATE::GAME_SCENE)
+	{
+		// 게임 매니저 업데이트
+		m_pGameManager->GameMgrUpdate();
+
+		if (m_pGameManager->GetGameOver() || m_pGameManager->GetGameClear())
+		{
+			//SAFE_DELETE(m_pCurScene);
+			m_pCurScene = new CScene;
+
+			SceneState = SCENE_STATE::END_SCENE;
+			init();
+
+			isChange = true;
+		}
+	}
+
+	else if (SceneState == SCENE_STATE::END_SCENE)
+	{
+		if (KEY_TAB(KEY_TYPE::KEY_SPACE))
+		{
+			//SAFE_DELETE(m_pCurScene);
+			m_pCurScene = new CScene;
+			//delete m_pCurScene;
+			SceneState = SCENE_STATE::START_SCENE;
 			init();
 
 			isChange = true;

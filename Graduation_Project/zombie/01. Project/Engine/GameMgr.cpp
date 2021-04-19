@@ -68,14 +68,14 @@ void GameMgr::CheckZombieRespawn()
 
 void GameMgr::GameMgrUpdate()
 {
-	IsGameOver();
+	CheckGameOver();
 	if (Gstatus->isGameOver)
 	{
 		//¾À Ã¼ÀÎÁö
 		return;
 	}
 
-	IsGameClear();
+	CheckGameClear();
 	if (Gstatus->isGameOver)
 	{
 		//¾À Ã¼ÀÎÁö
@@ -85,15 +85,15 @@ void GameMgr::GameMgrUpdate()
 	CheckZombieRespawn();
 }
 
-void GameMgr::IsGameClear()
+void GameMgr::CheckGameClear()
 {
-	if (Gstatus->DeathZombieCnt >= 20)
+	if (Gstatus->DeathZombieCnt >= 3)
 	{
 		Gstatus->isGameClear = true;
 	}
 }
 
-void GameMgr::IsGameOver()
+void GameMgr::CheckGameOver()
 {
 	int cnt = 0;
 	for (int i = 0; i < Gstatus->playerCnt; i++)
