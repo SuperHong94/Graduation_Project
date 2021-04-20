@@ -178,39 +178,44 @@ void CSceneMgr::init()
 
 	std::array<CGameObject*, MAX_USER> players = CNetworkMgr::GetInst()->GetPlayerArray();
 
-
-	pPlayerObject = new CGameObject;
-
-	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Zombie1Death.fbx");
+	for (auto player : players)
+	{
+		player = new CGameObject;
+		//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Zombie1Death.fbx");
 	//pMeshData->Save(pMeshData->GetPath());
 
 
-	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 
-	pPlayerObject = pMeshData->Instantiate();
+		player = pMeshData->Instantiate();
 
-	pPlayerObject->SetName(L"Player Object");
-	pPlayerObject->AddComponent(new CTransform);
-	//pPlayerObject->AddComponent(new CMeshRender);
+		player->SetName(L"Player Object");
+		player->AddComponent(new CTransform);
+		//pPlayerObject->AddComponent(new CMeshRender);
 
-	// Transform 설정
-	pPlayerObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
-	pPlayerObject->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
+		// Transform 설정
+		player->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
+		player->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
 
-	//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
+		//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
 
-	// MeshRender 설정
-	//pPlayerObject->MeshRender()->SetDynamicShadow(true);
-	//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-	//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
-	//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
-	//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+		// MeshRender 설정
+		//pPlayerObject->MeshRender()->SetDynamicShadow(true);
+		//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+		//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
+		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
+		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
 
-	// Script 설정
-	pPlayerObject->AddComponent(new CPlayerScript(pPlayerObject));
+		// Script 설정
+		player->AddComponent(new CPlayerScript(player));
 
-	// AddGameObject
-	m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
+		// AddGameObject
+		m_pCurScene->FindLayer(L"Player")->AddGameObject(player);
+	}
+
+	//pPlayerObject = new CGameObject;
+
+	
 
 	//CNetworkMgr::GetInst()->SetPlayer(pPlayerObject);
 
