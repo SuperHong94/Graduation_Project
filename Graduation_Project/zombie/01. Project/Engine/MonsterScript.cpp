@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "MonsterScript.h"
-
+#include "BulletScript.h"
 
 CMonsterScript::CMonsterScript(CGameObject* targetObject[], int ntargetNum, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
@@ -159,26 +159,11 @@ void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 	// 충돌이 발생하고, 상대 물체가 총알이면 체력 감소
 	if (L"Bullet Object" == _pOther->GetObj()->GetName())
 	{
-		float damage = 0;
-		BulletState bulletState;
-		vector<CScript*>  m_vecScript = _pOther->GetObj()->GetScripts();
-		for (int i = 0; i < m_vecScript.size(); i++)
-		{
-			if (L"BulletScript" == m_vecScript[i]->GetName())
-			{
-				bulletState = m_vecScript[i]->GetBulletState();
-			}
-		}
+		CBulletScript* bulletScript = _pOther->GetObj()->GetScript<CBulletScript>();
 
-		if (bulletState == BulletState::B_Normal)
-			damage = 40;
+		if (status->hp >= 0)
+			status->hp -= bulletScript->GetDamage();
 
-		if(status->hp >= 0)
-			status->hp -= damage;
-		//if (status->hp <= 0)
-		//{
-		//	//DeleteObject(GetObj());	// -->삭제 이벤트 등록	
-		//}
 	}
 
 	if (L"Monster Object" == _pOther->GetObj()->GetName() && !_pOther->GetObj()->GetScript<CMonsterScript>()->status->IsCollide)

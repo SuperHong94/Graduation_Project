@@ -6,7 +6,7 @@
 #include "Transform.h"
 
 #include "MonsterScript.h"
-
+#include "TombScript.h"
 
 GameMgr::GameMgr(CScene* pScene, CGameObject* monsters[], int monsterCount, CGameObject* PlayerArr[], int PlayerCnt, int PlayerID)
 {
@@ -87,7 +87,7 @@ void GameMgr::GameMgrUpdate()
 
 void GameMgr::CheckGameClear()
 {
-	if (Gstatus->DeathZombieCnt >= 3)
+	if (Gstatus->DeathZombieCnt >= Gstatus->zombieGoalCnt)
 	{
 		Gstatus->isGameClear = true;
 	}
@@ -107,6 +107,14 @@ void GameMgr::CheckGameOver()
 }
 
 
+void GameMgr::tombArrInit(int i, CGameObject* tomb)
+{
+	Gstatus->tombArr[i] = tomb;
+
+	Gstatus->spawnPosition[i][0] = Gstatus->tombArr[i]->Transform()->GetLocalPos().x;
+	Gstatus->spawnPosition[i][1] = Gstatus->tombArr[i]->Transform()->GetLocalPos().z;
+}
+
 int GameMgr::FindNearRespawnPostion(Vec3 pos)
 {
 	int n = 0;
@@ -114,11 +122,14 @@ int GameMgr::FindNearRespawnPostion(Vec3 pos)
 
 	for (int i = 0; i < 4; i++)
 	{
-		float temp = sqrt((pos.x - Gstatus->spawnPosition[i][0]) * (pos.x - Gstatus->spawnPosition[i][0]) + (pos.z - Gstatus->spawnPosition[i][1]) * (pos.z - Gstatus->spawnPosition[i][1]));
-		if (temp < distance)
+		if (!Gstatus->tombArr[i]->GetScript<CTombScript>()->CheckIsDisappear())
 		{
-			distance = temp;
-			n = i;
+			float temp = sqrt((pos.x - Gstatus->spawnPosition[i][0]) * (pos.x - Gstatus->spawnPosition[i][0]) + (pos.z - Gstatus->spawnPosition[i][1]) * (pos.z - Gstatus->spawnPosition[i][1]));
+			if (temp < distance)
+			{
+				distance = temp;
+				n = i;
+			}
 		}
 	}
 
