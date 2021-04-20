@@ -13,7 +13,7 @@ struct MonsterStatus
 	bool PlayerInRange = false;
 	bool PlayerInAttackRange = false;
 	bool isAttack = false;
-	float recognizeRange = 10000.f;	// 인지 범위
+	float recognizeRange = 1000.f;	// 인지 범위
 	float attackCoolTime = 2.6f;
 	float attackDelay = 1.2f;	// 정확한 공격 타이밍을 계산하기 위한 변수
 	float hp = 100;
@@ -112,7 +112,7 @@ public:
 			status->attackCoolTime = 2.6f;
 
 			status->PlayerInAttackRange = false;
-			if (status->distanceToPlayer <= 1000)
+			if (status->distanceToPlayer <= status->recognizeRange)
 			{
 				status->state = MonsterState::M_Run;
 			}
