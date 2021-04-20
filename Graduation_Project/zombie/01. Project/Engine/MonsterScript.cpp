@@ -69,7 +69,14 @@ void CMonsterScript::update()
 	if (status->state != MonsterState::M_Die)
 	{
 		// 좀비 방향 설정
-		float XZdistanceToTarget = sqrt(((vPos.x - vTargetPos.x) * (vPos.x - vTargetPos.x)) + ((vPos.z - vTargetPos.z) * (vPos.z - vTargetPos.z)));
+		Vec2 v1, v2;
+		v1.x = vPos.x;
+		v1.y = vPos.z;
+		v2.x = vTargetPos.x;
+		v2.y = vTargetPos.z;
+
+		//float XZdistanceToTarget = sqrt(((vPos.x - vTargetPos.x) * (vPos.x - vTargetPos.x)) + ((vPos.z - vTargetPos.z) * (vPos.z - vTargetPos.z)));
+		float XZdistanceToTarget = Vec2::Distance(v1, v2);
 		status->distanceToPlayer = XZdistanceToTarget;
 
 		vDir.x = vTargetPos.x - vPos.x;
