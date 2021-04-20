@@ -6,16 +6,20 @@ struct GameMgrStatus
 {
 	int DeathZombieCnt = 0;
 	int monsterCnt;
-	float spawnPosition[4][2] = { {0.f, 5000.f}, {0.f, -5000.f}, {-5000.f, 0.f}, {5000.f, 0.f} };
+	float spawnPosition[4][2] = { 0, };
 
 	CScene* Scene;
 	CGameObject* monsterArr[100];
 	CGameObject* playerArr[4];
+	CGameObject* tombArr[4];
+
 	int playerCnt;
 	int playerID;
 
 	bool isGameOver = false;
 	bool isGameClear = false;
+
+	int zombieGoalCnt = 20;
 };
 
 class GameMgr
@@ -26,6 +30,9 @@ private:
 public:
 	GameMgr(CScene* pScene, CGameObject* monsters[], int monsterCount, CGameObject* PlayerArr[], int PlayerCnt, int PlayerID);
 	~GameMgr();
+
+	// 무덤 오브젝트 가져오기
+	void tombArrInit(int i, CGameObject* tomb);
 
 	// 게임 매니저 업데이트
 	void GameMgrUpdate();

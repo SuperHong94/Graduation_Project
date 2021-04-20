@@ -238,6 +238,9 @@
     <ClInclude Include="StartSceneScript.h">
       <Filter>04. GameObject\Script</Filter>
     </ClInclude>
+    <ClInclude Include="TombScript.h">
+      <Filter>04. GameObject\Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -401,6 +404,9 @@
       <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="StartSceneScript.cpp">
+      <Filter>04. GameObject\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="TombScript.cpp">
       <Filter>04. GameObject\Script</Filter>
     </ClCompile>
   </ItemGroup>

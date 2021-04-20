@@ -22,6 +22,25 @@ CBulletScript::~CBulletScript()
 
 void CBulletScript::update()
 {
+	switch (bulletState)
+	{
+	case B_Normal:
+		damage = 30;
+		break;
+	case B_Fire:
+		damage = 30;
+		break;
+	case B_Ice:
+		damage = 30;
+		break;
+	case B_Thunder:
+		damage = 30;
+		break;
+	default:
+		damage = 30;
+		break;
+	}
+
 	Vec3 vPos = Transform()->GetLocalPos();
 	//vPos.y += 400.f * DT;
 	vPos += vBulletDir * BulletSpeed * DT;

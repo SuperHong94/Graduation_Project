@@ -35,6 +35,7 @@
 #include "GridScript.h"
 #include "StartSceneScript.h"
 #include "meshdata.h"
+#include "TombScript.h"
 
 #include "ResMgr.h"
 #include "PathMgr.h"
@@ -1020,7 +1021,11 @@ void CSceneMgr::setMap()
 		pObject->Collider2D()->SetOffsetScale(Vec3(300.f, 300.f, 0.f));
 		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RRECT);
 
+		pObject->AddComponent(new CTombScript());
+
 		m_pCurScene->FindLayer(L"Tomb")->AddGameObject(pObject);
+
+		m_pGameManager->tombArrInit(i, pObject);
 	}
 
 
