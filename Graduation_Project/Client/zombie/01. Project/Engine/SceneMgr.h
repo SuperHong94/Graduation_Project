@@ -11,7 +11,7 @@ class CSceneMgr
 private:
 	CScene*		m_pCurScene;	
 
-	std::array<CGameObject*, MAX_USER> m_PlayerArr;
+	CGameObject* m_pPlayerArr[4];
 public:
 	void init();
 

@@ -176,26 +176,46 @@ void CSceneMgr::init()
 	// Player 오브젝트 생성
 	// ===================
 
-	std::array<CGameObject*, MAX_USER> players = CNetworkMgr::GetInst()->GetPlayerArray();
+	// 서버와 통신 해야됨
+	int playerNum = 4;
+	// 임시 설정 
+	int controlPlayerNum = 0;
 
-	for (auto player : players)
+
+
+	//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+
+	//pPlayerObject = pMeshData->Instantiate();
+
+	for (int i = 0; i < playerNum; i++)
 	{
-		player = new CGameObject;
-		//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Zombie1Death.fbx");
-	//pMeshData->Save(pMeshData->GetPath());
+		m_pPlayerArr[i] = new CGameObject;
+		CNetworkMgr::GetInst().
 
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
+		pMeshData->Save(pMeshData->GetPath());
 
+		// 모델을 플레이어별로 따로 설정할수도 있음
+		// 아직 보류
 		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+		m_pPlayerArr[i] = pMeshData->Instantiate();
 
-		player = pMeshData->Instantiate();
-
-		player->SetName(L"Player Object");
-		player->AddComponent(new CTransform);
+		m_pPlayerArr[i]->SetName(L"Player Object");
+		m_pPlayerArr[i]->AddComponent(new CTransform);
 		//pPlayerObject->AddComponent(new CMeshRender);
 
 		// Transform 설정
-		player->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
-		player->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
+
+		if (i == 0)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
+		else if (i == 1)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, 200.f));
+		else if (i == 2)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, -200.f));
+		else if (i == 3)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, -200.f));
+
+		m_pPlayerArr[i]->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
 
 		//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
 
@@ -207,30 +227,17 @@ void CSceneMgr::init()
 		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
 
 		// Script 설정
-		player->AddComponent(new CPlayerScript(player));
+		// 플레이어 일시
+		if (i == controlPlayerNum)
+			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
+		else
+			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], false));
 
 		// AddGameObject
-		m_pCurScene->FindLayer(L"Player")->AddGameObject(player);
+		m_pCurScene->FindLayer(L"Player")->AddGameObject(m_pPlayerArr[i]);
+
 	}
-
-	//pPlayerObject = new CGameObject;
-
 	
-
-	//CNetworkMgr::GetInst()->SetPlayer(pPlayerObject);
-
-	//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
-
-	//// ====================
-	//// Animation 3D Object
-	//// ====================
-	//pObject = pMeshData->Instantiate();
-	//pObject->SetName(L"Monster");
-	//pObject->FrustumCheck(false);
-	//pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
-	//pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
-	//// pObject->MeshRender()->SetDynamicShadow(true);		
-	//m_pCurScene->AddGameObject(L"Default", pObject, false);
 
 
 

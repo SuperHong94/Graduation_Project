@@ -8,12 +8,14 @@
 #include "NetworkMgr.h"
 
 
-CPlayerScript::CPlayerScript(CGameObject* Object)
+CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	: CScript((UINT)SCRIPT_TYPE::PLAYERSCRIPT)
 	, m_pOriginMtrl(nullptr)
 	, m_pCloneMtrl(nullptr)
 {
 	pObject = Object;
+	status = new PlayerStatus();
+	isPlayer = player;
 }
 
 CPlayerScript::~CPlayerScript()
