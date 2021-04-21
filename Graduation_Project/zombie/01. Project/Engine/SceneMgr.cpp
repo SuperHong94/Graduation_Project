@@ -67,13 +67,16 @@ void CSceneMgr::CreateTargetUI()
 {
 	Vec3 vScale(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 1.f);
 
-	Ptr<CTexture> GameSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"TestTex", L"Texture\\BlockingView.png") };
+	Ptr<CTexture> GameSceneArrTex[3] = { (CResMgr::GetInst()->Load<CTexture>(L"TestTex", L"Texture\\BlockingView.png")),
+	 ( CResMgr::GetInst()->Load<CTexture>(L"miniMap", L"Texture\\test8.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\playerTest.png"))
+	};
 
 	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"TestTex2", L"Texture\\test6.png") };
 
 	Ptr<CTexture> EndSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"TestTex3", L"Texture\\test7.png") };
 
-	int NumgameSceneUI = 1;
+	int NumgameSceneUI = 3;
 	int NumStartSceneUI = 1;
 	int NumEndSceneUI = 1;
 
@@ -82,7 +85,6 @@ void CSceneMgr::CreateTargetUI()
 		for (UINT i = 0; i < NumgameSceneUI; ++i)
 		{
 			CGameObject* pObject = new CGameObject;
-			pObject->SetName(L"GameUI");
 			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
@@ -90,10 +92,28 @@ void CSceneMgr::CreateTargetUI()
 			// Transform 설정
 			tResolution res = CRenderMgr::GetInst()->GetResolution();
 
-			pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 1.0f));
+			if (i == 0)
+			{
+				pObject->SetName(L"BlackEdgeUI");
+				pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 1.1f));
+				pObject->Transform()->SetLocalScale(vScale);
+			}
 
-			pObject->Transform()->SetLocalScale(vScale);
+			else if (i == 1)
+			{
+				pObject->SetName(L"MiniMapUI");
+				pObject->Transform()->SetLocalPos(Vec3((res.fWidth / 2.f) - ((vScale.x / miniMapUIRatio) / 2)
+					, (res.fHeight / 2.f) - ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)  / 2.f)
+					, 1.0f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / miniMapUIRatio, (vScale.y / miniMapUIRatio) * (vScale.x / vScale.y), 1.f));
+			}
 
+			else if (i == 2)
+			{
+				pObject->SetName(L"PlayerPosUI");
+				pObject->Transform()->SetLocalPos(Vec3(-20000.f , 0.f, 1.0f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / posUIRatio, (vScale.y / posUIRatio) * (vScale.x / vScale.y), 1.f));
+			}
 			// MeshRender 설정
 			pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 			Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
@@ -266,11 +286,6 @@ void CSceneMgr::initGameScene()
 		// ===================
 		//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
 		//pMeshData->Save(pMeshData->GetPath());
-
-		// 서버와 통신 해야됨
-		int playerNum = 4;
-		// 임시 설정 
-		int playerID = 0;
 
 		for (int i = 0; i < playerNum; i++)
 		{
@@ -883,6 +898,8 @@ void CSceneMgr::update()
 			isChange = true;
 		}
 	}
+
+	updateUI();
 }
 
 void CSceneMgr::update_tool()
@@ -890,6 +907,40 @@ void CSceneMgr::update_tool()
 	// rendermgr 카메라 초기화
 	CRenderMgr::GetInst()->ClearCamera();
 	m_pCurScene->finalupdate();
+}
+
+void CSceneMgr::updateUI()
+{
+	// Transform 설정
+	tResolution res = CRenderMgr::GetInst()->GetResolution();
+	Vec3 vScale(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 1.f);
+
+	if (SceneState == SCENE_STATE::GAME_SCENE)
+	{
+		for (int i = 0; i < MAX_LAYER; ++i)
+		{
+			const vector<CGameObject*>& vecObject = m_pCurScene->GetLayer(i)->GetObjects();
+			for (size_t j = 0; j < vecObject.size(); ++j)
+			{
+				if (L"PlayerPosUI" == vecObject[j]->GetName())
+				{
+					Vec3 playerPos = m_pPlayerArr[playerID]->Transform()->GetLocalPos();
+					playerPos = Vec3(playerPos.x + 5000.f, 0.f, playerPos.z + 5000.f);
+
+					Vec2 posRatio = Vec2(playerPos.x / 10000.f * ((vScale.x / miniMapUIRatio)), playerPos.z / 10000.f * ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)));
+
+					Vec3 size = vecObject[j]->Transform()->GetLocalScale();
+
+					/*vecObject[j]->Transform()->SetLocalPos(Vec3((res.fWidth / 2.f) - ((vScale.x / miniMapUIRatio) / 2.f) + posRatio.x - (size.x / 2)
+						, (res.fHeight / 2.f) - ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y) / 2.f) + posRatio.y - (size.y / 2)
+						, 1.0f));*/
+					vecObject[j]->Transform()->SetLocalPos(Vec3((res.fWidth / 2.f) - ((vScale.x / miniMapUIRatio) ) + posRatio.x
+						, (res.fHeight / 2.f) - ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)) + posRatio.y 
+						, 1.0f));
+				}
+			}
+		}
+	}
 }
 
 void CSceneMgr::FindGameObjectByTag(const wstring& _strTag, vector<CGameObject*>& _vecFindObj)

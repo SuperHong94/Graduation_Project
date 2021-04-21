@@ -23,6 +23,14 @@ private:
 	int			sceneNum = 0;
 	bool		isChange = false;
 
+	// 서버와 통신 해야됨
+	int playerNum = 4;
+	// 임시 설정 
+	int playerID = 0;
+
+	float posUIRatio = 40;
+	float miniMapUIRatio = 6;
+
 	SCENE_STATE SceneState = SCENE_STATE::START_SCENE;
 public:
 	SCENE_STATE setSceneNum(SCENE_STATE s) { SceneState = s; }
@@ -34,6 +42,7 @@ public:
 	void update();	 // Player Mod 일때
 	void update_tool();
 
+	void updateUI();
 	/*CScene* GetStartScene() { return m_pStartScene; }
 	CScene* GetGameScene() { return m_pGameScene; }
 	CScene* GetEndScene() { return m_pEndScene; }*/
