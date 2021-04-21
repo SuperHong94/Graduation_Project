@@ -28,7 +28,7 @@ private:
 	// 임시 설정 
 	int playerID = 0;
 
-	float posUIRatio = 40;
+	float posUIRatio = 64;
 	float miniMapUIRatio = 6;
 
 	SCENE_STATE SceneState = SCENE_STATE::START_SCENE;

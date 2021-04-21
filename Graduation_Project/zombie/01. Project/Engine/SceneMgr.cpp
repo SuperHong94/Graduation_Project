@@ -95,7 +95,7 @@ void CSceneMgr::CreateTargetUI()
 			if (i == 0)
 			{
 				pObject->SetName(L"BlackEdgeUI");
-				pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 1.1f));
+				pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 2.0f));
 				pObject->Transform()->SetLocalScale(vScale);
 			}
 
@@ -104,14 +104,20 @@ void CSceneMgr::CreateTargetUI()
 				pObject->SetName(L"MiniMapUI");
 				pObject->Transform()->SetLocalPos(Vec3((res.fWidth / 2.f) - ((vScale.x / miniMapUIRatio) / 2)
 					, (res.fHeight / 2.f) - ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)  / 2.f)
-					, 1.0f));
+					, 1.5f));
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / miniMapUIRatio, (vScale.y / miniMapUIRatio) * (vScale.x / vScale.y), 1.f));
 			}
 
 			else if (i == 2)
 			{
 				pObject->SetName(L"PlayerPosUI");
-				pObject->Transform()->SetLocalPos(Vec3(-20000.f , 0.f, 1.0f));
+			
+				Vec3 playerPos = m_pPlayerArr[playerID]->Transform()->GetLocalPos();
+				playerPos = Vec3(playerPos.x + 5000.f, 0.f, playerPos.z + 5000.f);
+				Vec2 posRatio = Vec2(playerPos.x / 10000.f * ((vScale.x / miniMapUIRatio)), playerPos.z / 10000.f * ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)));
+				pObject->Transform()->SetLocalPos(Vec3((res.fWidth / 2.f) - ((vScale.x / miniMapUIRatio)) + posRatio.x
+					, (res.fHeight / 2.f) - ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)) + posRatio.y
+					, 1.0f));
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / posUIRatio, (vScale.y / posUIRatio) * (vScale.x / vScale.y), 1.f));
 			}
 			// MeshRender 설정
@@ -922,6 +928,7 @@ void CSceneMgr::updateUI()
 			const vector<CGameObject*>& vecObject = m_pCurScene->GetLayer(i)->GetObjects();
 			for (size_t j = 0; j < vecObject.size(); ++j)
 			{
+				// 미니맵에 플레이어 위치 업데이트
 				if (L"PlayerPosUI" == vecObject[j]->GetName())
 				{
 					Vec3 playerPos = m_pPlayerArr[playerID]->Transform()->GetLocalPos();
@@ -931,12 +938,11 @@ void CSceneMgr::updateUI()
 
 					Vec3 size = vecObject[j]->Transform()->GetLocalScale();
 
-					/*vecObject[j]->Transform()->SetLocalPos(Vec3((res.fWidth / 2.f) - ((vScale.x / miniMapUIRatio) / 2.f) + posRatio.x - (size.x / 2)
-						, (res.fHeight / 2.f) - ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y) / 2.f) + posRatio.y - (size.y / 2)
-						, 1.0f));*/
-					vecObject[j]->Transform()->SetLocalPos(Vec3((res.fWidth / 2.f) - ((vScale.x / miniMapUIRatio) ) + posRatio.x
-						, (res.fHeight / 2.f) - ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)) + posRatio.y 
-						, 1.0f));
+					Vec3 p1 = vecObject[j]->Transform()->GetLocalPos();
+					Vec3 p2 = Vec3((res.fWidth / 2.f) - ((vScale.x / miniMapUIRatio)) + posRatio.x
+						, (res.fHeight / 2.f) - ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)) + posRatio.y
+						, 1.0f);
+					vecObject[j]->Transform()->SetLocalPos(Vec3(p1.x * (1 - 0.3) + p2.x * 0.3, p1.y * (1 - 0.3) + p2.y * 0.3, 1.0f));
 				}
 			}
 		}
