@@ -67,12 +67,12 @@ void CSceneMgr::CreateTargetUI()
 {
 	Vec3 vScale(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 1.f);
 
-	Ptr<CTexture> GameSceneArrTex[3] = { (CResMgr::GetInst()->Load<CTexture>(L"TestTex", L"Texture\\BlockingView.png")),
+	Ptr<CTexture> GameSceneArrTex[3] = { (CResMgr::GetInst()->Load<CTexture>(L"BlockingView", L"Texture\\BlockingView.png")),
 	 ( CResMgr::GetInst()->Load<CTexture>(L"miniMap", L"Texture\\test8.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\playerTest.png"))
 	};
 
-	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"TestTex2", L"Texture\\test6.png") };
+	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"StartBackGround", L"Texture\\StartBackGround.png") };
 
 	Ptr<CTexture> EndSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"TestTex3", L"Texture\\test7.png") };
 
@@ -139,7 +139,7 @@ void CSceneMgr::CreateTargetUI()
 		for (UINT i = 0; i < NumStartSceneUI; ++i)
 		{
 			CGameObject* pObject = new CGameObject;
-			pObject->SetName(L"StartUI");
+			pObject->SetName(L"StartBgUI");
 			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
@@ -170,7 +170,7 @@ void CSceneMgr::CreateTargetUI()
 		for (UINT i = 0; i < NumStartSceneUI; ++i)
 		{
 			CGameObject* pObject = new CGameObject;
-			pObject->SetName(L"EndUI");
+			pObject->SetName(L"EndBgUI");
 			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
