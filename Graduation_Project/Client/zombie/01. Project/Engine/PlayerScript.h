@@ -30,7 +30,7 @@ private:
 	Vec3 rollDir;
 
 	CGameObject* pObject;
-	PlayerStatus* status;
+	PlayerStatus status;
 
 	PlayerState previousState = P_Spawn; // 플레이어의 이전 프레임 애니메이션 상태
 

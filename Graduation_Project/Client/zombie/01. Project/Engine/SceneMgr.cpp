@@ -417,10 +417,17 @@ void CSceneMgr::initGameScene()
 			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Run.mdat", L"MeshData\\Zombie1Run.mdat");
 			pObject = pMeshData->Instantiate();
 
+<<<<<<< HEAD
 			pObject->SetName(L"Monster Object");
 			pObject->FrustumCheck(false);
 			pObject->AddComponent(new CTransform);
 			//pObject->AddComponent(new CMeshRender);
+=======
+	for (int i = 0; i < playerNum; i++)
+	{
+		m_pPlayerArr[i] = new CGameObject;
+		CNetworkMgr::GetInst().
+>>>>>>> parent of 0651e18 (클라이언트 배열추가했더니 오류가남)
 
 			// Transform ����
 			float randomXPos = rand() % 9000 - 4500;

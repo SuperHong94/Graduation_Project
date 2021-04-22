@@ -89,6 +89,31 @@ void CSceneMgr::CreateTargetUI()
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+	pObject->Transform()->SetLocalScale(vScale);
+
+	// MeshRender ¼³Á¤
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
+	pObject->MeshRender()->SetMaterial(pMtrl->Clone());
+	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pTex.GetPointer());
+
+	// AddGameObject
+	m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
+}
+
+void CSceneMgr::init()
+{
+	// =================
+	// ÇÊ¿äÇÑ ¸®¼Ò½º ·Îµù
+	// =================
+	// Texture ·Îµå
+	Ptr<CTexture> pTex = CResMgr::GetInst()->Load<CTexture>(L"TestTex", L"Texture\\Health.png");
+	Ptr<CTexture> pExplosionTex = CResMgr::GetInst()->Load<CTexture>(L"Explosion", L"Texture\\Explosion\\Explosion80.png");
+=======
+>>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
 			// Transform ¼³Á¤
 			tResolution res = CRenderMgr::GetInst()->GetResolution();
 
@@ -130,6 +155,10 @@ void CSceneMgr::CreateTargetUI()
 			m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
 		}
 	}
+<<<<<<< HEAD
+=======
+>>>>>>> yjs
+>>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,6 +180,14 @@ void CSceneMgr::CreateTargetUI()
 
 			pObject->Transform()->SetLocalScale(vScale);
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+	pPM = CResMgr::GetInst()->FindRes<CMaterial>(L"PointLightMtrl");
+	pPM->SetData(SHADER_PARAM::TEX_2, pSky01.GetPointer());
+
+=======
+>>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
 			// MeshRender ¼³Á¤
 			pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 			Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
@@ -211,6 +248,10 @@ void CSceneMgr::init()
 
 void CSceneMgr::initGameScene()
 {
+<<<<<<< HEAD
+=======
+>>>>>>> yjs
+>>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
 	// ===============
 	// GameScene »ı¼º
 	// ===============
@@ -297,6 +338,24 @@ void CSceneMgr::initGameScene()
 		{
 			m_pPlayerArr[i] = new CGameObject;
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+
+	//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+
+	//pPlayerObject = pMeshData->Instantiate();
+
+	for (int i = 0; i < playerNum; i++)
+	{
+		m_pPlayerArr[i] = new CGameObject;
+
+
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
+		pMeshData->Save(pMeshData->GetPath());
+=======
+>>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
 			// ¸ğµ¨À» ÇÃ·¹ÀÌ¾îº°·Î µû·Î ¼³Á¤ÇÒ¼öµµ ÀÖÀ½
 			// ¾ÆÁ÷ º¸·ù
 			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
@@ -305,6 +364,10 @@ void CSceneMgr::initGameScene()
 			m_pPlayerArr[i]->SetName(L"Player Object");
 			m_pPlayerArr[i]->AddComponent(new CTransform);
 			//pPlayerObject->AddComponent(new CMeshRender);
+<<<<<<< HEAD
+=======
+>>>>>>> yjs
+>>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
 
 			// Transform ¼³Á¤
 
@@ -319,6 +382,19 @@ void CSceneMgr::initGameScene()
 
 			m_pPlayerArr[i]->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+		if (i == 0)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
+		else if (i == 1)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, 200.f));
+		else if (i == 2)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, -200.f));
+		else if (i == 3)
+			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, -200.f));
+=======
+>>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
 			//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
 
 			// MeshRender ¼³Á¤
@@ -455,6 +531,7 @@ void CSceneMgr::initGameScene()
 		// Game Manager »ı¼º
 		// ====================
 		m_pGameManager = new GameMgr(m_pCurScene, monsterArr, monsterCnt, m_pPlayerArr, playerNum, playerID);
+>>>>>>> yjs
 
 
 		// ====================
@@ -481,9 +558,30 @@ void CSceneMgr::initGameScene()
 		pObject->AddComponent(new CMeshRender);
 
 		// MeshRender ¼³Á¤
+<<<<<<< HEAD
 		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 		pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyboxMtrl"));
 		pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pSky01.GetPointer());
+=======
+<<<<<<< HEAD
+		//pPlayerObject->MeshRender()->SetDynamicShadow(true);
+		//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+		//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
+		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
+		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+
+		// Script ¼³Á¤
+		// ÇÃ·¹ÀÌ¾î ÀÏ½Ã
+		if (i == controlPlayerNum)
+			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
+		else
+			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], false));
+=======
+		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+		pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyboxMtrl"));
+		pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pSky01.GetPointer());
+>>>>>>> yjs
+>>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
 
 		// AddGameObject
 		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
@@ -842,8 +940,27 @@ void CSceneMgr::initStartScene()
 	////m_pStartScene->start();
 }
 
+<<<<<<< HEAD
 void CSceneMgr::initEndScene()
 {
+=======
+<<<<<<< HEAD
+	// =================================
+	// CollisionMgr Ãæµ¹ ±×·ì(Layer) ÁöÁ¤
+	// =================================
+	// Player Layer ¿Í Monster Layer ´Â Ãæµ¹ °Ë»ç ÁøÇà
+	//CCollisionMgr::GetInst()->CheckCollisionLayer(L"Player", L"Monster");
+	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Monster");
+	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Monster", L"Monster");
+	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Tomb");
+
+	m_pCurScene->awake();
+	m_pCurScene->start();
+=======
+void CSceneMgr::initEndScene()
+{
+>>>>>>> yjs
+>>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
 }
 
 void CSceneMgr::update()
