@@ -61,7 +61,7 @@ PlayerState CPlayerScript::setRunAni(Vec3 dir, Vec3 axis)
 void CPlayerScript::update()
 {
 	Vec3 vPos = CNetworkMgr::GetInst()->playerPos;
-	status.state = CNetworkMgr::GetInst()->m_ePState;
+	status->state = CNetworkMgr::GetInst()->m_ePState;
 	PlayerState playerState = CNetworkMgr::GetInst()->m_ePState;
 	Vec3 vRot = Transform()->GetLocalRot();
 	POINT ptMousePos = CKeyMgr::GetInst()->GetMousePos();
@@ -111,8 +111,8 @@ void CPlayerScript::update()
 		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_UP, vRot);
 		//vPos.z += DT * status.speed;
 		isMove = true;
-		if (status.state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)))
-			status.state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
+		if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)))
+			status->state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_S))
@@ -122,8 +122,8 @@ void CPlayerScript::update()
 		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_DOWN, vRot);
 		//vPos.z -= DT * status.speed;
 		isMove = true;
-		if (status.state != setRunAni(playerDir, Vec3(0.f, 0.f, -1.f)))
-			status.state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
+		if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, -1.f)))
+			status->state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_A))
@@ -132,8 +132,8 @@ void CPlayerScript::update()
 		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_LEFT, vRot);
 		//vPos.x -= DT * status.speed;
 		isMove = true;
-		if (status.state != setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f)))
-			status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
+		if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f)))
+			status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
 	}
 
 	if (KEY_HOLD(KEY_TYPE::KEY_D))
@@ -142,8 +142,8 @@ void CPlayerScript::update()
 		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_RIGHT, vRot);
 		//vPos.x += DT * status.speed;
 		isMove = true;
-		if (status.state != setRunAni(playerDir, Vec3(1.f, 0.f, 0.f)))
-			status.state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
+		if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, 0.f)))
+			status->state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
 	}
 
 
@@ -154,34 +154,34 @@ void CPlayerScript::update()
 	//좌상
 	if (keyHold[0] == 1 && keyHold[1] == 0 && keyHold[2] == 1 && keyHold[3] == 0)
 	{
-		if (status.state != setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f)))
-			status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f));
+		if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f)))
+			status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f));
 	}
 	//우상
 	else if (keyHold[0] == 1 && keyHold[1] == 0 && keyHold[2] == 0 && keyHold[3] == 1)
 	{
-		if (status.state != setRunAni(playerDir, Vec3(1.f, 0.f, 1.f)))
-			status.state = setRunAni(playerDir, Vec3(1.f, 0.f, 1.f));
+		if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, 1.f)))
+			status->state = setRunAni(playerDir, Vec3(1.f, 0.f, 1.f));
 	}
 	//좌하
 	else if (keyHold[0] == 0 && keyHold[1] == 1 && keyHold[2] == 1 && keyHold[3] == 0)
 	{
-		if (status.state != setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f)))
-			status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f));
+		if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f)))
+			status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f));
 	}
 	//우하
 	else if (keyHold[0] == 0 && keyHold[1] == 1 && keyHold[2] == 0 && keyHold[3] == 1)
 	{
-		if (status.state != setRunAni(playerDir, Vec3(1.f, 0.f, -1.f)))
-			status.state = setRunAni(playerDir, Vec3(1.f, 0.f, -1.f));
+		if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, -1.f)))
+			status->state = setRunAni(playerDir, Vec3(1.f, 0.f, -1.f));
 	}
 
 
 	// 아이들 애니메이션 상태인지 확인
 	if (!isMove)
 	{
-		if (status.state != PlayerState::P_Idle)
-			status.state = PlayerState::P_Idle;
+		if (status->state != PlayerState::P_Idle)
+			status->state = PlayerState::P_Idle;
 	}
 
 	if (CNetworkMgr::GetInst()->m_isChange) {
@@ -191,10 +191,10 @@ void CPlayerScript::update()
 
 	}
 	// 애니메이션 상태가 바뀌었는지 확인
-	if (previousState != status.state)
+	if (previousState != status->state)
 	{
 		isAniChange = true;
-		previousState = status.state;
+		previousState = status->state;
 	}
 	else
 		isAniChange = false;
@@ -217,20 +217,20 @@ void CPlayerScript::update()
 			float revise = 0;
 			// 방향별 달리기 애니메이션 설정
 			Ptr<CMeshData> pMeshData;
-			if (status.state == PlayerState::P_FRun) {
+			if (status->state == PlayerState::P_FRun) {
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
 
 			}
-			else if (status.state == PlayerState::P_BRun)
+			else if (status->state == PlayerState::P_BRun)
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierBRun.mdat", L"MeshData\\SoldierBRun.mdat");
 
-			else if (status.state == PlayerState::P_LRun)
+			else if (status->state == PlayerState::P_LRun)
 			{
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierLRun.mdat", L"MeshData\\SoldierLRun.mdat");
 				revise = 4;
 			}
 
-			else if (status.state == PlayerState::P_RRun)
+			else if (status->state == PlayerState::P_RRun)
 			{
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRRun.mdat", L"MeshData\\SoldierRRun.mdat");
 				revise = 4;
@@ -259,7 +259,7 @@ void CPlayerScript::update()
 			//pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
 		}
 	}
-	if (status.state != PlayerState::P_Idle){
+	if (status->state != PlayerState::P_Idle){
 		vPos.y = 53.f;
 		Transform()->SetLocalPos(vPos);
 	}
@@ -305,7 +305,7 @@ void CPlayerScript::update()
 		pBullet->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
 		//pBullet->Collider2D()->SetOffsetPos(Vec3(0.f, -bulletHeight - 5000.f, 0.f));
 
-		pBullet->AddComponent(new CBulletScript(vNBulletDir, status.bulletState));
+		pBullet->AddComponent(new CBulletScript(vNBulletDir, status->bulletState));
 
 		CreateObject(pBullet, L"Bullet");
 	}

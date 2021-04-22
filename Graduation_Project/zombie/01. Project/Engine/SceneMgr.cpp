@@ -89,7 +89,7 @@ void CSceneMgr::CreateTargetUI()
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
 
-<<<<<<< HEAD
+
 	pObject->Transform()->SetLocalScale(vScale);
 
 	// MeshRender 설정
@@ -102,6 +102,7 @@ void CSceneMgr::CreateTargetUI()
 	m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
 }
 
+
 void CSceneMgr::init()
 {
 	// =================
@@ -110,7 +111,7 @@ void CSceneMgr::init()
 	// Texture 로드
 	Ptr<CTexture> pTex = CResMgr::GetInst()->Load<CTexture>(L"TestTex", L"Texture\\Health.png");
 	Ptr<CTexture> pExplosionTex = CResMgr::GetInst()->Load<CTexture>(L"Explosion", L"Texture\\Explosion\\Explosion80.png");
-=======
+
 			// Transform 설정
 			tResolution res = CRenderMgr::GetInst()->GetResolution();
 
@@ -152,7 +153,7 @@ void CSceneMgr::init()
 			m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
 		}
 	}
->>>>>>> yjs
+
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -174,11 +175,11 @@ void CSceneMgr::init()
 
 			pObject->Transform()->SetLocalScale(vScale);
 
-<<<<<<< HEAD
+
 	pPM = CResMgr::GetInst()->FindRes<CMaterial>(L"PointLightMtrl");
 	pPM->SetData(SHADER_PARAM::TEX_2, pSky01.GetPointer());
 
-=======
+
 			// MeshRender 설정
 			pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 			Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
@@ -239,7 +240,7 @@ void CSceneMgr::init()
 
 void CSceneMgr::initGameScene()
 {
->>>>>>> yjs
+
 	// ===============
 	// GameScene 생성
 	// ===============
@@ -326,7 +327,7 @@ void CSceneMgr::initGameScene()
 		{
 			m_pPlayerArr[i] = new CGameObject;
 
-<<<<<<< HEAD
+
 
 
 	//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
@@ -340,7 +341,7 @@ void CSceneMgr::initGameScene()
 
 		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
 		pMeshData->Save(pMeshData->GetPath());
-=======
+
 			// 모델을 플레이어별로 따로 설정할수도 있음
 			// 아직 보류
 			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
@@ -349,7 +350,7 @@ void CSceneMgr::initGameScene()
 			m_pPlayerArr[i]->SetName(L"Player Object");
 			m_pPlayerArr[i]->AddComponent(new CTransform);
 			//pPlayerObject->AddComponent(new CMeshRender);
->>>>>>> yjs
+
 
 			// Transform 설정
 
@@ -364,7 +365,7 @@ void CSceneMgr::initGameScene()
 
 			m_pPlayerArr[i]->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
 
-<<<<<<< HEAD
+
 		if (i == 0)
 			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
 		else if (i == 1)
@@ -373,7 +374,7 @@ void CSceneMgr::initGameScene()
 			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, -200.f));
 		else if (i == 3)
 			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, -200.f));
-=======
+
 			//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
 
 			// MeshRender 설정
@@ -510,7 +511,6 @@ void CSceneMgr::initGameScene()
 		// Game Manager 생성
 		// ====================
 		m_pGameManager = new GameMgr(m_pCurScene, monsterArr, monsterCnt, m_pPlayerArr, playerNum, playerID);
->>>>>>> yjs
 
 
 		// ====================
@@ -537,7 +537,7 @@ void CSceneMgr::initGameScene()
 		pObject->AddComponent(new CMeshRender);
 
 		// MeshRender 설정
-<<<<<<< HEAD
+
 		//pPlayerObject->MeshRender()->SetDynamicShadow(true);
 		//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 		//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
@@ -550,11 +550,11 @@ void CSceneMgr::initGameScene()
 			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
 		else
 			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], false));
-=======
+
 		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 		pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyboxMtrl"));
 		pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pSky01.GetPointer());
->>>>>>> yjs
+
 
 		// AddGameObject
 		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
@@ -913,7 +913,7 @@ void CSceneMgr::initStartScene()
 	////m_pStartScene->start();
 }
 
-<<<<<<< HEAD
+
 	// =================================
 	// CollisionMgr 충돌 그룹(Layer) 지정
 	// =================================
@@ -925,10 +925,10 @@ void CSceneMgr::initStartScene()
 
 	m_pCurScene->awake();
 	m_pCurScene->start();
-=======
+
 void CSceneMgr::initEndScene()
 {
->>>>>>> yjs
+
 }
 
 void CSceneMgr::update()

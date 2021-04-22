@@ -190,7 +190,7 @@ void CSceneMgr::init()
 	for (int i = 0; i < playerNum; i++)
 	{
 		m_pPlayerArr[i] = new CGameObject;
-		CNetworkMgr::GetInst().
+		//CNetworkMgr::GetInst().
 
 		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
 		pMeshData->Save(pMeshData->GetPath());
