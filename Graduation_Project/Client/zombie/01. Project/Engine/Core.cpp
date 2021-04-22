@@ -28,7 +28,15 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	m_hMainHwnd = _hWnd;
 	ChangeWindowSize(m_hMainHwnd, _resolution);
 	ShowWindow(_hWnd, true);
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+	CNetworkMgr::GetInst()->init();
+>>>>>>> parent of 0651e18 (클라이언트 배열추가했더니 오류가남)
+>>>>>>> 6eec2dd8a504b0747f527b951430a77b4910601e
 	if(FAILED(CDevice::GetInst()->init(_hWnd, _resolution, _bWindow)))
 	{
 		return E_FAIL;
@@ -75,6 +83,13 @@ void CCore::ChangeWindowSize(HWND _hWnd, const tResolution & _resolution)
 
 void CCore::progress()
 {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+	CNetworkMgr::GetInst()->client_main();
+>>>>>>> parent of 0651e18 (클라이언트 배열추가했더니 오류가남)
+>>>>>>> 6eec2dd8a504b0747f527b951430a77b4910601e
 	CKeyMgr::GetInst()->update();
 	CTimeMgr::GetInst()->update();
 	CSound::g_pFMOD->update();

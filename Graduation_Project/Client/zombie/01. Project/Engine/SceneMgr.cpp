@@ -417,10 +417,23 @@ void CSceneMgr::initGameScene()
 			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Run.mdat", L"MeshData\\Zombie1Run.mdat");
 			pObject = pMeshData->Instantiate();
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6eec2dd8a504b0747f527b951430a77b4910601e
 			pObject->SetName(L"Monster Object");
 			pObject->FrustumCheck(false);
 			pObject->AddComponent(new CTransform);
 			//pObject->AddComponent(new CMeshRender);
+<<<<<<< HEAD
+=======
+=======
+	for (int i = 0; i < playerNum; i++)
+	{
+		m_pPlayerArr[i] = new CGameObject;
+		CNetworkMgr::GetInst().
+>>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
+>>>>>>> 6eec2dd8a504b0747f527b951430a77b4910601e
 
 			// Transform ¼³Á¤
 			float randomXPos = rand() % 9000 - 4500;
@@ -440,6 +453,7 @@ void CSceneMgr::initGameScene()
 			pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 100.f, 0.f));
 			//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, -5000.f, 0.f));
 			pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
+<<<<<<< HEAD
 
 			// Script ¼³Á¤
 			pObject->AddComponent(new CMonsterScript(m_pPlayerArr, playerNum, pObject, m_pCurScene));
@@ -470,6 +484,38 @@ void CSceneMgr::initGameScene()
 		//
 		//m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
+=======
+
+			// Script ¼³Á¤
+			pObject->AddComponent(new CMonsterScript(m_pPlayerArr, playerNum, pObject, m_pCurScene));
+
+			// AddGameObject
+			m_pCurScene->FindLayer(L"Monster")->AddGameObject(pObject);
+
+			monsterArr[i] = pObject;
+		}
+
+
+		// ====================
+		// Game Manager »ý¼º
+		// ====================
+		m_pGameManager = new GameMgr(m_pCurScene, monsterArr, monsterCnt, m_pPlayerArr, playerNum, playerID);
+
+
+		// ====================
+		// Particle Object »ý¼º
+		// ====================
+		//pObject = new CGameObject;
+		//pObject->SetName(L"Particle");
+		//pObject->AddComponent(new CTransform);	
+		//pObject->AddComponent(new CParticleSystem);
+		//
+		//pObject->FrustumCheck(false);
+		//pObject->Transform()->SetLocalPos(Vec3(500.f, 0.f, 0.f));		
+		//
+		//m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+
+>>>>>>> 6eec2dd8a504b0747f527b951430a77b4910601e
 
 		// ====================
 		// Skybox ¿ÀºêÁ§Æ® »ý¼º
