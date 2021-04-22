@@ -57,7 +57,6 @@ PlayerState CPlayerScript::setRunAni(Vec3 dir, Vec3 axis)
 }
 
 void CPlayerScript::getDamage(float damage)
-<<<<<<< HEAD
 {
 	if (!isPlayer)
 	{
@@ -164,255 +163,6 @@ void CPlayerScript::update()
 			{
 				vPos += DT * rollDir * status->speed;
 			}
-=======
-{
-<<<<<<< HEAD
-	if (!isPlayer)
-	{
-		int a = 3;
-	}
-	// Å×½ºÆ®
-	status->hp -= damage;
-}
-
-void CPlayerScript::update()
-{
-	if (!status->IsDead)
-	{
-		// ÇÃ·¹ÀÌ¾î ÀÏ½Ã
-		if (isPlayer)
-		{
-			Vec3 vPos = Transform()->GetLocalPos();
-			Vec3 vRot = Transform()->GetLocalRot();
-			POINT ptMousePos = CKeyMgr::GetInst()->GetMousePos();
-			bool isMove = false;
-			int keyHold[4] = { 0, };
-
-			//////////////////////////////////////////////////////////
-			// ¸¶¿ì½º ¹æÇâÀ¸·Î ÇÃ·¹ÀÌ¾î ¹æÇâ ¼³Á¤
-			// ÃÑ¾Ë ¹æÇâ °è»ê
-			Vec3 vMousePos;
-			vMousePos.x = (((2.0f * ptMousePos.x) / FRAME_BUFFER_WIDTH) - 1) / g_transform.matProj._11;
-			vMousePos.y = -(((2.0f * ptMousePos.y) / FRAME_BUFFER_HEIGHT) - 1) / g_transform.matProj._22;
-			vMousePos.z = 1.0f;
-
-			//XMMATRIX m;
-			//XMVECTOR xmVec = XMMatrixDeterminant(m);
-
-			float a1 = g_transform.matViewInv._41;
-			float a2 = g_transform.matViewInv._42;
-			float a3 = g_transform.matViewInv._43;
-			XMMATRIX InverseM = XMMatrixInverse(NULL, g_transform.matView);
-
-			Vec3 vPickRayDir;
-			vPickRayDir.x = vMousePos.x * InverseM._11 + vMousePos.y * InverseM._21 + vMousePos.z * InverseM._31;
-			vPickRayDir.y = vMousePos.x * InverseM._12 + vMousePos.y * InverseM._22 + vMousePos.z * InverseM._32;
-			vPickRayDir.z = vMousePos.x * InverseM._13 + vMousePos.y * InverseM._23 + vMousePos.z * InverseM._33;
-
-			Vec3 vPickRayOrig;
-			vPickRayOrig.x = InverseM._41;
-			vPickRayOrig.y = InverseM._42;
-			vPickRayOrig.z = InverseM._43;
-
-			bulletHeight = 0;
-
-			Vec3 vBulletTargetPos;
-			vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
-			vBulletTargetPos.z = (bulletHeight - vPickRayOrig.y) * vPickRayDir.z / vPickRayDir.y + vPickRayOrig.z;
-			//////////////////////////////////////////////////////////
-
-			// ÇÃ·¹ÀÌ¾î ÀÌµ¿ ¹× ¹æÇâ ¼³Á¤
-			Vec3 playerDir;
-			playerDir.x = vBulletTargetPos.x - vPos.x;
-			playerDir.y = 0;
-			playerDir.z = vBulletTargetPos.z - vPos.z;
-			playerDir = playerDir.Normalize();
-
-			if (!status->IsRoll)
-			{
-				if (KEY_HOLD(KEY_TYPE::KEY_W))
-				{
-					keyHold[0] = 1;
-					vPos.z += DT * status->speed;
-					isMove = true;
-					if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)) && !status->IsRoll)
-						status->state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
-				}
-
-				if (KEY_HOLD(KEY_TYPE::KEY_S))
-				{
-					keyHold[1] = 1;
-					vPos.z -= DT * status->speed;
-					isMove = true;
-					if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, -1.f)) && !status->IsRoll)
-						status->state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
-				}
-
-				if (KEY_HOLD(KEY_TYPE::KEY_A))
-				{
-					keyHold[2] = 1;
-					vPos.x -= DT * status->speed;
-					isMove = true;
-					if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f)) && !status->IsRoll)
-						status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
-				}
-
-				if (KEY_HOLD(KEY_TYPE::KEY_D))
-				{
-					keyHold[3] = 1;
-					vPos.x += DT * status->speed;
-					isMove = true;
-					if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, 0.f)) && !status->IsRoll)
-						status->state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
-				}
-			}
-			// ±¸¸£±â »óÅÂÀÏ¶§ ÀÌµ¿
-			// ½¬ÇÁÆ® ´©¸¦ ¶§ ¸¶¿ì½º ¹æÇâÀ¸·Î ±¸¸£±â ³¡³¯¶§ ±îÁö °íÁ¤ ÀÌµ¿
-			else
-			{
-				vPos += DT * rollDir * status->speed;
-			}
-=======
-	Vec3 vPos = CNetworkMgr::GetInst()->playerPos;
-	status.state = CNetworkMgr::GetInst()->m_ePState;
-	PlayerState playerState = CNetworkMgr::GetInst()->m_ePState;
-	Vec3 vRot = Transform()->GetLocalRot();
-	POINT ptMousePos = CKeyMgr::GetInst()->GetMousePos();
-	bool isMove = false;
-	int keyHold[4] = { 0, };
-
-	//////////////////////////////////////////////////////////
-	// ¸¶¿ì½º ¹æÇâÀ¸·Î ÇÃ·¹ÀÌ¾î ¹æÇâ ¼³Á¤
-	// ÃÑ¾Ë ¹æÇâ °è»ê
-	Vec3 vMousePos;
-	vMousePos.x = (((2.0f * ptMousePos.x) / FRAME_BUFFER_WIDTH) - 1) / g_transform.matProj._11;
-	vMousePos.y = -(((2.0f * ptMousePos.y) / FRAME_BUFFER_HEIGHT) - 1) / g_transform.matProj._22;
-	vMousePos.z = 1.0f;
-
-	//XMMATRIX m;
-	//XMVECTOR xmVec = XMMatrixDeterminant(m);
-	XMMATRIX InverseM = XMMatrixInverse(NULL, g_transform.matView);
-
-	Vec3 vPickRayDir;
-	vPickRayDir.x = vMousePos.x * InverseM._11 + vMousePos.y * InverseM._21 + vMousePos.z * InverseM._31;
-	vPickRayDir.y = vMousePos.x * InverseM._12 + vMousePos.y * InverseM._22 + vMousePos.z * InverseM._32;
-	vPickRayDir.z = vMousePos.x * InverseM._13 + vMousePos.y * InverseM._23 + vMousePos.z * InverseM._33;
-
-	Vec3 vPickRayOrig;
-	vPickRayOrig.x = InverseM._41;
-	vPickRayOrig.y = InverseM._42;
-	vPickRayOrig.z = InverseM._43;
-
-	bulletHeight = 0;
-
-	Vec3 vBulletTargetPos;
-	vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
-	vBulletTargetPos.z = (bulletHeight - vPickRayOrig.y) * vPickRayDir.z / vPickRayDir.y + vPickRayOrig.z;
-	//////////////////////////////////////////////////////////
-
-	// ÇÃ·¹ÀÌ¾î ÀÌµ¿ ¹× ¹æÇâ ¼³Á¤
-	Vec3 playerDir;
-	playerDir.x = vBulletTargetPos.x - vPos.x;
-	playerDir.y = 0;
-	playerDir.z = vBulletTargetPos.z - vPos.z;
-	playerDir = playerDir.Normalize();
-
-	if (KEY_HOLD(KEY_TYPE::KEY_W))
-	{
-		keyHold[0] = 1;
-
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_UP, vRot);
-		//vPos.z += DT * status.speed;
-		isMove = true;
-		if (status.state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)))
-			status.state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
-	}
-
-	if (KEY_HOLD(KEY_TYPE::KEY_S))
-	{
-		keyHold[1] = 1;
-
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_DOWN, vRot);
-		//vPos.z -= DT * status.speed;
-		isMove = true;
-		if (status.state != setRunAni(playerDir, Vec3(0.f, 0.f, -1.f)))
-			status.state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
-	}
-
-	if (KEY_HOLD(KEY_TYPE::KEY_A))
-	{
-		keyHold[2] = 1;
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_LEFT, vRot);
-		//vPos.x -= DT * status.speed;
-		isMove = true;
-		if (status.state != setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f)))
-			status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
-	}
-
-	if (KEY_HOLD(KEY_TYPE::KEY_D))
-	{
-		keyHold[3] = 1;
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_RIGHT, vRot);
-		//vPos.x += DT * status.speed;
-		isMove = true;
-		if (status.state != setRunAni(playerDir, Vec3(1.f, 0.f, 0.f)))
-			status.state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
-	}
-
-
-
-
-
-	// ´ë°¢¼± ¾Ö´Ï¸ÞÀÌ¼Ç Ã¼Å©
-	//ÁÂ»ó
-	if (keyHold[0] == 1 && keyHold[1] == 0 && keyHold[2] == 1 && keyHold[3] == 0)
-	{
-		if (status.state != setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f)))
-			status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f));
-	}
-	//¿ì»ó
-	else if (keyHold[0] == 1 && keyHold[1] == 0 && keyHold[2] == 0 && keyHold[3] == 1)
-	{
-		if (status.state != setRunAni(playerDir, Vec3(1.f, 0.f, 1.f)))
-			status.state = setRunAni(playerDir, Vec3(1.f, 0.f, 1.f));
-	}
-	//ÁÂÇÏ
-	else if (keyHold[0] == 0 && keyHold[1] == 1 && keyHold[2] == 1 && keyHold[3] == 0)
-	{
-		if (status.state != setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f)))
-			status.state = setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f));
-	}
-	//¿ìÇÏ
-	else if (keyHold[0] == 0 && keyHold[1] == 1 && keyHold[2] == 0 && keyHold[3] == 1)
-	{
-		if (status.state != setRunAni(playerDir, Vec3(1.f, 0.f, -1.f)))
-			status.state = setRunAni(playerDir, Vec3(1.f, 0.f, -1.f));
-	}
-
-
-	// ¾ÆÀÌµé ¾Ö´Ï¸ÞÀÌ¼Ç »óÅÂÀÎÁö È®ÀÎ
-	if (!isMove)
-	{
-		if (status.state != PlayerState::P_Idle)
-			status.state = PlayerState::P_Idle;
-	}
-
-	if (CNetworkMgr::GetInst()->m_isChange) {
-
-
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::NO_EVENT, vRot);
-
-	}
-	// ¾Ö´Ï¸ÞÀÌ¼Ç »óÅÂ°¡ ¹Ù²î¾ú´ÂÁö È®ÀÎ
-	if (previousState != status.state)
-	{
-		isAniChange = true;
-		previousState = status.state;
-	}
-	else
-		isAniChange = false;
->>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
->>>>>>> 6eec2dd8a504b0747f527b951430a77b4910601e
 
 			// ±¸¸£±â 
 			if (KEY_HOLD(KEY_TYPE::KEY_LSHIFT))
@@ -426,7 +176,6 @@ void CPlayerScript::update()
 					rollDir = playerDir;
 				}
 			}
-<<<<<<< HEAD
 
 			// ´ë°¢¼± ¾Ö´Ï¸ÞÀÌ¼Ç Ã¼Å©
 			if (!status->IsRoll)
@@ -474,56 +223,6 @@ void CPlayerScript::update()
 				isAniChange = false;
 
 
-=======
-
-			// ´ë°¢¼± ¾Ö´Ï¸ÞÀÌ¼Ç Ã¼Å©
-			if (!status->IsRoll)
-			{
-				//ÁÂ»ó
-				if (keyHold[0] == 1 && keyHold[1] == 0 && keyHold[2] == 1 && keyHold[3] == 0)
-				{
-					if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f)))
-						status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f));
-				}
-				//¿ì»ó
-				else if (keyHold[0] == 1 && keyHold[1] == 0 && keyHold[2] == 0 && keyHold[3] == 1)
-				{
-					if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, 1.f)))
-						status->state = setRunAni(playerDir, Vec3(1.f, 0.f, 1.f));
-				}
-				//ÁÂÇÏ
-				else if (keyHold[0] == 0 && keyHold[1] == 1 && keyHold[2] == 1 && keyHold[3] == 0)
-				{
-					if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f)))
-						status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f));
-				}
-				//¿ìÇÏ
-				else if (keyHold[0] == 0 && keyHold[1] == 1 && keyHold[2] == 0 && keyHold[3] == 1)
-				{
-					if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, -1.f)))
-						status->state = setRunAni(playerDir, Vec3(1.f, 0.f, -1.f));
-				}
-			}
-
-			// ¾ÆÀÌµé ¾Ö´Ï¸ÞÀÌ¼Ç »óÅÂÀÎÁö È®ÀÎ
-			if (!isMove && !status->IsRoll)
-			{
-				if (status->state != PlayerState::P_Idle)
-					status->state = PlayerState::P_Idle;
-			}
-
-			// ¾Ö´Ï¸ÞÀÌ¼Ç »óÅÂ°¡ ¹Ù²î¾ú´ÂÁö È®ÀÎ
-			if (previousState != status->state)
-			{
-				isAniChange = true;
-				previousState = status->state;
-			}
-			else
-				isAniChange = false;
-
-
-<<<<<<< HEAD
->>>>>>> 6eec2dd8a504b0747f527b951430a77b4910601e
 			// ÇÃ·¹ÀÌ¾î À§Ä¡ ¹æÇâ ¼³Á¤
 			if (vPos.x > 4990)
 				vPos.x = 4990;
@@ -535,35 +234,10 @@ void CPlayerScript::update()
 				vPos.z = -4990;
 			Transform()->SetLocalPos(vPos);
 			Transform()->SetLocalRot(vRot);
-<<<<<<< HEAD
 
 
 			//±¸¸£±â ¾Ö´Ï¸ÞÀÌ¼Ç ¼³Á¤
 			if (isAniChange)
-=======
-
-
-			//±¸¸£±â ¾Ö´Ï¸ÞÀÌ¼Ç ¼³Á¤
-			if (isAniChange)
-=======
-	//¾Ö´Ï¸ÞÀÌ¼Ç ¼³Á¤
-	if (isAniChange)
-	{
-		if (isMove)
-		{
-			float revise = 0;
-			// ¹æÇâº° ´Þ¸®±â ¾Ö´Ï¸ÞÀÌ¼Ç ¼³Á¤
-			Ptr<CMeshData> pMeshData;
-			if (status.state == PlayerState::P_FRun) {
-				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
-
-			}
-			else if (status.state == PlayerState::P_BRun)
-				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierBRun.mdat", L"MeshData\\SoldierBRun.mdat");
-
-			else if (status.state == PlayerState::P_LRun)
->>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
->>>>>>> 6eec2dd8a504b0747f527b951430a77b4910601e
 			{
 				if (status->IsRoll)
 				{
@@ -634,17 +308,8 @@ void CPlayerScript::update()
 				}
 			}
 
-<<<<<<< HEAD
 			// ±¸¸£±â Äð Å¸ÀÓ Ã¼Å©
 			if (status->IsRoll)
-=======
-<<<<<<< HEAD
-			// ±¸¸£±â Äð Å¸ÀÓ Ã¼Å©
-			if (status->IsRoll)
-=======
-			else if (status.state == PlayerState::P_RRun)
->>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
->>>>>>> 6eec2dd8a504b0747f527b951430a77b4910601e
 			{
 				status->RollCoolTime += DT;
 				if (status->RollCoolTime >= shiftCoolTime)
@@ -671,32 +336,10 @@ void CPlayerScript::update()
 			}
 
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 6eec2dd8a504b0747f527b951430a77b4910601e
 			// ÃÑ¾Ë ¹æÇâ & ÇÃ·¹ÀÌ¾î ¹æÇâ
 			float temp = atan2(vBulletTargetPos.z - vPos.z, vBulletTargetPos.x - vPos.x);
 			if (!status->IsRoll)
 				Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
-<<<<<<< HEAD
-=======
-=======
-			//// ÀÌ°Ç ¸ðµ¨ ÇÇº¿ Àß¸ø¼³Á¤ÇØ¼­ ÀÓ½Ã·Î ¼³Á¤
-			//// ¼öÁ¤µÇ¸é Áö¿ï °Í
-			//Vec3 temp = pObject->Transform()->GetLocalPos();
-			//pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
-		}
-	}
-	if (status.state != PlayerState::P_Idle){
-		vPos.y = 53.f;
-		Transform()->SetLocalPos(vPos);
-	}
-	else {
-		Transform()->SetLocalPos(vPos);
-	}
->>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
->>>>>>> 6eec2dd8a504b0747f527b951430a77b4910601e
 
 
 			// ÃÑ¾Ë
@@ -706,7 +349,6 @@ void CPlayerScript::update()
 			if (KEY_TAB(KEY_TYPE::KEY_LBTN) && !status->IsRoll)
 			{
 				bulletHeight = 100;
-<<<<<<< HEAD
 
 				vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
 				vBulletTargetPos.z = (bulletHeight - vPickRayOrig.y) * vPickRayDir.z / vPickRayDir.y + vPickRayOrig.z;
@@ -741,45 +383,6 @@ void CPlayerScript::update()
 				CreateObject(pBullet, L"Bullet");
 			}
 		}
-=======
-
-				vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
-				vBulletTargetPos.z = (bulletHeight - vPickRayOrig.y) * vPickRayDir.z / vPickRayDir.y + vPickRayOrig.z;
-
-				Vec3 vBulletDir;
-				vBulletDir.x = vBulletTargetPos.x - vPos.x;
-				vBulletDir.y = 0;
-				vBulletDir.z = vBulletTargetPos.z - vPos.z;
-
-				//printf("%f	%f	%f\n", vBulletDir.x, vBulletDir.y, vBulletDir.z);
-
-				Vec3 vNBulletDir = vBulletDir.Normalize();
-
-				// ÃÑ¾Ë ½î±â
-				CGameObject* pBullet = new CGameObject;
-				pBullet->SetName(L"Bullet Object");
-
-				pBullet->AddComponent(new CTransform());
-				pBullet->Transform()->SetLocalPos(Vec3(vPos.x, bulletHeight, vPos.z));
-				pBullet->Transform()->SetLocalScale(Vec3(5.f, 5.f, 5.f));
-
-				pBullet->AddComponent(new CMeshRender);
-				pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
-				pBullet->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
-
-<<<<<<< HEAD
-				pBullet->AddComponent(new CCollider2D);
-				pBullet->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
-				//pBullet->Collider2D()->SetOffsetPos(Vec3(0.f, -bulletHeight - 5000.f, 0.f));
-=======
-		pBullet->AddComponent(new CBulletScript(vNBulletDir, status.bulletState));
->>>>>>> parent of 0651e18 (í´ë¼ì´ì–¸íŠ¸ ë°°ì—´ì¶”ê°€í–ˆë”ë‹ˆ ì˜¤ë¥˜ê°€ë‚¨)
-
-				pBullet->AddComponent(new CBulletScript(vNBulletDir, status->bulletState));
-
-				CreateObject(pBullet, L"Bullet");
-			}
-		}
 
 		// ÇÃ·¹ÀÌ¾î Á×À½ Ã¼Å©
 		if (status->hp <= 0)
@@ -790,22 +393,8 @@ void CPlayerScript::update()
 			pObject->ChangeAnimation(pMeshData);
 		}
 	}
->>>>>>> 6eec2dd8a504b0747f527b951430a77b4910601e
-
-		// ÇÃ·¹ÀÌ¾î Á×À½ Ã¼Å©
-		if (status->hp <= 0)
-		{
-			status->IsDead = true;
-
-<<<<<<< HEAD
-			Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierDying.mdat", L"MeshData\\SoldierDying.mdat");
-			pObject->ChangeAnimation(pMeshData);
-		}
-	}
 
 
-=======
->>>>>>> 6eec2dd8a504b0747f527b951430a77b4910601e
 	// »ç¶óÁö´Â ½Ã°£ Ã¼Å©
 	if (status->IsDead)
 	{
