@@ -22,10 +22,25 @@ enum class SCRIPT_TYPE
 	MONSTERSCRIPT,
 	PLAYERSCRIPT,
 	TESTSCRIPT,
+	STARTSCENESCRIPT,
+	ENDSCENESCRIPT,
+	TOMBSCRIPT,
 	END,
 };
 
-
+enum PlayerState
+{
+	P_Idle,
+	P_FRun,
+	P_BRun,
+	P_LRun,
+	P_RRun,
+	P_Attack,
+	P_Die,
+	P_Spawn,
+	P_Roll,
+	p_None,
+};
 
 enum BulletState
 {
@@ -54,11 +69,11 @@ private:
 	float		damage = 0;
 
 protected:
-	BulletState bulletState = BulletState::B_Normal;
 
 public:
 	UINT GetScriptType() { return m_iScriptType; }
 	bool isAniChange = false;
+
 
 public:
 	virtual void update() = 0;
@@ -99,7 +114,7 @@ public:
 
 	void setDamage(float d) { damage = d; };
 	float getDamage() { return damage; };
-	virtual BulletState GetBulletState() { return bulletState; };
+	//virtual BulletState GetBulletState() { return bulletState; };
 
 public:
 	CScript(UINT _iScriptType);

@@ -72,6 +72,7 @@ public:
 	const vector<CGameObject*>& GetChild() { return m_vecChild; }
 	bool IsDead() { return m_bDead; }
 	void SetDead();
+	void SetAlive();
 
 	void RegisterToLayer();
 	void ChangeAnimation(Ptr<CMeshData> pMeshData);

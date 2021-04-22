@@ -14,7 +14,6 @@
 #include "ConstantBuffer.h"
 #include "InstancingMgr.h"
 
-#include "NetworkMgr.h"
 CCore::CCore()
 	: m_hMainHwnd(nullptr)
 {
@@ -26,13 +25,10 @@ CCore::~CCore()
 
 int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 {
-	std::wcout.imbue(std::locale("korean"));//오류코드 한국어로 표현
-
-
 	m_hMainHwnd = _hWnd;
 	ChangeWindowSize(m_hMainHwnd, _resolution);
 	ShowWindow(_hWnd, true);
-	//CNetworkMgr::GetInst()->init();
+
 	if(FAILED(CDevice::GetInst()->init(_hWnd, _resolution, _bWindow)))
 	{
 		return E_FAIL;
@@ -65,7 +61,6 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	CResMgr::GetInst()->init();
 	CSceneMgr::GetInst()->init();
 	
-	//우선은 여기다하는데 나중에는 가장먼저로 올려야 함
 
 	return S_OK;
 }
@@ -80,14 +75,17 @@ void CCore::ChangeWindowSize(HWND _hWnd, const tResolution & _resolution)
 
 void CCore::progress()
 {
-	//CNetworkMgr::GetInst()->client_main();
 	CKeyMgr::GetInst()->update();
 	CTimeMgr::GetInst()->update();
 	CSound::g_pFMOD->update();
+
 	CEventMgr::GetInst()->clear();
 	{
 		CSceneMgr::GetInst()->update();
-		CRenderMgr::GetInst()->render();
+		if(!CSceneMgr::GetInst()->CheckIsChange())
+			CRenderMgr::GetInst()->render();
+
+		CSceneMgr::GetInst()->SetIsChange(false);
 	}
 	CEventMgr::GetInst()->update();
 
