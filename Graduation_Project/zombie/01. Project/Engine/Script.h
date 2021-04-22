@@ -22,6 +22,9 @@ enum class SCRIPT_TYPE
 	MONSTERSCRIPT,
 	PLAYERSCRIPT,
 	TESTSCRIPT,
+	STARTSCENESCRIPT,
+	ENDSCENESCRIPT,
+	TOMBSCRIPT,
 	END,
 };
 
@@ -66,7 +69,6 @@ private:
 	float		damage = 0;
 
 protected:
-	BulletState bulletState = BulletState::B_Normal;
 
 public:
 	UINT GetScriptType() { return m_iScriptType; }
@@ -112,7 +114,7 @@ public:
 
 	void setDamage(float d) { damage = d; };
 	float getDamage() { return damage; };
-	virtual BulletState GetBulletState() { return bulletState; };
+	//virtual BulletState GetBulletState() { return bulletState; };
 
 public:
 	CScript(UINT _iScriptType);

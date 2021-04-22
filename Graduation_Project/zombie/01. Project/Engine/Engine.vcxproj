@@ -216,6 +216,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="StartSceneScript.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="StructuredBuffer.h" />
@@ -223,6 +224,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="TestScript.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeMgr.h" />
+    <ClInclude Include="TombScript.h" />
     <ClInclude Include="ToolCamScript.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
@@ -274,6 +276,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="StartSceneScript.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -284,6 +287,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="TestScript.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeMgr.cpp" />
+    <ClCompile Include="TombScript.cpp" />
     <ClCompile Include="ToolCamScript.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>

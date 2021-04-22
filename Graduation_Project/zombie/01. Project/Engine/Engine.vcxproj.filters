@@ -62,6 +62,9 @@
     <Filter Include="04. GameObject\BehaviourTree">
       <UniqueIdentifier>{00c1eb54-e378-48d5-ae8f-12978e2d7bb9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Manager\Mgr">
+      <UniqueIdentifier>{55d486ed-0b12-44e1-983b-f31b8e66b98c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -86,15 +89,6 @@
     </ClInclude>
     <ClInclude Include="Device.h">
       <Filter>03. Device</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyMgr.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeMgr.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="PathMgr.h">
-      <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Resource</Filter>
@@ -138,9 +132,6 @@
     <ClInclude Include="Script.h">
       <Filter>04. GameObject\Component</Filter>
     </ClInclude>
-    <ClInclude Include="EventMgr.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
     <ClInclude Include="SceneMgr.h">
       <Filter>Manager\SceneMgr</Filter>
     </ClInclude>
@@ -176,9 +167,6 @@
     </ClInclude>
     <ClInclude Include="Light3D.h">
       <Filter>04. GameObject\Component</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionMgr.h">
-      <Filter>Manager</Filter>
     </ClInclude>
     <ClInclude Include="RenderMgr.h">
       <Filter>Rendering</Filter>
@@ -232,8 +220,29 @@
     <ClInclude Include="BehaviourTree.h">
       <Filter>04. GameObject\BehaviourTree</Filter>
     </ClInclude>
+    <ClInclude Include="StartSceneScript.h">
+      <Filter>04. GameObject\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="TombScript.h">
+      <Filter>04. GameObject\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionMgr.h">
+      <Filter>Manager\Mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="EventMgr.h">
+      <Filter>Manager\Mgr</Filter>
+    </ClInclude>
     <ClInclude Include="GameMgr.h">
-      <Filter>Manager</Filter>
+      <Filter>Manager\Mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyMgr.h">
+      <Filter>Manager\Mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="PathMgr.h">
+      <Filter>Manager\Mgr</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeMgr.h">
+      <Filter>Manager\Mgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -243,15 +252,6 @@
     </ClCompile>
     <ClCompile Include="Device.cpp">
       <Filter>03. Device</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyMgr.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="TimeMgr.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="PathMgr.cpp">
-      <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="Resource.cpp">
       <Filter>Resource</Filter>
@@ -292,9 +292,6 @@
     <ClCompile Include="Script.cpp">
       <Filter>04. GameObject\Component</Filter>
     </ClCompile>
-    <ClCompile Include="EventMgr.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="SceneMgr.cpp">
       <Filter>Manager\SceneMgr</Filter>
     </ClCompile>
@@ -333,9 +330,6 @@
     </ClCompile>
     <ClCompile Include="Light3D.cpp">
       <Filter>04. GameObject\Component</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionMgr.cpp">
-      <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="RenderMgrInit.cpp">
       <Filter>Rendering</Filter>
@@ -394,8 +388,29 @@
     <ClCompile Include="BehaviourTree.cpp">
       <Filter>04. GameObject\BehaviourTree</Filter>
     </ClCompile>
+    <ClCompile Include="StartSceneScript.cpp">
+      <Filter>04. GameObject\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="TombScript.cpp">
+      <Filter>04. GameObject\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionMgr.cpp">
+      <Filter>Manager\Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="EventMgr.cpp">
+      <Filter>Manager\Mgr</Filter>
+    </ClCompile>
     <ClCompile Include="GameMgr.cpp">
-      <Filter>Manager</Filter>
+      <Filter>Manager\Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyMgr.cpp">
+      <Filter>Manager\Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="PathMgr.cpp">
+      <Filter>Manager\Mgr</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeMgr.cpp">
+      <Filter>Manager\Mgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

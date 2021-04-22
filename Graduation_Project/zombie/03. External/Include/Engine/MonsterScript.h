@@ -112,7 +112,7 @@ public:
 			status->attackCoolTime = 2.6f;
 
 			status->PlayerInAttackRange = false;
-			if (status->distanceToPlayer <= 1000)
+			if (status->distanceToPlayer <= status->recognizeRange)
 			{
 				status->state = MonsterState::M_Run;
 			}

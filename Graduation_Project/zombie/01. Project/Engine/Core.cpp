@@ -82,7 +82,10 @@ void CCore::progress()
 	CEventMgr::GetInst()->clear();
 	{
 		CSceneMgr::GetInst()->update();
-		CRenderMgr::GetInst()->render();
+		if(!CSceneMgr::GetInst()->CheckIsChange())
+			CRenderMgr::GetInst()->render();
+
+		CSceneMgr::GetInst()->SetIsChange(false);
 	}
 	CEventMgr::GetInst()->update();
 
