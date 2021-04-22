@@ -46,7 +46,7 @@ CScene* CSceneMgr::GetCurScene()
 	return m_pCurScene;
 }
 
-void CSceneMgr::ChangeScene(CScene* _pNextScene)
+void CSceneMgr::ChangeScene(CScene * _pNextScene)
 {
 	SAFE_DELETE(m_pCurScene);
 	m_pCurScene = _pNextScene;
@@ -88,29 +88,6 @@ void CSceneMgr::CreateTargetUI()
 			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
-
-
-	pObject->Transform()->SetLocalScale(vScale);
-
-	// MeshRender 설정
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
-	pObject->MeshRender()->SetMaterial(pMtrl->Clone());
-	pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pTex.GetPointer());
-
-	// AddGameObject
-	m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
-}
-
-
-void CSceneMgr::init()
-{
-	// =================
-	// 필요한 리소스 로딩
-	// =================
-	// Texture 로드
-	Ptr<CTexture> pTex = CResMgr::GetInst()->Load<CTexture>(L"TestTex", L"Texture\\Health.png");
-	Ptr<CTexture> pExplosionTex = CResMgr::GetInst()->Load<CTexture>(L"Explosion", L"Texture\\Explosion\\Explosion80.png");
 
 			// Transform 설정
 			tResolution res = CRenderMgr::GetInst()->GetResolution();
@@ -154,7 +131,6 @@ void CSceneMgr::init()
 		}
 	}
 
-
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -174,11 +150,6 @@ void CSceneMgr::init()
 			pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 1.f));
 
 			pObject->Transform()->SetLocalScale(vScale);
-
-
-	pPM = CResMgr::GetInst()->FindRes<CMaterial>(L"PointLightMtrl");
-	pPM->SetData(SHADER_PARAM::TEX_2, pSky01.GetPointer());
-
 
 			// MeshRender 설정
 			pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
@@ -240,7 +211,6 @@ void CSceneMgr::init()
 
 void CSceneMgr::initGameScene()
 {
-
 	// ===============
 	// GameScene 생성
 	// ===============
@@ -327,21 +297,6 @@ void CSceneMgr::initGameScene()
 		{
 			m_pPlayerArr[i] = new CGameObject;
 
-
-
-
-	//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
-
-	//pPlayerObject = pMeshData->Instantiate();
-
-	for (int i = 0; i < playerNum; i++)
-	{
-		m_pPlayerArr[i] = new CGameObject;
-
-
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
-		pMeshData->Save(pMeshData->GetPath());
-
 			// 모델을 플레이어별로 따로 설정할수도 있음
 			// 아직 보류
 			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
@@ -350,7 +305,6 @@ void CSceneMgr::initGameScene()
 			m_pPlayerArr[i]->SetName(L"Player Object");
 			m_pPlayerArr[i]->AddComponent(new CTransform);
 			//pPlayerObject->AddComponent(new CMeshRender);
-
 
 			// Transform 설정
 
@@ -364,16 +318,6 @@ void CSceneMgr::initGameScene()
 				m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, -200.f));
 
 			m_pPlayerArr[i]->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
-
-
-		if (i == 0)
-			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
-		else if (i == 1)
-			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, 200.f));
-		else if (i == 2)
-			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, -200.f));
-		else if (i == 3)
-			m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, -200.f));
 
 			//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
 
@@ -537,24 +481,9 @@ void CSceneMgr::initGameScene()
 		pObject->AddComponent(new CMeshRender);
 
 		// MeshRender 설정
-
-		//pPlayerObject->MeshRender()->SetDynamicShadow(true);
-		//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-		//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
-		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
-		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
-
-		// Script 설정
-		// 플레이어 일시
-		if (i == controlPlayerNum)
-			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
-		else
-			m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], false));
-
 		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 		pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyboxMtrl"));
 		pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pSky01.GetPointer());
-
 
 		// AddGameObject
 		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
@@ -913,22 +842,8 @@ void CSceneMgr::initStartScene()
 	////m_pStartScene->start();
 }
 
-
-	// =================================
-	// CollisionMgr 충돌 그룹(Layer) 지정
-	// =================================
-	// Player Layer 와 Monster Layer 는 충돌 검사 진행
-	//CCollisionMgr::GetInst()->CheckCollisionLayer(L"Player", L"Monster");
-	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Monster");
-	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Monster", L"Monster");
-	CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Tomb");
-
-	m_pCurScene->awake();
-	m_pCurScene->start();
-
 void CSceneMgr::initEndScene()
 {
-
 }
 
 void CSceneMgr::update()
@@ -941,7 +856,7 @@ void CSceneMgr::update()
 	CRenderMgr::GetInst()->ClearCamera();
 
 	m_pCurScene->finalupdate();
-
+	   
 	// 충돌 처리
 	CCollisionMgr::GetInst()->update();
 
@@ -1046,7 +961,7 @@ void CSceneMgr::FindGameObjectByTag(const wstring& _strTag, vector<CGameObject*>
 				_vecFindObj.push_back(vecObject[j]);
 			}
 		}
-	}
+	}	
 }
 
 bool Compare(CGameObject* _pLeft, CGameObject* _pRight)
@@ -1091,7 +1006,7 @@ void CSceneMgr::setMap()
 	Ptr<CMeshData> pMeshData;
 	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Tomb2.fbx");
 	pMeshData->Save(pMeshData->GetPath());
-
+	
 	//울타리 생성
 	for (int i = 1; i < 260; i++)
 	{
@@ -1145,7 +1060,7 @@ void CSceneMgr::setMap()
 		}
 		else if (i == 2)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, -5250.f));
+			pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f,-5250.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI, 0.f));
 		}
 		else
@@ -1155,7 +1070,7 @@ void CSceneMgr::setMap()
 		}
 
 		pObject->Transform()->SetLocalScale(Vec3(2.0f, 1.5f, 2.0f));
-
+	
 		//pObject->MeshRender()->SetDynamicShadow(true);
 
 		pObject->AddComponent(new CCollider2D);

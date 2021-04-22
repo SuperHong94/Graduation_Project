@@ -166,7 +166,6 @@ call EngineCopy.bat</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\Protocol.h" />
     <ClInclude Include="Animation2D.h" />
     <ClInclude Include="Animator2D.h" />
     <ClInclude Include="Animator3D.h" />
@@ -187,6 +186,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="FBXLoader.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="func.h" />
+    <ClInclude Include="GameMgr.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="GridScript.h" />
@@ -202,7 +202,6 @@ call EngineCopy.bat</Command>
     <ClInclude Include="MeshRender.h" />
     <ClInclude Include="MonsterScript.h" />
     <ClInclude Include="MRT.h" />
-    <ClInclude Include="NetworkMgr.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="PathMgr.h" />
     <ClInclude Include="PlayerScript.h" />
@@ -217,6 +216,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="StartSceneScript.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="StructuredBuffer.h" />
@@ -224,6 +224,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="TestScript.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TimeMgr.h" />
+    <ClInclude Include="TombScript.h" />
     <ClInclude Include="ToolCamScript.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
@@ -246,6 +247,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="FBXLoader.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="func.cpp" />
+    <ClCompile Include="GameMgr.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GridScript.cpp" />
     <ClCompile Include="InstancingBuffer.cpp" />
@@ -260,7 +262,6 @@ call EngineCopy.bat</Command>
     <ClCompile Include="MeshRender.cpp" />
     <ClCompile Include="MonsterScript.cpp" />
     <ClCompile Include="MRT.cpp" />
-    <ClCompile Include="NetworkMgr.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="PathMgr.cpp" />
     <ClCompile Include="PlayerScript.cpp" />
@@ -275,6 +276,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="StartSceneScript.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -285,6 +287,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="TestScript.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TimeMgr.cpp" />
+    <ClCompile Include="TombScript.cpp" />
     <ClCompile Include="ToolCamScript.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>

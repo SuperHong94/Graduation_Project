@@ -5,9 +5,6 @@
 #include "TestScript.h"
 #include "Scene.h"
 
-#include "NetworkMgr.h"
-
-
 CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	: CScript((UINT)SCRIPT_TYPE::PLAYERSCRIPT)
 	, m_pOriginMtrl(nullptr)
@@ -20,6 +17,7 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 
 CPlayerScript::~CPlayerScript()
 {
+	delete status;
 }
 
 void CPlayerScript::awake()
@@ -52,264 +50,362 @@ PlayerState CPlayerScript::setRunAni(Vec3 dir, Vec3 axis)
 		runState = PlayerState::P_BRun;
 	else if (cross.y < 0)
 		runState = PlayerState::P_LRun;
-	else if (cross.y > 0)
+	else
 		runState = PlayerState::P_RRun;
 
 	return runState;
 }
 
+void CPlayerScript::getDamage(float damage)
+{
+	if (!isPlayer)
+	{
+		int a = 3;
+	}
+	// 테스트
+	status->hp -= damage;
+}
+
 void CPlayerScript::update()
 {
-	Vec3 vPos = CNetworkMgr::GetInst()->playerPos;
-	status->state = CNetworkMgr::GetInst()->m_ePState;
-	PlayerState playerState = CNetworkMgr::GetInst()->m_ePState;
-	Vec3 vRot = Transform()->GetLocalRot();
-	POINT ptMousePos = CKeyMgr::GetInst()->GetMousePos();
-	bool isMove = false;
-	int keyHold[4] = { 0, };
-
-	//////////////////////////////////////////////////////////
-	// 마우스 방향으로 플레이어 방향 설정
-	// 총알 방향 계산
-	Vec3 vMousePos;
-	vMousePos.x = (((2.0f * ptMousePos.x) / FRAME_BUFFER_WIDTH) - 1) / g_transform.matProj._11;
-	vMousePos.y = -(((2.0f * ptMousePos.y) / FRAME_BUFFER_HEIGHT) - 1) / g_transform.matProj._22;
-	vMousePos.z = 1.0f;
-
-	//XMMATRIX m;
-	//XMVECTOR xmVec = XMMatrixDeterminant(m);
-	XMMATRIX InverseM = XMMatrixInverse(NULL, g_transform.matView);
-
-	Vec3 vPickRayDir;
-	vPickRayDir.x = vMousePos.x * InverseM._11 + vMousePos.y * InverseM._21 + vMousePos.z * InverseM._31;
-	vPickRayDir.y = vMousePos.x * InverseM._12 + vMousePos.y * InverseM._22 + vMousePos.z * InverseM._32;
-	vPickRayDir.z = vMousePos.x * InverseM._13 + vMousePos.y * InverseM._23 + vMousePos.z * InverseM._33;
-
-	Vec3 vPickRayOrig;
-	vPickRayOrig.x = InverseM._41;
-	vPickRayOrig.y = InverseM._42;
-	vPickRayOrig.z = InverseM._43;
-
-	bulletHeight = 0;
-
-	Vec3 vBulletTargetPos;
-	vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
-	vBulletTargetPos.z = (bulletHeight - vPickRayOrig.y) * vPickRayDir.z / vPickRayDir.y + vPickRayOrig.z;
-	//////////////////////////////////////////////////////////
-
-	// 플레이어 이동 및 방향 설정
-	Vec3 playerDir;
-	playerDir.x = vBulletTargetPos.x - vPos.x;
-	playerDir.y = 0;
-	playerDir.z = vBulletTargetPos.z - vPos.z;
-	playerDir = playerDir.Normalize();
-
-	if (KEY_HOLD(KEY_TYPE::KEY_W))
+	if (!status->IsDead)
 	{
-		keyHold[0] = 1;
-
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_UP, vRot);
-		//vPos.z += DT * status.speed;
-		isMove = true;
-		if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)))
-			status->state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
-	}
-
-	if (KEY_HOLD(KEY_TYPE::KEY_S))
-	{
-		keyHold[1] = 1;
-
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_DOWN, vRot);
-		//vPos.z -= DT * status.speed;
-		isMove = true;
-		if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, -1.f)))
-			status->state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
-	}
-
-	if (KEY_HOLD(KEY_TYPE::KEY_A))
-	{
-		keyHold[2] = 1;
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_LEFT, vRot);
-		//vPos.x -= DT * status.speed;
-		isMove = true;
-		if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f)))
-			status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
-	}
-
-	if (KEY_HOLD(KEY_TYPE::KEY_D))
-	{
-		keyHold[3] = 1;
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_RIGHT, vRot);
-		//vPos.x += DT * status.speed;
-		isMove = true;
-		if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, 0.f)))
-			status->state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
-	}
-
-
-
-
-
-	// 대각선 애니메이션 체크
-	//좌상
-	if (keyHold[0] == 1 && keyHold[1] == 0 && keyHold[2] == 1 && keyHold[3] == 0)
-	{
-		if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f)))
-			status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f));
-	}
-	//우상
-	else if (keyHold[0] == 1 && keyHold[1] == 0 && keyHold[2] == 0 && keyHold[3] == 1)
-	{
-		if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, 1.f)))
-			status->state = setRunAni(playerDir, Vec3(1.f, 0.f, 1.f));
-	}
-	//좌하
-	else if (keyHold[0] == 0 && keyHold[1] == 1 && keyHold[2] == 1 && keyHold[3] == 0)
-	{
-		if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f)))
-			status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f));
-	}
-	//우하
-	else if (keyHold[0] == 0 && keyHold[1] == 1 && keyHold[2] == 0 && keyHold[3] == 1)
-	{
-		if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, -1.f)))
-			status->state = setRunAni(playerDir, Vec3(1.f, 0.f, -1.f));
-	}
-
-
-	// 아이들 애니메이션 상태인지 확인
-	if (!isMove)
-	{
-		if (status->state != PlayerState::P_Idle)
-			status->state = PlayerState::P_Idle;
-	}
-
-	if (CNetworkMgr::GetInst()->m_isChange) {
-
-
-		CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::NO_EVENT, vRot);
-
-	}
-	// 애니메이션 상태가 바뀌었는지 확인
-	if (previousState != status->state)
-	{
-		isAniChange = true;
-		previousState = status->state;
-	}
-	else
-		isAniChange = false;
-
-	// 플레이어 위치 방향 설정
-
-//#ifdef _DEBUG
-//	std::cout << "현재 플레이어의 위치 " << vPos.x << '	' << vPos.y << '	' << vPos.z << '\r';
-//#endif // _DEBUG
-
-
-
-	//Transform()->SetLocalRot(vRot);
-
-	//애니메이션 설정
-	if (isAniChange)
-	{
-		if (isMove)
+		// 플레이어 일시
+		if (isPlayer)
 		{
-			float revise = 0;
-			// 방향별 달리기 애니메이션 설정
-			Ptr<CMeshData> pMeshData;
-			if (status->state == PlayerState::P_FRun) {
-				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
+			Vec3 vPos = Transform()->GetLocalPos();
+			Vec3 vRot = Transform()->GetLocalRot();
+			POINT ptMousePos = CKeyMgr::GetInst()->GetMousePos();
+			bool isMove = false;
+			int keyHold[4] = { 0, };
 
-			}
-			else if (status->state == PlayerState::P_BRun)
-				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierBRun.mdat", L"MeshData\\SoldierBRun.mdat");
+			//////////////////////////////////////////////////////////
+			// 마우스 방향으로 플레이어 방향 설정
+			// 총알 방향 계산
+			Vec3 vMousePos;
+			vMousePos.x = (((2.0f * ptMousePos.x) / FRAME_BUFFER_WIDTH) - 1) / g_transform.matProj._11;
+			vMousePos.y = -(((2.0f * ptMousePos.y) / FRAME_BUFFER_HEIGHT) - 1) / g_transform.matProj._22;
+			vMousePos.z = 1.0f;
 
-			else if (status->state == PlayerState::P_LRun)
+			//XMMATRIX m;
+			//XMVECTOR xmVec = XMMatrixDeterminant(m);
+
+			float a1 = g_transform.matViewInv._41;
+			float a2 = g_transform.matViewInv._42;
+			float a3 = g_transform.matViewInv._43;
+			XMMATRIX InverseM = XMMatrixInverse(NULL, g_transform.matView);
+
+			Vec3 vPickRayDir;
+			vPickRayDir.x = vMousePos.x * InverseM._11 + vMousePos.y * InverseM._21 + vMousePos.z * InverseM._31;
+			vPickRayDir.y = vMousePos.x * InverseM._12 + vMousePos.y * InverseM._22 + vMousePos.z * InverseM._32;
+			vPickRayDir.z = vMousePos.x * InverseM._13 + vMousePos.y * InverseM._23 + vMousePos.z * InverseM._33;
+
+			Vec3 vPickRayOrig;
+			vPickRayOrig.x = InverseM._41;
+			vPickRayOrig.y = InverseM._42;
+			vPickRayOrig.z = InverseM._43;
+
+			bulletHeight = 0;
+
+			Vec3 vBulletTargetPos;
+			vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
+			vBulletTargetPos.z = (bulletHeight - vPickRayOrig.y) * vPickRayDir.z / vPickRayDir.y + vPickRayOrig.z;
+			//////////////////////////////////////////////////////////
+
+			// 플레이어 이동 및 방향 설정
+			Vec3 playerDir;
+			playerDir.x = vBulletTargetPos.x - vPos.x;
+			playerDir.y = 0;
+			playerDir.z = vBulletTargetPos.z - vPos.z;
+			playerDir = playerDir.Normalize();
+
+			if (!status->IsRoll)
 			{
-				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierLRun.mdat", L"MeshData\\SoldierLRun.mdat");
-				revise = 4;
+				if (KEY_HOLD(KEY_TYPE::KEY_W))
+				{
+					keyHold[0] = 1;
+					vPos.z += DT * status->speed;
+					isMove = true;
+					if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)) && !status->IsRoll)
+						status->state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
+				}
+
+				if (KEY_HOLD(KEY_TYPE::KEY_S))
+				{
+					keyHold[1] = 1;
+					vPos.z -= DT * status->speed;
+					isMove = true;
+					if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, -1.f)) && !status->IsRoll)
+						status->state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
+				}
+
+				if (KEY_HOLD(KEY_TYPE::KEY_A))
+				{
+					keyHold[2] = 1;
+					vPos.x -= DT * status->speed;
+					isMove = true;
+					if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f)) && !status->IsRoll)
+						status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
+				}
+
+				if (KEY_HOLD(KEY_TYPE::KEY_D))
+				{
+					keyHold[3] = 1;
+					vPos.x += DT * status->speed;
+					isMove = true;
+					if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, 0.f)) && !status->IsRoll)
+						status->state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
+				}
+			}
+			// 구르기 상태일때 이동
+			// 쉬프트 누를 때 마우스 방향으로 구르기 끝날때 까지 고정 이동
+			else
+			{
+				vPos += DT * rollDir * status->speed;
 			}
 
-			else if (status->state == PlayerState::P_RRun)
+			// 구르기 
+			if (KEY_HOLD(KEY_TYPE::KEY_LSHIFT))
 			{
-				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRRun.mdat", L"MeshData\\SoldierRRun.mdat");
-				revise = 4;
+				if (!status->IsRoll)
+				{
+					status->IsRoll = true;
+					status->state = PlayerState::P_Roll;
+
+					// 구르기 키 입력 당시 방향을 저장해 무조건 구르기가 끝날때 까지 그 방향으로 이동 되게만 할거임
+					rollDir = playerDir;
+				}
 			}
 
-			if (pMeshData != NULL)
+			// 대각선 애니메이션 체크
+			if (!status->IsRoll)
 			{
-				pObject->ChangeAnimation(pMeshData);
+				//좌상
+				if (keyHold[0] == 1 && keyHold[1] == 0 && keyHold[2] == 1 && keyHold[3] == 0)
+				{
+					if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f)))
+						status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, 1.f));
+				}
+				//우상
+				else if (keyHold[0] == 1 && keyHold[1] == 0 && keyHold[2] == 0 && keyHold[3] == 1)
+				{
+					if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, 1.f)))
+						status->state = setRunAni(playerDir, Vec3(1.f, 0.f, 1.f));
+				}
+				//좌하
+				else if (keyHold[0] == 0 && keyHold[1] == 1 && keyHold[2] == 1 && keyHold[3] == 0)
+				{
+					if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f)))
+						status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, -1.f));
+				}
+				//우하
+				else if (keyHold[0] == 0 && keyHold[1] == 1 && keyHold[2] == 0 && keyHold[3] == 1)
+				{
+					if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, -1.f)))
+						status->state = setRunAni(playerDir, Vec3(1.f, 0.f, -1.f));
+				}
 			}
+
+			// 아이들 애니메이션 상태인지 확인
+			if (!isMove && !status->IsRoll)
+			{
+				if (status->state != PlayerState::P_Idle)
+					status->state = PlayerState::P_Idle;
+			}
+
+			// 애니메이션 상태가 바뀌었는지 확인
+			if (previousState != status->state)
+			{
+				isAniChange = true;
+				previousState = status->state;
+			}
+			else
+				isAniChange = false;
+
+
+			// 플레이어 위치 방향 설정
+			if (vPos.x > 4990)
+				vPos.x = 4990;
+			if (vPos.x < -4990)
+				vPos.x = -4990;
+			if (vPos.z > 4990)
+				vPos.z = 4990;
+			if (vPos.z < -4990)
+				vPos.z = -4990;
+			Transform()->SetLocalPos(vPos);
+			Transform()->SetLocalRot(vRot);
+
+
+			//구르기 애니메이션 설정
+			if (isAniChange)
+			{
+				if (status->IsRoll)
+				{
+					Ptr<CMeshData> pMeshData;
+
+					status->state = PlayerState::P_Roll;
+					pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRoll.mdat", L"MeshData\\SoldierRoll.mdat");
+
+					if (pMeshData != NULL)
+					{
+						pObject->ChangeAnimation(pMeshData);
+					}
+
+					// 이건 모델 피봇 잘못설정해서 임시로 설정
+					// 수정되면 지울 것
+					Vec3 temp = pObject->Transform()->GetLocalPos();
+					pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
+				}
+
+				//애니메이션 설정
+				else
+				{
+					if (isMove)
+					{
+						float revise = 0;
+						Ptr<CMeshData> pMeshData;
+
+						// 방향별 달리기 애니메이션 설정
+						if (status->state == PlayerState::P_FRun)
+							pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
+
+						else if (status->state == PlayerState::P_BRun)
+							pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierBRun.mdat", L"MeshData\\SoldierBRun.mdat");
+
+						else if (status->state == PlayerState::P_LRun)
+						{
+							pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierLRun.mdat", L"MeshData\\SoldierLRun.mdat");
+							revise = 4;
+						}
+
+						else if (status->state == PlayerState::P_RRun)
+						{
+							pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRRun.mdat", L"MeshData\\SoldierRRun.mdat");
+							revise = 4;
+						}
+
+						if (pMeshData != NULL)
+						{
+							pObject->ChangeAnimation(pMeshData);
+						}
+
+						// 이건 모델 피봇 잘못설정해서 임시로 설정
+						// 수정되면 지울 것
+						Vec3 temp = pObject->Transform()->GetLocalPos();
+						pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f + revise, temp.z));
+					}
+
+					else
+					{
+						Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+						pObject->ChangeAnimation(pMeshData);
+
+						// 이건 모델 피봇 잘못설정해서 임시로 설정
+						// 수정되면 지울 것
+						Vec3 temp = pObject->Transform()->GetLocalPos();
+						pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
+					}
+				}
+			}
+
+			// 구르기 쿨 타임 체크
+			if (status->IsRoll)
+			{
+				status->RollCoolTime += DT;
+				if (status->RollCoolTime >= shiftCoolTime)
+				{
+					status->IsRoll = false;
+					status->RollCoolTime = 0;
+					status->state = PlayerState::p_None;
+
+					/*	for (int i = 0; i < 4; i++)
+							rollDir[i] = 0;*/
+
+					vPos += 20 * rollDir;
+					pObject->Transform()->SetLocalPos(vPos);
+				}
+			}
+
 
 			// 이건 모델 피봇 잘못설정해서 임시로 설정
 			// 수정되면 지울 것
-			//Vec3 temp = pObject->Transform()->GetLocalPos();
-			//pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f + revise, temp.z));
-		
+			if (status->state == PlayerState::p_None)
+			{
+				Vec3 temp = pObject->Transform()->GetLocalPos();
+				pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
+			}
+
+
+			// 총알 방향 & 플레이어 방향
+			float temp = atan2(vBulletTargetPos.z - vPos.z, vBulletTargetPos.x - vPos.x);
+			if (!status->IsRoll)
+				Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
+
+
+			// 총알
+			//
+
+
+			if (KEY_TAB(KEY_TYPE::KEY_LBTN) && !status->IsRoll)
+			{
+				bulletHeight = 100;
+
+				vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
+				vBulletTargetPos.z = (bulletHeight - vPickRayOrig.y) * vPickRayDir.z / vPickRayDir.y + vPickRayOrig.z;
+
+				Vec3 vBulletDir;
+				vBulletDir.x = vBulletTargetPos.x - vPos.x;
+				vBulletDir.y = 0;
+				vBulletDir.z = vBulletTargetPos.z - vPos.z;
+
+				//printf("%f	%f	%f\n", vBulletDir.x, vBulletDir.y, vBulletDir.z);
+
+				Vec3 vNBulletDir = vBulletDir.Normalize();
+
+				// 총알 쏘기
+				CGameObject* pBullet = new CGameObject;
+				pBullet->SetName(L"Bullet Object");
+
+				pBullet->AddComponent(new CTransform());
+				pBullet->Transform()->SetLocalPos(Vec3(vPos.x, bulletHeight, vPos.z));
+				pBullet->Transform()->SetLocalScale(Vec3(5.f, 5.f, 5.f));
+
+				pBullet->AddComponent(new CMeshRender);
+				pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
+				pBullet->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+
+				pBullet->AddComponent(new CCollider2D);
+				pBullet->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+				//pBullet->Collider2D()->SetOffsetPos(Vec3(0.f, -bulletHeight - 5000.f, 0.f));
+
+				pBullet->AddComponent(new CBulletScript(vNBulletDir, status->bulletState));
+
+				CreateObject(pBullet, L"Bullet");
+			}
 		}
 
-		else
+		// 플레이어 죽음 체크
+		if (status->hp <= 0)
 		{
-			Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
-			pObject->ChangeAnimation(pMeshData);
+			status->IsDead = true;
 
-			//// 이건 모델 피봇 잘못설정해서 임시로 설정
-			//// 수정되면 지울 것
-			//Vec3 temp = pObject->Transform()->GetLocalPos();
-			//pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
+			Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierDying.mdat", L"MeshData\\SoldierDying.mdat");
+			pObject->ChangeAnimation(pMeshData);
 		}
 	}
-	if (status->state != PlayerState::P_Idle){
-		vPos.y = 53.f;
-		Transform()->SetLocalPos(vPos);
-	}
-	else {
-		Transform()->SetLocalPos(vPos);
-	}
 
 
-	float temp = atan2(vBulletTargetPos.z - vPos.z, vBulletTargetPos.x - vPos.x);
-	Vec3 send_rot = Vec3(0.f, -temp - XM_PI / 2, 0.f);
-	Transform()->SetLocalRot(send_rot);
-	//CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::NO_EVENT, send_rot); //회전정보 보내기
-
-	if (KEY_TAB(KEY_TYPE::KEY_LBTN))
+	// 사라지는 시간 체크
+	if (status->IsDead)
 	{
-		bulletHeight = 100;
-
-		vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
-		vBulletTargetPos.z = (bulletHeight - vPickRayOrig.y) * vPickRayDir.z / vPickRayDir.y + vPickRayOrig.z;
-
-		Vec3 vBulletDir;
-		vBulletDir.x = vBulletTargetPos.x - vPos.x;
-		vBulletDir.y = 0;
-		vBulletDir.z = vBulletTargetPos.z - vPos.z;
-
-		//printf("%f	%f	%f\n", vBulletDir.x, vBulletDir.y, vBulletDir.z);
-
-		Vec3 vNBulletDir = vBulletDir.Normalize();
-
-		// 총알 쏘기
-		CGameObject* pBullet = new CGameObject;
-		pBullet->SetName(L"Bullet Object");
-
-		pBullet->AddComponent(new CTransform());
-		pBullet->Transform()->SetLocalPos(Vec3(vPos.x, bulletHeight, vPos.z));
-		pBullet->Transform()->SetLocalScale(Vec3(5.f, 5.f, 5.f));
-
-		pBullet->AddComponent(new CMeshRender);
-		pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
-		pBullet->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
-
-		pBullet->AddComponent(new CCollider2D);
-		pBullet->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
-		//pBullet->Collider2D()->SetOffsetPos(Vec3(0.f, -bulletHeight - 5000.f, 0.f));
-
-		pBullet->AddComponent(new CBulletScript(vNBulletDir, status->bulletState));
-
-		CreateObject(pBullet, L"Bullet");
+		status->disappearCnt += DT;
+		{
+			if (status->disappearCnt >= 3.4f)
+			{
+				status->isDisappear = true;
+				Vec3 vPos = pObject->Transform()->GetLocalPos();
+				pObject->Transform()->SetLocalPos(Vec3(20000.f, 20000.f, 20000.f));
+			}
+		}
 	}
-
-
-
 }

@@ -31,8 +31,8 @@ void CResMgr::CreateDefaultShader()
 	pShader->CreateVertexInstShader(L"Shader\\std.fx", "VS_Tex_Inst", "vs_5_0");
 	pShader->CreatePixelShader(L"Shader\\std.fx", "PS_Tex", "ps_5_0");
 
-	// BlendState 설정
-	// pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
+	 //BlendState 설정
+	 pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
 
 	// DSState
 	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS);
@@ -43,6 +43,27 @@ void CResMgr::CreateDefaultShader()
 	pShader->Create(SHADER_POV::FORWARD);
 
 	AddRes(L"TexShader", pShader);
+
+	// ==============
+	// Texture Shader2
+	// ==============
+	pShader = new CShader;
+	pShader->CreateVertexShader(L"Shader\\std.fx", "VS_Tex", "vs_5_0");
+	pShader->CreateVertexInstShader(L"Shader\\std.fx", "VS_Tex_Inst", "vs_5_0");
+	pShader->CreatePixelShader(L"Shader\\std.fx", "PS_Tex", "ps_5_0");
+
+	//BlendState 설정
+	pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
+
+	// DSState
+	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS);
+
+	// Shader Parameter 알림
+	pShader->AddShaderParam(tShaderParam{ L"Output Texture", SHADER_PARAM::TEX_0 });
+
+	pShader->Create(SHADER_POV::FORWARD);
+
+	AddRes(L"TexShader2", pShader);
 
 	// =================
 	// Collider2D Shader
@@ -308,6 +329,11 @@ void CResMgr::CreateDefaultMaterial()
 	pMtrl->SetShader(FindRes<CShader>(L"TexShader"));
 	AddRes(L"TexMtrl", pMtrl);
 
+	pMtrl = new CMaterial;
+	pMtrl->DisableFileSave();
+	pMtrl->SetShader(FindRes<CShader>(L"TexShader2"));
+	AddRes(L"TexMtrl2", pMtrl);
+
 	int a = 0;
 	pMtrl = new CMaterial;
 	pMtrl->DisableFileSave();
@@ -565,6 +591,17 @@ void CResMgr::CreateDefaultMesh()
 		, DXGI_FORMAT_R32_UINT, (UINT)vecIdx.size(), (BYTE*)vecIdx.data()); //D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP
 
 	AddRes(L"ColRectMesh", pMesh);
+
+	pMesh = new CMesh;
+
+	vecIdx.clear();
+	vecIdx.push_back(0); vecIdx.push_back(1);
+	vecIdx.push_back(2); vecIdx.push_back(3); vecIdx.push_back(0);
+
+	pMesh->Create(sizeof(VTX), (UINT)vecVTX.size(), (BYTE*)vecVTX.data()
+		, DXGI_FORMAT_R32_UINT, (UINT)vecIdx.size(), (BYTE*)vecIdx.data()); //D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP
+
+	AddRes(L"ColRRectMesh", pMesh);
 
 
 	//				       3
