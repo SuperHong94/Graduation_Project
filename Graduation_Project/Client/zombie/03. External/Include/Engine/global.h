@@ -28,31 +28,17 @@ using namespace Microsoft::WRL;
 #include "fbxsdk.h"
 
 #ifdef _DEBUG
-//콘솔창 나오게 하기
-#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
-
 #pragma comment(lib, "FBXLoader/x64/debug/libfbxsdk-md.lib")
 #else
 #pragma comment(lib, "FBXLoader/x64/release/libfbxsdk-md.lib")
 #endif
 
-
-
-
 #include <string>
 #include <vector>
 #include <list>
 #include <map>
-#include <array>
-//서버 관련 헤더, lib////////////////
-#include <WS2tcpip.h>
-#include <iostream> //서버관련 콘솔창에 출력하기
-#include "..\..\..\..\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\Protocol.h" //프로토콜
-
-#pragma comment(lib, "ws2_32")
 
 
-/////////////////////////////////
 using std::vector;
 using std::list;
 using std::map;
@@ -66,3 +52,22 @@ using std::make_pair;
 #include "extern.h" // extern 변수
 #include "func.h"   // 전역 함수
 
+
+// 서버관련 lib, 헤더추가
+#include <WS2tcpip.h>
+#include <MSWSock.h>//acceptEx를위해서
+
+#pragma comment(lib, "Ws2_32.lib")
+#pragma comment(lib, "MSWSock.lib") //acceptEx를위해서
+#include "../../../../Server/Server_ZombieSlaughter/Server_ZombieSlaughter/Protocol.h"
+
+#include <iostream>
+#ifdef _DEBUG
+
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+
+#endif
+
+
+#define FRAME_BUFFER_WIDTH		1280
+#define FRAME_BUFFER_HEIGHT		768
