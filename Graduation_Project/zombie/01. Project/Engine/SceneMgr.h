@@ -9,7 +9,8 @@ enum class SCENE_STATE
 {
 	START_SCENE,
 	GAME_SCENE,
-	END_SCENE,
+	GAMECLEAR_SCENE,
+	GAMEOVER_SCENE,
 };
 
 class CSceneMgr
@@ -28,8 +29,8 @@ private:
 	// 임시 설정 
 	int playerID = 0;
 
-	float posUIRatio = 40;
-	float miniMapUIRatio = 6;
+	float posUIRatio = 64;
+	float miniMapUIRatio = 6.8;
 
 	SCENE_STATE SceneState = SCENE_STATE::START_SCENE;
 public:
