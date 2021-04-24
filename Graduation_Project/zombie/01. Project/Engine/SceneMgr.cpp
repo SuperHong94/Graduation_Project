@@ -69,12 +69,10 @@ void CSceneMgr::CreateTargetUI()
 	// Transform 설정
 	tResolution res = CRenderMgr::GetInst()->GetResolution();
 
-	Ptr<CTexture> GameSceneArrTex[5] = {
-	 (CResMgr::GetInst()->Load<CTexture>(L"BlockingView", L"Texture\\UI\\BlockingView.png")),
+	Ptr<CTexture> GameSceneArrTex[3] = {
+	 (CResMgr::GetInst()->Load<CTexture>(L"BGUI", L"Texture\\UI\\BGUI.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"MiniMap", L"Texture\\UI\\MiniMap.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\UI\\playerTest.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"Information", L"Texture\\UI\\Information.png")),
-	  (CResMgr::GetInst()->Load<CTexture>(L"test7", L"Texture\\UI\\test7.png")),
 	};
 
 	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"StartBG", L"Texture\\UI\\StartBG.png") };
@@ -83,7 +81,7 @@ void CSceneMgr::CreateTargetUI()
 
 	Ptr<CTexture> GameOverSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"GameOverBG", L"Texture\\UI\\GameOverBG.png") };
 
-	int NumgameSceneUI = 5;
+	int NumgameSceneUI = 3;
 	int NumStartSceneUI = 1;
 	int NumGameClearSceneUI = 1;
 	int NumGameOVerSceneUI = 1;
@@ -100,10 +98,8 @@ void CSceneMgr::CreateTargetUI()
 			if (i == 0)
 			{
 				pObject->SetName(L"BlackEdgeUI");
-			/*	pObject->Transform()->SetLocalPos(Vec3(0.f, res.fHeight * 0.06f, 2.f));
-				pObject->Transform()->SetLocalScale(Vec3(vScale.x, vScale.y, 1.f));*/
-				pObject->Transform()->SetLocalPos(Vec3(0.f,res.fHeight * 0.1f, 5.0f));
-				pObject->Transform()->SetLocalScale(Vec3(vScale.x, vScale.y * 0.8, 1.f));
+				pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 5.0f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x, vScale.y, 1.f));
 			}
 
 			else if (i == 1)
@@ -131,19 +127,6 @@ void CSceneMgr::CreateTargetUI()
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / posUIRatio, (vScale.y / posUIRatio) * (vScale.x / vScale.y), 1.f));
 			}
 
-			else if (i == 3)
-			{
-				pObject->SetName(L"InformationUI");
-				pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 4.f));
-				pObject->Transform()->SetLocalScale(vScale);
-			}
-
-		/*	else
-			{
-				pObject->SetName(L"test7");
-				pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 3.f));
-				pObject->Transform()->SetLocalScale(Vec3(vScale.x * 0.5f, vScale.y * 0.5f, 1.f));
-			}*/
 			// MeshRender 설정
 			pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 			Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
