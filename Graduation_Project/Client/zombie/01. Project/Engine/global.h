@@ -63,11 +63,10 @@ using std::make_pair;
 
 #include <iostream>
 #ifdef _DEBUG
-  #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") //유니코드
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") //유니코드
 
 
 #endif
-
 
 #define FRAME_BUFFER_WIDTH		1280
 #define FRAME_BUFFER_HEIGHT		768

@@ -3,7 +3,7 @@
 #define SERVER_IP "127.0.0.1"
 
 
-constexpr int MAX_USER = 5; //0번은 서버
+constexpr int MAX_USER = 4; //0번은 서버
 
 
 constexpr int MAX_NAME = 100;

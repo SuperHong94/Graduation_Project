@@ -13,6 +13,9 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	pObject = Object;
 	status = new PlayerStatus();
 	isPlayer = player;
+
+	if (false == isPlayer)
+		status->isDisappear = true;
 }
 
 CPlayerScript::~CPlayerScript()

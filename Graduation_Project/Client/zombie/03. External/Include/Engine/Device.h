@@ -39,6 +39,7 @@ private:
 	ComPtr<ID3D12Fence>						m_pFenceCompute;
 
 	ComPtr<IDXGIFactory>					m_pFactory;
+
 	ComPtr<ID3D12Debug>						m_pDbgCtrl;		// 디버그 관리	
 
 	ComPtr<IDXGISwapChain>					m_pSwapChain;	

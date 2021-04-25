@@ -14,6 +14,8 @@
 #include "ConstantBuffer.h"
 #include "InstancingMgr.h"
 
+#include "NetworkMgr.h"
+
 CCore::CCore()
 	: m_hMainHwnd(nullptr)
 {
@@ -29,6 +31,7 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	ChangeWindowSize(m_hMainHwnd, _resolution);
 	ShowWindow(_hWnd, true);
 
+	CNetworkMgr::GetInst()->init();
 	if(FAILED(CDevice::GetInst()->init(_hWnd, _resolution, _bWindow)))
 	{
 		return E_FAIL;
@@ -75,6 +78,7 @@ void CCore::ChangeWindowSize(HWND _hWnd, const tResolution & _resolution)
 
 void CCore::progress()
 {
+	CNetworkMgr::GetInst()->client_main();
 	CKeyMgr::GetInst()->update();
 	CTimeMgr::GetInst()->update();
 	CSound::g_pFMOD->update();

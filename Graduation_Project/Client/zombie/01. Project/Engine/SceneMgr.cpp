@@ -39,7 +39,7 @@
 
 #include "ResMgr.h"
 #include "PathMgr.h"
-
+#include "NetworkMgr.h"
 
 CScene* CSceneMgr::GetCurScene()
 {
@@ -55,6 +55,8 @@ void CSceneMgr::ChangeScene(CScene * _pNextScene)
 CSceneMgr::CSceneMgr()
 	: m_pCurScene(nullptr)
 {
+
+
 }
 
 CSceneMgr::~CSceneMgr()
@@ -66,45 +68,51 @@ CSceneMgr::~CSceneMgr()
 void CSceneMgr::CreateTargetUI()
 {
 	Vec3 vScale(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 1.f);
+	// Transform 설정
+	tResolution res = CRenderMgr::GetInst()->GetResolution();
 
-	Ptr<CTexture> GameSceneArrTex[3] = { (CResMgr::GetInst()->Load<CTexture>(L"TestTex", L"Texture\\BlockingView.png")),
-	 ( CResMgr::GetInst()->Load<CTexture>(L"miniMap", L"Texture\\test8.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\playerTest.png"))
+	Ptr<CTexture> GameSceneArrTex[3] = {
+	 (CResMgr::GetInst()->Load<CTexture>(L"BGUI", L"Texture\\UI\\BGUI.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"MiniMap", L"Texture\\UI\\MiniMap.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\UI\\playerTest.png")),
 	};
 
-	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"TestTex2", L"Texture\\test6.png") };
+	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"StartBG", L"Texture\\UI\\StartBG.png") };
 
-	Ptr<CTexture> EndSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"TestTex3", L"Texture\\test7.png") };
+	Ptr<CTexture> GameClearSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"GameClearBG", L"Texture\\UI\\GameClearBG.png") };
+
+	Ptr<CTexture> GameOverSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"GameOverBG", L"Texture\\UI\\GameOverBG.png") };
 
 	int NumgameSceneUI = 3;
 	int NumStartSceneUI = 1;
-	int NumEndSceneUI = 1;
+	int NumGameClearSceneUI = 1;
+	int NumGameOVerSceneUI = 1;
 
 	if (SceneState == SCENE_STATE::GAME_SCENE)
 	{
-		for (UINT i = 0; i < NumgameSceneUI; ++i)
+		for (UINT i = 0; i < NumgameSceneUI; i++)
 		{
 			CGameObject* pObject = new CGameObject;
 			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
 
-			// Transform 설정
-			tResolution res = CRenderMgr::GetInst()->GetResolution();
-
 			if (i == 0)
 			{
 				pObject->SetName(L"BlackEdgeUI");
-				pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 2.0f));
-				pObject->Transform()->SetLocalScale(vScale);
+				pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 5.0f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x, vScale.y, 1.f));
 			}
 
 			else if (i == 1)
 			{
 				pObject->SetName(L"MiniMapUI");
-				pObject->Transform()->SetLocalPos(Vec3((res.fWidth / 2.f) - ((vScale.x / miniMapUIRatio) / 2)
+				/*pObject->Transform()->SetLocalPos(Vec3((res.fWidth / 2.f) - ((vScale.x / miniMapUIRatio) / 2)
 					, (res.fHeight / 2.f) - ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)  / 2.f)
-					, 1.5f));
+					, 1.5f));*/
+				pObject->Transform()->SetLocalPos(Vec3(-(res.fWidth / 2.f) + ((vScale.x / miniMapUIRatio) /2) + vScale.x * 0.015
+					, -(res.fHeight / 2.f) + (((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)) / 2) + vScale.y * 0.015
+					, 2.f));
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / miniMapUIRatio, (vScale.y / miniMapUIRatio) * (vScale.x / vScale.y), 1.f));
 			}
 
@@ -115,11 +123,12 @@ void CSceneMgr::CreateTargetUI()
 				Vec3 playerPos = m_pPlayerArr[playerID]->Transform()->GetLocalPos();
 				playerPos = Vec3(playerPos.x + 5000.f, 0.f, playerPos.z + 5000.f);
 				Vec2 posRatio = Vec2(playerPos.x / 10000.f * ((vScale.x / miniMapUIRatio)), playerPos.z / 10000.f * ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)));
-				pObject->Transform()->SetLocalPos(Vec3((res.fWidth / 2.f) - ((vScale.x / miniMapUIRatio)) + posRatio.x
-					, (res.fHeight / 2.f) - ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)) + posRatio.y
-					, 1.0f));
+				pObject->Transform()->SetLocalPos(Vec3(-(res.fWidth / 2.f) + vScale.x * 0.015 + posRatio.x
+					, -(res.fHeight / 2.f) + vScale.y * 0.015 + posRatio.y
+					, 1.f));
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / posUIRatio, (vScale.y / posUIRatio) * (vScale.x / vScale.y), 1.f));
 			}
+
 			// MeshRender 설정
 			pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 			Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
@@ -136,10 +145,10 @@ void CSceneMgr::CreateTargetUI()
 
 	else if (SceneState == SCENE_STATE::START_SCENE)
 	{
-		for (UINT i = 0; i < NumStartSceneUI; ++i)
+		for (UINT i = 0; i < NumStartSceneUI; i++)
 		{
 			CGameObject* pObject = new CGameObject;
-			pObject->SetName(L"StartUI");
+			pObject->SetName(L"StartBgUI");
 			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
@@ -165,12 +174,12 @@ void CSceneMgr::CreateTargetUI()
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	else if (SceneState == SCENE_STATE::END_SCENE)
+	else if (SceneState == SCENE_STATE::GAMECLEAR_SCENE)
 	{
-		for (UINT i = 0; i < NumStartSceneUI; ++i)
+		for (UINT i = 0; i < NumGameClearSceneUI; i++)
 		{
 			CGameObject* pObject = new CGameObject;
-			pObject->SetName(L"EndUI");
+			pObject->SetName(L"EndBgUI");
 			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
@@ -186,7 +195,35 @@ void CSceneMgr::CreateTargetUI()
 			pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 			Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
 			pObject->MeshRender()->SetMaterial(pMtrl->Clone());
-			pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, EndSceneArrTex[i].GetPointer());
+			pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, GameClearSceneArrTex[i].GetPointer());
+
+			// AddGameObject
+			m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
+		}
+	}
+
+	else if (SceneState == SCENE_STATE::GAMEOVER_SCENE)
+	{
+		for (UINT i = 0; i < NumGameOVerSceneUI; i++)
+		{
+			CGameObject* pObject = new CGameObject;
+			pObject->SetName(L"EndBgUI");
+			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
+			pObject->AddComponent(new CTransform);
+			pObject->AddComponent(new CMeshRender);
+
+			// Transform 설정
+			tResolution res = CRenderMgr::GetInst()->GetResolution();
+
+			pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 1.f));
+
+			pObject->Transform()->SetLocalScale(vScale);
+
+			// MeshRender 설정
+			pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+			Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
+			pObject->MeshRender()->SetMaterial(pMtrl->Clone());
+			pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, GameOverSceneArrTex[i].GetPointer());
 
 			// AddGameObject
 			m_pCurScene->FindLayer(L"UI")->AddGameObject(pObject);
@@ -204,7 +241,7 @@ void CSceneMgr::init()
 
 	//m_pCurScene = m_pStartScene;
 	//m_pCurScene = m_pCurScene;
-
+	playerID = CNetworkMgr::GetInst()->GetId();
 	m_pCurScene->awake();
 	m_pCurScene->start();
 }
@@ -310,12 +347,9 @@ void CSceneMgr::initGameScene()
 
 			if (i == 0)
 				m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
-			else if (i == 1)
-				m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, 200.f));
-			else if (i == 2)
-				m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, -200.f));
-			else if (i == 3)
-				m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(200.f, 0.f, -200.f));
+			else
+				m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-20000.f, 20000.f, -20000.f));
+
 
 			m_pPlayerArr[i]->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
 
@@ -332,13 +366,15 @@ void CSceneMgr::initGameScene()
 			// 플레이어 일시
 			if (i == playerID)
 				m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
-			else
+			else{
 				m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], false));
+			}
 
 			// AddGameObject
 			m_pCurScene->FindLayer(L"Player")->AddGameObject(m_pPlayerArr[i]);
 
 		}
+		CNetworkMgr::GetInst()->SetPlayerArray(m_pPlayerArr);
 
 		//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 
@@ -617,7 +653,7 @@ void CSceneMgr::initGameScene()
 	else if (SceneState == SCENE_STATE::START_SCENE)
 	{
 		// ===============
-		// GameScene 생성
+		// StartScene 생성
 		// ===============
 		m_pCurScene->SetName(L"Start Scene");
 
@@ -689,8 +725,86 @@ void CSceneMgr::initGameScene()
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	else if (SceneState == SCENE_STATE::END_SCENE)
+	else if (SceneState == SCENE_STATE::GAMECLEAR_SCENE)
 	{
+	// ===============
+	// GameClearScene 생성
+	// ===============
+	m_pCurScene->SetName(L"GameClear Scene");
+
+	// ===================
+	// Player 오브젝트 생성
+	// ===================
+	pPlayerObject = new CGameObject;
+	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+	pPlayerObject = pMeshData->Instantiate();
+	pPlayerObject->SetName(L"Player Object");
+	pPlayerObject->AddComponent(new CTransform);
+	pPlayerObject->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
+	pPlayerObject->AddComponent(new CPlayerScript(pPlayerObject, false));
+
+	// AddGameObject
+	m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
+
+	// ==================
+	// Camera Object 생성
+	// ==================
+	// Main Camera
+	CGameObject* pMainCam = new CGameObject;
+	pMainCam->SetName(L"MainCam");
+	pMainCam->AddComponent(new CTransform);
+	pMainCam->AddComponent(new CCamera);
+	pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
+
+	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+	pMainCam->Camera()->SetFar(100000.f);
+	pMainCam->Camera()->SetLayerAllCheck();
+	pMainCam->Camera()->SetLayerCheck(30, false);
+
+	m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
+
+	//====================
+	//UI 오브젝트 생성
+	// ====================
+	// UI Camera
+	CGameObject* pUICam = new CGameObject;
+	pUICam->SetName(L"MainCam");
+	pUICam->AddComponent(new CTransform);
+	pUICam->AddComponent(new CCamera);
+
+	pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
+	pUICam->Camera()->SetFar(100.f);
+	pUICam->Camera()->SetLayerCheck(30, true);
+	pUICam->Camera()->SetWidth(CRenderMgr::GetInst()->GetResolution().fWidth);
+	pUICam->Camera()->SetHeight(CRenderMgr::GetInst()->GetResolution().fHeight);
+
+	m_pCurScene->FindLayer(L"Default")->AddGameObject(pUICam);
+
+	CreateTargetUI();
+
+	// Main Camera
+	pMainCam = new CGameObject;
+	pMainCam->SetName(L"MainCam");
+	pMainCam->AddComponent(new CTransform);
+	pMainCam->AddComponent(new CCamera);
+	pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
+
+	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+	pMainCam->Camera()->SetFar(100000.f);
+	pMainCam->Camera()->SetLayerAllCheck();
+	pMainCam->Camera()->SetLayerCheck(30, false);
+
+	m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
+
+	}
+
+	else if (SceneState == SCENE_STATE::GAMEOVER_SCENE)
+	{
+	// ===============
+	// GameOverScene 생성
+	// ===============
+	m_pCurScene->SetName(L"GameOver Scene");
+
 	// ===================
 	// Player 오브젝트 생성
 	// ===================
@@ -860,6 +974,20 @@ void CSceneMgr::update()
 	// 충돌 처리
 	CCollisionMgr::GetInst()->update();
 
+
+	if (KEY_TAB(KEY_TYPE::KEY_0))
+	{
+		//SAFE_DELETE(m_pCurScene);
+		m_pCurScene = new CScene;
+		//delete m_pCurScene;
+		SceneState = SCENE_STATE::START_SCENE;
+		init();
+
+		isChange = true;
+	}
+
+
+
 	if (SceneState == SCENE_STATE::START_SCENE)
 	{
 		if (KEY_TAB(KEY_TYPE::KEY_SPACE))
@@ -879,19 +1007,44 @@ void CSceneMgr::update()
 		// 게임 매니저 업데이트
 		m_pGameManager->GameMgrUpdate();
 
-		if (m_pGameManager->GetGameOver() || m_pGameManager->GetGameClear())
+		if (m_pGameManager->GetGameClear())
 		{
 			//SAFE_DELETE(m_pCurScene);
 			m_pCurScene = new CScene;
 
-			SceneState = SCENE_STATE::END_SCENE;
+			SceneState = SCENE_STATE::GAMECLEAR_SCENE;
+			init();
+
+			isChange = true;
+		}
+
+		else if (m_pGameManager->GetGameOver())
+		{
+			//SAFE_DELETE(m_pCurScene);
+			m_pCurScene = new CScene;
+
+			SceneState = SCENE_STATE::GAMEOVER_SCENE;
 			init();
 
 			isChange = true;
 		}
 	}
 
-	else if (SceneState == SCENE_STATE::END_SCENE)
+	else if (SceneState == SCENE_STATE::GAMECLEAR_SCENE)
+	{
+		if (KEY_TAB(KEY_TYPE::KEY_SPACE))
+		{
+			//SAFE_DELETE(m_pCurScene);
+			m_pCurScene = new CScene;
+			//delete m_pCurScene;
+			SceneState = SCENE_STATE::START_SCENE;
+			init();
+
+			isChange = true;
+		}
+	}
+
+	else if (SceneState == SCENE_STATE::GAMEOVER_SCENE)
 	{
 		if (KEY_TAB(KEY_TYPE::KEY_SPACE))
 		{
@@ -919,7 +1072,7 @@ void CSceneMgr::updateUI()
 {
 	// Transform 설정
 	tResolution res = CRenderMgr::GetInst()->GetResolution();
-	Vec3 vScale(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 1.f);
+	//Vec3 vScale(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 1.f);
 
 	if (SceneState == SCENE_STATE::GAME_SCENE)
 	{
@@ -931,18 +1084,26 @@ void CSceneMgr::updateUI()
 				// 미니맵에 플레이어 위치 업데이트
 				if (L"PlayerPosUI" == vecObject[j]->GetName())
 				{
-					Vec3 playerPos = m_pPlayerArr[playerID]->Transform()->GetLocalPos();
-					playerPos = Vec3(playerPos.x + 5000.f, 0.f, playerPos.z + 5000.f);
+					if (!m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->isDisappear)
+					{
+						Vec3 playerPos = m_pPlayerArr[playerID]->Transform()->GetLocalPos();
+						playerPos = Vec3(playerPos.x + 5000.f, 0.f, playerPos.z + 5000.f);
 
-					Vec2 posRatio = Vec2(playerPos.x / 10000.f * ((vScale.x / miniMapUIRatio)), playerPos.z / 10000.f * ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)));
+						Vec2 posRatio = Vec2(playerPos.x / 10000.f * ((res.fWidth / miniMapUIRatio)), playerPos.z / 10000.f * ((res.fHeight / miniMapUIRatio) * (res.fWidth / res.fHeight)));
 
-					Vec3 size = vecObject[j]->Transform()->GetLocalScale();
+						Vec3 size = vecObject[j]->Transform()->GetLocalScale();
 
-					Vec3 p1 = vecObject[j]->Transform()->GetLocalPos();
-					Vec3 p2 = Vec3((res.fWidth / 2.f) - ((vScale.x / miniMapUIRatio)) + posRatio.x
-						, (res.fHeight / 2.f) - ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)) + posRatio.y
-						, 1.0f);
-					vecObject[j]->Transform()->SetLocalPos(Vec3(p1.x * (1 - 0.3) + p2.x * 0.3, p1.y * (1 - 0.3) + p2.y * 0.3, 1.0f));
+						Vec3 p1 = vecObject[j]->Transform()->GetLocalPos();
+						Vec3 p2 = Vec3(-(res.fWidth / 2.f) + res.fWidth * 0.015 + posRatio.x
+							, -(res.fHeight / 2.f) + res.fHeight * 0.015 + posRatio.y
+							, 1.0f);
+
+						vecObject[j]->Transform()->SetLocalPos(Vec3(p1.x * (1 - 0.3) + p2.x * 0.3, p1.y * (1 - 0.3) + p2.y * 0.3, 1.1f));
+					}
+					else
+					{
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000.0f, -20000.0f, -3.f));
+					}
 				}
 			}
 		}

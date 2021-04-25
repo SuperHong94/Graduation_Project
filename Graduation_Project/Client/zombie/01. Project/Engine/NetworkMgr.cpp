@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "Transform.h" //이동을위한 헤더
 #include "TimeMgr.h" //DT를 위해서
-
+#include "PlayerScript.h"	
 //생성자 
 CNetworkMgr::CNetworkMgr()
 {};
@@ -12,7 +12,6 @@ CNetworkMgr::~CNetworkMgr()
 
 void CNetworkMgr::err_display(const char* msg, int error)
 {
-
 	WCHAR* lpMsgBuf;
 	FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
@@ -28,7 +27,7 @@ void CNetworkMgr::err_display(const char* msg, int error)
 
 void CNetworkMgr::client_main()
 {
-	
+
 	char recvBuf[MAX_BUFFER];
 	WSABUF recvWsaBuf[1];
 	recvWsaBuf[0].buf = recvBuf;
@@ -84,12 +83,23 @@ void CNetworkMgr::process(char* buf)
 	case S2C_LOGIN_OK:
 	{
 		s2c_loginOK* p = reinterpret_cast<s2c_loginOK*>(buf);
-
+	
+		//m_pPlayerArray[m_id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;
 		playerPos = Vec3(p->x, p->y, p->z);
+		m_id = p->id-1;
 
 #ifdef _DEBUG
 		std::cout << "서버에서 접속 성공 초기좌표" << p->x << ',' << p->y << ',' << p->z << std::endl;
 #endif // _DEBUG
+
+	}
+	break;
+	case S2C_ADD_PLAYER: //추가접속플레이어
+	{
+		s2c_add_client* packet = reinterpret_cast<s2c_add_client*>(buf);
+		int id = packet->id - 1;
+		m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;
+		m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
 
 	}
 	break;
@@ -100,7 +110,7 @@ void CNetworkMgr::process(char* buf)
 
 		process_key(p);
 #ifdef _DEBUG
-		std::cout << "키 정보결과로 " << p->x << ',' << p->y << ',' << p->z <<"를 받았다"<< std::endl;
+		std::cout << "키 정보결과로 " << p->x << ',' << p->y << ',' << p->z << "를 받았다" << std::endl;
 #endif 
 	}
 	break;
@@ -118,7 +128,7 @@ void CNetworkMgr::process_key(s2c_move* p)
 	else
 		m_isChange = true;
 
-	if (m_isChange){
+	if (m_isChange) {
 		playerPos = packetPos;
 		m_ePState = p->ePlayerState;
 	}
@@ -161,9 +171,9 @@ void CNetworkMgr::send_Key_packet(EKEY_EVENT key, Vec3 Rotation)
 	packet.rX = Rotation.x;
 	packet.rY = Rotation.y;
 	packet.rZ = Rotation.z;
-//#ifdef _DEBUG
-//	std::cout << "서버에게" << key << " 키 정보를 보낸다.\n";
-//#endif // _DEBUG
+	//#ifdef _DEBUG
+	//	std::cout << "서버에게" << key << " 키 정보를 보낸다.\n";
+	//#endif // _DEBUG
 
 	send_packet(&packet);
 }
@@ -217,9 +227,9 @@ void CNetworkMgr::init()
 			exit(-1);
 		}
 	}
-	else
+
 #ifdef _DEBUG
-		cout << "서버와 connect 성공" << endl;
+	cout << "서버와 connect 성공" << endl;
 #endif // _DEBUG
 
 	send_login_packet();

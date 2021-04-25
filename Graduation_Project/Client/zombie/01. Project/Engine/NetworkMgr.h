@@ -1,5 +1,6 @@
 #pragma once
 
+class CGameObject;
 class CNetworkMgr
 {
 	SINGLE(CNetworkMgr);
@@ -8,7 +9,9 @@ private:
 	SOCKET m_sock;
 	CGameObject* m_pPlayer;
 
-	std::array<CGameObject*, MAX_USER> m_PlayerArray;
+	CGameObject** m_pPlayerArray;
+
+	int m_id;
 public:
 	void init();
 	void err_display(const char* msg, int error);
@@ -29,9 +32,11 @@ public:
 
 public: //오브젝트 관련 메소드
 
-	std::array<CGameObject*, MAX_USER> GetPlayerArray() { return m_PlayerArray; };
+	CGameObject** GetPlayerArray() { return m_pPlayerArray; }; //참조자 리턴 밖에서 수정가능
+	void SetPlayerArray(CGameObject** playerArray) { m_pPlayerArray = playerArray; };
 	void SetPlayer(CGameObject* pPlayer);
 
+	int GetId() { return m_id; };
 	bool m_isChange = false;
 
 	Vec3 playerPos;

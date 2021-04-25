@@ -129,7 +129,7 @@ void proccess_packet(int c_id, unsigned char* buf)
 		for (auto& c : clients)
 		{
 			if (c.second.m_id != c_id)//자기자신한테는 보내면 안됨
-			{ 
+			{
 				send_add_client(c_id, c.second.m_id);//새로접속한 클라이언트에게 이미접속한 클라이언트 정보보내기
 				send_add_client(c.second.m_id, c_id);//이미접속한 클라이언트들에게 새로접속한 클라이언트 정보보내기
 			}

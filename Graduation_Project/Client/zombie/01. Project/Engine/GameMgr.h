@@ -20,7 +20,7 @@ struct GameMgrStatus
 	bool isGameOver = false;
 	bool isGameClear = false;
 
-	int zombieGoalCnt = 20;
+	int zombieGoalCnt = 1;
 
 	int destroyTombCnt = 0;
 	bool tombAllDestroy = false;
