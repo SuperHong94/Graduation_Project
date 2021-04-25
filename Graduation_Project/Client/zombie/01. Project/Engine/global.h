@@ -63,8 +63,8 @@ using std::make_pair;
 
 #include <iostream>
 #ifdef _DEBUG
+  #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console") //유니코드
 
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 
 #endif
 
