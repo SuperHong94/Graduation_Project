@@ -30,6 +30,13 @@ CDevice::~CDevice()
 	{
 		SAFE_DELETE(m_vecCB[i]);
 	}
+
+	BOOL bIsFullScreen = false;
+	m_pSwapChain->GetFullscreenState(&bIsFullScreen, nullptr);
+	if (bIsFullScreen)
+	{
+		m_pSwapChain->SetFullscreenState(false, nullptr);
+	}
 }
 
 int CDevice::init(HWND _hWnd, const tResolution & _res, bool _bWindow)
@@ -46,10 +53,14 @@ int CDevice::init(HWND _hWnd, const tResolution & _res, bool _bWindow)
 #endif	
 
 	CreateDXGIFactory(IID_PPV_ARGS(&m_pFactory));
-	   	 
+	   	
+	IDXGIAdapter* pd3dAdapter = NULL;
+	m_pFactory->EnumAdapters(1, &pd3dAdapter);
+
 	// CreateDevice
-	D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_pDevice));
-	
+	D3D12CreateDevice(pd3dAdapter, D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&m_pDevice));
+	//D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&m_pDevice));
+
 	// CreateFence
 	m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFence));
 	m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFenceCompute));
@@ -160,6 +171,7 @@ void CDevice::render_present()
 
 	// 백버퍼 타겟 인덱스 변경
 	m_iCurTargetIdx == 0 ? m_iCurTargetIdx = 1 : m_iCurTargetIdx = 0;
+
 }
 
 void CDevice::WaitForFenceEvent()
@@ -212,6 +224,7 @@ void CDevice::CreateSwapChain()
 	tDesc.BufferDesc.RefreshRate.Denominator = 1;    // 화면 갱신 비율 
 
 	tDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // 출력 타겟 용도로 버퍼를 만든다.
+	//tDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH
 	tDesc.Flags = 0; // DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH
 	
 	tDesc.OutputWindow = m_hWnd;	// 출력 윈도우
