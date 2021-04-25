@@ -63,7 +63,7 @@ int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 	CTimeMgr::GetInst()->init();
 	CResMgr::GetInst()->init();
 	CSceneMgr::GetInst()->init();
-	
+
 
 	return S_OK;
 }

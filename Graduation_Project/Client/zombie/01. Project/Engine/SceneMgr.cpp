@@ -235,13 +235,14 @@ void CSceneMgr::CreateTargetUI()
 
 void CSceneMgr::init()
 {
+	playerID = CNetworkMgr::GetInst()->GetId();
 	//initStartScene();
 	initGameScene();
 	//initEndScene();
 
 	//m_pCurScene = m_pStartScene;
 	//m_pCurScene = m_pCurScene;
-	playerID = CNetworkMgr::GetInst()->GetId();
+	
 	m_pCurScene->awake();
 	m_pCurScene->start();
 }

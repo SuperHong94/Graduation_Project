@@ -83,11 +83,19 @@ void CNetworkMgr::process(char* buf)
 	case S2C_LOGIN_OK:
 	{
 		s2c_loginOK* p = reinterpret_cast<s2c_loginOK*>(buf);
-	
+
 		//m_pPlayerArray[m_id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;
 		playerPos = Vec3(p->x, p->y, p->z);
-		m_id = p->id-1;
+		m_id = p->id - 1;
 
+		//로그인 확인하고 논블로킹 소켓으로 바꿈
+		unsigned long noblock = 1;
+		int retval = ioctlsocket(m_sock, FIONBIO, &noblock);
+		if (retval != NO_ERROR)
+		{
+			err_display("ioctlsocket", WSAGetLastError());
+			exit(-1);
+		}
 #ifdef _DEBUG
 		std::cout << "서버에서 접속 성공 초기좌표" << p->x << ',' << p->y << ',' << p->z << std::endl;
 #endif // _DEBUG
@@ -98,9 +106,10 @@ void CNetworkMgr::process(char* buf)
 	{
 		s2c_add_client* packet = reinterpret_cast<s2c_add_client*>(buf);
 		int id = packet->id - 1;
-		m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;
-		m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
-
+		if (m_pPlayerArray != nullptr) {
+			m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;
+			m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
+		}
 	}
 	break;
 	case S2C_MOVE:
@@ -153,7 +162,7 @@ void CNetworkMgr::send_packet(void* packet)
 	DWORD databytes = 0;
 	DWORD sFlag = 0;
 	int retval = WSASend(m_sock, sendWsaBuf, 1, &databytes, sFlag, NULL, 0);
-	if (retval == SOCKET_ERROR)
+	if (retval != NO_ERROR)
 	{
 		err_display("WSASend()", WSAGetLastError());
 	}
@@ -188,7 +197,11 @@ void CNetworkMgr::SetPlayer(CGameObject* pPlayer)
 
 void CNetworkMgr::init()
 {
-	m_pPlayer = nullptr;
+	
+	m_pPlayerArray = new CGameObject*[MAX_USER];
+	for (int i = 0; i < MAX_USER; ++i) {
+		m_pPlayerArray[i] = nullptr;
+	}
 	using namespace std;
 	if (WSAStartup(MAKEWORD(2, 2), &m_wsa) != 0)
 	{
@@ -204,20 +217,20 @@ void CNetworkMgr::init()
 	}
 
 	//논블록 소켓으로 설정
-	unsigned long noblock = 1;
+	/*unsigned long noblock = 1;
 	int retval = ioctlsocket(m_sock, FIONBIO, &noblock);
 	if (retval != NO_ERROR)
 	{
 		err_display("ioctlsocket", WSAGetLastError());
 		exit(-1);
-	}
+	}*/
 	//connect()
 	SOCKADDR_IN serveraddr;
 	memset(&serveraddr, 0, sizeof(serveraddr));
 	serveraddr.sin_family = AF_INET;
 	serveraddr.sin_port = htons(SERVER_PORT);
 	inet_pton(AF_INET, SERVER_IP, &serveraddr.sin_addr);
-	retval = connect(m_sock, reinterpret_cast<SOCKADDR*>(&serveraddr), sizeof(serveraddr));
+	int retval = connect(m_sock, reinterpret_cast<SOCKADDR*>(&serveraddr), sizeof(serveraddr));
 	if (retval == SOCKET_ERROR)
 	{
 		int errono = WSAGetLastError();

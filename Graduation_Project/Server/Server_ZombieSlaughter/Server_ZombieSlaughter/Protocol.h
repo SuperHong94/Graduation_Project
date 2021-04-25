@@ -47,6 +47,7 @@ constexpr unsigned char S2C_MOVE = 5;
 constexpr unsigned char S2C_REMOVE_CLIENT= 6;
 
 constexpr unsigned char C2S_MOUSE_EVENT= 7;
+constexpr unsigned char C2S_CHANGE_SCENE= 8;
 
 enum EKEY_EVENT
 {

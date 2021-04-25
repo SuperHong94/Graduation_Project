@@ -236,11 +236,14 @@ int main()
 		return 0;
 	}
 	BOOL b_ret = AcceptEx(listenSocket, c_sock, accept_over.m_buf, SERVER_ID, 32, 32, NULL, &accept_over.m_over);
-	/*if (b_ret == FALSE)
+	if (b_ret == FALSE)
 	{
-		err_display("AcceptEx()", WSAGetLastError());
-		while (true);
-	}*/
+		int error = WSAGetLastError();
+		if (error != WSA_IO_PENDING) {
+			err_display("AcceptEx()", WSAGetLastError());
+			while (true);
+		}
+	}
 
 	while (true)
 	{
@@ -303,20 +306,27 @@ int main()
 
 
 			int c_id = get_new_id();
+			if (c_id != -1) {
 #ifdef _DEBUG
-			std::cout << "[TCP 서버] " << c_id << "번 클라이언트 접속" << endl;
+				std::cout << "[TCP 서버] " << c_id << "번 클라이언트 접속" << endl;
 #endif // _DEBUG
 
-			clients[c_id] = CLIENT{};
-			clients[c_id].m_id = c_id;
-			clients[c_id].m_socket = c_sock;
-			clients[c_id].m_prev_size = 0;
-			clients[c_id].m_recv_over.m_eOP = EOP_TYPE::OP_RECV;
-			clients[c_id].m_pPlayer = new CPlayerObject;
-			clients[c_id].m_pPlayer->init();
-			CreateIoCompletionPort(reinterpret_cast<HANDLE>(c_sock), h_iocp, c_id, 0);
-			do_recv(c_id);
+				clients[c_id] = CLIENT{};
+				clients[c_id].m_id = c_id;
+				clients[c_id].m_socket = c_sock;
+				clients[c_id].m_prev_size = 0;
+				clients[c_id].m_recv_over.m_eOP = EOP_TYPE::OP_RECV;
+				clients[c_id].m_pPlayer = new CPlayerObject;
+				clients[c_id].m_pPlayer->init();
+				CreateIoCompletionPort(reinterpret_cast<HANDLE>(c_sock), h_iocp, c_id, 0);
+				do_recv(c_id);
+			}
+			//계속 Accept해야됨
+			memset(&accept_over.m_over, 0, sizeof(accept_over.m_over));
 
+			c_sock = WSASocket(AF_INET, SOCK_STREAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
+			//AcceptEx()
+			AcceptEx(listenSocket, c_sock, accept_over.m_buf, SERVER_ID, 32, 32, NULL, &accept_over.m_over);
 		}
 		break;
 		default:
