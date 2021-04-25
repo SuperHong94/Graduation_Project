@@ -111,6 +111,7 @@ void GameMgr::CheckGameClear()
 	if (Gstatus->DeathZombieCnt >= Gstatus->zombieGoalCnt)
 	{
 		Gstatus->isGameClear = true;
+		Gstatus->isGameOver = false;
 	}
 }
 
@@ -124,7 +125,10 @@ void GameMgr::CheckGameOver()
 	}
 
 	if (cnt == Gstatus->playerCnt && !Gstatus->isGameOver)
+	{
 		Gstatus->isGameOver = true;
+		Gstatus->isGameClear = false;
+	}
 }
 
 void GameMgr::IncreaseZombieRange()

@@ -10,7 +10,6 @@ CToolCamScript::CToolCamScript(CGameObject* _pShootObject)
 	, m_fScaleSpeed(1.f)
 {
 	m_pShootObject = _pShootObject;
-	int a = 3;
 }
 
 CToolCamScript::~CToolCamScript()
@@ -109,7 +108,7 @@ void CToolCamScript::update()
 	
 	vPos.x = vPos.x * (1 - 0.3) + vPlayerPos.x * 0.3;
 	vPos.y = 500 * m_fZoomScaleY;
-	vPos.z = vPos.z * (1 - 0.3) + (vPlayerPos.z - 500 * m_fZoomScaleZ) * 0.3;
+	vPos.z = vPos.z * (1 - 0.3) + (vPlayerPos.z - 550 * m_fZoomScaleZ) * 0.3;
 
 	Transform()->SetLocalPos(vPos);
 

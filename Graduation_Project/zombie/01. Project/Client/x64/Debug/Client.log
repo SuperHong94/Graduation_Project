@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿DirectXTex_debug.lib(BC.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(BC.obj)' 또는 'C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\02. File\bin_debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTex_debug.lib(BC4BC5.obj) : warning LNK4099: '' PDB를 'DirectXTex_debug.lib(BC4BC5.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTex_debug.lib(BC6HBC7.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(BC6HBC7.obj)' 또는 'C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\02. File\bin_debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
@@ -11,3 +12,6 @@ DirectXTex_debug.lib(DirectXTexTGA.obj) : warning LNK4099: 'DirectXTex.pdb' PDB�
 DirectXTex_debug.lib(DirectXTexUtil.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(DirectXTexUtil.obj)' 또는 'C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\02. File\bin_debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTex_debug.lib(DirectXTexWIC.obj) : warning LNK4099: '' PDB를 'DirectXTex_debug.lib(DirectXTexWIC.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
   Client.vcxproj -> C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\zombie\02. File\bin_debug\Client.exe
+=======
+﻿  Client.vcxproj -> C:\Users\yajun\Desktop\graduation_project\Graduation_Project\Graduation_Project\zombie\02. File\bin_debug\Client.exe
+>>>>>>> yjs
