@@ -44,15 +44,15 @@ void CTimeMgr::update()
 	{
 		QueryPerformanceFrequency(&m_llFrequency);
 
-		m_fAccTime = 0.f;
 		m_fFPS = 1 / m_fDeltaTime;
 
 		// FPS 출력
 		wchar_t szFPS[50] = L"";
-		//wsprintf(szFPS, L"FPS : %d", (int)i/ (int)m_fAccTime);
-		wsprintf(szFPS, L"FPS : %d", i / 2);
+		wsprintf(szFPS, L"FPS : %d", (int)i/ (int)m_fAccTime);
+		//wsprintf(szFPS, L"FPS : %d", i / 2);
 		SetWindowText(CCore::GetInst()->m_hMainHwnd, szFPS);
 		i = 0;
+		m_fAccTime = 0.f;
 	}
 
 	// 전역 상수버퍼에 전달 될 값
