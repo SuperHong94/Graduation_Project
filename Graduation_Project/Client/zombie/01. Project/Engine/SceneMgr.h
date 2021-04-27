@@ -5,13 +5,13 @@ class CScene;
 class CCamera;
 class CGameObject;
 
-enum class SCENE_STATE 
-{
-	START_SCENE,
-	GAME_SCENE,
-	GAMECLEAR_SCENE,
-	GAMEOVER_SCENE,
-};
+//enum class SCENE_STATE 
+//{
+//	START_SCENE,
+//	GAME_SCENE,
+//	GAMECLEAR_SCENE,
+//	GAMEOVER_SCENE,
+//};
 
 class CSceneMgr
 {

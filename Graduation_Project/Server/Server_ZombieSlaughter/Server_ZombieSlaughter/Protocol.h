@@ -65,12 +65,21 @@ enum EPlayerState
 	eP_Die,
 	eP_Spawn,
 };
+
+enum class SCENE_STATE
+{
+	START_SCENE,
+	GAME_SCENE,
+	GAMECLEAR_SCENE,
+	GAMEOVER_SCENE,
+};
 #pragma pack(push,1)
 //client->Serve
 struct c2s_login
 {
 	unsigned char size;
 	unsigned char type;
+	
 };
 
 
@@ -84,6 +93,15 @@ struct c2s_Key
 	unsigned char isMove; //0이면 안움직임 1이면 움직임
 };
 
+struct c2s_chage_scene
+{
+
+	unsigned char size;
+	unsigned char type;
+	int id; //누가 보냈는지
+	SCENE_STATE eSceneStatae; //클라이언트의 현재씬
+
+};
 
 //////////////////
 //Server->Client
@@ -102,7 +120,7 @@ struct s2c_loginOK
 	unsigned char size;
 	unsigned char type;
 	int id;
-	float x, y, z;  //초기위치
+	SCENE_STATE eScene_state;
 
 };
 
