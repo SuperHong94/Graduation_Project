@@ -126,6 +126,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    ShowWindow(g_hWnd, false);
    UpdateWindow(g_hWnd);
 
+   /////////////////////////////////////////////////////////
+#ifdef _WITH_SWAPCHAIN_FULLSCREEN_STATE
+   gGameFramework.ChangeSwapChainState();
+#endif
+
+   ///////////////////////////////////////////////////////////////
+
    return TRUE;
 }
 

@@ -41,7 +41,8 @@ private:
 	ComPtr<IDXGIFactory>					m_pFactory;
 	ComPtr<ID3D12Debug>						m_pDbgCtrl;		// 디버그 관리	
 
-	ComPtr<IDXGISwapChain>					m_pSwapChain;	
+	ComPtr<IDXGISwapChain>					m_pSwapChain;
+	IDXGIOutput* dxgiOutput;
 	//Ptr<CTexture>							m_arrRenderTargets[2];
 	//Ptr<CTexture>							m_pDSTex;
 
