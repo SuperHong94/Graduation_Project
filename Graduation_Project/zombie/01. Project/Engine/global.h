@@ -52,5 +52,8 @@ using std::make_pair;
 #include "extern.h" // extern 변수
 #include "func.h"   // 전역 함수
 
-#define FRAME_BUFFER_WIDTH		1280
-#define FRAME_BUFFER_HEIGHT		768
+//#define FRAME_BUFFER_WIDTH		1280
+//#define FRAME_BUFFER_HEIGHT		768
+
+//#define FRAME_BUFFER_WIDTH		1920
+//#define FRAME_BUFFER_HEIGHT		1080

@@ -5,6 +5,8 @@
 #include "TestScript.h"
 #include "Scene.h"
 
+#include "RenderMgr.h"
+
 CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	: CScript((UINT)SCRIPT_TYPE::PLAYERSCRIPT)
 	, m_pOriginMtrl(nullptr)
@@ -83,8 +85,10 @@ void CPlayerScript::update()
 			// 마우스 방향으로 플레이어 방향 설정
 			// 총알 방향 계산
 			Vec3 vMousePos;
-			vMousePos.x = (((2.0f * ptMousePos.x) / FRAME_BUFFER_WIDTH) - 1) / g_transform.matProj._11;
-			vMousePos.y = -(((2.0f * ptMousePos.y) / FRAME_BUFFER_HEIGHT) - 1) / g_transform.matProj._22;
+			tResolution res = CRenderMgr::GetInst()->GetResolution();
+
+			vMousePos.x = (((2.0f * ptMousePos.x) / res.fWidth) - 1) / g_transform.matProj._11;
+			vMousePos.y = -(((2.0f * ptMousePos.y) / res.fHeight) - 1) / g_transform.matProj._22;
 			vMousePos.z = 1.0f;
 
 			//XMMATRIX m;

@@ -102,7 +102,7 @@ private:
 	void CreateRootSignature();
 	void CreateSamplerDesc(); 
 	
-
+	
 public:
 	ComPtr<ID3D12GraphicsCommandList> GetCmdList() { return m_pCmdListGraphic; }
 	ComPtr<ID3D12GraphicsCommandList> GetCmdListRes() { return m_pCmdListRes; }

@@ -65,9 +65,9 @@ CSceneMgr::~CSceneMgr()
 
 void CSceneMgr::CreateTargetUI()
 {
-	Vec3 vScale(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 1.f);
-	// Transform 설정
 	tResolution res = CRenderMgr::GetInst()->GetResolution();
+	Vec3 vScale(res.fWidth, res.fHeight, 1.f);
+	// Transform 설정
 
 	Ptr<CTexture> GameSceneArrTex[3] = {
 	 (CResMgr::GetInst()->Load<CTexture>(L"BGUI", L"Texture\\UI\\BGUI.png")),
