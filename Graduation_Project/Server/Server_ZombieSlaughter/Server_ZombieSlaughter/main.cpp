@@ -85,8 +85,9 @@ void send_login_result(int c_id)
 	packet.size = sizeof(packet);
 	packet.type = S2C_LOGIN_OK;
 	packet.id = c_id;
-	Vec3 vPos = clients[c_id].m_pPlayer->GetPostion();
-	packet.x = vPos.x; packet.y = vPos.y; packet.z = vPos.z;
+
+	clients[c_id].m_pPlayer
+	packet.eScene_state = SCENE_STATE::START_SCENE;
 
 	send_packet(c_id, &packet);
 }

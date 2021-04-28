@@ -5,6 +5,7 @@ void CPlayerObject::init()
 {
 	m_postion = { 0.f,0.f,0.f };
 	m_speed = 500;
+	m_eSceneState = SCENE_STATE::START_SCENE;
 }
 
 void CPlayerObject::Update(c2s_Key* packet)
