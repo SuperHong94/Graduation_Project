@@ -65,9 +65,9 @@ CSceneMgr::~CSceneMgr()
 
 void CSceneMgr::CreateTargetUI()
 {
-	Vec3 vScale(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, 1.f);
-	// Transform 설정
 	tResolution res = CRenderMgr::GetInst()->GetResolution();
+	Vec3 vScale(res.fWidth, res.fHeight, 1.f);
+	// Transform 설정
 
 	Ptr<CTexture> GameSceneArrTex[3] = {
 	 (CResMgr::GetInst()->Load<CTexture>(L"BGUI", L"Texture\\UI\\BGUI.png")),
@@ -97,7 +97,7 @@ void CSceneMgr::CreateTargetUI()
 
 			if (i == 0)
 			{
-				pObject->SetName(L"BlackEdgeUI");
+				pObject->SetName(L"BGUI");
 				pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 5.0f));
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x, vScale.y, 1.f));
 			}
@@ -368,7 +368,11 @@ void CSceneMgr::initGameScene()
 			if (i == playerID)
 				m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
 			else
+			{
 				m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], false));
+				//m_pPlayerArr[i]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;
+				//m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-20000.f, -20000.f, -20000.f));
+			}
 
 			// AddGameObject
 			m_pCurScene->FindLayer(L"Player")->AddGameObject(m_pPlayerArr[i]);

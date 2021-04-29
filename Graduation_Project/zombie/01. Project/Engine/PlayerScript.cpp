@@ -5,6 +5,8 @@
 #include "TestScript.h"
 #include "Scene.h"
 
+#include "RenderMgr.h"
+
 CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	: CScript((UINT)SCRIPT_TYPE::PLAYERSCRIPT)
 	, m_pOriginMtrl(nullptr)
@@ -83,8 +85,10 @@ void CPlayerScript::update()
 			// 마우스 방향으로 플레이어 방향 설정
 			// 총알 방향 계산
 			Vec3 vMousePos;
-			vMousePos.x = (((2.0f * ptMousePos.x) / FRAME_BUFFER_WIDTH) - 1) / g_transform.matProj._11;
-			vMousePos.y = -(((2.0f * ptMousePos.y) / FRAME_BUFFER_HEIGHT) - 1) / g_transform.matProj._22;
+			tResolution res = CRenderMgr::GetInst()->GetResolution();
+
+			vMousePos.x = (((2.0f * ptMousePos.x) / res.fWidth) - 1) / g_transform.matProj._11;
+			vMousePos.y = -(((2.0f * ptMousePos.y) / res.fHeight) - 1) / g_transform.matProj._22;
 			vMousePos.z = 1.0f;
 
 			//XMMATRIX m;
@@ -368,7 +372,13 @@ void CPlayerScript::update()
 
 				pBullet->AddComponent(new CTransform());
 				pBullet->Transform()->SetLocalPos(Vec3(vPos.x, bulletHeight, vPos.z));
-				pBullet->Transform()->SetLocalScale(Vec3(5.f, 5.f, 5.f));
+
+				// 총알 크기 설정
+				pBullet->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+
+				float temp = atan2(vNBulletDir.z, vNBulletDir.x);
+				pBullet->Transform()->SetLocalRot(Vec3(XM_PI / 2, -temp, 0.f));
+
 
 				pBullet->AddComponent(new CMeshRender);
 				pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));

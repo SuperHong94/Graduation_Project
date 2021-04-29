@@ -50,6 +50,11 @@ void CBulletScript::update()
 	{
 		DeleteObject(GetObj());
 	}
+
+	//Vec3 vScale = Transform()->GetLocalScale();
+	//Vec3 fDir = vBulletDir.Forward;
+	//Vec3 fnDir = fDir.Normalize();
+	//Transform()->SetLocalScale(Vec3(vScale.x + fnDir.x * 200, vScale.y + fnDir.y * 200, vScale.z + fnDir.z * 200));
 }
 
 void CBulletScript::OnCollisionEnter(CCollider2D* _pOther)
