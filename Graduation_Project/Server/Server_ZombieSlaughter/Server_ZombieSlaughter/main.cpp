@@ -85,11 +85,38 @@ void send_login_result(int c_id)
 	packet.size = sizeof(packet);
 	packet.type = S2C_LOGIN_OK;
 	packet.id = c_id;
-
-	clients[c_id].m_pPlayer
 	packet.eScene_state = SCENE_STATE::START_SCENE;
 
 	send_packet(c_id, &packet);
+}
+void send_scene_state(int c_id,c2s_chage_scene* packet)
+{
+	switch (packet->eSceneStatae)
+	{
+	case SCENE_STATE::START_SCENE:
+	{
+		//클라현재씬이 스타트씬에서 씬변환 패킷이 날라온경우
+		//서버에서 관리하는 클라이언트 씬상태를 inGame상태로 바꿈
+		clients[c_id].m_pPlayer->SetSceneState(SCENE_STATE::GAME_SCENE);
+	}
+		break;
+	case SCENE_STATE::GAME_SCENE:
+		break;
+	case SCENE_STATE::GAMECLEAR_SCENE:
+		break;
+	case SCENE_STATE::GAMEOVER_SCENE:
+		break;
+	default:
+		break;
+	}
+
+	s2c_chage_Scene p;
+	p.size = sizeof(p);
+	p.type = S2C_CHAGE_SCENE;
+	p.eScene_state = clients[c_id].m_pPlayer->GetSceneState();
+
+	send_packet(c_id, &p);
+
 }
 void send_key_result(int c_id, c2s_Key* packet)
 {
@@ -141,6 +168,11 @@ void proccess_packet(int c_id, unsigned char* buf)
 	{
 		c2s_Key* packet = reinterpret_cast<c2s_Key*>(buf);
 		send_key_result(c_id, packet);
+	}
+	case C2S_CHANGE_SCENE:
+	{
+		c2s_chage_scene* packet = reinterpret_cast<c2s_chage_scene*>(buf);
+		send_scene_state(c_id, packet);
 	}
 	break;
 	default:

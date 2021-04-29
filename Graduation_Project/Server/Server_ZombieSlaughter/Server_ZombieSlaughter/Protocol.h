@@ -46,9 +46,10 @@ constexpr unsigned char S2C_MOVE = 5;
 
 constexpr unsigned char S2C_REMOVE_CLIENT= 6;
 
+
 constexpr unsigned char C2S_MOUSE_EVENT= 7;
 constexpr unsigned char C2S_CHANGE_SCENE= 8;
-
+constexpr unsigned char S2C_CHAGE_SCENE = 9;
 enum EKEY_EVENT
 {
 	DOWN_UP=0,DOWN_DOWN,DOWN_RIGHT,DOWN_LEFT,DOWN_LB,NO_EVENT
@@ -129,8 +130,17 @@ struct s2c_remove_client
 	unsigned char size;
 	unsigned char type;
 	int m_id;
+	
 };
 
+struct s2c_chage_Scene
+{
+	unsigned char size;
+	unsigned char type;
+	int id; //바꾸는 씬 정보
+	SCENE_STATE eScene_state;
+
+};
 struct s2c_add_client
 {
 	unsigned char size;
