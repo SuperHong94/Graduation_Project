@@ -90,25 +90,36 @@ void CCore::ChangeWindowSize(HWND _hWnd, const tResolution & _resolution)
 
 void CCore::progress()
 {
-	if (KEY_TAB(KEY_TYPE::KEY_9))
+	if (KEY_TAB(KEY_TYPE::KEY_ESC))
 	{
-		bWindow = !bWindow;
-		if (!bWindow)
-		{
-			res.fWidth = 1280;
-			res.fHeight = 768;
-		}
-		else
-		{
-			res.fWidth = 1920;
-			res.fHeight = 1080;
-		}
-		CDevice::GetInst()->GetSwapChain().Get()->SetFullscreenState(bWindow, NULL);
-		CDevice::GetInst()->GetSwapChain().Get()->Release();
-
-		//CDevice::GetInst()->init(m_hMainHwnd, res, bWindow);
-		CRenderMgr::GetInst()->init(m_hMainHwnd, res, bWindow);
+		ExitProcess(1);
 	}
+
+	//if (KEY_TAB(KEY_TYPE::KEY_9))
+	//{
+	//	bWindow = !bWindow;
+	//	if (!bWindow)
+	//	{
+	//		res.fWidth = 1280;
+	//		res.fHeight = 768;
+	//	}
+	//	else
+	//	{
+	//		res.fWidth = 1920;
+	//		res.fHeight = 1080;
+	//	}
+	//	CDevice::GetInst()->GetSwapChain().Get()->Present(0, 0);
+	//	//CDevice::GetInst()->GetSwapChain().Get()->ResizeBuffers();
+	//	//CDevice::GetInst()->GetSwapChain().Get()->ResizeTarget();
+	//	//CDevice::GetInst()->GetSwapChain().Get()->SetFullscreenState(bWindow, NULL);
+	//	CDevice::GetInst()->GetSwapChain().Get()->Release();
+	//	//CDevice::GetInst()->m_bWindowed = bWindow;
+	//	CDevice::GetInst()->m_tResolution = res;
+	//	CDevice::GetInst()->CreateSwapChain();
+
+	//	//CDevice::GetInst()->init(m_hMainHwnd, res, true);
+	//	CRenderMgr::GetInst()->init(m_hMainHwnd, res, true);
+	//}
 
 	CKeyMgr::GetInst()->update();
 	CTimeMgr::GetInst()->update();

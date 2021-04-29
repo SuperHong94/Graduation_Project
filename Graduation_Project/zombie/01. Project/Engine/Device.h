@@ -96,9 +96,9 @@ public:
 	void UpdateTable_CS();
 	void ExcuteResourceLoad();
 	void ExcuteComputeShader();
+	void CreateSwapChain();
 
-private:
-	void CreateSwapChain();		
+private:	
 	void CreateRootSignature();
 	void CreateSamplerDesc(); 
 	
