@@ -372,7 +372,13 @@ void CPlayerScript::update()
 
 				pBullet->AddComponent(new CTransform());
 				pBullet->Transform()->SetLocalPos(Vec3(vPos.x, bulletHeight, vPos.z));
-				pBullet->Transform()->SetLocalScale(Vec3(5.f, 5.f, 5.f));
+
+				// 총알 크기 설정
+				pBullet->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+
+				float temp = atan2(vNBulletDir.z, vNBulletDir.x);
+				pBullet->Transform()->SetLocalRot(Vec3(XM_PI / 2, -temp, 0.f));
+
 
 				pBullet->AddComponent(new CMeshRender);
 				pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
