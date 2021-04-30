@@ -50,6 +50,7 @@ constexpr unsigned char S2C_REMOVE_CLIENT= 6;
 constexpr unsigned char C2S_MOUSE_EVENT= 7;
 constexpr unsigned char C2S_CHANGE_SCENE= 8;
 constexpr unsigned char S2C_CHAGE_SCENE = 9;
+
 enum EKEY_EVENT
 {
 	DOWN_UP=0,DOWN_DOWN,DOWN_RIGHT,DOWN_LEFT,DOWN_LB,NO_EVENT
@@ -75,7 +76,9 @@ enum class SCENE_STATE
 	GAMEOVER_SCENE,
 };
 #pragma pack(push,1)
+///////////////
 //client->Serve
+///////////////
 struct c2s_login
 {
 	unsigned char size;
@@ -106,6 +109,7 @@ struct c2s_chage_scene
 
 //////////////////
 //Server->Client
+//////////////////
 struct s2c_move
 {
 	unsigned char size;
@@ -141,7 +145,7 @@ struct s2c_chage_Scene
 	SCENE_STATE eScene_state;
 
 };
-struct s2c_add_client
+struct s2c_add_client //이게 초기 데이터도 보내는거임
 {
 	unsigned char size;
 	unsigned char type;
@@ -149,4 +153,5 @@ struct s2c_add_client
 	float x, y, z; //추가할 클라의 좌표값
 	float rx, ry, rz; //추가할 클라의 회전값
 };
+
 #pragma pack(pop)

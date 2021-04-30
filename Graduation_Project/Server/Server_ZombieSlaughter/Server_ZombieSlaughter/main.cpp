@@ -89,7 +89,7 @@ void send_login_result(int c_id)
 
 	send_packet(c_id, &packet);
 }
-void send_scene_state(int c_id,c2s_chage_scene* packet)
+void send_scene_state(int c_id, c2s_chage_scene* packet)
 {
 	switch (packet->eSceneStatae)
 	{
@@ -97,9 +97,20 @@ void send_scene_state(int c_id,c2s_chage_scene* packet)
 	{
 		//클라현재씬이 스타트씬에서 씬변환 패킷이 날라온경우
 		//서버에서 관리하는 클라이언트 씬상태를 inGame상태로 바꿈
-		clients[c_id].m_pPlayer->SetSceneState(SCENE_STATE::GAME_SCENE);
+		clients[c_id].m_pPlayer->init();
+
+
+		//
+		for (auto& c : clients)
+		{
+			if (clients[c_id].m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) { //game씬상태인 클라이언트에게 addclient보내기
+				send_add_client(c_id, c.second.m_id);//새로접속한 클라이언트에게 이미접속한 클라이언트 정보보내기
+				send_add_client(c.second.m_id, c_id);//이미접속한 클라이언트들에게 새로접속한 클라이언트 정보보내기
+			}
+		}
+		//여기에 게임 초기화 데이터 보내야함
 	}
-		break;
+	break;
 	case SCENE_STATE::GAME_SCENE:
 		break;
 	case SCENE_STATE::GAMECLEAR_SCENE:
@@ -153,15 +164,7 @@ void proccess_packet(int c_id, unsigned char* buf)
 		send_login_result(c_id);
 
 
-		//
-		for (auto& c : clients)
-		{
-			if (c.second.m_id != c_id)//자기자신한테는 보내면 안됨
-			{
-				send_add_client(c_id, c.second.m_id);//새로접속한 클라이언트에게 이미접속한 클라이언트 정보보내기
-				send_add_client(c.second.m_id, c_id);//이미접속한 클라이언트들에게 새로접속한 클라이언트 정보보내기
-			}
-		}
+
 	}
 	break;
 	case C2S_KEY_EVENT:
