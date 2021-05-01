@@ -84,9 +84,8 @@ void CNetworkMgr::process(char* buf)
 	{
 		s2c_loginOK* p = reinterpret_cast<s2c_loginOK*>(buf);
 
-		//m_pPlayerArray[m_id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;
-		playerPos = Vec3(p->x, p->y, p->z);
-		m_id = p->id - 1;
+		
+		m_id = p->id - 1; //0번은 서버아이디여서 할당안되지만 게임오브젝트 배열은 0번부터시작
 
 		//로그인 확인하고 논블로킹 소켓으로 바꿈
 		unsigned long noblock = 1;
@@ -198,7 +197,7 @@ void CNetworkMgr::SetPlayer(CGameObject* pPlayer)
 void CNetworkMgr::init()
 {
 	
-	m_pPlayerArray = new CGameObject*[MAX_USER];
+	m_pPlayerArray = nullptr;
 	for (int i = 0; i < MAX_USER; ++i) {
 		m_pPlayerArray[i] = nullptr;
 	}
@@ -246,5 +245,5 @@ void CNetworkMgr::init()
 #endif // _DEBUG
 
 	send_login_packet();
-	client_main();
+	//client_main();
 }

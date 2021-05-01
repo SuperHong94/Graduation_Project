@@ -100,15 +100,15 @@ void send_scene_state(int c_id, c2s_chage_scene* packet)
 		clients[c_id].m_pPlayer->init();
 
 
-		//
-		for (auto& c : clients)
+		
+		for (auto& c : clients)//이미 플레이어늰 초기화 된데이터를 보냈다.
 		{
 			if (clients[c_id].m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) { //game씬상태인 클라이언트에게 addclient보내기
 				send_add_client(c_id, c.second.m_id);//새로접속한 클라이언트에게 이미접속한 클라이언트 정보보내기
 				send_add_client(c.second.m_id, c_id);//이미접속한 클라이언트들에게 새로접속한 클라이언트 정보보내기
 			}
 		}
-		//여기에 게임 초기화 데이터 보내야함
+		
 	}
 	break;
 	case SCENE_STATE::GAME_SCENE:

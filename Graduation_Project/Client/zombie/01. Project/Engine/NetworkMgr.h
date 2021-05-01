@@ -7,13 +7,14 @@ class CNetworkMgr
 private:
 	WSADATA m_wsa;
 	SOCKET m_sock;
-	CGameObject* m_pPlayer;
 
 	CGameObject** m_pPlayerArray;
 
 	int m_id;
+	SCENE_STATE m_eSceneState;
 public:
 	void init();
+	void init_game();// 게임씬  들어가면 하는 초기화
 	void err_display(const char* msg, int error);
 
 	/// <summary>
@@ -41,6 +42,7 @@ public: //오브젝트 관련 메소드
 
 	Vec3 playerPos;
 	PlayerState m_ePState;
+
 
 };
 
