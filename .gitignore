@@ -40,5 +40,24 @@ ipch/
 *.exe
 
 
+<<<<<<< HEAD
+*.pdb
+*.log
+*.idb
+*.VC
+#폴더 무시
+v16/
+/zombie/.vs/
+/01. Project/Client/x64/
+/Client/x64/
+
+*.log
+*.idb
+*.log
+*.idb
+*.pdb
+*.zip
+=======
 *.zip
 
+>>>>>>> yjs
