@@ -41,7 +41,7 @@ int get_new_id()
 }
 
 
-
+void send_add_client(int c_id, int other_id);
 
 void send_packet(int c_id, void* packet)
 {
@@ -97,6 +97,7 @@ void send_scene_state(int c_id, c2s_chage_scene* packet)
 	{
 		//클라현재씬이 스타트씬에서 씬변환 패킷이 날라온경우
 		//서버에서 관리하는 클라이언트 씬상태를 inGame상태로 바꿈
+	
 		clients[c_id].m_pPlayer->init();
 
 
@@ -150,7 +151,7 @@ void send_add_client(int c_id, int other_id)
 	packet.id = other_id;
 	packet.rx = otherRotation.x; packet.ry = otherRotation.y; packet.rz = otherRotation.z;
 	packet.x = otherPos.x; packet.y = otherPos.y; packet.z = otherPos.z;
-
+	packet.eScene_state = clients[other_id].m_pPlayer->GetSceneState();
 	send_packet(c_id, &packet);
 }
 void proccess_packet(int c_id, unsigned char* buf)
@@ -174,6 +175,7 @@ void proccess_packet(int c_id, unsigned char* buf)
 	}
 	case C2S_CHANGE_SCENE:
 	{
+		cout << "c2sChange_sCene\n";
 		c2s_chage_scene* packet = reinterpret_cast<c2s_chage_scene*>(buf);
 		send_scene_state(c_id, packet);
 	}

@@ -152,6 +152,7 @@ struct s2c_add_client //이게 초기 데이터도 보내는거임
 	int id;//추가할 클라ID
 	float x, y, z; //추가할 클라의 좌표값
 	float rx, ry, rz; //추가할 클라의 회전값
+	SCENE_STATE eScene_state;
 };
 
 #pragma pack(pop)

@@ -1,5 +1,5 @@
 ﻿  PlayerObject.cpp
-C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\PlayerObject.cpp(13,13): warning C4101: 'send_key' :참조되지 않은 지역 변수입니다.
+C:\Users\SuperHong\Documents\GitHub\Graduation_Project\Graduation_Project\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\PlayerObject.cpp(15,13): warning C4101: 'send_key' :참조되지 않은 지역 변수입니다.
   main.cpp
   stdafx.cpp
   코드를 생성하고 있습니다...

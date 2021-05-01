@@ -236,6 +236,7 @@ void CSceneMgr::CreateTargetUI()
 void CSceneMgr::init()
 {
 	playerID = CNetworkMgr::GetInst()->GetId();
+	SceneState = CNetworkMgr::GetInst()->GetSceneState();
 	//initStartScene();
 	initGameScene();
 	//initEndScene();
@@ -324,58 +325,60 @@ void CSceneMgr::initGameScene()
 		pObject->Transform()->SetLocalPos(Vec3(-1000.f, 1000.f, -1000.f));
 		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
-
+		CNetworkMgr::GetInst()->init_game();
 		// ===================
 		// Player 오브젝트 생성
 		// ===================
 		//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
 		//pMeshData->Save(pMeshData->GetPath());
 
-		for (int i = 0; i < playerNum; i++)
-		{
-			m_pPlayerArr[i] = new CGameObject;
+		//for (int i = 0; i < playerNum; i++)
+		//{
+		//	m_pPlayerArr[i] = new CGameObject;
 
-			// 모델을 플레이어별로 따로 설정할수도 있음
-			// 아직 보류
-			pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
-			m_pPlayerArr[i] = pMeshData->Instantiate();
+		//	// 모델을 플레이어별로 따로 설정할수도 있음
+		//	// 아직 보류
+		//	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+		//	m_pPlayerArr[i] = pMeshData->Instantiate();
 
-			m_pPlayerArr[i]->SetName(L"Player Object");
-			m_pPlayerArr[i]->AddComponent(new CTransform);
-			//pPlayerObject->AddComponent(new CMeshRender);
+		//	m_pPlayerArr[i]->SetName(L"Player Object");
+		//	m_pPlayerArr[i]->AddComponent(new CTransform);
+		//	//pPlayerObject->AddComponent(new CMeshRender);
 
-			// Transform 설정
+		//	// Transform 설정
 
-			if (i == 0)
-				m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
-			else
-				m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-20000.f, 20000.f, -20000.f));
+		//	if (i == 0)
+		//		m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
+		//	else
+		//		m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-20000.f, 20000.f, -20000.f));
 
 
-			m_pPlayerArr[i]->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
+		//	m_pPlayerArr[i]->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
 
-			//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
+		//	//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
 
-			// MeshRender 설정
-			//pPlayerObject->MeshRender()->SetDynamicShadow(true);
-			//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-			//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
-			//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
-			//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+		//	// MeshRender 설정
+		//	//pPlayerObject->MeshRender()->SetDynamicShadow(true);
+		//	//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+		//	//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
+		//	//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
+		//	//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
 
-			// Script 설정
-			// 플레이어 일시
-			if (i == playerID)
-				m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
-			else{
-				m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], false));
-			}
-
+		//	// Script 설정
+		//	// 플레이어 일시
+		//	if (i == playerID)
+		//		m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
+		//	else{
+		//		m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], false));
+		//	}
+			//}
 			// AddGameObject
-			m_pCurScene->FindLayer(L"Player")->AddGameObject(m_pPlayerArr[i]);
+		CGameObject** ppt = CNetworkMgr::GetInst()->GetPlayerArray();
+		for(int i=0;i<MAX_USER;++i)
+			m_pCurScene->FindLayer(L"Player")->AddGameObject(CNetworkMgr::GetInst()->GetPlayerArray()[i]);
 
-		}
-		CNetworkMgr::GetInst()->SetPlayerArray(m_pPlayerArr);
+	
+		//CNetworkMgr::GetInst()->SetPlayerArray(m_pPlayerArr);
 
 		//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 
@@ -996,7 +999,8 @@ void CSceneMgr::update()
 			//SAFE_DELETE(m_pCurScene);
 			m_pCurScene = new CScene;
 			//delete m_pCurScene;
-			SceneState = SCENE_STATE::GAME_SCENE;
+			CNetworkMgr::GetInst()->send_chage_scene();
+			//CNetworkMgr::GetInst()->client_main();
 			init();
 
 			isChange = true;
