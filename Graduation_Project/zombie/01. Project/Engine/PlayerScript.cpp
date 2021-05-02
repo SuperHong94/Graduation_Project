@@ -366,23 +366,53 @@ void CPlayerScript::update()
 
 				Vec3 vNBulletDir = vBulletDir.Normalize();
 
+				// ≈ÿΩ∫√≥
+				Ptr<CTexture> pNormal = CResMgr::GetInst()->Load<CTexture>(L"NormalB", L"Texture\\Bullet\\NormalBullet.png");
+
 				// √—æÀ ΩÓ±‚
 				CGameObject* pBullet = new CGameObject;
 				pBullet->SetName(L"Bullet Object");
 
 				pBullet->AddComponent(new CTransform());
-				pBullet->Transform()->SetLocalPos(Vec3(vPos.x, bulletHeight, vPos.z));
+				pBullet->Transform()->SetLocalPos(Vec3(vPos.x + vNBulletDir.x * 20, bulletHeight, vPos.z + vNBulletDir.z * 20));
+				pBullet->AddComponent(new CMeshRender);
+	/*			pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
+				pBullet->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));*/
 
-				// √—æÀ ≈©±‚ º≥¡§
-				pBullet->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+				pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
+				Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
+				pBullet->MeshRender()->SetMaterial(pMtrl->Clone());
 
+				if (status->bulletState == BulletState::B_Normal)
+				{
+					pBullet->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
+
+					// √—æÀ ≈©±‚ º≥¡§
+					pBullet->Transform()->SetLocalScale(Vec3(80.f, 4.5f, 30.f));
+				}
+				else if (status->bulletState == BulletState::B_Fire)
+				{
+					pBullet->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
+
+					pBullet->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+				}
+				else if (status->bulletState == BulletState::B_Ice)
+				{
+					pBullet->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
+
+					pBullet->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+				}
+				else if (status->bulletState == BulletState::B_Thunder)
+				{
+					pBullet->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
+
+					pBullet->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+				}
+			
+				// √—æÀ πÊ«‚ º≥¡§
 				float temp = atan2(vNBulletDir.z, vNBulletDir.x);
 				pBullet->Transform()->SetLocalRot(Vec3(XM_PI / 2, -temp, 0.f));
 
-
-				pBullet->AddComponent(new CMeshRender);
-				pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
-				pBullet->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
 
 				pBullet->AddComponent(new CCollider2D);
 				pBullet->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
@@ -391,6 +421,7 @@ void CPlayerScript::update()
 				pBullet->AddComponent(new CBulletScript(vNBulletDir, status->bulletState));
 
 				CreateObject(pBullet, L"Bullet");
+
 			}
 		}
 
