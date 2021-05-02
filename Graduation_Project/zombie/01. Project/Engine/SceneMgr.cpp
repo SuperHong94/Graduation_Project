@@ -274,29 +274,13 @@ void CSceneMgr::initGameScene()
 		// 필요한 리소스 로딩
 		// =================
 		// Texture 로드
-		Ptr<CTexture> pTex = CResMgr::GetInst()->Load<CTexture>(L"TestTex", L"Texture\\Health.png");
-		Ptr<CTexture> pExplosionTex = CResMgr::GetInst()->Load<CTexture>(L"Explosion", L"Texture\\Explosion\\Explosion80.png");
-
-		Ptr<CTexture> pSky01 = CResMgr::GetInst()->Load<CTexture>(L"Sky01", L"Texture\\Skybox\\Sky01.png");
-		Ptr<CTexture> pSky02 = CResMgr::GetInst()->Load<CTexture>(L"Sky02", L"Texture\\Skybox\\Sky02.jpg");
-
 		Ptr<CTexture> pColor = CResMgr::GetInst()->Load<CTexture>(L"Ground", L"Texture\\Ground\\Ground.tga");
 		Ptr<CTexture> pNormal = CResMgr::GetInst()->Load<CTexture>(L"Ground_n", L"Texture\\Ground\\Ground_n.tga");
-
-		Ptr<CTexture> pDiffuseTargetTex = CResMgr::GetInst()->FindRes<CTexture>(L"DiffuseTargetTex");
-		Ptr<CTexture> pNormalTargetTex = CResMgr::GetInst()->FindRes<CTexture>(L"NormalTargetTex");
-		Ptr<CTexture> pPositionTargetTex = CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex");
 
 		// UAV 용 Texture 생성
 		Ptr<CTexture> pTestUAVTexture = CResMgr::GetInst()->CreateTexture(L"UAVTexture", 1024, 1024
 			, DXGI_FORMAT_R8G8B8A8_UNORM, CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT), D3D12_HEAP_FLAG_NONE
 			, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS);
-
-		Ptr<CMaterial> pPM = CResMgr::GetInst()->FindRes<CMaterial>(L"MergeLightMtrl");
-		pPM->SetData(SHADER_PARAM::TEX_3, pSky01.GetPointer());
-
-		pPM = CResMgr::GetInst()->FindRes<CMaterial>(L"PointLightMtrl");
-		pPM->SetData(SHADER_PARAM::TEX_2, pSky01.GetPointer());
 
 		// ===============
 		// GameScene 생성
@@ -325,8 +309,8 @@ void CSceneMgr::initGameScene()
 		// ===================
 		// Player 오브젝트 생성
 		// ===================
-		//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
-		//pMeshData->Save(pMeshData->GetPath());
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\HpPotion.fbx");
+		pMeshData->Save(pMeshData->GetPath());
 
 		for (int i = 0; i < playerNum; i++)
 		{
@@ -443,6 +427,21 @@ void CSceneMgr::initGameScene()
 		m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
 
 
+		//////////
+		pObject = new CGameObject;
+
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\HpPotion.mdat", L"MeshData\\HpPotion.mdat");
+		pObject = pMeshData->Instantiate();
+
+		pObject->SetName(L"ItemBox Object");
+		pObject->FrustumCheck(false);
+		pObject->AddComponent(new CTransform);
+		pObject->Transform()->SetLocalRot(Vec3(0.f, XM_PI, 0.f));
+		pObject->Transform()->SetLocalScale(Vec3(2, 2, 2));
+		pObject->Transform()->SetLocalPos(Vec3(0.f, 50.f, 0.f));
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		///////////
+
 		// ====================
 		// Monster 오브젝트 생성
 		// ====================
@@ -521,22 +520,22 @@ void CSceneMgr::initGameScene()
 		//m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
 
-		// ====================
-		// Skybox 오브젝트 생성
-		// ====================
-		pObject = new CGameObject;
-		pObject->SetName(L"SkyBox");
-		pObject->FrustumCheck(false);
-		pObject->AddComponent(new CTransform);
-		pObject->AddComponent(new CMeshRender);
+		//// ====================
+		//// Skybox 오브젝트 생성
+		//// ====================
+		//pObject = new CGameObject;
+		//pObject->SetName(L"SkyBox");
+		//pObject->FrustumCheck(false);
+		//pObject->AddComponent(new CTransform);
+		//pObject->AddComponent(new CMeshRender);
 
-		// MeshRender 설정
-		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-		pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyboxMtrl"));
-		pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pSky01.GetPointer());
+		//// MeshRender 설정
+		//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+		//pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"SkyboxMtrl"));
+		//pObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pSky01.GetPointer());
 
-		// AddGameObject
-		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		//// AddGameObject
+		//m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
 
 		//// ========================
