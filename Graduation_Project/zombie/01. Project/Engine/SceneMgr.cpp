@@ -446,9 +446,6 @@ void CSceneMgr::initGameScene()
 		// ====================
 		// Monster 오브젝트 생성
 		// ====================
-
-		CGameObject* monsterArr[60];
-		int monsterCnt = 60;
 		for (int i = 0; i < monsterCnt; i++)
 		{
 			pObject = new CGameObject;

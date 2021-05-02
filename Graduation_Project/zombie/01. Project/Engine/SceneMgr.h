@@ -21,6 +21,8 @@ private:
 
 	GameMgr* m_pGameManager;
 	CGameObject* m_pPlayerArr[4];
+	CGameObject* monsterArr[100];
+	int monsterCnt = 60;
 	int			sceneNum = 0;
 	bool		isChange = false;
 

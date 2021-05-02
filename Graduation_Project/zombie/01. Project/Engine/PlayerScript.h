@@ -36,6 +36,9 @@ private:
 
 	bool isPlayer;
 
+	CGameObject* pBullet[200];
+	int BulletCnt = 200;
+
 public:
 	virtual void awake();
 	virtual void update();
