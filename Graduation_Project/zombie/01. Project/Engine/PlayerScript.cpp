@@ -21,7 +21,7 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	{
 		pBullet[i] = new CGameObject;
 		pBullet[i]->SetName(L"Bullet Object");
-
+		pBullet[i]->FrustumCheck(true);
 		pBullet[i]->AddComponent(new CTransform());
 		pBullet[i]->Transform()->SetLocalPos(Vec3(-20000.0f, 20000.0f, 20000.0f));
 		pBullet[i]->AddComponent(new CMeshRender);
@@ -31,6 +31,7 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 		pBullet[i]->Collider2D()->SetOffsetPos(Vec3(BulletCollOffset, 0.f, 0.f));
 
 		pBullet[i]->AddComponent(new CBulletScript(Vec3(0,0,0), status->bulletState));
+		pBullet[i]->GetScript<CBulletScript>()->SetActive(false);
 
 		CreateObject(pBullet[i], L"Bullet");
 	}
@@ -398,7 +399,7 @@ void CPlayerScript::update()
 
 						pBullet[i]->GetScript<CBulletScript>()->SetDir(vNBulletDir);
 
-						pBullet[i]->Transform()->SetLocalPos(Vec3(vPos.x + vNBulletDir.x * 20, bulletHeight, vPos.z + vNBulletDir.z * 20));
+						pBullet[i]->Transform()->SetLocalPos(Vec3(vPos.x + vNBulletDir.x * 25, bulletHeight, vPos.z + vNBulletDir.z * 25));
 
 						/*			pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
 									pBullet->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));*/

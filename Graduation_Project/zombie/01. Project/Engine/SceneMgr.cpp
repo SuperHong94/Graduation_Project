@@ -435,45 +435,45 @@ void CSceneMgr::initGameScene()
 	/*	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SpPotion.fbx");
 		pMeshData->Save(pMeshData->GetPath());*/
 
-		pObject = new CGameObject;
+		//pObject = new CGameObject;
 
-		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\HpPotion.mdat", L"MeshData\\HpPotion.mdat");
-		pObject = pMeshData->Instantiate();
+		//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\HpPotion.mdat", L"MeshData\\HpPotion.mdat");
+		//pObject = pMeshData->Instantiate();
 
-		pObject->SetName(L"ItemBox Object");
-		pObject->FrustumCheck(false);
-		pObject->AddComponent(new CTransform);
-		pObject->Transform()->SetLocalRot(Vec3(0.f, XM_PI, 0.f));
-		pObject->Transform()->SetLocalScale(Vec3(1, 1, 1));
-		pObject->Transform()->SetLocalPos(Vec3(0.f, 50.f, 0.f));
-		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		//pObject->SetName(L"ItemBox Object");
+		//pObject->FrustumCheck(false);
+		//pObject->AddComponent(new CTransform);
+		//pObject->Transform()->SetLocalRot(Vec3(0.f, XM_PI, 0.f));
+		//pObject->Transform()->SetLocalScale(Vec3(1, 1, 1));
+		//pObject->Transform()->SetLocalPos(Vec3(0.f, 50.f, 0.f));
+		//m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		/////////////
+		//pObject = new CGameObject;
+
+		//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SpPotion.mdat", L"MeshData\\SpPotion.mdat");
+		//pObject = pMeshData->Instantiate();
+
+		//pObject->SetName(L"ItemBox Object");
+		//pObject->FrustumCheck(false);
+		//pObject->AddComponent(new CTransform);
+		//pObject->Transform()->SetLocalRot(Vec3(0.f, XM_PI, 0.f));
+		//pObject->Transform()->SetLocalScale(Vec3(1, 1, 1));
+		//pObject->Transform()->SetLocalPos(Vec3(100.f, 50.f, 0.f));
+		//m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 		///////////
-		pObject = new CGameObject;
 
-		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SpPotion.mdat", L"MeshData\\SpPotion.mdat");
-		pObject = pMeshData->Instantiate();
+		//pObject = new CGameObject;
 
-		pObject->SetName(L"ItemBox Object");
-		pObject->FrustumCheck(false);
-		pObject->AddComponent(new CTransform);
-		pObject->Transform()->SetLocalRot(Vec3(0.f, XM_PI, 0.f));
-		pObject->Transform()->SetLocalScale(Vec3(1, 1, 1));
-		pObject->Transform()->SetLocalPos(Vec3(100.f, 50.f, 0.f));
-		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
-		/////////
+		//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\DfPotion.mdat", L"MeshData\\DfPotion.mdat");
+		//pObject = pMeshData->Instantiate();
 
-		pObject = new CGameObject;
-
-		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\DfPotion.mdat", L"MeshData\\DfPotion.mdat");
-		pObject = pMeshData->Instantiate();
-
-		pObject->SetName(L"ItemBox Object");
-		pObject->FrustumCheck(false);
-		pObject->AddComponent(new CTransform);
-		pObject->Transform()->SetLocalRot(Vec3(0.f, XM_PI, 0.f));
-		pObject->Transform()->SetLocalScale(Vec3(1, 1, 1));
-		pObject->Transform()->SetLocalPos(Vec3(200.f, 50.f, 0.f));
-		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		//pObject->SetName(L"ItemBox Object");
+		//pObject->FrustumCheck(false);
+		//pObject->AddComponent(new CTransform);
+		//pObject->Transform()->SetLocalRot(Vec3(0.f, XM_PI, 0.f));
+		//pObject->Transform()->SetLocalScale(Vec3(1, 1, 1));
+		//pObject->Transform()->SetLocalPos(Vec3(200.f, 50.f, 0.f));
+		//m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 		/////////
 
 		// ====================

@@ -48,7 +48,7 @@ void CBulletScript::update()
 		vPos += vBulletDir * BulletSpeed * DT;
 		Transform()->SetLocalPos(vPos);
 
-		if (vPos.x >= 6000 || vPos.x <= -6000 || vPos.z >= 6000 || vPos.z <= -6000)
+		if (vPos.x >= 5300 || vPos.x <= -5300 || vPos.z >= 5300 || vPos.z <= -5300)
 		{
 			//DeleteObject(GetObj());
 			BulletActive = false;
