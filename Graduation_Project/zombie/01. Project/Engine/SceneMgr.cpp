@@ -462,8 +462,22 @@ void CSceneMgr::initGameScene()
 			//pObject->AddComponent(new CMeshRender);
 
 			// Transform 설정
-			float randomXPos = rand() % 9000 - 4500;
-			float randomZPos = rand() % 9000 - 4500;
+			bool isRightPos = false;
+			float randomXPos;
+			float randomZPos;
+
+			// 좀비 초기 위치 설정
+			while (!isRightPos)
+			{
+				randomXPos = rand() % 9000 - 4500;
+				randomZPos = rand() % 9000 - 4500;
+
+				if (randomXPos >= -1500 && randomXPos <= 1500 && randomZPos >= -1500 && randomZPos <= 1500)
+					isRightPos = false;
+
+				else
+					isRightPos = true;
+			}
 
 			pObject->Transform()->SetLocalPos(Vec3(randomXPos, 0.f, randomZPos));
 			pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
