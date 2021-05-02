@@ -18,11 +18,13 @@ class CSceneMgr
 	SINGLE(CSceneMgr);
 private:
 	CScene* m_pCurScene;
-
 	GameMgr* m_pGameManager;
 	CGameObject* m_pPlayerArr[4];
+	CGameObject* monsterArr[100];
+	int monsterCnt = 60;
 	int			sceneNum = 0;
 	bool		isChange = false;
+	float collOffset = 20000.f;
 
 	// 서버와 통신 해야됨
 	int playerNum = 4;
@@ -50,6 +52,12 @@ public:
 
 	bool CheckIsChange(){return isChange;}
 	void SetIsChange(bool b) { isChange = b; }
+
+	float GetCollOffset() { return collOffset; };
+	void SetCollOffset(float offset) { collOffset = offset; };
+
+	//초기화할 값
+	void initValue();
 
 public:
 	CScene* GetCurScene();
