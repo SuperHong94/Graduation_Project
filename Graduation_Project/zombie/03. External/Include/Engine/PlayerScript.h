@@ -36,8 +36,8 @@ private:
 
 	bool isPlayer;
 
-	CGameObject* pBullet[20];
-	int BulletCnt = 20;
+	CGameObject* pBullet[200];
+	int BulletCnt = 200;
 
 	float BulletCollOffset = 0.f;
 
