@@ -49,7 +49,7 @@ constexpr unsigned char S2C_REMOVE_CLIENT= 6;
 
 constexpr unsigned char C2S_MOUSE_EVENT= 7;
 constexpr unsigned char C2S_CHANGE_SCENE= 8;
-constexpr unsigned char S2C_CHAGE_SCENE = 9;
+constexpr unsigned char S2C_CHANGE_SCENE = 9;
 
 enum EKEY_EVENT
 {
@@ -137,12 +137,12 @@ struct s2c_remove_client
 	
 };
 
-struct s2c_chage_Scene
+struct s2c_change_Scene
 {
 	unsigned char size;
 	unsigned char type;
-	int id; //바꾸는 씬 정보
-	SCENE_STATE eScene_state;
+
+	SCENE_STATE eScene_state;//바꾸는 씬 정보
 
 };
 struct s2c_add_client //이게 초기 데이터도 보내는거임

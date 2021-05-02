@@ -235,7 +235,7 @@ void CSceneMgr::CreateTargetUI()
 
 void CSceneMgr::init()
 {
-	playerID = CNetworkMgr::GetInst()->GetId();
+	playerID = CNetworkMgr::GetInst()->GetPlayerId();
 	SceneState = CNetworkMgr::GetInst()->GetSceneState();
 	//initStartScene();
 	initGameScene();
@@ -325,7 +325,7 @@ void CSceneMgr::initGameScene()
 		pObject->Transform()->SetLocalPos(Vec3(-1000.f, 1000.f, -1000.f));
 		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 
-		CNetworkMgr::GetInst()->init_game();
+		
 		// ===================
 		// Player 오브젝트 생성
 		// ===================
@@ -374,8 +374,11 @@ void CSceneMgr::initGameScene()
 			//}
 			// AddGameObject
 		CGameObject** ppt = CNetworkMgr::GetInst()->GetPlayerArray();
+
+		for (int i = 0; i < MAX_USER; ++i)
+			m_pPlayerArr[i] = ppt[i];
 		for(int i=0;i<MAX_USER;++i)
-			m_pCurScene->FindLayer(L"Player")->AddGameObject(CNetworkMgr::GetInst()->GetPlayerArray()[i]);
+			m_pCurScene->FindLayer(L"Player")->AddGameObject(ppt[i]);
 
 	
 		//CNetworkMgr::GetInst()->SetPlayerArray(m_pPlayerArr);
@@ -997,13 +1000,13 @@ void CSceneMgr::update()
 		if (KEY_TAB(KEY_TYPE::KEY_SPACE))
 		{
 			//SAFE_DELETE(m_pCurScene);
-			m_pCurScene = new CScene;
+			//m_pCurScene = new CScene;
 			//delete m_pCurScene;
 			CNetworkMgr::GetInst()->send_chage_scene();
 			//CNetworkMgr::GetInst()->client_main();
-			init();
+			//init();
 
-			isChange = true;
+			//isChange = true;
 		}
 	}
 

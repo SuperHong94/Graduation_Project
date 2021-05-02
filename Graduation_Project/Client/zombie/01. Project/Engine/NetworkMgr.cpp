@@ -4,6 +4,7 @@
 #include "Transform.h" //이동을위한 헤더
 #include "TimeMgr.h" //DT를 위해서
 #include "PlayerScript.h"	
+#include "SceneMgr.h"
 //생성자 
 CNetworkMgr::CNetworkMgr()
 {};
@@ -74,6 +75,27 @@ void CNetworkMgr::processPacket(char* buf, DWORD bufsize)
 	}
 }
 
+void CNetworkMgr::UpdateScene()
+{
+	switch (m_eSceneState)
+	{
+	case SCENE_STATE::START_SCENE:
+		break;
+	case SCENE_STATE::GAME_SCENE:
+		init_game();
+		CSceneMgr::GetInst()->NewCurScene();
+		CSceneMgr::GetInst()->init();
+		CSceneMgr::GetInst()->SetIsChange(true);
+		break;
+	case SCENE_STATE::GAMECLEAR_SCENE:
+		break;
+	case SCENE_STATE::GAMEOVER_SCENE:
+		break;
+	default:
+		break;
+	}
+}
+
 void CNetworkMgr::process(char* buf)
 {
 
@@ -98,14 +120,17 @@ void CNetworkMgr::process(char* buf)
 
 	}
 	break;
+	case S2C_CHANGE_SCENE:
+	{
+		s2c_change_Scene* packet = reinterpret_cast<s2c_change_Scene*>(buf);
+		m_eSceneState = packet->eScene_state;
+		UpdateScene();
+	}
+	break;
 	case S2C_ADD_PLAYER: //추가접속플레이어
 	{
 		s2c_add_client* packet = reinterpret_cast<s2c_add_client*>(buf);
 		int id = packet->id - 1;
-		if (id == m_playerId)
-		{
-			m_eSceneState = packet->eScene_state;
-		}
 		if (m_pPlayerArray != nullptr) {
 
 			m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;

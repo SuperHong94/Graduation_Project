@@ -25,6 +25,7 @@ public:
 
 	void processPacket(char* buf, DWORD bufsize);
 
+	void UpdateScene();
 	void process(char* buf);
 	void process_key(s2c_move* p);
 	void send_login_packet();
@@ -36,8 +37,9 @@ public: //오브젝트 관련 메소드
 
 	CGameObject** GetPlayerArray() { return m_pPlayerArray; }; //참조자 리턴 밖에서 수정가능
 	//void SetPlayerArray(CGameObject* playerArray[MAX_USER]) { m_pPlayerArray = playerArray; };
-
+	//void SetPlayerArray(CGameObject playerArray[][MAX_USER]) { m_pPlayerArray = playerArray; };
 	int GetId() { return m_id; };
+	int GetPlayerId() { return m_playerId; };
 	SCENE_STATE GetSceneState() { return m_eSceneState; };
 	bool m_isChange = false;
 

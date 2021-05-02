@@ -5,12 +5,13 @@ class CScene;
 class CCamera;
 class CGameObject;
 
-enum class SCENE_STATE 
-{
-	START_SCENE,
-	GAME_SCENE,
-	END_SCENE,
-};
+//enum class SCENE_STATE 
+//{
+//	START_SCENE,
+//	GAME_SCENE,
+//	GAMECLEAR_SCENE,
+//	GAMEOVER_SCENE,
+//};
 
 class CSceneMgr
 {
@@ -19,7 +20,7 @@ private:
 	CScene* m_pCurScene;
 
 	GameMgr* m_pGameManager;
-	CGameObject* m_pPlayerArr[MAX_USER];
+	CGameObject* m_pPlayerArr[4];
 	int			sceneNum = 0;
 	bool		isChange = false;
 
@@ -29,7 +30,7 @@ private:
 	int playerID = 0;
 
 	float posUIRatio = 64;
-	float miniMapUIRatio = 6;
+	float miniMapUIRatio = 6.8;
 
 	SCENE_STATE SceneState = SCENE_STATE::START_SCENE;
 public:
@@ -51,6 +52,7 @@ public:
 	void SetIsChange(bool b) { isChange = b; }
 
 public:
+	void NewCurScene() { m_pCurScene = new CScene; };
 	CScene* GetCurScene();
 	void ChangeScene(CScene* _pNextScene);
 	void FindGameObjectByTag( const wstring& _strTag, vector<CGameObject*>& _vecFindObj);
