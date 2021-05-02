@@ -178,6 +178,7 @@ public:
 	void SetStatus(MonsterStatus* st);
 	int findNearTarget();
 
+
 public:
 	CLONE(CMonsterScript);
 

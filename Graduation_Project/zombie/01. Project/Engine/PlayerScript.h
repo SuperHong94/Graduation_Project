@@ -39,6 +39,8 @@ private:
 	CGameObject* pBullet[200];
 	int BulletCnt = 200;
 
+	float BulletCollOffset = 0.f;
+
 public:
 	virtual void awake();
 	virtual void update();
@@ -49,6 +51,10 @@ public:
 
 	PlayerStatus* GetStatus() { return status; };
 	void SetStatus(PlayerStatus* st);
+
+	void SetBulletCollOffset(float offset) { BulletCollOffset = offset; };
+	float GetBulletCollOffset() {return BulletCollOffset;};
+
 public:
 	CLONE(CPlayerScript);
 

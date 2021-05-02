@@ -41,6 +41,7 @@
 #include "PathMgr.h"
 
 
+
 CScene* CSceneMgr::GetCurScene()
 {
 	return m_pCurScene;
@@ -309,8 +310,8 @@ void CSceneMgr::initGameScene()
 		// ===================
 		// Player 오브젝트 생성
 		// ===================
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\HpPotion.fbx");
-		pMeshData->Save(pMeshData->GetPath());
+	/*	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\HpPotion.fbx");
+		pMeshData->Save(pMeshData->GetPath());*/
 
 		for (int i = 0; i < playerNum; i++)
 		{
@@ -350,7 +351,10 @@ void CSceneMgr::initGameScene()
 			// Script 설정
 			// 플레이어 일시
 			if (i == playerID)
+			{
 				m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
+				m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->SetBulletCollOffset(collOffset);
+			}
 			else
 			{
 				m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], false));
@@ -428,6 +432,9 @@ void CSceneMgr::initGameScene()
 
 
 		//////////
+	/*	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SpPotion.fbx");
+		pMeshData->Save(pMeshData->GetPath());*/
+
 		pObject = new CGameObject;
 
 		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\HpPotion.mdat", L"MeshData\\HpPotion.mdat");
@@ -437,10 +444,37 @@ void CSceneMgr::initGameScene()
 		pObject->FrustumCheck(false);
 		pObject->AddComponent(new CTransform);
 		pObject->Transform()->SetLocalRot(Vec3(0.f, XM_PI, 0.f));
-		pObject->Transform()->SetLocalScale(Vec3(2, 2, 2));
+		pObject->Transform()->SetLocalScale(Vec3(1, 1, 1));
 		pObject->Transform()->SetLocalPos(Vec3(0.f, 50.f, 0.f));
 		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 		///////////
+		pObject = new CGameObject;
+
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SpPotion.mdat", L"MeshData\\SpPotion.mdat");
+		pObject = pMeshData->Instantiate();
+
+		pObject->SetName(L"ItemBox Object");
+		pObject->FrustumCheck(false);
+		pObject->AddComponent(new CTransform);
+		pObject->Transform()->SetLocalRot(Vec3(0.f, XM_PI, 0.f));
+		pObject->Transform()->SetLocalScale(Vec3(1, 1, 1));
+		pObject->Transform()->SetLocalPos(Vec3(100.f, 50.f, 0.f));
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		/////////
+
+		pObject = new CGameObject;
+
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\DfPotion.mdat", L"MeshData\\DfPotion.mdat");
+		pObject = pMeshData->Instantiate();
+
+		pObject->SetName(L"ItemBox Object");
+		pObject->FrustumCheck(false);
+		pObject->AddComponent(new CTransform);
+		pObject->Transform()->SetLocalRot(Vec3(0.f, XM_PI, 0.f));
+		pObject->Transform()->SetLocalScale(Vec3(1, 1, 1));
+		pObject->Transform()->SetLocalPos(Vec3(200.f, 50.f, 0.f));
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		/////////
 
 		// ====================
 		// Monster 오브젝트 생성
@@ -483,10 +517,10 @@ void CSceneMgr::initGameScene()
 			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
 			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
 			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
-
+			
 			pObject->AddComponent(new CCollider2D);
 			pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
-			pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 100.f, 0.f));
+			pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 100.f + collOffset, 0.f));
 			//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, -5000.f, 0.f));
 			pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
 
@@ -997,6 +1031,9 @@ void CSceneMgr::update()
 		init();
 
 		isChange = true;
+
+		// 변수값 초기화
+		initValue();
 	}
 
 
@@ -1068,6 +1105,40 @@ void CSceneMgr::update()
 			init();
 
 			isChange = true;
+		}
+	}
+
+	// 충돌 처리 Offset 변경
+	if (KEY_TAB(KEY_TYPE::KEY_C) && SceneState == SCENE_STATE::GAME_SCENE)
+	{
+		if (collOffset == 0)
+		{
+			collOffset = 20000.f;
+		}
+		else
+		{
+			collOffset = 0.f;
+		}
+
+		// 플레이어 Offset 변경
+		m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->SetBulletCollOffset(collOffset);
+		
+		for (int i = 0; i < MAX_LAYER; ++i)
+		{
+			const vector<CGameObject*>& vecObject = m_pCurScene->GetLayer(i)->GetObjects();
+			for (size_t j = 0; j < vecObject.size(); ++j)
+			{	
+				// 몬스터 Offset 변경
+				if (L"Monster Object" == vecObject[j]->GetName())
+				{
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 100.f + collOffset, 0.f));
+				}
+
+				if (L"Tomb Object" == vecObject[j]->GetName())
+				{
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 100.f + collOffset));
+				}
+			}
 		}
 	}
 
@@ -1178,8 +1249,8 @@ void CSceneMgr::setMap()
 	// =================================
 	CGameObject* pObject = nullptr;
 	Ptr<CMeshData> pMeshData;
-	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Tomb2.fbx");
-	pMeshData->Save(pMeshData->GetPath());
+	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Tomb2.fbx");
+	//pMeshData->Save(pMeshData->GetPath());
 	
 	//울타리 생성
 	for (int i = 1; i < 260; i++)
@@ -1248,7 +1319,7 @@ void CSceneMgr::setMap()
 		//pObject->MeshRender()->SetDynamicShadow(true);
 
 		pObject->AddComponent(new CCollider2D);
-		pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 100.f));
+		pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 100.f + collOffset));
 		pObject->Collider2D()->SetOffsetScale(Vec3(300.f, 300.f, 0.f));
 		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RRECT);
 
@@ -1348,4 +1419,9 @@ void CSceneMgr::setMap()
 			}
 		}
 	}
+}
+
+void CSceneMgr::initValue()
+{
+	collOffset = 20000.f;
 }

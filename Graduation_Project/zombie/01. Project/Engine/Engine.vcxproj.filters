@@ -412,6 +412,7 @@
     <ClCompile Include="TimeMgr.cpp">
       <Filter>Manager\Mgr</Filter>
     </ClCompile>
+    <ClCompile Include="global.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="std.fx">

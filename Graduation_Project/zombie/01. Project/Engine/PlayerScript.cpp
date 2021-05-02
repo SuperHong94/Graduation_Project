@@ -27,7 +27,8 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 		pBullet[i]->AddComponent(new CMeshRender);
 		pBullet[i]->AddComponent(new CCollider2D);
 		pBullet[i]->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
-		//pBullet->Collider2D()->SetOffsetPos(Vec3(0.f, -bulletHeight - 5000.f, 0.f));
+
+		pBullet[i]->Collider2D()->SetOffsetPos(Vec3(BulletCollOffset, 0.f, 0.f));
 
 		pBullet[i]->AddComponent(new CBulletScript(Vec3(0,0,0), status->bulletState));
 
@@ -392,6 +393,7 @@ void CPlayerScript::update()
 				{
 					if (!pBullet[i]->GetScript<CBulletScript>()->GetActive())
 					{
+
 						pBullet[i]->GetScript<CBulletScript>()->SetActive(true);
 
 						pBullet[i]->GetScript<CBulletScript>()->SetDir(vNBulletDir);
@@ -405,6 +407,10 @@ void CPlayerScript::update()
 						Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
 						pBullet[i]->MeshRender()->SetMaterial(pMtrl->Clone());
 
+						//충돌체 위치 조정
+						pBullet[i]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, -BulletCollOffset));
+
+
 						if (status->bulletState == BulletState::B_Normal)
 						{
 							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
@@ -417,12 +423,14 @@ void CPlayerScript::update()
 							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
 
 							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+		
 						}
 						else if (status->bulletState == BulletState::B_Ice)
 						{
 							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
 
 							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+
 						}
 						else if (status->bulletState == BulletState::B_Thunder)
 						{

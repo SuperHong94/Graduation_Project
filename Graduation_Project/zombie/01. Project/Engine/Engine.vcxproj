@@ -249,6 +249,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="func.cpp" />
     <ClCompile Include="GameMgr.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="global.cpp" />
     <ClCompile Include="GridScript.cpp" />
     <ClCompile Include="InstancingBuffer.cpp" />
     <ClCompile Include="InstancingMgr.cpp" />
