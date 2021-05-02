@@ -122,6 +122,7 @@ void CNetworkMgr::process(char* buf)
 	break;
 	case S2C_CHANGE_SCENE:
 	{
+		std::cout << "¾Àº¯È¯ ¹ÞÀ½\n";
 		s2c_change_Scene* packet = reinterpret_cast<s2c_change_Scene*>(buf);
 		m_eSceneState = packet->eScene_state;
 		UpdateScene();
@@ -133,7 +134,7 @@ void CNetworkMgr::process(char* buf)
 		int id = packet->id - 1;
 		if (m_pPlayerArray != nullptr) {
 
-			m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;
+			m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = false;
 			m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
 		}
 	}

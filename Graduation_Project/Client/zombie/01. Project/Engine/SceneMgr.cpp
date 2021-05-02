@@ -437,7 +437,7 @@ void CSceneMgr::initGameScene()
 		pMainCam->SetName(L"MainCam");
 		pMainCam->AddComponent(new CTransform);
 		pMainCam->AddComponent(new CCamera);
-		pMainCam->AddComponent(new CToolCamScript(m_pPlayerArr[0]));
+		pMainCam->AddComponent(new CToolCamScript(m_pPlayerArr[playerID]));
 
 		pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 		pMainCam->Camera()->SetFar(100000.f);
