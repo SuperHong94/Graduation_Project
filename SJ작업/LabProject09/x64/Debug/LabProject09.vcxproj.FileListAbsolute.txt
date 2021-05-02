@@ -1,0 +1,2 @@
+C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\SJ작업\LabProject09\x64\Debug\LabProject09.exe
+C:\Users\SuperHong\source\repos\GitHub\Graduation_Project\SJ작업\LabProject09\x64\Debug\LabProject09.pdb

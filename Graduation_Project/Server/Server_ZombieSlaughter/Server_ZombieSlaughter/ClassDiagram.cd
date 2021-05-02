@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="tas&#xD;&#xA;">
+    <Position X="4.5" Y="4.75" Height="0.895" Width="1.7" />
+  </Comment>
+  <Class Name="CPlayerObject" Collapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAEAAAAAAAABAAAAFAAgIAAAAAAAAAAAA=</HashCode>
+      <FileName>PlayerObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DirectX::SimpleMath::Ray" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAKAAAAAAAIQAAAAAAAAAAAAAgAAAAAIA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DirectX::SimpleMath::Viewport" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgBAAQEAAQAQgBACQggBAAgAAAAAABgAAQAAAA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="MY_OVER" Collapsed="true">
+    <Position X="10.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAICAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CLIENT" Collapsed="true">
+    <Position X="10.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAQAAAAAAABAAAAAAAAAAAAAAAAAAQAAAAAAAAIAAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="c2s_login" Collapsed="true">
+    <Position X="8.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Protocol.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="c2s_Key" Collapsed="true">
+    <Position X="7" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAIAEAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Protocol.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="s2c_move" Collapsed="true">
+    <Position X="12.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAEAAAAAAABAAAAAABgAQAAAAA=</HashCode>
+      <FileName>Protocol.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="s2c_loginOK" Collapsed="true">
+    <Position X="10.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAABAAAAAABgAQAAAAA=</HashCode>
+      <FileName>Protocol.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="s2c_remove_client" Collapsed="true">
+    <Position X="7" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAABAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Protocol.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Vector2" Collapsed="true">
+    <Position X="4.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAGAIAABCBABBAAAEAAgQwRBCQAAAABAgECgAAAAAMA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Vector4" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAGAIgABCFAABAAAFAABQwRBCQAAAABAgECgAAAAAMA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Matrix" Collapsed="true">
+    <Position X="8.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEEaAAIAAAkACEAEgAQRTIBAgADIAiEDgAAgAAAI=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Quaternion" Collapsed="true">
+    <Position X="7" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABYAAAAAAAAAEAIAAYBAKAAAAAAAgEAgAAAQAAA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Plane" Collapsed="true">
+    <Position X="12.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAMAAAAQQACAAIAEAAgAIgBAAAAAA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Rectangle" Collapsed="true">
+    <Position X="8.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAEAAAAAAAAQAQAIEAQAAAAAhAAAAAABgAQAYgIA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Vector3" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAGAMgKBCJAABAAAEAAgQwRBCQEAAABAiECgAAAAAMI=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="DirectX::SimpleMath::Color" Collapsed="true">
+    <Position X="12.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAIAAAAAEAAQAAAARAAAAAEAAEBgQAkqAEAAQA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="std::less&lt;DirectX::SimpleMath::Rectangle&gt;" Collapsed="true">
+    <Position X="7" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SimpleMath.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="Vec2" Collapsed="true">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>global.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Vec3" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>global.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="Vec4" Collapsed="true">
+    <Position X="0.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>global.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="EOP_TYPE" Collapsed="true">
+    <Position X="8.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAABAAAAAAAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="EKEY_EVENT" Collapsed="true">
+    <Position X="7" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAABAAQAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Protocol.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="EPlayerState" Collapsed="true">
+    <Position X="10.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgACAAIgAAAAAAAQAAAAAAAAACAAAAAAAACAAAQA=</HashCode>
+      <FileName>Protocol.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

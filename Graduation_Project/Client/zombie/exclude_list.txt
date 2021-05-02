@@ -1,0 +1,2 @@
+targetver.h
+stdafx.h
