@@ -15,6 +15,26 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	pObject = Object;
 	status = new PlayerStatus();
 	isPlayer = player;
+
+	// 총알 생성ㄹ
+	for (int i = 0; i < BulletCnt; i++)
+	{
+		pBullet[i] = new CGameObject;
+		pBullet[i]->SetName(L"Bullet Object");
+		pBullet[i]->FrustumCheck(true);
+		pBullet[i]->AddComponent(new CTransform());
+		pBullet[i]->Transform()->SetLocalPos(Vec3(-20000.0f, 20000.0f, 20000.0f));
+		pBullet[i]->AddComponent(new CMeshRender);
+		pBullet[i]->AddComponent(new CCollider2D);
+		pBullet[i]->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+
+		pBullet[i]->Collider2D()->SetOffsetPos(Vec3(BulletCollOffset, 0.f, 0.f));
+
+		pBullet[i]->AddComponent(new CBulletScript(Vec3(0,0,0), status->bulletState));
+		pBullet[i]->GetScript<CBulletScript>()->SetActive(false);
+
+		CreateObject(pBullet[i], L"Bullet");
+	}
 }
 
 CPlayerScript::~CPlayerScript()
@@ -366,31 +386,68 @@ void CPlayerScript::update()
 
 				Vec3 vNBulletDir = vBulletDir.Normalize();
 
-				// 총알 쏘기
-				CGameObject* pBullet = new CGameObject;
-				pBullet->SetName(L"Bullet Object");
+				// 텍스처
+				Ptr<CTexture> pNormal = CResMgr::GetInst()->Load<CTexture>(L"NormalB", L"Texture\\Bullet\\NormalBullet.png");
 
-				pBullet->AddComponent(new CTransform());
-				pBullet->Transform()->SetLocalPos(Vec3(vPos.x, bulletHeight, vPos.z));
+				// 총알 위치
+				for (int i = 0; i < BulletCnt; i++)
+				{
+					if (!pBullet[i]->GetScript<CBulletScript>()->GetActive())
+					{
 
-				// 총알 크기 설정
-				pBullet->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+						pBullet[i]->GetScript<CBulletScript>()->SetActive(true);
 
-				float temp = atan2(vNBulletDir.z, vNBulletDir.x);
-				pBullet->Transform()->SetLocalRot(Vec3(XM_PI / 2, -temp, 0.f));
+						pBullet[i]->GetScript<CBulletScript>()->SetDir(vNBulletDir);
+
+						pBullet[i]->Transform()->SetLocalPos(Vec3(vPos.x + vNBulletDir.x * 25, bulletHeight, vPos.z + vNBulletDir.z * 25));
+
+						/*			pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
+									pBullet->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));*/
+
+						pBullet[i]->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
+						Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
+						pBullet[i]->MeshRender()->SetMaterial(pMtrl->Clone());
+
+						//충돌체 위치 조정
+						pBullet[i]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, -BulletCollOffset));
 
 
-				pBullet->AddComponent(new CMeshRender);
-				pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
-				pBullet->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+						if (status->bulletState == BulletState::B_Normal)
+						{
+							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
 
-				pBullet->AddComponent(new CCollider2D);
-				pBullet->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
-				//pBullet->Collider2D()->SetOffsetPos(Vec3(0.f, -bulletHeight - 5000.f, 0.f));
+							// 총알 크기 설정
+							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 4.5f, 30.f));
+						}
+						else if (status->bulletState == BulletState::B_Fire)
+						{
+							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
 
-				pBullet->AddComponent(new CBulletScript(vNBulletDir, status->bulletState));
+							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+		
+						}
+						else if (status->bulletState == BulletState::B_Ice)
+						{
+							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
 
-				CreateObject(pBullet, L"Bullet");
+							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+
+						}
+						else if (status->bulletState == BulletState::B_Thunder)
+						{
+							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
+
+							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+						}
+
+						// 총알 방향 설정
+						float temp = atan2(vNBulletDir.z, vNBulletDir.x);
+						pBullet[i]->Transform()->SetLocalRot(Vec3(XM_PI / 2, -temp, 0.f));
+
+						break;
+					}
+
+				}
 			}
 		}
 

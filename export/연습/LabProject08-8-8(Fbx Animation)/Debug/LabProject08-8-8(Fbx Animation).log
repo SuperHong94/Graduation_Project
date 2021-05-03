@@ -1,9 +1,0 @@
-﻿  stdafx.cpp
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\추출\연습\LabProject08-8-8(Fbx Animation)\stdafx.h(180,70): error C2665: 'Vector3::Angle': 2개의 오버로드 중 모든 인수 형식을 변환할 수 있는 오버로드가 없습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\추출\연습\LabProject08-8-8(Fbx Animation)\stdafx.h(178,15): message : 'float Vector3::Angle(DirectX::XMFLOAT3 &,DirectX::XMFLOAT3 &)'일 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\추출\연습\LabProject08-8-8(Fbx Animation)\stdafx.h(172,15): message : 또는       'float Vector3::Angle(DirectX::XMVECTOR &,DirectX::XMVECTOR &)'
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\추출\연습\LabProject08-8-8(Fbx Animation)\stdafx.h(180,70): message : 인수 목록 '(DirectX::XMVECTOR, DirectX::XMVECTOR)'을(를) 일치시키는 동안
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\추출\연습\LabProject08-8-8(Fbx Animation)\stdafx.h(199,68): error C2665: 'Vector3::TransformCoord': 2개의 오버로드 중 모든 인수 형식을 변환할 수 있는 오버로드가 없습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\추출\연습\LabProject08-8-8(Fbx Animation)\stdafx.h(197,18): message : 'DirectX::XMFLOAT3 Vector3::TransformCoord(DirectX::XMFLOAT3 &,DirectX::XMFLOAT4X4 &)'일 수 있습니다.
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\추출\연습\LabProject08-8-8(Fbx Animation)\stdafx.h(190,18): message : 또는       'DirectX::XMFLOAT3 Vector3::TransformCoord(DirectX::XMFLOAT3 &,DirectX::XMMATRIX &)'
-C:\Users\yajun\Desktop\graduation_project\Graduation_Project\추출\연습\LabProject08-8-8(Fbx Animation)\stdafx.h(199,68): message : 인수 목록 '(DirectX::XMFLOAT3, DirectX::XMMATRIX)'을(를) 일치시키는 동안

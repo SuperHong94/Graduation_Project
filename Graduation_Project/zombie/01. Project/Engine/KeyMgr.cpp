@@ -58,6 +58,7 @@ int arrVK[(UINT)KEY_TYPE::KEY_END] =
 	VK_PRIOR,
 	VK_NEXT,
 	'L',
+	'C',
 };
 
 CKeyMgr::CKeyMgr()
