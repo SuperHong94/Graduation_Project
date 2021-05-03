@@ -135,7 +135,7 @@ void CNetworkMgr::process(char* buf)
 		if (m_pPlayerArray != nullptr) {
 
 			m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = false;
-			m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
+			m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(packet->x,packet->y,packet->z));
 		}
 	}
 	break;
@@ -302,7 +302,7 @@ void CNetworkMgr::init_game()
 		// Transform ¼³Á¤
 
 		if (i == m_playerId)
-			m_pPlayerArray[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
+			m_pPlayerArray[i]->Transform()->SetLocalPos(Vec3(0, 0.f, 0.f));
 		else
 			m_pPlayerArray[i]->Transform()->SetLocalPos(Vec3(-20000.f, 20000.f, -20000.f));
 
