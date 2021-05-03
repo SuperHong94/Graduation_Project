@@ -39,6 +39,8 @@ CMonsterScript::~CMonsterScript()
 
 void CMonsterScript::update()
 {
+	// 충돌체 위치 설정
+
 	int a = findNearTarget();
 	status->TargetObject = targetObjects[findNearTarget()];
 

@@ -5,6 +5,7 @@ class CScene;
 class CCamera;
 class CGameObject;
 
+<<<<<<< HEAD
 //enum class SCENE_STATE 
 //{
 //	START_SCENE,
@@ -12,6 +13,14 @@ class CGameObject;
 //	GAMECLEAR_SCENE,
 //	GAMEOVER_SCENE,
 //};
+=======
+enum class SCENE_STATE 
+{
+	START_SCENE,
+	GAME_SCENE,
+	END_SCENE,
+};
+>>>>>>> yjs
 
 class CSceneMgr
 {
@@ -20,7 +29,11 @@ private:
 	CScene* m_pCurScene;
 
 	GameMgr* m_pGameManager;
+<<<<<<< HEAD
 	CGameObject* m_pPlayerArr[4];
+=======
+	CGameObject* m_pPlayerArr[MAX_USER];
+>>>>>>> yjs
 	int			sceneNum = 0;
 	bool		isChange = false;
 
@@ -30,7 +43,11 @@ private:
 	int playerID = 0;
 
 	float posUIRatio = 64;
+<<<<<<< HEAD
 	float miniMapUIRatio = 6.8;
+=======
+	float miniMapUIRatio = 6;
+>>>>>>> yjs
 
 	SCENE_STATE SceneState = SCENE_STATE::START_SCENE;
 public:
@@ -52,7 +69,10 @@ public:
 	void SetIsChange(bool b) { isChange = b; }
 
 public:
+<<<<<<< HEAD
 	void NewCurScene() { m_pCurScene = new CScene; };
+=======
+>>>>>>> yjs
 	CScene* GetCurScene();
 	void ChangeScene(CScene* _pNextScene);
 	void FindGameObjectByTag( const wstring& _strTag, vector<CGameObject*>& _vecFindObj);

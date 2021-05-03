@@ -43,11 +43,13 @@ void CTimeMgr::update()
 	if (m_fAccTime >= 1.f)
 	{
 		QueryPerformanceFrequency(&m_llFrequency);
+
 		m_fFPS = 1 / m_fDeltaTime;
 
 		// FPS Ãâ·Â
 		wchar_t szFPS[50] = L"";
 		wsprintf(szFPS, L"FPS : %d", (int)i/ (int)m_fAccTime);
+		//wsprintf(szFPS, L"FPS : %d", i / 2);
 		SetWindowText(CCore::GetInst()->m_hMainHwnd, szFPS);
 		i = 0;
 		m_fAccTime = 0.f;

@@ -26,6 +26,8 @@ CCore::~CCore()
 int CCore::init(HWND _hWnd, const tResolution & _resolution, bool _bWindow)
 {
 	m_hMainHwnd = _hWnd;
+	res = _resolution;
+	bWindow = _bWindow;
 	ChangeWindowSize(m_hMainHwnd, _resolution);
 	ShowWindow(_hWnd, true);
 
@@ -70,11 +72,55 @@ void CCore::ChangeWindowSize(HWND _hWnd, const tResolution & _resolution)
 	RECT rt = { 0, 0, (int)_resolution.fWidth, (int)_resolution.fHeight };
 
 	AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, false);
-	SetWindowPos(_hWnd, nullptr, 10, 10, rt.right - rt.left, rt.bottom - rt.top, 0);
+	
+	RECT rect_desktop = { 0, };
+	HWND hWnd_desktop = GetDesktopWindow();
+	GetWindowRect(hWnd_desktop, &rect_desktop);
+
+	RECT rect_console = { 0, };
+	HWND hWnd_console = GetConsoleWindow();
+	GetWindowRect(hWnd_console, &rect_console);
+
+	// 중앙에 화면 출력
+	SetWindowPos(_hWnd, nullptr, (rect_desktop.left + rect_desktop.right - rect_console.right + rect_console.left) / 2 - (rt.right - rt.left) / 2,
+		(rect_desktop.top + rect_desktop.bottom - rect_console.bottom + rect_console.top) / 2 - (rt.bottom - rt.top) / 2, rt.right - rt.left, rt.bottom - rt.top, 0);
+
+	//SetWindowPos(_hWnd, nullptr, 10, 10, rt.right - rt.left, rt.bottom - rt.top, 0);
 }
 
 void CCore::progress()
 {
+	if (KEY_TAB(KEY_TYPE::KEY_ESC))
+	{
+		ExitProcess(1);
+	}
+
+	//if (KEY_TAB(KEY_TYPE::KEY_9))
+	//{
+	//	bWindow = !bWindow;
+	//	if (!bWindow)
+	//	{
+	//		res.fWidth = 1280;
+	//		res.fHeight = 768;
+	//	}
+	//	else
+	//	{
+	//		res.fWidth = 1920;
+	//		res.fHeight = 1080;
+	//	}
+	//	CDevice::GetInst()->GetSwapChain().Get()->Present(0, 0);
+	//	//CDevice::GetInst()->GetSwapChain().Get()->ResizeBuffers();
+	//	//CDevice::GetInst()->GetSwapChain().Get()->ResizeTarget();
+	//	//CDevice::GetInst()->GetSwapChain().Get()->SetFullscreenState(bWindow, NULL);
+	//	CDevice::GetInst()->GetSwapChain().Get()->Release();
+	//	//CDevice::GetInst()->m_bWindowed = bWindow;
+	//	CDevice::GetInst()->m_tResolution = res;
+	//	CDevice::GetInst()->CreateSwapChain();
+
+	//	//CDevice::GetInst()->init(m_hMainHwnd, res, true);
+	//	CRenderMgr::GetInst()->init(m_hMainHwnd, res, true);
+	//}
+
 	CKeyMgr::GetInst()->update();
 	CTimeMgr::GetInst()->update();
 	CSound::g_pFMOD->update();

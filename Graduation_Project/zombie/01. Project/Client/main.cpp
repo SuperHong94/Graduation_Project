@@ -126,6 +126,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    ShowWindow(g_hWnd, false);
    UpdateWindow(g_hWnd);
 
+   /////////////////////////////////////////////////////////
+#ifdef _WITH_SWAPCHAIN_FULLSCREEN_STATE
+   gGameFramework.ChangeSwapChainState();
+#endif
+
+   ///////////////////////////////////////////////////////////////
+
    return TRUE;
 }
 
@@ -141,6 +148,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    int a = 3;
+
     switch (message)
     {
     case WM_COMMAND:
@@ -159,6 +168,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
         }
+        break;
+    case WM_SIZE:
         break;
     case WM_PAINT:
         {
