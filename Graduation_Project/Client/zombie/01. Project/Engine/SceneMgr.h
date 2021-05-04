@@ -52,10 +52,9 @@ public:
 	void SetIsChange(bool b) { isChange = b; }
 
 public:
-<<<<<<< HEAD
+
 	void NewCurScene() { m_pCurScene = new CScene; };
-=======
->>>>>>> yjs
+
 	CScene* GetCurScene();
 	void ChangeScene(CScene* _pNextScene);
 	void FindGameObjectByTag( const wstring& _strTag, vector<CGameObject*>& _vecFindObj);
