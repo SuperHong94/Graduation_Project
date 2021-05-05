@@ -53,11 +53,9 @@ v16/
 
 *.log
 *.idb
-*.log
-*.idb
+
 *.pdb
 *.zip
 
-*.zip
 
 
