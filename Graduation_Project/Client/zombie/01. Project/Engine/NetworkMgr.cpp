@@ -131,7 +131,7 @@ void CNetworkMgr::process(char* buf)
 		std::cout << "¾Àº¯È¯ ¹ÞÀ½\n";
 		s2c_change_Scene* packet = reinterpret_cast<s2c_change_Scene*>(buf);
 		m_eSceneState = packet->eScene_state;
-		UpdateScene();
+ 		UpdateScene();
 	}
 	break;
 
