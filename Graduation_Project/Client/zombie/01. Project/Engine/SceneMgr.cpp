@@ -333,51 +333,6 @@ void CSceneMgr::initGameScene()
 		// ===================
 		// Player 오브젝트 생성
 		// ===================
-		//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\SoldierDying.fbx");
-		//pMeshData->Save(pMeshData->GetPath());
-
-
-		//for (int i = 0; i < playerNum; i++)
-		//{
-		//	m_pPlayerArr[i] = new CGameObject;
-
-		//	// 모델을 플레이어별로 따로 설정할수도 있음
-		//	// 아직 보류
-		//	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
-		//	m_pPlayerArr[i] = pMeshData->Instantiate();
-
-		//	m_pPlayerArr[i]->SetName(L"Player Object");
-		//	m_pPlayerArr[i]->AddComponent(new CTransform);
-		//	//pPlayerObject->AddComponent(new CMeshRender);
-
-		//	// Transform 설정
-
-		//	if (i == 0)
-		//		m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
-		//	else
-		//		m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-20000.f, 20000.f, -20000.f));
-
-
-		//	m_pPlayerArr[i]->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
-
-		//	//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
-
-		//	// MeshRender 설정
-		//	//pPlayerObject->MeshRender()->SetDynamicShadow(true);
-		//	//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-		//	//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
-		//	//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
-		//	//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
-
-		//	// Script 설정
-		//	// 플레이어 일시
-		//	if (i == playerID)
-		//		m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
-		//	else{
-		//		m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], false));
-		//	}
-			//}
-			// AddGameObject
 		CGameObject** ppt = CNetworkMgr::GetInst()->GetPlayerArray();
 
 		for (int i = 0; i < MAX_USER; ++i)
@@ -410,7 +365,7 @@ void CSceneMgr::initGameScene()
 		pMainCam->SetName(L"MainCam");
 		pMainCam->AddComponent(new CTransform);
 		pMainCam->AddComponent(new CCamera);
-		pMainCam->AddComponent(new CToolCamScript(m_pPlayerArr[0]));
+		pMainCam->AddComponent(new CToolCamScript(m_pPlayerArr[playerID]));
 
 		pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 		pMainCam->Camera()->SetFar(100000.f);

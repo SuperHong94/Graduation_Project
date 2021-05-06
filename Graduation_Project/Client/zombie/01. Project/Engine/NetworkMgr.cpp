@@ -137,6 +137,10 @@ void CNetworkMgr::process(char* buf)
 
 	case S2C_ADD_PLAYER: //추가접속플레이어
 	{
+#ifdef _DEBUG
+		std::cout << "add Player\n";
+#endif // _DEBUG
+
 		s2c_add_client* packet = reinterpret_cast<s2c_add_client*>(buf);
 		int id = packet->id - 1;
 		if (m_pPlayerArray != nullptr) {
@@ -348,4 +352,8 @@ void CNetworkMgr::init_game()
 		//m_pCurScene->FindLayer(L"Player")->AddGameObject(m_pPlayerArray[i]);
 
 	}
+#ifdef _DEBUG
+	std::cout << "플레이어 초기화 완료\n";
+#endif // _DEBUG
+
 }
