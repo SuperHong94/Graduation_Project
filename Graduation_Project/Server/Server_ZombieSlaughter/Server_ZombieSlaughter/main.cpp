@@ -78,6 +78,7 @@ void send_move_packet(int c_id)
 	packet.x = pos.x; packet.y = pos.y; packet.z = pos.z;
 	Vec3 rot = client.m_pPlayer->GetRotation();
 	packet.rx = rot.x; packet.ry = rot.y; packet.rz = rot.z;
+	packet.ePlayerState = client.m_pPlayer->GetState();
 	send_packet(c_id, &packet);
 }
 void send_login_result(int c_id)
@@ -185,6 +186,7 @@ void proccess_packet(int c_id, unsigned char* buf)
 		c2s_Key* packet = reinterpret_cast<c2s_Key*>(buf);
 		send_key_result(c_id, packet);
 	}
+	break;
 	case C2S_CHANGE_SCENE:
 	{
 

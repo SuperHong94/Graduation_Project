@@ -232,9 +232,10 @@ void CNetworkMgr::send_Key_packet(EKEY_EVENT key, Vec3 Rotation)
 	packet.rX = Rotation.x;
 	packet.rY = Rotation.y;
 	packet.rZ = Rotation.z;
-	//#ifdef _DEBUG
-	//	std::cout << "서버에게" << key << " 키 정보를 보낸다.\n";
-	//#endif // _DEBUG
+	packet.isMove = true;
+	#ifdef _DEBUG
+		std::cout << "서버에게" << key << " 키 정보를 보낸다.\n";
+	#endif // _DEBUG
 
 	send_packet(&packet);
 }

@@ -4,6 +4,7 @@
 #include "BulletScript.h"
 #include "TestScript.h"
 #include "Scene.h"
+#include "NetworkMgr.h"
 
 CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	: CScript((UINT)SCRIPT_TYPE::PLAYERSCRIPT)
@@ -127,9 +128,10 @@ void CPlayerScript::update()
 				if (KEY_HOLD(KEY_TYPE::KEY_W))
 				{
 					keyHold[0] = 1;
-					vPos.z += DT * status->speed;
+					CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_UP, vRot);
+					//vPos.z += DT * status.speed;
 					isMove = true;
-					if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)) && !status->IsRoll)
+					if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)))
 						status->state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
 				}
 
