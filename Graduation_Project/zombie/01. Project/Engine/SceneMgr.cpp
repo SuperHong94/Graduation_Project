@@ -70,10 +70,11 @@ void CSceneMgr::CreateTargetUI()
 	Vec3 vScale(res.fWidth, res.fHeight, 1.f);
 	// Transform 설정
 
-	Ptr<CTexture> GameSceneArrTex[3] = {
+	Ptr<CTexture> GameSceneArrTex[4] = {
 	 (CResMgr::GetInst()->Load<CTexture>(L"BGUI", L"Texture\\UI\\BGUI.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"MiniMap", L"Texture\\UI\\MiniMap.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\UI\\playerTest.png")),
+	  (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\UI\\playerTest.png")),
 	};
 
 	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"StartBG", L"Texture\\UI\\StartBG.png") };
@@ -82,7 +83,7 @@ void CSceneMgr::CreateTargetUI()
 
 	Ptr<CTexture> GameOverSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"GameOverBG", L"Texture\\UI\\GameOverBG.png") };
 
-	int NumgameSceneUI = 3;
+	int NumgameSceneUI = 4;
 	int NumStartSceneUI = 1;
 	int NumGameClearSceneUI = 1;
 	int NumGameOVerSceneUI = 1;
@@ -126,6 +127,16 @@ void CSceneMgr::CreateTargetUI()
 					, -(res.fHeight / 2.f) + vScale.y * 0.015 + posRatio.y
 					, 1.f));
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / posUIRatio, (vScale.y / posUIRatio) * (vScale.x / vScale.y), 1.f));
+			}
+
+			else if (i == 3)
+			{
+				pObject->SetName(L"QuestUI");
+
+
+				pObject->Transform()->SetLocalPos(Vec3(0, res.fHeight / 8, 1.f));
+				
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 2, (vScale.y / 2 ), 1.f));
 			}
 
 			// MeshRender 설정
@@ -1078,6 +1089,12 @@ void CSceneMgr::update()
 
 			isChange = true;
 		}
+
+		if (KEY_TAB(KEY_TYPE::KEY_I))
+		{
+			pressI = true;
+			QuestionVisible = !QuestionVisible;
+		}
 	}
 
 	else if (SceneState == SCENE_STATE::GAMECLEAR_SCENE)
@@ -1189,9 +1206,21 @@ void CSceneMgr::updateUI()
 						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000.0f, -20000.0f, -3.f));
 					}
 				}
+
+				//퀘스쳔 UI 화면 표시 유무
+				else if (L"QuestUI" == vecObject[j]->GetName() && pressI)
+				{
+					if (QuestionVisible)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(0, res.fHeight / 8, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(20000, 20000, 1.f));
+				}
 			}
 		}
 	}
+
+	pressI = false;
 }
 
 void CSceneMgr::FindGameObjectByTag(const wstring& _strTag, vector<CGameObject*>& _vecFindObj)
@@ -1424,4 +1453,5 @@ void CSceneMgr::setMap()
 void CSceneMgr::initValue()
 {
 	collOffset = 20000.f;
+	QuestionVisible = true;
 }
