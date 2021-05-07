@@ -25,7 +25,7 @@ private:
 	int			sceneNum = 0;
 	bool		isChange = false;
 	float collOffset = 20000.f;
-	bool QuestionVisible = true;
+	bool QuestVisible = true;
 	bool pressI = false;
 
 	// 서버와 통신 해야됨

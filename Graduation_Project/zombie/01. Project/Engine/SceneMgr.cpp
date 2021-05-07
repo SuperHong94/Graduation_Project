@@ -1093,7 +1093,7 @@ void CSceneMgr::update()
 		if (KEY_TAB(KEY_TYPE::KEY_I))
 		{
 			pressI = true;
-			QuestionVisible = !QuestionVisible;
+			QuestVisible = !QuestVisible;
 		}
 	}
 
@@ -1210,7 +1210,7 @@ void CSceneMgr::updateUI()
 				//Äù½ºÃÅ UI È­¸é Ç¥½Ã À¯¹«
 				else if (L"QuestUI" == vecObject[j]->GetName() && pressI)
 				{
-					if (QuestionVisible)
+					if (QuestVisible)
 						vecObject[j]->Transform()->SetLocalPos(Vec3(0, res.fHeight / 8, 1.f));
 
 					else
@@ -1453,5 +1453,5 @@ void CSceneMgr::setMap()
 void CSceneMgr::initValue()
 {
 	collOffset = 20000.f;
-	QuestionVisible = true;
+	QuestVisible = true;
 }
