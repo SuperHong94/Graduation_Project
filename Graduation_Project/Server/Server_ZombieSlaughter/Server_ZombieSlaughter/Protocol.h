@@ -51,6 +51,7 @@ constexpr unsigned char C2S_MOUSE_EVENT= 7;
 constexpr unsigned char C2S_CHANGE_SCENE= 8;
 
 constexpr unsigned char S2C_CHANGE_SCENE = 9;
+constexpr unsigned char S2C_DUMMY = 10;
 
 
 enum EKEY_EVENT
@@ -116,6 +117,7 @@ struct s2c_move
 {
 	unsigned char size;
 	unsigned char type;
+	unsigned char id;
 	PlayerState ePlayerState;
 	float x, y, z;
 	float rx, ry, rz;
@@ -159,6 +161,13 @@ struct s2c_add_client //이게 초기 데이터도 보내는거임
 
 	SCENE_STATE eScene_state;
 
+};
+
+
+struct s2c_dummy
+{
+	unsigned char size;
+	unsigned char type;
 };
 
 #pragma pack(pop)

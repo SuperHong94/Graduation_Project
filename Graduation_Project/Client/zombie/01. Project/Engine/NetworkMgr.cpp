@@ -102,6 +102,7 @@ void CNetworkMgr::UpdateScene()
 void CNetworkMgr::process(char* buf)
 {
 
+	unsigned char a = buf[1];
 
 	switch (buf[1])//타입확인
 	{
@@ -163,6 +164,10 @@ void CNetworkMgr::process(char* buf)
 #endif 
 	}
 	break;
+	case S2C_DUMMY:
+	{
+	std::cout << "더미 받음\n";
+	}
 	default:
 		break;
 	}
@@ -170,6 +175,16 @@ void CNetworkMgr::process(char* buf)
 
 void CNetworkMgr::process_key(s2c_move* p)
 {
+
+	int playerID = p->id - 1;
+	if (m_pPlayerArray != nullptr) {
+
+		
+		//m_pPlayerArray[playerID]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = false;
+		m_pPlayerArray[playerID]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(p->x, p->y, p->z));
+		m_pPlayerArray[playerID]->GetScript<CPlayerScript>()->Transform()->SetLocalRot(Vec3(p->rx, p->ry, p->rz));
+
+	}
 
 	Vec3 packetPos = { p->x,p->y,p->z };
 	if (packetPos == playerPos)
@@ -179,7 +194,6 @@ void CNetworkMgr::process_key(s2c_move* p)
 
 	if (m_isChange) {
 		playerPos = packetPos;
-		m_ePState = p->ePlayerState;
 	}
 
 }

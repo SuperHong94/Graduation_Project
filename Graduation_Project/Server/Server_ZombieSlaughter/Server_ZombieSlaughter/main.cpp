@@ -74,11 +74,20 @@ void send_move_packet(int c_id)
 	s2c_move packet;
 	packet.size = sizeof(packet);
 	packet.type = S2C_MOVE;
+	packet.id = c_id;
+
+	//좌표설정
 	Vec3 pos = client.m_pPlayer->GetPostion();
 	packet.x = pos.x; packet.y = pos.y; packet.z = pos.z;
 	Vec3 rot = client.m_pPlayer->GetRotation();
 	packet.rx = rot.x; packet.ry = rot.y; packet.rz = rot.z;
+
+	//플레이어상태설정
 	packet.ePlayerState = client.m_pPlayer->GetState();
+
+	//s2c_dummy p;
+	//p.size = sizeof(p);
+	//p.type = S2C_DUMMY;
 	send_packet(c_id, &packet);
 }
 void send_login_result(int c_id)
