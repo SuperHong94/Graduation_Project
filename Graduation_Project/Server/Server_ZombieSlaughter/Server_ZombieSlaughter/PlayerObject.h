@@ -22,6 +22,6 @@ public:
 	void SetState(PlayerState ePState) { m_ePState = ePState; };
 
 	SCENE_STATE GetSceneState() { return m_eSceneState; };
-	SCENE_STATE SetSceneState(SCENE_STATE eSstate) { m_eSceneState = eSstate; };
+	void SetSceneState(SCENE_STATE eSstate) { m_eSceneState = eSstate; };
 };
 

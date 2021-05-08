@@ -129,7 +129,6 @@ struct s2c_loginOK
 	unsigned char size;
 	unsigned char type;
 	int id;
-	SCENE_STATE eScene_state;
 
 };
 

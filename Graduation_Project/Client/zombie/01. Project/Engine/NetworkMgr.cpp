@@ -52,13 +52,16 @@ void CNetworkMgr::client_main()
 void CNetworkMgr::processPacket(char* buf, DWORD bufsize)
 {
 	char* ptr = buf;
+	unsigned char type = buf[1];
+	unsigned char s = buf[0];
 	static DWORD inPacketSize = 0; //새패킷
+	//DWORD inPacketSize = 0; //새패킷
 	static DWORD savedPacketSize = 0; //잔여패킷
 	static char packetBuffer[MAX_BUFFER];
 	while (bufsize != 0)
 	{
 		if (inPacketSize == 0)
-			inPacketSize = buf[0];
+			inPacketSize = ptr[0]; //여기때문에 안된거임
 		if (bufsize + savedPacketSize >= inPacketSize)
 		{
 			memcpy(packetBuffer + savedPacketSize, ptr, inPacketSize - savedPacketSize);
@@ -114,15 +117,7 @@ void CNetworkMgr::process(char* buf)
 
 		m_id = p->id; //이것은 통신하기위한 ID
 		m_playerId = m_id - 1; //이것은 그리기위한 ID 이렇게 한이유는 m_id의 0은 서버ID이다. 하지만 랜더링을 위한 플레이어 배열의 시작은 0부터시작하기에 이렇게 하였다.
-
-		//로그인 확인하고 논블로킹 소켓으로 바꿈
-		unsigned long noblock = 1;
-		int retval = ioctlsocket(m_sock, FIONBIO, &noblock);
-		if (retval != NO_ERROR)
-		{
-			err_display("ioctlsocket", WSAGetLastError());
-			exit(-1);
-		}
+		
 
 
 	}
@@ -132,7 +127,7 @@ void CNetworkMgr::process(char* buf)
 		std::cout << "씬변환 받음\n";
 		s2c_change_Scene* packet = reinterpret_cast<s2c_change_Scene*>(buf);
 		m_eSceneState = packet->eScene_state;
- 		UpdateScene();
+		UpdateScene();
 	}
 	break;
 
@@ -148,7 +143,7 @@ void CNetworkMgr::process(char* buf)
 
 
 			m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = false;
-			m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(packet->x,packet->y,packet->z));
+			m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(packet->x, packet->y, packet->z));
 
 		}
 	}
@@ -166,9 +161,14 @@ void CNetworkMgr::process(char* buf)
 	break;
 	case S2C_DUMMY:
 	{
-	std::cout << "더미 받음\n";
+#ifdef _DEBUG
+		std::cout << "더미 받음\n";
+#endif
 	}
 	default:
+#ifdef _DEBUG
+		std::cout << "알 수 없는 패킷 받음\n";
+#endif
 		break;
 	}
 }
@@ -179,7 +179,7 @@ void CNetworkMgr::process_key(s2c_move* p)
 	int playerID = p->id - 1;
 	if (m_pPlayerArray != nullptr) {
 
-		
+
 		//m_pPlayerArray[playerID]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = false;
 		m_pPlayerArray[playerID]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(p->x, p->y, p->z));
 		m_pPlayerArray[playerID]->GetScript<CPlayerScript>()->Transform()->SetLocalRot(Vec3(p->rx, p->ry, p->rz));
@@ -247,9 +247,9 @@ void CNetworkMgr::send_Key_packet(EKEY_EVENT key, Vec3 Rotation)
 	packet.rY = Rotation.y;
 	packet.rZ = Rotation.z;
 	packet.isMove = true;
-	#ifdef _DEBUG
-		std::cout << "서버에게" << key << " 키 정보를 보낸다.\n";
-	#endif // _DEBUG
+#ifdef _DEBUG
+	std::cout << "서버에게" << key << " 키 정보를 보낸다.\n";
+#endif // _DEBUG
 
 	send_packet(&packet);
 }
@@ -269,7 +269,7 @@ void CNetworkMgr::init()
 	//	m_pPlayerArray[i] = nullptr;
 	//}
 
-	
+
 
 	using namespace std;
 	if (WSAStartup(MAKEWORD(2, 2), &m_wsa) != 0)
@@ -286,20 +286,20 @@ void CNetworkMgr::init()
 	}
 
 	//논블록 소켓으로 설정
-	/*unsigned long noblock = 1;
+	unsigned long noblock = 1;
 	int retval = ioctlsocket(m_sock, FIONBIO, &noblock);
 	if (retval != NO_ERROR)
 	{
 		err_display("ioctlsocket", WSAGetLastError());
 		exit(-1);
-	}*/
+	}
 	//connect()
 	SOCKADDR_IN serveraddr;
 	memset(&serveraddr, 0, sizeof(serveraddr));
 	serveraddr.sin_family = AF_INET;
 	serveraddr.sin_port = htons(SERVER_PORT);
 	inet_pton(AF_INET, SERVER_IP, &serveraddr.sin_addr);
-	int retval = connect(m_sock, reinterpret_cast<SOCKADDR*>(&serveraddr), sizeof(serveraddr));
+	retval = connect(m_sock, reinterpret_cast<SOCKADDR*>(&serveraddr), sizeof(serveraddr));
 	if (retval == SOCKET_ERROR)
 	{
 		int errono = WSAGetLastError();

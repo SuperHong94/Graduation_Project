@@ -8,7 +8,7 @@ void CPlayerObject::init() //게임들어갈때 초기화
 
 	m_rotation = { 0.f,0.f,0.f };
 	m_speed = 500;
-	m_eSceneState = SCENE_STATE::GAME_SCENE; 
+	m_eSceneState = SCENE_STATE::START_SCENE; 
 }
 
 void CPlayerObject::Update(c2s_Key* packet)

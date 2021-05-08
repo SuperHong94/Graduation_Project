@@ -96,7 +96,6 @@ void send_login_result(int c_id)
 	packet.size = sizeof(packet);
 	packet.type = S2C_LOGIN_OK;
 	packet.id = c_id;
-	packet.eScene_state = SCENE_STATE::START_SCENE;
 
 	send_packet(c_id, &packet);
 }
@@ -110,7 +109,7 @@ void send_change_scene(int c_id, SCENE_STATE Scenestate)
 	send_packet(c_id, &packet);
 }
 
-void send_scene_state(int c_id, c2s_chage_scene* packet)
+void upadate_scene_state(int c_id, c2s_chage_scene* packet)
 {
 	switch (packet->eSceneStatae)
 	{
@@ -120,10 +119,10 @@ void send_scene_state(int c_id, c2s_chage_scene* packet)
 		//서버에서 관리하는 클라이언트 씬상태를 inGame상태로 바꿈
 
 
+		clients[c_id].m_pPlayer->SetSceneState(SCENE_STATE::GAME_SCENE);
 
 		send_change_scene(c_id, SCENE_STATE::GAME_SCENE); //처음에 씬
-		clients[c_id].m_pPlayer->init();
-
+		
 		for (auto& c : clients)//이미 플레이어늰 초기화 된데이터를 보냈다.
 		{
 			if (clients[c_id].m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) { //game씬상태인 클라이언트에게 addclient보내기
@@ -196,14 +195,14 @@ void proccess_packet(int c_id, unsigned char* buf)
 		send_key_result(c_id, packet);
 	}
 	break;
-	case C2S_CHANGE_SCENE:
+	case C2S_CHANGE_SCENE: //클라에서 씬바꾸는 이벤트 일어남
 	{
 
 		cout << "c2sChange_sCene\n";
 
 
 		c2s_chage_scene* packet = reinterpret_cast<c2s_chage_scene*>(buf);
-		send_scene_state(c_id, packet);
+		upadate_scene_state(c_id, packet); //해당 이벤트에 맞게 씬을 업데이트
 	}
 	break;
 	default:
