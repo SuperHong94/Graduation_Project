@@ -136,7 +136,7 @@ struct s2c_remove_client
 {
 	unsigned char size;
 	unsigned char type;
-	int m_id;
+	int id;
 	
 };
 

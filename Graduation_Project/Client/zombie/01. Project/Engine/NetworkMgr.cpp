@@ -117,7 +117,7 @@ void CNetworkMgr::process(char* buf)
 
 		m_id = p->id; //이것은 통신하기위한 ID
 		m_playerId = m_id - 1; //이것은 그리기위한 ID 이렇게 한이유는 m_id의 0은 서버ID이다. 하지만 랜더링을 위한 플레이어 배열의 시작은 0부터시작하기에 이렇게 하였다.
-		
+
 
 
 	}
@@ -159,6 +159,18 @@ void CNetworkMgr::process(char* buf)
 #endif 
 	}
 	break;
+	case S2C_REMOVE_CLIENT: //클라이언트 접속 종료된
+	{
+		s2c_remove_client* packet = reinterpret_cast<s2c_remove_client*>(buf);
+		int id = packet->id - 1;
+		if (m_pPlayerArray != nullptr) {
+
+			m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;
+			m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(20000.f,20000.f,20000.f));
+
+		}
+	}
+	break;
 	case S2C_DUMMY:
 	{
 #ifdef _DEBUG
@@ -178,8 +190,6 @@ void CNetworkMgr::process_key(s2c_move* p)
 
 	int playerID = p->id - 1;
 	if (m_pPlayerArray != nullptr) {
-
-
 		//m_pPlayerArray[playerID]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = false;
 		m_pPlayerArray[playerID]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(p->x, p->y, p->z));
 		m_pPlayerArray[playerID]->GetScript<CPlayerScript>()->Transform()->SetLocalRot(Vec3(p->rx, p->ry, p->rz));

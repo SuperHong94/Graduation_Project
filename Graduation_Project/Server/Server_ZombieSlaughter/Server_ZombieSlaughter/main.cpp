@@ -122,7 +122,7 @@ void upadate_scene_state(int c_id, c2s_chage_scene* packet)
 		clients[c_id].m_pPlayer->SetSceneState(SCENE_STATE::GAME_SCENE);
 
 		send_change_scene(c_id, SCENE_STATE::GAME_SCENE); //처음에 씬
-		
+
 		for (auto& c : clients)//이미 플레이어늰 초기화 된데이터를 보냈다.
 		{
 			if (clients[c.second.m_id].m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) { //game씬상태인 클라이언트에게 addclient보내기
@@ -230,7 +230,7 @@ void send_remove_client(int p_id, int other_id)
 	s2c_remove_client packet;
 	packet.size = sizeof(packet);
 	packet.type = S2C_REMOVE_CLIENT;
-	packet.m_id = other_id;
+	packet.id = other_id;
 	send_packet(p_id, &packet);
 }
 
@@ -239,8 +239,10 @@ void disconnect(int key)
 	closesocket(clients[key].m_socket);
 	delete clients[key].m_pPlayer;
 	clients.erase(key);
-	for (auto& c : clients)
-		send_remove_client(c.second.m_id, key); //c.sencond.m_id에게 key가 종료되었음을 알림
+	for (auto& c : clients) {
+		if (clients[c.second.m_id].m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE)
+			send_remove_client(c.second.m_id, key); //c.sencond.m_id에게 key가 종료되었음을 알림
+	}
 }
 
 int main()
