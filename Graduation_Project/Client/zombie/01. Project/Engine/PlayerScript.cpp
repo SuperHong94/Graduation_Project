@@ -138,7 +138,7 @@ void CPlayerScript::update()
 				if (KEY_HOLD(KEY_TYPE::KEY_S))
 				{
 					keyHold[1] = 1;
-					vPos.z -= DT * status->speed;
+					CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_DOWN, vRot);
 					isMove = true;
 					if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, -1.f)) && !status->IsRoll)
 						status->state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
@@ -147,7 +147,7 @@ void CPlayerScript::update()
 				if (KEY_HOLD(KEY_TYPE::KEY_A))
 				{
 					keyHold[2] = 1;
-					vPos.x -= DT * status->speed;
+					CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_LEFT, vRot);
 					isMove = true;
 					if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f)) && !status->IsRoll)
 						status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
@@ -156,7 +156,7 @@ void CPlayerScript::update()
 				if (KEY_HOLD(KEY_TYPE::KEY_D))
 				{
 					keyHold[3] = 1;
-					vPos.x += DT * status->speed;
+					CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_RIGHT, vRot);
 					isMove = true;
 					if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, 0.f)) && !status->IsRoll)
 						status->state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
@@ -229,14 +229,14 @@ void CPlayerScript::update()
 
 
 			// 플레이어 위치 방향 설정
-			if (vPos.x > 4990)
+			/*if (vPos.x > 4990)
 				vPos.x = 4990;
 			if (vPos.x < -4990)
 				vPos.x = -4990;
 			if (vPos.z > 4990)
 				vPos.z = 4990;
 			if (vPos.z < -4990)
-				vPos.z = -4990;
+				vPos.z = -4990;*/
 			Transform()->SetLocalPos(vPos);
 			Transform()->SetLocalRot(vRot);
 
