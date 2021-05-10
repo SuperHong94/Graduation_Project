@@ -70,11 +70,12 @@ void CSceneMgr::CreateTargetUI()
 	Vec3 vScale(res.fWidth, res.fHeight, 1.f);
 	// Transform 설정
 
-	Ptr<CTexture> GameSceneArrTex[4] = {
+	Ptr<CTexture> GameSceneArrTex[5] = {
 	 (CResMgr::GetInst()->Load<CTexture>(L"BGUI", L"Texture\\UI\\BGUI.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"MiniMap", L"Texture\\UI\\MiniMap.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\UI\\playerTest.png")),
-	  (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\UI\\playerTest.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"Quest", L"Texture\\UI\\playerTest.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"Picture", L"Texture\\UI\\PlayerPicture.png")),
 	};
 
 	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"StartBG", L"Texture\\UI\\StartBG.png") };
@@ -83,7 +84,7 @@ void CSceneMgr::CreateTargetUI()
 
 	Ptr<CTexture> GameOverSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"GameOverBG", L"Texture\\UI\\GameOverBG.png") };
 
-	int NumgameSceneUI = 4;
+	int NumgameSceneUI = 5;
 	int NumStartSceneUI = 1;
 	int NumGameClearSceneUI = 1;
 	int NumGameOVerSceneUI = 1;
@@ -137,6 +138,16 @@ void CSceneMgr::CreateTargetUI()
 				pObject->Transform()->SetLocalPos(Vec3(0, res.fHeight / 8, 1.f));
 				
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 2, (vScale.y / 2 ), 1.f));
+			}
+
+			else if (i == 4)
+			{
+				pObject->SetName(L"PictureUI");
+
+
+				pObject->Transform()->SetLocalPos(Vec3(res.fWidth / 5.10, -res.fHeight/ 2.75, 1.f));
+
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 6.8, (vScale.y / 7), 1.f));
 			}
 
 			// MeshRender 설정
