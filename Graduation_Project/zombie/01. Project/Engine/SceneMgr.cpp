@@ -69,13 +69,17 @@ void CSceneMgr::CreateTargetUI()
 	tResolution res = CRenderMgr::GetInst()->GetResolution();
 	Vec3 vScale(res.fWidth, res.fHeight, 1.f);
 	// Transform 설정
+	hpBarWidth = CRenderMgr::GetInst()->GetResolution().fWidth / 4.1;
+	hpBarHeight = CRenderMgr::GetInst()->GetResolution().fHeight / 45;
 
-	Ptr<CTexture> GameSceneArrTex[5] = {
+	Ptr<CTexture> GameSceneArrTex[7] = {
 	 (CResMgr::GetInst()->Load<CTexture>(L"BGUI", L"Texture\\UI\\BGUI.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"MiniMap", L"Texture\\UI\\MiniMap.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\UI\\playerTest.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"Quest", L"Texture\\UI\\playerTest.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"Picture", L"Texture\\UI\\PlayerPicture.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"HpBarEdge", L"Texture\\UI\\HpBarEdge.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"HpBar", L"Texture\\UI\\HpBar.png")),
 	};
 
 	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"StartBG", L"Texture\\UI\\StartBG.png") };
@@ -84,7 +88,7 @@ void CSceneMgr::CreateTargetUI()
 
 	Ptr<CTexture> GameOverSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"GameOverBG", L"Texture\\UI\\GameOverBG.png") };
 
-	int NumgameSceneUI = 5;
+	int NumgameSceneUI = 7;
 	int NumStartSceneUI = 1;
 	int NumGameClearSceneUI = 1;
 	int NumGameOVerSceneUI = 1;
@@ -133,21 +137,29 @@ void CSceneMgr::CreateTargetUI()
 			else if (i == 3)
 			{
 				pObject->SetName(L"QuestUI");
-
-
-				pObject->Transform()->SetLocalPos(Vec3(0, res.fHeight / 8, 1.f));
-				
+				pObject->Transform()->SetLocalPos(Vec3(0, res.fHeight / 8, 1.f));	
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 2, (vScale.y / 2 ), 1.f));
 			}
 
 			else if (i == 4)
 			{
-				pObject->SetName(L"PictureUI");
-
-
+				pObject->SetName(L"HpBarEdgeUI");
 				pObject->Transform()->SetLocalPos(Vec3(res.fWidth / 5.10, -res.fHeight/ 2.75, 1.f));
-
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 6.8, (vScale.y / 7), 1.f));
+			}
+
+			else if (i == 5)
+			{
+				pObject->SetName(L"HpBarEdgeeUI");
+				pObject->Transform()->SetLocalPos(Vec3(-res.fWidth / 20, -res.fHeight / 2.75, 1.2f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 4, (vScale.y / 40), 1.f));
+			}
+
+			else if (i == 6)
+			{
+				pObject->SetName(L"HpBarUI");
+				pObject->Transform()->SetLocalPos(Vec3(-res.fWidth / 20, -res.fHeight / 2.75, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(hpBarWidth, hpBarHeight, 1.f));
 			}
 
 			// MeshRender 설정
@@ -1226,6 +1238,17 @@ void CSceneMgr::updateUI()
 
 					else
 						vecObject[j]->Transform()->SetLocalPos(Vec3(20000, 20000, 1.f));
+				}
+
+					//Hp 업데이트
+				else if (L"HpBarUI" == vecObject[j]->GetName())
+				{
+					float hp = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->hp;
+					 
+					vecObject[j]->Transform()->SetLocalScale(Vec3(hpBarWidth * hp / 100, hpBarHeight, 1.f));
+
+					float adjust = 100 - hp;
+					vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / 20 - adjust * 1.57, -res.fHeight / 2.75, 1.f));
 				}
 			}
 		}

@@ -35,6 +35,8 @@ private:
 
 	float posUIRatio = 64;
 	float miniMapUIRatio = 6.8;
+	float hpBarWidth = 0;
+	float hpBarHeight = 0;
 
 	SCENE_STATE SceneState = SCENE_STATE::START_SCENE;
 public:
