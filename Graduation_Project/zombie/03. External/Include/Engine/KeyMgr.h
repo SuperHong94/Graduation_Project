@@ -57,6 +57,7 @@ enum class KEY_TYPE
 	KEY_NEXT,
 	KEY_L,
 	KEY_C,
+	KEY_I,
 
 	KEY_END,
 };

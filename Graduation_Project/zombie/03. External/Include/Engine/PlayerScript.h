@@ -8,6 +8,9 @@ struct PlayerStatus
 	PlayerState state = P_Spawn;
 	BulletState bulletState = B_Normal;
 	float hp = 100.f;
+	float defence = 0.f;
+	float AdditionAttack = 0.f; //추가 공격력
+	float AdditionSpeed = 0.f; //추가 속도
 	//float speed = 4000.f;
 	float speed = 300.f;
 	float RollCoolTime = 0.f;
@@ -15,6 +18,10 @@ struct PlayerStatus
 	bool IsDead = false;
 	float disappearCnt = 0;
 	bool isDisappear = false;
+
+	float powerBuffTime = 10.f;
+	float defenceBuffTime = 10.f;
+	float speedBuffTime = 10.f;
 };
 
 class CPlayerScript :
@@ -26,7 +33,9 @@ private:
 
 	float bulletHeight = 0;
 	float shiftCoolTime = 1.2f;
-
+	float AddAtk = 10;	// 추가 공격력 수치 (수정시 이걸로)
+	float Adddefence = 5;	// 방어력 수치 (수정시 이걸로)
+	float AddSpead = 150;  // 추가 이속 수치 (수정시 이걸로)
 	Vec3 rollDir;
 
 	CGameObject* pObject;
@@ -36,8 +45,8 @@ private:
 
 	bool isPlayer;
 
-	CGameObject* pBullet[200];
-	int BulletCnt = 200;
+	CGameObject* pBullet[70];
+	int BulletCnt = 70;
 
 	float BulletCollOffset = 0.f;
 

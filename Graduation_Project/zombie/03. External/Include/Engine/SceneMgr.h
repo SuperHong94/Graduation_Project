@@ -25,6 +25,8 @@ private:
 	int			sceneNum = 0;
 	bool		isChange = false;
 	float collOffset = 20000.f;
+	bool QuestVisible = true;
+	bool pressI = false;
 
 	// 서버와 통신 해야됨
 	int playerNum = 4;
@@ -33,6 +35,8 @@ private:
 
 	float posUIRatio = 64;
 	float miniMapUIRatio = 6.8;
+	float hpBarWidth = 0;
+	float hpBarHeight = 0;
 
 	SCENE_STATE SceneState = SCENE_STATE::START_SCENE;
 public:
