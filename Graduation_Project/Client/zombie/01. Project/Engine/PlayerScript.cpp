@@ -77,6 +77,8 @@ void CPlayerScript::update()
 		// 플레이어 일시
 		if (isPlayer)
 		{
+
+			//플레이어 좌표받기
 			Vec3 vPos = Transform()->GetLocalPos();
 			Vec3 vRot = Transform()->GetLocalRot();
 			POINT ptMousePos = CKeyMgr::GetInst()->GetMousePos();
