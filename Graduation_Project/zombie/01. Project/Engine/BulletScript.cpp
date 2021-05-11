@@ -43,6 +43,8 @@ void CBulletScript::update()
 			break;
 		}
 
+		damage += AddDamage;
+
 		Vec3 vPos = Transform()->GetLocalPos();
 		//vPos.y += 400.f * DT;
 		vPos += vBulletDir * BulletSpeed * DT;

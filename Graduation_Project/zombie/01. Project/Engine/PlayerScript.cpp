@@ -85,7 +85,7 @@ void CPlayerScript::getDamage(float damage)
 		int a = 3;
 	}
 	// 테스트
-	status->hp -= damage;
+	status->hp -= (damage - status->defence);
 }
 
 void CPlayerScript::update()
@@ -95,6 +95,43 @@ void CPlayerScript::update()
 		// 플레이어 일시
 		if (isPlayer)
 		{
+			// 버프 확인
+			//공격
+			if (status->powerBuffTime > 0)
+			{
+				status->AdditionAttack = AddAtk;
+				status->powerBuffTime -= DT;
+			}
+			else
+			{
+				status->AdditionAttack = 0;
+				status->powerBuffTime = 0;
+			}
+
+			//방어
+			if (status->defenceBuffTime > 0)
+			{
+				status->defence = Adddefence;
+				status->defenceBuffTime -= DT;
+			}
+			else
+			{
+				status->defence = 0;
+				status->defenceBuffTime = 0;
+			}
+
+			//속도
+			if (status->speedBuffTime > 0)
+			{
+				status->AdditionSpeed = AddSpead;
+				status->speedBuffTime -= DT;
+			}
+			else
+			{
+				status->AdditionSpeed = 0;
+				status->speedBuffTime = 0;
+			}
+
 			Vec3 vPos = Transform()->GetLocalPos();
 			Vec3 vRot = Transform()->GetLocalRot();
 			POINT ptMousePos = CKeyMgr::GetInst()->GetMousePos();
@@ -148,7 +185,7 @@ void CPlayerScript::update()
 				if (KEY_HOLD(KEY_TYPE::KEY_W))
 				{
 					keyHold[0] = 1;
-					vPos.z += DT * status->speed;
+					vPos.z += DT * (status->speed + status->AdditionSpeed);
 					isMove = true;
 					if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)) && !status->IsRoll)
 						status->state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
@@ -157,7 +194,7 @@ void CPlayerScript::update()
 				if (KEY_HOLD(KEY_TYPE::KEY_S))
 				{
 					keyHold[1] = 1;
-					vPos.z -= DT * status->speed;
+					vPos.z -= DT * (status->speed + status->AdditionSpeed);
 					isMove = true;
 					if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, -1.f)) && !status->IsRoll)
 						status->state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
@@ -166,7 +203,7 @@ void CPlayerScript::update()
 				if (KEY_HOLD(KEY_TYPE::KEY_A))
 				{
 					keyHold[2] = 1;
-					vPos.x -= DT * status->speed;
+					vPos.x -= DT * (status->speed + status->AdditionSpeed);
 					isMove = true;
 					if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f)) && !status->IsRoll)
 						status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
@@ -175,7 +212,7 @@ void CPlayerScript::update()
 				if (KEY_HOLD(KEY_TYPE::KEY_D))
 				{
 					keyHold[3] = 1;
-					vPos.x += DT * status->speed;
+					vPos.x += DT * (status->speed + status->AdditionSpeed);
 					isMove = true;
 					if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, 0.f)) && !status->IsRoll)
 						status->state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
@@ -185,7 +222,7 @@ void CPlayerScript::update()
 			// 쉬프트 누를 때 마우스 방향으로 구르기 끝날때 까지 고정 이동
 			else
 			{
-				vPos += DT * rollDir * status->speed;
+				vPos += DT * rollDir * (status->speed + status->AdditionSpeed);
 			}
 
 			// 구르기 
@@ -410,6 +447,9 @@ void CPlayerScript::update()
 
 						//충돌체 위치 조정
 						pBullet[i]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, -BulletCollOffset));
+
+						//추가 공격력 설정
+						pBullet[i]->GetScript<CBulletScript>()->setDamage(status->AdditionAttack);
 
 
 						if (status->bulletState == BulletState::B_Normal)

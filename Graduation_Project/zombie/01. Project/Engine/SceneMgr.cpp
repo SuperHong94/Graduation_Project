@@ -72,7 +72,7 @@ void CSceneMgr::CreateTargetUI()
 	hpBarWidth = CRenderMgr::GetInst()->GetResolution().fWidth / 4.1;
 	hpBarHeight = CRenderMgr::GetInst()->GetResolution().fHeight / 45;
 
-	Ptr<CTexture> GameSceneArrTex[7] = {
+	Ptr<CTexture> GameSceneArrTex[13] = {
 	 (CResMgr::GetInst()->Load<CTexture>(L"BGUI", L"Texture\\UI\\BGUI.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"MiniMap", L"Texture\\UI\\MiniMap.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\UI\\playerTest.png")),
@@ -80,6 +80,12 @@ void CSceneMgr::CreateTargetUI()
 	 (CResMgr::GetInst()->Load<CTexture>(L"Picture", L"Texture\\UI\\PlayerPicture.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"HpBarEdge", L"Texture\\UI\\HpBarEdge.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"HpBar", L"Texture\\UI\\HpBar.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"PowerBuffOn", L"Texture\\UI\\PowerBuffOn.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"PowerBuffOff", L"Texture\\UI\\PowerBuffOff.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"DefenceBuffOn", L"Texture\\UI\\DefenceBuffOn.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"DefenceBuffOff", L"Texture\\UI\\DefenceBuffOff.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"SpeedBuffOn", L"Texture\\UI\\SpeedBuffOn.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"SpeedBuffOff", L"Texture\\UI\\SpeedBuffOff.png")),
 	};
 
 	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"StartBG", L"Texture\\UI\\StartBG.png") };
@@ -88,7 +94,7 @@ void CSceneMgr::CreateTargetUI()
 
 	Ptr<CTexture> GameOverSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"GameOverBG", L"Texture\\UI\\GameOverBG.png") };
 
-	int NumgameSceneUI = 7;
+	int NumgameSceneUI = 13;
 	int NumStartSceneUI = 1;
 	int NumGameClearSceneUI = 1;
 	int NumGameOVerSceneUI = 1;
@@ -160,6 +166,48 @@ void CSceneMgr::CreateTargetUI()
 				pObject->SetName(L"HpBarUI");
 				pObject->Transform()->SetLocalPos(Vec3(-res.fWidth / 20, -res.fHeight / 2.75, 1.f));
 				pObject->Transform()->SetLocalScale(Vec3(hpBarWidth, hpBarHeight, 1.f));
+			}
+
+			else if (i == 7)
+			{
+				pObject->SetName(L"PowerBuffOnUI");
+				pObject->Transform()->SetLocalPos(Vec3(-20000, 0.f , 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
+			}
+
+			else if (i == 8)
+			{
+				pObject->SetName(L"PowerBuffOffUI");
+				pObject->Transform()->SetLocalPos(Vec3(-res.fWidth / 6.5, -res.fHeight / 2.3, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
+			}
+
+			else if (i == 9)
+			{
+				pObject->SetName(L"DefenceBuffOnUI");
+				pObject->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25)* res.fWidth / res.fHeight, 1.f));
+			}
+
+			else if (i == 10)
+			{
+				pObject->SetName(L"DefenceBuffOffUI");
+				pObject->Transform()->SetLocalPos(Vec3(-res.fWidth / 10, -res.fHeight / 2.3, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
+			}
+
+			else if (i == 11)
+			{
+				pObject->SetName(L"SpeedBuffOnUI");
+				pObject->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25)* res.fWidth / res.fHeight, 1.f));
+			}
+
+			else if (i == 12)
+			{
+				pObject->SetName(L"SpeedBuffOffUI");
+				pObject->Transform()->SetLocalPos(Vec3(-res.fWidth / (130 / 6), -res.fHeight / 2.3, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
 			}
 
 			// MeshRender 설정
@@ -1249,6 +1297,69 @@ void CSceneMgr::updateUI()
 
 					float adjust = 100 - hp;
 					vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / 20 - adjust * 1.57, -res.fHeight / 2.75, 1.f));
+				}
+
+				//공격버프 UI 업데이트
+				else if (L"PowerBuffOnUI" == vecObject[j]->GetName())
+				{
+					float powerBuffTime = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->powerBuffTime;
+					if(powerBuffTime > 0)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / 6.5, -res.fHeight / 2.3, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				}
+
+				else if (L"PowerBuffOffUI" == vecObject[j]->GetName())
+				{
+					float powerBuffTime = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->powerBuffTime;
+					if (powerBuffTime <= 0)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / 6.5, -res.fHeight / 2.3, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				}
+
+				//방어버프 UI 업데이트
+				else if (L"DefenceBuffOnUI" == vecObject[j]->GetName())
+				{
+					float defenceBuffTime = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->defenceBuffTime;
+					if (defenceBuffTime > 0)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / 10, -res.fHeight / 2.3, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				}
+
+				else if (L"DefenceBuffOffUI" == vecObject[j]->GetName())
+				{
+					float defenceBuffTime = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->defenceBuffTime;
+					if (defenceBuffTime <= 0)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / 10, -res.fHeight / 2.3, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				}
+
+				//속도버프 UI 업데이트
+				else if (L"SpeedBuffOnUI" == vecObject[j]->GetName())
+				{
+					float speedBuffTime = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->speedBuffTime;
+					if (speedBuffTime > 0)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / (130 / 6), -res.fHeight / 2.3, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				}
+
+				else if (L"SpeedBuffOffUI" == vecObject[j]->GetName())
+				{
+					float speedBuffTime = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->speedBuffTime;
+					if (speedBuffTime <= 0)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / (130 / 6), -res.fHeight / 2.3, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
 				}
 			}
 		}
