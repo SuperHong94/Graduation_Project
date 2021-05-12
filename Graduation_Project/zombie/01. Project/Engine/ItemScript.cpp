@@ -44,18 +44,30 @@ void CItemScript::OnCollisionEnter(CCollider2D* _pOther)
 		wstring s = _pOther->GetObj()->GetName();
 		if (L"Player Object" == _pOther->GetObj()->GetName())
 		{
-			if (state == ItemState::I_PwPotion)
-				_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->powerBuffTime += 10.f;
+			if (!_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->IsDead)
+			{
+				if (state == ItemState::I_PwPotion)
+					_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->powerBuffTime += 10.f;
 
-			else if (state == ItemState::I_DfPotion)
-				_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->defenceBuffTime += 10.f;
+				else if (state == ItemState::I_DfPotion)
+					_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->defenceBuffTime += 10.f;
 
-			else if (state == ItemState::I_SpPotion)
-				_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->speedBuffTime += 10.f;
+				else if (state == ItemState::I_SpPotion)
+					_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->speedBuffTime += 10.f;
 
-			Transform()->SetLocalPos(Vec3(20000.f, 0.f, 20000.f));
-			activeTime = 0.f;
-			isSpawn = false;
+				else if (state == ItemState::I_HpItem)
+				{
+					float hp = _pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->hp;
+					hp += 20;
+					if (hp > 100)
+						hp = 100;
+					_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->hp = hp;
+				}
+
+				Transform()->SetLocalPos(Vec3(20000.f, 0.f, 20000.f));
+				activeTime = 0.f;
+				isSpawn = false;
+			}
 		}
 	}
 }

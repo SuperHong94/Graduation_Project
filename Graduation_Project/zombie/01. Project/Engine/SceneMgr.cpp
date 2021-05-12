@@ -394,7 +394,7 @@ void CSceneMgr::initGameScene()
 		// ===================
 		// Player 坷宏璃飘 积己
 		// ===================
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\PowerPotion.fbx");
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\HealPack.fbx");
 		pMeshData->Save(pMeshData->GetPath());
 
 		for (int i = 0; i < playerNum; i++)
@@ -626,7 +626,7 @@ void CSceneMgr::initGameScene()
 		// ====================
 		// Item 积己
 		// ====================
-		for (int i = 0; i < potionCnt; i++)
+		for (int i = 0; i < ItemCnt; i++)
 		{
 			pObject = new CGameObject;
 
@@ -634,8 +634,13 @@ void CSceneMgr::initGameScene()
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\PowerPotion.mdat", L"MeshData\\PowerPotion.mdat");
 			else if(i<20)
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\DfPotion.mdat", L"MeshData\\DfPotion.mdat");
-			else
+			else if(i<30)
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SpPotion.mdat", L"MeshData\\SpPotion.mdat");
+			else if (i < 40)
+			{
+				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\HealPack.mdat", L"MeshData\\HealPack.mdat");
+				//pObject->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
+			}
 			pObject = pMeshData->Instantiate();
 
 			pObject->SetName(L"Item Object");
@@ -661,13 +666,18 @@ void CSceneMgr::initGameScene()
 				pObject->AddComponent(new CItemScript(ItemState::I_PwPotion));
 			else if (i < 20)
 				pObject->AddComponent(new CItemScript(ItemState::I_DfPotion));
-			else
+			else if (i < 30)
 				pObject->AddComponent(new CItemScript(ItemState::I_SpPotion));
+			else if (i < 40)
+			{
+				pObject->AddComponent(new CItemScript(ItemState::I_HpItem));
+				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f,  0.f));
+			}
 
 			// AddGameObject
 			m_pCurScene->FindLayer(L"Item")->AddGameObject(pObject);
 
-			m_pPotion[i] = pObject;
+			m_pItem[i] = pObject;
 		}
 
 		// ====================
