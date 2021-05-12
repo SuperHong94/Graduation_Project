@@ -23,8 +23,18 @@ void CItemScript::update()
 		if (activeTime > 0)
 		{
 			activeTime -= DT;
-			float rot = Transform()->GetLocalRot().y;
-			Transform()->SetLocalRot(Vec3(0.f, rot + DT, 0.f));
+
+			if (state == ItemState::I_HpItem)
+			{
+				Vec3 vRot = Transform()->GetLocalRot();
+				Transform()->SetLocalRot(Vec3(vRot.x, vRot.y + DT, 0.f));
+			}
+			
+			else
+			{
+				float rot = Transform()->GetLocalRot().y;
+				Transform()->SetLocalRot(Vec3(0.f, rot + DT, 0.f));
+			}
 		}
 
 		else

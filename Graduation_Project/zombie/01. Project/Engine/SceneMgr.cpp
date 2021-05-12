@@ -394,8 +394,8 @@ void CSceneMgr::initGameScene()
 		// ===================
 		// Player 오브젝트 생성
 		// ===================
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\HealPack.fbx");
-		pMeshData->Save(pMeshData->GetPath());
+	/*	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\HealPack.fbx");
+		pMeshData->Save(pMeshData->GetPath());*/
 
 		for (int i = 0; i < playerNum; i++)
 		{
@@ -672,6 +672,7 @@ void CSceneMgr::initGameScene()
 			{
 				pObject->AddComponent(new CItemScript(ItemState::I_HpItem));
 				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f,  0.f));
+				pObject->Collider2D()->SetOffsetScale(Vec3(250.f, 0.f, 250.f));
 			}
 
 			// AddGameObject
