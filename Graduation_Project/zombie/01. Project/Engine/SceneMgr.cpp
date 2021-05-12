@@ -435,7 +435,7 @@ void CSceneMgr::initGameScene()
 			m_pPlayerArr[i]->AddComponent(new CCollider2D);
 			m_pPlayerArr[i]->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
 			m_pPlayerArr[i]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
-			m_pPlayerArr[i]->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
+			m_pPlayerArr[i]->Collider2D()->SetOffsetScale(Vec3(100.f, 0.f, 100.f));
 
 
 			// Script 설정
@@ -672,7 +672,7 @@ void CSceneMgr::initGameScene()
 			{
 				pObject->AddComponent(new CItemScript(ItemState::I_HpItem));
 				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f,  0.f));
-				pObject->Collider2D()->SetOffsetScale(Vec3(250.f, 0.f, 250.f));
+				pObject->Collider2D()->SetOffsetScale(Vec3(300.f, 0.f, 300.f));
 			}
 
 			// AddGameObject
@@ -836,6 +836,7 @@ void CSceneMgr::initGameScene()
 		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Monster", L"Monster");
 		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Tomb");
 		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Player", L"Item");
+		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Monster", L"Player");
 		//m_pCurScene->awake();
 		//m_pCurScene->start();
 	}
@@ -1261,6 +1262,23 @@ void CSceneMgr::update()
 		}
 	}
 
+	//if (SceneState == SCENE_STATE::GAME_SCENE)
+	//{
+	//	// 플레이어 오프셋 조정
+	//	for (int i = 0; i < MAX_LAYER; ++i)
+	//	{
+	//		const vector<CGameObject*>& vecObject = m_pCurScene->GetLayer(i)->GetObjects();
+	//		for (size_t j = 0; j < vecObject.size(); ++j)
+	//		{
+	//			if (L"Player Object" == vecObject[j]->GetName())
+	//			{
+	//				float offset = vecObject[j]->GetScript<CPlayerScript>()->GetCollOffset();
+	//				vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, offset + collOffset, 0.f));
+	//			}
+	//		}
+	//	}
+	//}
+
 	// 충돌 처리 Offset 변경
 	if (KEY_TAB(KEY_TYPE::KEY_C) && SceneState == SCENE_STATE::GAME_SCENE)
 	{
@@ -1283,7 +1301,9 @@ void CSceneMgr::update()
 			{	
 				if (L"Player Object" == vecObject[j]->GetName())
 				{
-					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
+				/*	float offset = vecObject[j]->GetScript<CPlayerScript>()->GetCollOffset();
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, offset + collOffset, 0.f));*/
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 50000.f + collOffset, 0.f));
 				}
 
 				// 몬스터 Offset 변경

@@ -295,7 +295,7 @@ void CPlayerScript::update()
 				vPos.z = -4990;
 			Transform()->SetLocalPos(vPos);
 			Transform()->SetLocalRot(vRot);
-
+			collOffset = 50;
 
 			//구르기 애니메이션 설정
 			if (isAniChange)
@@ -316,7 +316,7 @@ void CPlayerScript::update()
 					// 수정되면 지울 것
 					Vec3 temp = pObject->Transform()->GetLocalPos();
 					pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
-				
+					collOffset = 50;
 					//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 100 + collOffset, 0.f));
 				}
 
@@ -330,21 +330,29 @@ void CPlayerScript::update()
 
 						// 방향별 달리기 애니메이션 설정
 						if (status->state == PlayerState::P_FRun)
+						{
 							pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
+							collOffset = -3;
+						}
 
 						else if (status->state == PlayerState::P_BRun)
+						{
 							pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierBRun.mdat", L"MeshData\\SoldierBRun.mdat");
+							collOffset = -3;
+						}
 
 						else if (status->state == PlayerState::P_LRun)
 						{
 							pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierLRun.mdat", L"MeshData\\SoldierLRun.mdat");
 							revise = 4;
+							collOffset = -7;
 						}
 
 						else if (status->state == PlayerState::P_RRun)
 						{
 							pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRRun.mdat", L"MeshData\\SoldierRRun.mdat");
 							revise = 4;
+							collOffset = -7;
 						}
 
 						if (pMeshData != NULL)
@@ -367,6 +375,7 @@ void CPlayerScript::update()
 						// 수정되면 지울 것
 						Vec3 temp = pObject->Transform()->GetLocalPos();
 						pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
+						collOffset = 50;
 					}
 				}
 			}
@@ -491,7 +500,23 @@ void CPlayerScript::update()
 
 				}
 			}
+
+
 		}
+
+		// 충돌 오프셋 변경
+		if (status->state == PlayerState::P_BRun || status->state == PlayerState::P_FRun)
+			collOffset = -3;
+
+		else if (status->state == PlayerState::P_LRun || status->state == PlayerState::P_RRun)
+			collOffset = -7;
+
+		else if (status->state == PlayerState::P_Die)
+			collOffset = 20000;
+
+		else
+			collOffset = 50;
+		//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, collOffset + collOffset, 0.f));
 
 		// 플레이어 죽음 체크
 		if (status->hp <= 0)
