@@ -21,7 +21,9 @@ private:
 	GameMgr* m_pGameManager;
 	CGameObject* m_pPlayerArr[4];
 	CGameObject* monsterArr[100];
+	CGameObject* m_pPotion[30];
 	int monsterCnt = 60;
+	int potionCnt = 30;
 	int			sceneNum = 0;
 	bool		isChange = false;
 	float collOffset = 20000.f;

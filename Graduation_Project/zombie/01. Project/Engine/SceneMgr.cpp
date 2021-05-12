@@ -36,6 +36,7 @@
 #include "StartSceneScript.h"
 #include "meshdata.h"
 #include "TombScript.h"
+#include "ItemScript.h"
 
 #include "ResMgr.h"
 #include "PathMgr.h"
@@ -104,7 +105,7 @@ void CSceneMgr::CreateTargetUI()
 		for (UINT i = 0; i < NumgameSceneUI; i++)
 		{
 			CGameObject* pObject = new CGameObject;
-			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
+			pObject->FrustumCheck(true);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
 
@@ -230,7 +231,7 @@ void CSceneMgr::CreateTargetUI()
 		{
 			CGameObject* pObject = new CGameObject;
 			pObject->SetName(L"StartBgUI");
-			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
+			pObject->FrustumCheck(true);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
 
@@ -261,7 +262,7 @@ void CSceneMgr::CreateTargetUI()
 		{
 			CGameObject* pObject = new CGameObject;
 			pObject->SetName(L"EndBgUI");
-			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
+			pObject->FrustumCheck(true);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
 
@@ -289,7 +290,7 @@ void CSceneMgr::CreateTargetUI()
 		{
 			CGameObject* pObject = new CGameObject;
 			pObject->SetName(L"EndBgUI");
-			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
+			pObject->FrustumCheck(true);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
 
@@ -342,6 +343,7 @@ void CSceneMgr::initGameScene()
 	m_pCurScene->GetLayer(2)->SetName(L"Monster");
 	m_pCurScene->GetLayer(3)->SetName(L"Bullet");
 	m_pCurScene->GetLayer(4)->SetName(L"Tomb");
+	m_pCurScene->GetLayer(5)->SetName(L"Item");
 
 	m_pCurScene->GetLayer(30)->SetName(L"UI");
 	m_pCurScene->GetLayer(31)->SetName(L"Tool");
@@ -392,8 +394,8 @@ void CSceneMgr::initGameScene()
 		// ===================
 		// Player 오브젝트 생성
 		// ===================
-	/*	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\HpPotion.fbx");
-		pMeshData->Save(pMeshData->GetPath());*/
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\PowerPotion.fbx");
+		pMeshData->Save(pMeshData->GetPath());
 
 		for (int i = 0; i < playerNum; i++)
 		{
@@ -429,6 +431,12 @@ void CSceneMgr::initGameScene()
 			//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
 			//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
 			//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+
+			m_pPlayerArr[i]->AddComponent(new CCollider2D);
+			m_pPlayerArr[i]->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+			m_pPlayerArr[i]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
+			m_pPlayerArr[i]->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
+
 
 			// Script 설정
 			// 플레이어 일시
@@ -569,7 +577,7 @@ void CSceneMgr::initGameScene()
 			pObject = pMeshData->Instantiate();
 
 			pObject->SetName(L"Monster Object");
-			pObject->FrustumCheck(false);
+			pObject->FrustumCheck(true);
 			pObject->AddComponent(new CTransform);
 			//pObject->AddComponent(new CMeshRender);
 
@@ -602,7 +610,7 @@ void CSceneMgr::initGameScene()
 			
 			pObject->AddComponent(new CCollider2D);
 			pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
-			pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 100.f + collOffset, 0.f));
+			pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
 			//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, -5000.f, 0.f));
 			pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
 
@@ -615,6 +623,52 @@ void CSceneMgr::initGameScene()
 			monsterArr[i] = pObject;
 		}
 
+		// ====================
+		// Item 생성
+		// ====================
+		for (int i = 0; i < potionCnt; i++)
+		{
+			pObject = new CGameObject;
+
+			if(i<10)
+				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\PowerPotion.mdat", L"MeshData\\PowerPotion.mdat");
+			else if(i<20)
+				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\DfPotion.mdat", L"MeshData\\DfPotion.mdat");
+			else
+				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SpPotion.mdat", L"MeshData\\SpPotion.mdat");
+			pObject = pMeshData->Instantiate();
+
+			pObject->SetName(L"Item Object");
+			pObject->FrustumCheck(true);
+			pObject->AddComponent(new CTransform);
+
+			pObject->Transform()->SetLocalPos(Vec3(20000.f, 0.f, 20000.f));
+			pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+
+			//pObject->MeshRender()->SetDynamicShadow(true);
+			/*pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 0);
+			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
+			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
+			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
+
+			pObject->AddComponent(new CCollider2D);
+			pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+			pObject->Collider2D()->SetOffsetPos(Vec3(0.f, collOffset, 0.f));
+			pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
+
+			// Script 설정
+			if (i < 10)
+				pObject->AddComponent(new CItemScript(ItemState::I_PwPotion));
+			else if (i < 20)
+				pObject->AddComponent(new CItemScript(ItemState::I_DfPotion));
+			else
+				pObject->AddComponent(new CItemScript(ItemState::I_SpPotion));
+
+			// AddGameObject
+			m_pCurScene->FindLayer(L"Item")->AddGameObject(pObject);
+
+			m_pPotion[i] = pObject;
+		}
 
 		// ====================
 		// Game Manager 생성
@@ -770,7 +824,7 @@ void CSceneMgr::initGameScene()
 		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Monster");
 		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Monster", L"Monster");
 		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Tomb");
-
+		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Player", L"Item");
 		//m_pCurScene->awake();
 		//m_pCurScene->start();
 	}
@@ -1216,15 +1270,25 @@ void CSceneMgr::update()
 			const vector<CGameObject*>& vecObject = m_pCurScene->GetLayer(i)->GetObjects();
 			for (size_t j = 0; j < vecObject.size(); ++j)
 			{	
+				if (L"Player Object" == vecObject[j]->GetName())
+				{
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
+				}
+
 				// 몬스터 Offset 변경
 				if (L"Monster Object" == vecObject[j]->GetName())
 				{
-					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 100.f + collOffset, 0.f));
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
 				}
 
 				if (L"Tomb Object" == vecObject[j]->GetName())
 				{
-					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 100.f + collOffset));
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 50.f + collOffset));
+				}
+
+				if (L"Item Object" == vecObject[j]->GetName())
+				{
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, collOffset, 0.f));
 				}
 			}
 		}
@@ -1493,7 +1557,7 @@ void CSceneMgr::setMap()
 		//pObject->MeshRender()->SetDynamicShadow(true);
 
 		pObject->AddComponent(new CCollider2D);
-		pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 100.f + collOffset));
+		pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 50.f + collOffset));
 		pObject->Collider2D()->SetOffsetScale(Vec3(300.f, 300.f, 0.f));
 		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RRECT);
 

@@ -81,4 +81,10 @@ void CBulletScript::OnCollisionEnter(CCollider2D* _pOther)
 		//DeleteObject(GetObj());
 		BulletActive = false;
 	}
+
+	if (L"Item Object" == _pOther->GetObj()->GetName())
+	{
+		//DeleteObject(GetObj());
+		BulletActive = false;
+	}
 }

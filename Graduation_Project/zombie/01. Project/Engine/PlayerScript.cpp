@@ -316,6 +316,8 @@ void CPlayerScript::update()
 					// 수정되면 지울 것
 					Vec3 temp = pObject->Transform()->GetLocalPos();
 					pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
+				
+					//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 100 + collOffset, 0.f));
 				}
 
 				//애니메이션 설정

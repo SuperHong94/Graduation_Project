@@ -1,7 +1,7 @@
 #pragma once
 #include "Script.h"
 #include "Scene.h"
-
+#include "SceneMgr.h"
 
 struct PlayerStatus
 {
@@ -19,9 +19,9 @@ struct PlayerStatus
 	float disappearCnt = 0;
 	bool isDisappear = false;
 
-	float powerBuffTime = 10.f;
-	float defenceBuffTime = 10.f;
-	float speedBuffTime = 10.f;
+	float powerBuffTime = 0.f;
+	float defenceBuffTime = 0.f;
+	float speedBuffTime = 0.f;
 };
 
 class CPlayerScript :
