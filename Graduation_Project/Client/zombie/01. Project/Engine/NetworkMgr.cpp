@@ -152,11 +152,7 @@ void CNetworkMgr::process(char* buf)
 	{
 
 		s2c_move* p = reinterpret_cast<s2c_move*>(buf);
-
 		process_key(p);
-#ifdef _DEBUG
-		std::cout << "키 정보결과로 " << p->x << ',' << p->y << ',' << p->z << "를 받았다" << std::endl;
-#endif 
 	}
 	break;
 	case S2C_REMOVE_CLIENT: //클라이언트 접속 종료된
@@ -280,7 +276,7 @@ void CNetworkMgr::init()
 	//}
 
 
-
+	std::wcout.imbue(std::locale("korean"));
 	using namespace std;
 	if (WSAStartup(MAKEWORD(2, 2), &m_wsa) != 0)
 	{
@@ -295,9 +291,8 @@ void CNetworkMgr::init()
 		exit(-1);
 	}
 
-	//논블록 소켓으로 설정
-	unsigned long noblock = 1;
-	int retval = ioctlsocket(m_sock, FIONBIO, &noblock);
+
+	int retval = 0;
 	if (retval != NO_ERROR)
 	{
 		err_display("ioctlsocket", WSAGetLastError());
@@ -318,6 +313,10 @@ void CNetworkMgr::init()
 	serveraddr.sin_port = htons(SERVER_PORT);
 	inet_pton(AF_INET, ip, &serveraddr.sin_addr);
 	retval = connect(m_sock, reinterpret_cast<SOCKADDR*>(&serveraddr), sizeof(serveraddr));
+
+	//논블록 소켓으로 설정
+	unsigned long noblock = 1;
+	retval = ioctlsocket(m_sock, FIONBIO, &noblock);
 	if (retval == SOCKET_ERROR)
 	{
 		int errono = WSAGetLastError();
