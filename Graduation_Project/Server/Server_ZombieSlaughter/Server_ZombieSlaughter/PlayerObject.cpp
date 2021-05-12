@@ -40,13 +40,14 @@ void CPlayerObject::Update(c2s_Key* packet)
 		break;
 	case NO_EVENT:
 
-		m_rotation = { packet->rX,packet->rY,packet->rZ };
+	
 		m_ePState = PlayerState::P_Idle;
 		break;
 	default:
 		break;
 	}
 
+	m_rotation = { packet->rX,packet->rY,packet->rZ };
 	if (m_postion.x > MAX_MAP)
 		m_postion.x = MAX_MAP;
 	if (m_postion.x < MIN_MAP)

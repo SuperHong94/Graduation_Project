@@ -49,10 +49,6 @@ public: //오브젝트 관련 메소드
 	int GetPlayerId() { return m_playerId; };
 	SCENE_STATE GetSceneState() { return m_eSceneState; };
 
-	bool m_isChange = false;
-
-	Vec3 playerPos;
-	PlayerState m_ePState;
 
 
 };

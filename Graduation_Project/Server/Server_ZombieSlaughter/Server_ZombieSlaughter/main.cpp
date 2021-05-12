@@ -68,13 +68,13 @@ void send_packet(int c_id, void* packet)
 			err_display("WSASEND()", err_code);
 	}
 }
-void send_move_packet(int c_id)
+void send_move_packet(int c_id, int other_id) //c_id에게 other_id 정보 보내기
 {
-	CLIENT& client = clients[c_id];
+	CLIENT& client = clients[other_id];
 	s2c_move packet;
 	packet.size = sizeof(packet);
 	packet.type = S2C_MOVE;
-	packet.id = c_id;
+	packet.id = other_id;
 
 	//좌표설정
 	Vec3 pos = client.m_pPlayer->GetPostion();
@@ -153,7 +153,9 @@ void send_key_result(int c_id, c2s_Key* packet)
 {
 	clients[c_id].m_pPlayer->Update(packet);
 
-	send_move_packet(c_id);
+	for (auto& c : clients)
+		if (c.second.m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) //게임씬일때 보내기
+			send_move_packet(c.second.m_id, c_id); //c.secnod.m_id에게 c_id 정보 보내기
 }
 /// <summary>
 /// c_id가 other_id를 추가한다.
@@ -162,8 +164,8 @@ void send_key_result(int c_id, c2s_Key* packet)
 /// <param name="other_id"> 대상</param>
 void send_add_client(int c_id, int other_id)
 {
-	Vec3& otherRotation = clients[other_id].m_pPlayer->GetRotation();
-	Vec3& otherPos = clients[other_id].m_pPlayer->GetPostion();
+	const Vec3& otherRotation = clients[other_id].m_pPlayer->GetRotation();
+	const Vec3& otherPos = clients[other_id].m_pPlayer->GetPostion();
 	s2c_add_client packet;
 	packet.size = sizeof(packet);
 	packet.type = S2C_ADD_PLAYER;

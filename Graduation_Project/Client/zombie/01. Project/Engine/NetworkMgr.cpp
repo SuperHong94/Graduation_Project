@@ -166,7 +166,7 @@ void CNetworkMgr::process(char* buf)
 		if (m_pPlayerArray != nullptr) {
 
 			m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;
-			m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(20000.f,20000.f,20000.f));
+			m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(20000.f, 20000.f, 20000.f));
 
 		}
 	}
@@ -191,19 +191,19 @@ void CNetworkMgr::process_key(s2c_move* p)
 	int playerID = p->id - 1;
 	if (m_pPlayerArray != nullptr) {
 		//m_pPlayerArray[playerID]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = false;
-		m_pPlayerArray[playerID]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(p->x, p->y, p->z));
-		m_pPlayerArray[playerID]->GetScript<CPlayerScript>()->Transform()->SetLocalRot(Vec3(p->rx, p->ry, p->rz));
 
-	}
+		const auto& PlayerScript = m_pPlayerArray[playerID]->GetScript<CPlayerScript>();
 
-	Vec3 packetPos = { p->x,p->y,p->z };
-	if (packetPos == playerPos)
-		m_isChange = false;
-	else
-		m_isChange = true;
+		auto& state = PlayerScript->GetStatus()->state;
+		state = p->ePlayerState;
+		if (state == PlayerState::P_BRun || state == PlayerState::P_FRun || state == PlayerState::P_LRun || state == PlayerState::P_RRun)
+			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 53.f + p->y, p->z));
+		else
+			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, p->y, p->z));
 
-	if (m_isChange) {
-		playerPos = packetPos;
+		if (playerID != m_playerId) //내가 조정하는거 아닐때만
+			PlayerScript->Transform()->SetLocalRot(Vec3(p->rx, p->ry, p->rz));
+
 	}
 
 }
@@ -304,11 +304,19 @@ void CNetworkMgr::init()
 		exit(-1);
 	}
 	//connect()
+	char ip[30];
+	::memset(ip, 0, sizeof(ip));
+	ifstream in("IP.txt");
+	if (!in){
+		exit(-1);
+		cout << "안됨\n";
+	}
+	in >> ip;
 	SOCKADDR_IN serveraddr;
-	memset(&serveraddr, 0, sizeof(serveraddr));
+	::memset(&serveraddr, 0, sizeof(serveraddr));
 	serveraddr.sin_family = AF_INET;
 	serveraddr.sin_port = htons(SERVER_PORT);
-	inet_pton(AF_INET, SERVER_IP, &serveraddr.sin_addr);
+	inet_pton(AF_INET, ip, &serveraddr.sin_addr);
 	retval = connect(m_sock, reinterpret_cast<SOCKADDR*>(&serveraddr), sizeof(serveraddr));
 	if (retval == SOCKET_ERROR)
 	{

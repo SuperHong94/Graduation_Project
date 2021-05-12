@@ -56,7 +56,7 @@ using std::make_pair;
 // 서버관련 lib, 헤더추가
 #include <WS2tcpip.h>
 #include <MSWSock.h>//acceptEx를위해서
-
+#include <fstream>	
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "MSWSock.lib") //acceptEx를위해서
 #include "../../../../Server/Server_ZombieSlaughter/Server_ZombieSlaughter/Protocol.h"

@@ -298,8 +298,8 @@ void CPlayerScript::update()
 
 						// 이건 모델 피봇 잘못설정해서 임시로 설정
 						// 수정되면 지울 것
-						Vec3 temp = pObject->Transform()->GetLocalPos();
-						pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f + revise, temp.z));
+						//Vec3 temp = pObject->Transform()->GetLocalPos();
+						//pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f + revise, temp.z));
 					}
 
 					else
