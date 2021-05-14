@@ -57,7 +57,7 @@ int CDevice::init(HWND _hWnd, const tResolution & _res, bool _bWindow)
 	//OutputDebugString(dxgiAdapterDesc.Description);
 
 	// CreateDevice
-	D3D12CreateDevice(pd3dAdapter, D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_pDevice));
+	D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_pDevice));
 
 	// CreateFence
 	m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFence));
