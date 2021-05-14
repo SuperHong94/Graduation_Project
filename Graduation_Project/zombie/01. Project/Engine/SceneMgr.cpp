@@ -77,7 +77,7 @@ void CSceneMgr::CreateTargetUI()
 	 (CResMgr::GetInst()->Load<CTexture>(L"BGUI", L"Texture\\UI\\BGUI.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"MiniMap", L"Texture\\UI\\MiniMap.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\UI\\playerTest.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"Quest", L"Texture\\UI\\playerTest.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"Quest", L"Texture\\UI\\Quest.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"Picture", L"Texture\\UI\\PlayerPicture.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"HpBarEdge", L"Texture\\UI\\HpBarEdge.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"HpBar", L"Texture\\UI\\HpBar.png")),
@@ -672,7 +672,8 @@ void CSceneMgr::initGameScene()
 			{
 				pObject->AddComponent(new CItemScript(ItemState::I_HpItem));
 				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f,  0.f));
-				pObject->Collider2D()->SetOffsetScale(Vec3(300.f, 0.f, 300.f));
+				pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, collOffset));
+				pObject->Collider2D()->SetOffsetScale(Vec3(350.f, 0.f, 500.f));
 			}
 
 			// AddGameObject
@@ -1301,9 +1302,9 @@ void CSceneMgr::update()
 			{	
 				if (L"Player Object" == vecObject[j]->GetName())
 				{
-				/*	float offset = vecObject[j]->GetScript<CPlayerScript>()->GetCollOffset();
-					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, offset + collOffset, 0.f));*/
-					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 50000.f + collOffset, 0.f));
+					float offset = vecObject[j]->GetScript<CPlayerScript>()->GetCollOffset();
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, offset + collOffset, 0.f));
+					//vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 50000.f + collOffset, 0.f));
 				}
 
 				// 몬스터 Offset 변경
@@ -1319,7 +1320,11 @@ void CSceneMgr::update()
 
 				if (L"Item Object" == vecObject[j]->GetName())
 				{
-					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, collOffset, 0.f));
+					if(vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_HpItem)
+						vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, collOffset));
+
+					else
+						vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, collOffset, 0.f));
 				}
 			}
 		}
