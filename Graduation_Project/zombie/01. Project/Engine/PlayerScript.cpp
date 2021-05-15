@@ -23,7 +23,7 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 		pBullet[i]->SetName(L"Bullet Object");
 		pBullet[i]->FrustumCheck(true);
 		pBullet[i]->AddComponent(new CTransform());
-		pBullet[i]->Transform()->SetLocalPos(Vec3(-20000.0f, 20000.0f, 20000.0f));
+		pBullet[i]->Transform()->SetLocalPos(Vec3(20000.0f, 20000.0f, 20000.0f));
 		pBullet[i]->AddComponent(new CMeshRender);
 		pBullet[i]->AddComponent(new CCollider2D);
 		pBullet[i]->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
@@ -32,7 +32,7 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 
 		pBullet[i]->AddComponent(new CBulletScript(Vec3(0,0,0), status->bulletState));
 		pBullet[i]->GetScript<CBulletScript>()->SetActive(false);
-
+		//pBullet[i]->Collider2D()->disable();
 		CreateObject(pBullet[i], L"Bullet");
 	}
 }
