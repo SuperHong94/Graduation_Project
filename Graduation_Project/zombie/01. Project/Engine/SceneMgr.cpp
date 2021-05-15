@@ -1180,9 +1180,6 @@ void CSceneMgr::update()
 		init();
 
 		isChange = true;
-
-		// 변수값 초기화
-		initValue();
 	}
 
 
@@ -1195,6 +1192,10 @@ void CSceneMgr::update()
 			m_pCurScene = new CScene;
 			//delete m_pCurScene;
 			SceneState = SCENE_STATE::GAME_SCENE;
+
+			// 변수값 초기화
+			initValue();
+
 			init();
 
 			isChange = true;
@@ -1699,4 +1700,7 @@ void CSceneMgr::initValue()
 {
 	collOffset = 20000.f;
 	QuestVisible = true;
+	pressI = false;
+
+	updateUI();
 }

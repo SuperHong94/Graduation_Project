@@ -49,6 +49,7 @@ private:
 	int BulletCnt = 70;
 
 	float BulletCollOffset = 0.f;
+	float collOffset = 20000;
 
 public:
 	virtual void awake();
@@ -63,6 +64,9 @@ public:
 
 	void SetBulletCollOffset(float offset) { BulletCollOffset = offset; };
 	float GetBulletCollOffset() {return BulletCollOffset;};
+
+	float GetCollOffset() { return collOffset; };
+	void SetCollOffset(float offset) { collOffset = offset; };
 
 public:
 	CLONE(CPlayerScript);
