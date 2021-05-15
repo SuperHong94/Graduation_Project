@@ -243,6 +243,7 @@ void disconnect(int key)
 	clients.erase(key);
 	for (auto& c : clients) {
 		if (clients[c.second.m_id].m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE)
+			clients[c.second.m_id].m_pPlayer->SetSceneState(SCENE_STATE::GAME_SCENE);
 			send_remove_client(c.second.m_id, key); //c.sencond.m_id에게 key가 종료되었음을 알림
 	}
 }

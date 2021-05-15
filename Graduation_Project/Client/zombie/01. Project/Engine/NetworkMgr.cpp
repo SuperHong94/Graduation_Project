@@ -162,6 +162,7 @@ void CNetworkMgr::process(char* buf)
 		if (m_pPlayerArray != nullptr) {
 
 			m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;
+
 			m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(20000.f, 20000.f, 20000.f));
 
 		}
