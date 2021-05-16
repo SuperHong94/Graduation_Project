@@ -447,7 +447,7 @@ void CPlayerScript::update()
 
 						pBullet[i]->GetScript<CBulletScript>()->SetDir(vNBulletDir);
 
-						pBullet[i]->Transform()->SetLocalPos(Vec3(vPos.x + vNBulletDir.x * 25, bulletHeight, vPos.z + vNBulletDir.z * 25));
+						pBullet[i]->Transform()->SetLocalPos(Vec3(vPos.x + vNBulletDir.x * 70, bulletHeight, vPos.z + vNBulletDir.z * 65));
 
 						/*			pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
 									pBullet->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));*/

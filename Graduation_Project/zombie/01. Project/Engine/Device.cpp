@@ -58,8 +58,8 @@ int CDevice::init(HWND _hWnd, const tResolution & _res, bool _bWindow)
 	m_pFactory->EnumAdapters(1, &pd3dAdapter);
 
 	// CreateDevice
-	D3D12CreateDevice(pd3dAdapter, D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&m_pDevice));
-	//D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&m_pDevice));
+	//D3D12CreateDevice(pd3dAdapter, D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&m_pDevice));
+	D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&m_pDevice));
 
 	// CreateFence
 	m_pDevice->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_pFence));
