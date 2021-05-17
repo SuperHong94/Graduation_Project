@@ -11,4 +11,5 @@ void err_display(const char* msg, int code)
     cout << msg;
     wcout << lpMsgBuf << std::endl;
     LocalFree(lpMsgBuf);
+    //while (true);
 }

@@ -36,8 +36,10 @@ int get_new_id()
 {
 	for (int i = SERVER_ID + 1; i <= MAX_USER; ++i)
 	{
-		if (clients.count(i) == 0)return i;
+		if (clients[i].m_pPlayer == nullptr)
+			return i;
 	}
+	return -1;
 }
 
 
@@ -118,18 +120,18 @@ void upadate_scene_state(int c_id, c2s_chage_scene* packet)
 		//클라현재씬이 스타트씬에서 씬변환 패킷이 날라온경우
 		//서버에서 관리하는 클라이언트 씬상태를 inGame상태로 바꿈
 
-
 		clients[c_id].m_pPlayer->SetSceneState(SCENE_STATE::GAME_SCENE);
 
 		send_change_scene(c_id, SCENE_STATE::GAME_SCENE); //처음에 씬
 
 		for (auto& c : clients)//이미 플레이어늰 초기화 된데이터를 보냈다.
 		{
+			cout << c.first << endl;
+			cout << "c_id" << c_id << endl;
 			if (clients[c.second.m_id].m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) { //game씬상태인 클라이언트에게 addclient보내기
-				send_add_client(c_id, c.second.m_id);//새로접속한 클라이언트에게 이미접속한 클라이언트 정보보내기
-
+				send_add_client(c.second.m_id, c_id);//이미접속한 클라이언트들에게 새로접속한 클라이언트 정보보내기
 				if (c_id != c.second.m_id) //중복피하기위해서
-					send_add_client(c.second.m_id, c_id);//이미접속한 클라이언트들에게 새로접속한 클라이언트 정보보내기
+					send_add_client(c_id, c.second.m_id);//새로접속한 클라이언트에게 이미접속한 클라이언트 정보보내기
 			}
 		}
 
@@ -199,9 +201,9 @@ void proccess_packet(int c_id, unsigned char* buf)
 	break;
 	case C2S_CHANGE_SCENE: //클라에서 씬바꾸는 이벤트 일어남
 	{
-
+#ifdef _DEBUG
 		cout << "c2sChange_sCene\n";
-
+#endif // _DEBUG
 
 		c2s_chage_scene* packet = reinterpret_cast<c2s_chage_scene*>(buf);
 		upadate_scene_state(c_id, packet); //해당 이벤트에 맞게 씬을 업데이트
@@ -240,17 +242,22 @@ void disconnect(int key)
 {
 	closesocket(clients[key].m_socket);
 	delete clients[key].m_pPlayer;
+	clients[key].m_pPlayer = nullptr;
 	clients.erase(key);
 	for (auto& c : clients) {
-		if (clients[c.second.m_id].m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE)
-			clients[c.second.m_id].m_pPlayer->SetSceneState(SCENE_STATE::GAME_SCENE);
-			send_remove_client(c.second.m_id, key); //c.sencond.m_id에게 key가 종료되었음을 알림
+		if (c.first != key) {
+			if (clients[c.second.m_id].m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) {
+				//clients[c.second.m_id].m_pPlayer->SetSceneState(SCENE_STATE::GAME_SCENE);
+				send_remove_client(c.second.m_id, key); //c.sencond.m_id에게 key가 종료되었음을 알림
+			}
+		}
 	}
 }
 
 int main()
 {
 	wcout.imbue(locale("korean"));
+
 
 
 	int ret = 0;
@@ -374,6 +381,7 @@ int main()
 
 
 			int c_id = get_new_id();
+			cout << "새로운 ID " << c_id << endl;
 			if (c_id != -1) {
 #ifdef _DEBUG
 				std::cout << "[TCP 서버] " << c_id << "번 클라이언트 접속" << endl;
@@ -388,7 +396,7 @@ int main()
 				clients[c_id].m_pPlayer->init();
 				CreateIoCompletionPort(reinterpret_cast<HANDLE>(c_sock), h_iocp, c_id, 0);
 				do_recv(c_id);
-			}
+		}
 			//계속 Accept해야됨
 			memset(&accept_over.m_over, 0, sizeof(accept_over.m_over));
 
@@ -399,13 +407,13 @@ int main()
 		break;
 		default:
 			break;
-		}
-
-
-
-
-
 	}
+
+
+
+
+
+}
 	closesocket(listenSocket);
 	WSACleanup();
 

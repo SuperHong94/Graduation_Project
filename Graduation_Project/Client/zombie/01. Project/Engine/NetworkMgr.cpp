@@ -162,7 +162,6 @@ void CNetworkMgr::process(char* buf)
 		if (m_pPlayerArray != nullptr) {
 
 			m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;
-
 			m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos(Vec3(20000.f, 20000.f, 20000.f));
 
 		}
@@ -194,13 +193,15 @@ void CNetworkMgr::process_key(s2c_move* p)
 		auto& state = PlayerScript->GetStatus()->state;
 		state = p->ePlayerState;
 		if (state == PlayerState::P_BRun || state == PlayerState::P_FRun || state == PlayerState::P_LRun || state == PlayerState::P_RRun)
-			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 53.f + p->y, p->z));
+			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 53.f, p->z));
 		else
-			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, p->y, p->z));
+			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
 
-		if (playerID != m_playerId) //내가 조정하는거 아닐때만
+		if (playerID != m_playerId) { //내가 조정하는거 아닐때만
 			PlayerScript->Transform()->SetLocalRot(Vec3(p->rx, p->ry, p->rz));
-
+			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
+		
+		}
 	}
 
 }
