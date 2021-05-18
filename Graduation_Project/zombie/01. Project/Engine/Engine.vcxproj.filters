@@ -244,6 +244,9 @@
     <ClInclude Include="TimeMgr.h">
       <Filter>Manager\Mgr</Filter>
     </ClInclude>
+    <ClInclude Include="ItemScript.h">
+      <Filter>04. GameObject\Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -413,6 +416,9 @@
       <Filter>Manager\Mgr</Filter>
     </ClCompile>
     <ClCompile Include="global.cpp" />
+    <ClCompile Include="ItemScript.cpp">
+      <Filter>04. GameObject\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="std.fx">

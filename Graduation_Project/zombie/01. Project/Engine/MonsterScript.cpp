@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MonsterScript.h"
 #include "BulletScript.h"
+#include "ItemScript.h"
 
 CMonsterScript::CMonsterScript(CGameObject* targetObject[], int ntargetNum, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
@@ -127,6 +128,81 @@ void CMonsterScript::update()
 			if (!status->IsDisappear)
 			{
 				status->IsDisappear = true;
+
+				//아이템 스폰
+				bool ItemSpawn = false;
+				int rnd = rand() % 100;
+
+				if (rnd < 40)
+				{
+					for (int i = 0; i < MAX_LAYER; ++i)
+					{
+						if (!ItemSpawn)
+						{
+							const vector<CGameObject*>& vecObject = pScene->GetLayer(i)->GetObjects();
+							for (size_t j = 0; j < vecObject.size(); ++j)
+							{
+								if (L"Item Object" == vecObject[j]->GetName() && !ItemSpawn)
+								{
+									// 버프 포션 스폰
+									// 파워 포션 스폰
+									if (rnd < 10)
+									{
+										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_PwPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
+										{
+											vecObject[j]->GetScript<CItemScript>()->setIsSpawn(true);
+											vecObject[j]->GetScript<CItemScript>()->setActiveTime(10.f);
+											vecObject[j]->Transform()->SetLocalPos(Vec3(vPos.x, 50.f, vPos.z));
+											ItemSpawn = true;
+											break;
+										}
+									}
+
+									// 방어 포션 스폰
+									else if (rnd < 20)
+									{
+										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_DfPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
+										{
+											vecObject[j]->GetScript<CItemScript>()->setIsSpawn(true);
+											vecObject[j]->GetScript<CItemScript>()->setActiveTime(10.f);
+											vecObject[j]->Transform()->SetLocalPos(Vec3(vPos.x, 50.f, vPos.z));
+											ItemSpawn = true;
+											break;
+										}
+									}
+
+									// 속도 포션 스폰
+									else if (rnd < 30)
+									{
+										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_SpPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
+										{
+											vecObject[j]->GetScript<CItemScript>()->setIsSpawn(true);
+											vecObject[j]->GetScript<CItemScript>()->setActiveTime(10.f);
+											vecObject[j]->Transform()->SetLocalPos(Vec3(vPos.x, 50.f, vPos.z));
+											ItemSpawn = true;
+											break;
+										}
+									}
+
+									// 힐 팩 스폰
+									else if (rnd < 40)
+									{
+										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_HpItem && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
+										{
+											vecObject[j]->GetScript<CItemScript>()->setIsSpawn(true);
+											vecObject[j]->GetScript<CItemScript>()->setActiveTime(10.f);
+											vecObject[j]->Transform()->SetLocalPos(Vec3(vPos.x, 50.f, vPos.z));
+											vecObject[j]->Transform()->SetLocalScale(Vec3(0.2f, 0.2f, 0.2f));
+											ItemSpawn = true;
+											break;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+					
 			}
 		}
 	}
@@ -177,24 +253,19 @@ void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 
 	if (L"Monster Object" == _pOther->GetObj()->GetName() && !_pOther->GetObj()->GetScript<CMonsterScript>()->status->IsCollide)
 	{
-		status->IsCollide = true;
-
-		Vec3 vPos = Transform()->GetLocalPos();
-		Vec3 vDir = Transform()->GetLocalDir(DIR_TYPE::FRONT);
-
-		Vec3 vOtherPos = _pOther->GetObj()->Transform()->GetLocalPos();
-		Vec3 vOtherDir = _pOther->GetObj()->Transform()->GetLocalDir(DIR_TYPE::FRONT);
-
-		vPos += 7.f * vDir;
-		vDir = Transform()->GetLocalDir(DIR_TYPE::RIGHT);
-		//vPos += 7.f * vDir;
-		//Transform()->SetLocalPos(vPos);
-
-	/*	if (vDir == vOtherDir)
+		if (!status->state == MonsterState::M_Die && !_pOther->GetObj()->GetScript<CMonsterScript>()->status->state == MonsterState::M_Die)
 		{
-			vOtherPos -= DT * 2000.f * vOtherDir;
-			_pOther->GetObj()->Transform()->SetLocalPos(vOtherPos);
-		}*/
+			status->IsCollide = true;
+
+			Vec3 vPos = Transform()->GetLocalPos();
+			Vec3 vDir = Transform()->GetLocalDir(DIR_TYPE::FRONT);
+
+			Vec3 vOtherPos = _pOther->GetObj()->Transform()->GetLocalPos();
+			Vec3 vOtherDir = _pOther->GetObj()->Transform()->GetLocalDir(DIR_TYPE::FRONT);
+
+			vPos += 7.f * vDir;
+			vDir = Transform()->GetLocalDir(DIR_TYPE::RIGHT);
+		}
 	}
 }
 

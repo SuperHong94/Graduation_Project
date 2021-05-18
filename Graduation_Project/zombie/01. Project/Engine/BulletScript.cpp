@@ -43,6 +43,8 @@ void CBulletScript::update()
 			break;
 		}
 
+		damage += AddDamage;
+
 		Vec3 vPos = Transform()->GetLocalPos();
 		//vPos.y += 400.f * DT;
 		vPos += vBulletDir * BulletSpeed * DT;
@@ -62,21 +64,25 @@ void CBulletScript::update()
 	else
 	{
 		Transform()->SetLocalPos(Vec3(-20000.f, -20000.f, -20000.f));
+		
 	}
 }
 
 void CBulletScript::OnCollisionEnter(CCollider2D* _pOther)
 {
-	wstring s = _pOther->GetObj()->GetName();
-	if (L"Monster Object" == _pOther->GetObj()->GetName())
+	if (BulletActive)
 	{
-		//DeleteObject(GetObj());
-		BulletActive = false;
-	}
+		wstring s = _pOther->GetObj()->GetName();
+		if (L"Monster Object" == _pOther->GetObj()->GetName())
+		{
+			//DeleteObject(GetObj());
+			BulletActive = false;
+		}
 
-	if (L"Tomb Object" == _pOther->GetObj()->GetName())
-	{
-		//DeleteObject(GetObj());
-		BulletActive = false;
+		if (L"Tomb Object" == _pOther->GetObj()->GetName())
+		{
+			//DeleteObject(GetObj());
+			BulletActive = false;
+		}
 	}
 }

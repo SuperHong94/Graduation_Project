@@ -36,6 +36,7 @@
 #include "StartSceneScript.h"
 #include "meshdata.h"
 #include "TombScript.h"
+#include "ItemScript.h"
 
 #include "ResMgr.h"
 #include "PathMgr.h"
@@ -69,11 +70,23 @@ void CSceneMgr::CreateTargetUI()
 	tResolution res = CRenderMgr::GetInst()->GetResolution();
 	Vec3 vScale(res.fWidth, res.fHeight, 1.f);
 	// Transform 설정
+	hpBarWidth = CRenderMgr::GetInst()->GetResolution().fWidth / 4.1;
+	hpBarHeight = CRenderMgr::GetInst()->GetResolution().fHeight / 45;
 
-	Ptr<CTexture> GameSceneArrTex[3] = {
+	Ptr<CTexture> GameSceneArrTex[13] = {
 	 (CResMgr::GetInst()->Load<CTexture>(L"BGUI", L"Texture\\UI\\BGUI.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"MiniMap", L"Texture\\UI\\MiniMap.png")),
 	 (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\UI\\playerTest.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"Quest", L"Texture\\UI\\Quest.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"Picture", L"Texture\\UI\\PlayerPicture.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"HpBarEdge", L"Texture\\UI\\HpBarEdge.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"HpBar", L"Texture\\UI\\HpBar.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"PowerBuffOn", L"Texture\\UI\\PowerBuffOn.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"PowerBuffOff", L"Texture\\UI\\PowerBuffOff.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"DefenceBuffOn", L"Texture\\UI\\DefenceBuffOn.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"DefenceBuffOff", L"Texture\\UI\\DefenceBuffOff.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"SpeedBuffOn", L"Texture\\UI\\SpeedBuffOn.png")),
+	 (CResMgr::GetInst()->Load<CTexture>(L"SpeedBuffOff", L"Texture\\UI\\SpeedBuffOff.png")),
 	};
 
 	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"StartBG", L"Texture\\UI\\StartBG.png") };
@@ -82,7 +95,7 @@ void CSceneMgr::CreateTargetUI()
 
 	Ptr<CTexture> GameOverSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"GameOverBG", L"Texture\\UI\\GameOverBG.png") };
 
-	int NumgameSceneUI = 3;
+	int NumgameSceneUI = 13;
 	int NumStartSceneUI = 1;
 	int NumGameClearSceneUI = 1;
 	int NumGameOVerSceneUI = 1;
@@ -92,7 +105,7 @@ void CSceneMgr::CreateTargetUI()
 		for (UINT i = 0; i < NumgameSceneUI; i++)
 		{
 			CGameObject* pObject = new CGameObject;
-			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
+			pObject->FrustumCheck(true);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
 
@@ -128,6 +141,76 @@ void CSceneMgr::CreateTargetUI()
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / posUIRatio, (vScale.y / posUIRatio) * (vScale.x / vScale.y), 1.f));
 			}
 
+			else if (i == 3)
+			{
+				pObject->SetName(L"QuestUI");
+				pObject->Transform()->SetLocalPos(Vec3(0, res.fHeight / 8, 1.f));	
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 2, (vScale.y / 2 ), 1.f));
+			}
+
+			else if (i == 4)
+			{
+				pObject->SetName(L"HpBarEdgeUI");
+				pObject->Transform()->SetLocalPos(Vec3(res.fWidth / 5.10, -res.fHeight/ 2.75, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 6.8, (vScale.y / 7), 1.f));
+			}
+
+			else if (i == 5)
+			{
+				pObject->SetName(L"HpBarEdgeeUI");
+				pObject->Transform()->SetLocalPos(Vec3(-res.fWidth / 20, -res.fHeight / 2.75, 1.2f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 4, (vScale.y / 40), 1.f));
+			}
+
+			else if (i == 6)
+			{
+				pObject->SetName(L"HpBarUI");
+				pObject->Transform()->SetLocalPos(Vec3(-res.fWidth / 20, -res.fHeight / 2.75, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(hpBarWidth, hpBarHeight, 1.f));
+			}
+
+			else if (i == 7)
+			{
+				pObject->SetName(L"PowerBuffOnUI");
+				pObject->Transform()->SetLocalPos(Vec3(-20000, 0.f , 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
+			}
+
+			else if (i == 8)
+			{
+				pObject->SetName(L"PowerBuffOffUI");
+				pObject->Transform()->SetLocalPos(Vec3(-res.fWidth / 6.5, -res.fHeight / 2.3, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
+			}
+
+			else if (i == 9)
+			{
+				pObject->SetName(L"DefenceBuffOnUI");
+				pObject->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25)* res.fWidth / res.fHeight, 1.f));
+			}
+
+			else if (i == 10)
+			{
+				pObject->SetName(L"DefenceBuffOffUI");
+				pObject->Transform()->SetLocalPos(Vec3(-res.fWidth / 10, -res.fHeight / 2.3, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
+			}
+
+			else if (i == 11)
+			{
+				pObject->SetName(L"SpeedBuffOnUI");
+				pObject->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25)* res.fWidth / res.fHeight, 1.f));
+			}
+
+			else if (i == 12)
+			{
+				pObject->SetName(L"SpeedBuffOffUI");
+				pObject->Transform()->SetLocalPos(Vec3(-res.fWidth / (130 / 6), -res.fHeight / 2.3, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
+			}
+
 			// MeshRender 설정
 			pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 			Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
@@ -148,7 +231,7 @@ void CSceneMgr::CreateTargetUI()
 		{
 			CGameObject* pObject = new CGameObject;
 			pObject->SetName(L"StartBgUI");
-			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
+			pObject->FrustumCheck(true);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
 
@@ -179,7 +262,7 @@ void CSceneMgr::CreateTargetUI()
 		{
 			CGameObject* pObject = new CGameObject;
 			pObject->SetName(L"EndBgUI");
-			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
+			pObject->FrustumCheck(true);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
 
@@ -207,7 +290,7 @@ void CSceneMgr::CreateTargetUI()
 		{
 			CGameObject* pObject = new CGameObject;
 			pObject->SetName(L"EndBgUI");
-			pObject->FrustumCheck(false);	// 절두체 컬링 사용하지 않음
+			pObject->FrustumCheck(true);	// 절두체 컬링 사용하지 않음
 			pObject->AddComponent(new CTransform);
 			pObject->AddComponent(new CMeshRender);
 
@@ -260,6 +343,7 @@ void CSceneMgr::initGameScene()
 	m_pCurScene->GetLayer(2)->SetName(L"Monster");
 	m_pCurScene->GetLayer(3)->SetName(L"Bullet");
 	m_pCurScene->GetLayer(4)->SetName(L"Tomb");
+	m_pCurScene->GetLayer(5)->SetName(L"Item");
 
 	m_pCurScene->GetLayer(30)->SetName(L"UI");
 	m_pCurScene->GetLayer(31)->SetName(L"Tool");
@@ -310,7 +394,7 @@ void CSceneMgr::initGameScene()
 		// ===================
 		// Player 오브젝트 생성
 		// ===================
-	/*	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\HpPotion.fbx");
+	/*	pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\HealPack.fbx");
 		pMeshData->Save(pMeshData->GetPath());*/
 
 		for (int i = 0; i < playerNum; i++)
@@ -347,6 +431,12 @@ void CSceneMgr::initGameScene()
 			//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
 			//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
 			//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+
+			m_pPlayerArr[i]->AddComponent(new CCollider2D);
+			m_pPlayerArr[i]->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+			m_pPlayerArr[i]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
+			m_pPlayerArr[i]->Collider2D()->SetOffsetScale(Vec3(100.f, 0.f, 100.f));
+
 
 			// Script 설정
 			// 플레이어 일시
@@ -487,7 +577,7 @@ void CSceneMgr::initGameScene()
 			pObject = pMeshData->Instantiate();
 
 			pObject->SetName(L"Monster Object");
-			pObject->FrustumCheck(false);
+			pObject->FrustumCheck(true);
 			pObject->AddComponent(new CTransform);
 			//pObject->AddComponent(new CMeshRender);
 
@@ -520,7 +610,7 @@ void CSceneMgr::initGameScene()
 			
 			pObject->AddComponent(new CCollider2D);
 			pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
-			pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 100.f + collOffset, 0.f));
+			pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
 			//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, -5000.f, 0.f));
 			pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
 
@@ -533,6 +623,64 @@ void CSceneMgr::initGameScene()
 			monsterArr[i] = pObject;
 		}
 
+		// ====================
+		// Item 생성
+		// ====================
+		for (int i = 0; i < ItemCnt; i++)
+		{
+			pObject = new CGameObject;
+
+			if(i<10)
+				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\PowerPotion.mdat", L"MeshData\\PowerPotion.mdat");
+			else if(i<20)
+				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\DfPotion.mdat", L"MeshData\\DfPotion.mdat");
+			else if(i<30)
+				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SpPotion.mdat", L"MeshData\\SpPotion.mdat");
+			else if (i < 40)
+			{
+				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\HealPack.mdat", L"MeshData\\HealPack.mdat");
+				//pObject->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
+			}
+			pObject = pMeshData->Instantiate();
+
+			pObject->SetName(L"Item Object");
+			pObject->FrustumCheck(true);
+			pObject->AddComponent(new CTransform);
+
+			pObject->Transform()->SetLocalPos(Vec3(20000.f, 0.f, 20000.f));
+			pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
+
+			//pObject->MeshRender()->SetDynamicShadow(true);
+			/*pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 0);
+			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
+			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
+			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
+
+			pObject->AddComponent(new CCollider2D);
+			pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+			pObject->Collider2D()->SetOffsetPos(Vec3(0.f, collOffset, 0.f));
+			pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
+
+			// Script 설정
+			if (i < 10)
+				pObject->AddComponent(new CItemScript(ItemState::I_PwPotion));
+			else if (i < 20)
+				pObject->AddComponent(new CItemScript(ItemState::I_DfPotion));
+			else if (i < 30)
+				pObject->AddComponent(new CItemScript(ItemState::I_SpPotion));
+			else if (i < 40)
+			{
+				pObject->AddComponent(new CItemScript(ItemState::I_HpItem));
+				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f,  0.f));
+				pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, collOffset));
+				pObject->Collider2D()->SetOffsetScale(Vec3(350.f, 0.f, 500.f));
+			}
+
+			// AddGameObject
+			m_pCurScene->FindLayer(L"Item")->AddGameObject(pObject);
+
+			m_pItem[i] = pObject;
+		}
 
 		// ====================
 		// Game Manager 생성
@@ -688,7 +836,8 @@ void CSceneMgr::initGameScene()
 		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Monster");
 		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Monster", L"Monster");
 		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Tomb");
-
+		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Player", L"Item");
+		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Monster", L"Player");
 		//m_pCurScene->awake();
 		//m_pCurScene->start();
 	}
@@ -1031,9 +1180,6 @@ void CSceneMgr::update()
 		init();
 
 		isChange = true;
-
-		// 변수값 초기화
-		initValue();
 	}
 
 
@@ -1046,6 +1192,10 @@ void CSceneMgr::update()
 			m_pCurScene = new CScene;
 			//delete m_pCurScene;
 			SceneState = SCENE_STATE::GAME_SCENE;
+
+			// 변수값 초기화
+			initValue();
+
 			init();
 
 			isChange = true;
@@ -1078,6 +1228,12 @@ void CSceneMgr::update()
 
 			isChange = true;
 		}
+
+		if (KEY_TAB(KEY_TYPE::KEY_I))
+		{
+			pressI = true;
+			QuestVisible = !QuestVisible;
+		}
 	}
 
 	else if (SceneState == SCENE_STATE::GAMECLEAR_SCENE)
@@ -1108,6 +1264,23 @@ void CSceneMgr::update()
 		}
 	}
 
+	//if (SceneState == SCENE_STATE::GAME_SCENE)
+	//{
+	//	// 플레이어 오프셋 조정
+	//	for (int i = 0; i < MAX_LAYER; ++i)
+	//	{
+	//		const vector<CGameObject*>& vecObject = m_pCurScene->GetLayer(i)->GetObjects();
+	//		for (size_t j = 0; j < vecObject.size(); ++j)
+	//		{
+	//			if (L"Player Object" == vecObject[j]->GetName())
+	//			{
+	//				float offset = vecObject[j]->GetScript<CPlayerScript>()->GetCollOffset();
+	//				vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, offset + collOffset, 0.f));
+	//			}
+	//		}
+	//	}
+	//}
+
 	// 충돌 처리 Offset 변경
 	if (KEY_TAB(KEY_TYPE::KEY_C) && SceneState == SCENE_STATE::GAME_SCENE)
 	{
@@ -1128,15 +1301,31 @@ void CSceneMgr::update()
 			const vector<CGameObject*>& vecObject = m_pCurScene->GetLayer(i)->GetObjects();
 			for (size_t j = 0; j < vecObject.size(); ++j)
 			{	
+				if (L"Player Object" == vecObject[j]->GetName())
+				{
+					float offset = vecObject[j]->GetScript<CPlayerScript>()->GetCollOffset();
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, offset + collOffset, 0.f));
+					//vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 50000.f + collOffset, 0.f));
+				}
+
 				// 몬스터 Offset 변경
 				if (L"Monster Object" == vecObject[j]->GetName())
 				{
-					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 100.f + collOffset, 0.f));
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
 				}
 
 				if (L"Tomb Object" == vecObject[j]->GetName())
 				{
-					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 100.f + collOffset));
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 50.f + collOffset));
+				}
+
+				if (L"Item Object" == vecObject[j]->GetName())
+				{
+					if(vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_HpItem)
+						vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, collOffset));
+
+					else
+						vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, collOffset, 0.f));
 				}
 			}
 		}
@@ -1189,9 +1378,95 @@ void CSceneMgr::updateUI()
 						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000.0f, -20000.0f, -3.f));
 					}
 				}
+
+				//퀘스쳔 UI 화면 표시 유무
+				else if (L"QuestUI" == vecObject[j]->GetName() && pressI)
+				{
+					if (QuestVisible)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(0, res.fHeight / 8, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(20000, 20000, 1.f));
+				}
+
+					//Hp 업데이트
+				else if (L"HpBarUI" == vecObject[j]->GetName())
+				{
+					float hp = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->hp;
+					 
+					vecObject[j]->Transform()->SetLocalScale(Vec3(hpBarWidth * hp / 100, hpBarHeight, 1.f));
+
+					float adjust = 100 - hp;
+					vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / 20 - adjust * 1.57, -res.fHeight / 2.75, 1.f));
+				}
+
+				//공격버프 UI 업데이트
+				else if (L"PowerBuffOnUI" == vecObject[j]->GetName())
+				{
+					float powerBuffTime = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->powerBuffTime;
+					if(powerBuffTime > 0)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / 6.5, -res.fHeight / 2.3, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				}
+
+				else if (L"PowerBuffOffUI" == vecObject[j]->GetName())
+				{
+					float powerBuffTime = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->powerBuffTime;
+					if (powerBuffTime <= 0)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / 6.5, -res.fHeight / 2.3, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				}
+
+				//방어버프 UI 업데이트
+				else if (L"DefenceBuffOnUI" == vecObject[j]->GetName())
+				{
+					float defenceBuffTime = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->defenceBuffTime;
+					if (defenceBuffTime > 0)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / 10, -res.fHeight / 2.3, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				}
+
+				else if (L"DefenceBuffOffUI" == vecObject[j]->GetName())
+				{
+					float defenceBuffTime = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->defenceBuffTime;
+					if (defenceBuffTime <= 0)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / 10, -res.fHeight / 2.3, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				}
+
+				//속도버프 UI 업데이트
+				else if (L"SpeedBuffOnUI" == vecObject[j]->GetName())
+				{
+					float speedBuffTime = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->speedBuffTime;
+					if (speedBuffTime > 0)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / (130 / 6), -res.fHeight / 2.3, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				}
+
+				else if (L"SpeedBuffOffUI" == vecObject[j]->GetName())
+				{
+					float speedBuffTime = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->speedBuffTime;
+					if (speedBuffTime <= 0)
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / (130 / 6), -res.fHeight / 2.3, 1.f));
+
+					else
+						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
+				}
 			}
 		}
 	}
+
+	pressI = false;
 }
 
 void CSceneMgr::FindGameObjectByTag(const wstring& _strTag, vector<CGameObject*>& _vecFindObj)
@@ -1319,7 +1594,7 @@ void CSceneMgr::setMap()
 		//pObject->MeshRender()->SetDynamicShadow(true);
 
 		pObject->AddComponent(new CCollider2D);
-		pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 100.f + collOffset));
+		pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 50.f + collOffset));
 		pObject->Collider2D()->SetOffsetScale(Vec3(300.f, 300.f, 0.f));
 		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RRECT);
 
@@ -1424,4 +1699,8 @@ void CSceneMgr::setMap()
 void CSceneMgr::initValue()
 {
 	collOffset = 20000.f;
+	QuestVisible = true;
+	pressI = false;
+
+	updateUI();
 }

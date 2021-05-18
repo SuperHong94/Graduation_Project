@@ -192,6 +192,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="GridScript.h" />
     <ClInclude Include="InstancingBuffer.h" />
     <ClInclude Include="InstancingMgr.h" />
+    <ClInclude Include="ItemScript.h" />
     <ClInclude Include="KeyMgr.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Light2D.h" />
@@ -253,6 +254,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="GridScript.cpp" />
     <ClCompile Include="InstancingBuffer.cpp" />
     <ClCompile Include="InstancingMgr.cpp" />
+    <ClCompile Include="ItemScript.cpp" />
     <ClCompile Include="KeyMgr.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Light2D.cpp" />

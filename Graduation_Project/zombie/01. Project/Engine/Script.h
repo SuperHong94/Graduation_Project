@@ -25,6 +25,7 @@ enum class SCRIPT_TYPE
 	STARTSCENESCRIPT,
 	ENDSCENESCRIPT,
 	TOMBSCRIPT,
+	ITEMSCRIPT,
 	END,
 };
 
@@ -58,6 +59,15 @@ enum MonsterState
 	M_Damage,
 	M_Die,
 	M_Respawn,
+};
+
+enum ItemState
+{
+	I_PwPotion,
+	I_DfPotion,
+	I_SpPotion,
+	I_HpItem,
+	I_BulletItem,
 };
 
 
