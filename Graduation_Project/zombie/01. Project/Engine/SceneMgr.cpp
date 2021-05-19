@@ -37,6 +37,7 @@
 #include "meshdata.h"
 #include "TombScript.h"
 #include "ItemScript.h"
+#include "BossScript.h"
 
 #include "ResMgr.h"
 #include "PathMgr.h"
@@ -344,6 +345,7 @@ void CSceneMgr::initGameScene()
 	m_pCurScene->GetLayer(3)->SetName(L"Bullet");
 	m_pCurScene->GetLayer(4)->SetName(L"Tomb");
 	m_pCurScene->GetLayer(5)->SetName(L"Item");
+	m_pCurScene->GetLayer(6)->SetName(L"Boss");
 
 	m_pCurScene->GetLayer(30)->SetName(L"UI");
 	m_pCurScene->GetLayer(31)->SetName(L"Tool");
@@ -469,6 +471,37 @@ void CSceneMgr::initGameScene()
 		//pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
 		//// pObject->MeshRender()->SetDynamicShadow(true);		
 		//m_pCurScene->AddGameObject(L"Default", pObject, false);
+
+		// ===================
+		// Boss 오브젝트 생성
+		// ===================
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\BossAttack.fbx");
+		pMeshData->Save(pMeshData->GetPath());
+		pObject = new CGameObject;
+
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\BossAttack.mdat", L"MeshData\\BossAttack.mdat");
+		pObject = pMeshData->Instantiate();
+
+		pObject->SetName(L"Boss Object");
+		pObject->FrustumCheck(true);
+		pObject->AddComponent(new CTransform);
+	
+		pObject->Transform()->SetLocalPos(Vec3(-0, 0.f, 0));
+		pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0, 0));
+
+		pObject->AddComponent(new CCollider2D);
+		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+		pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
+
+		//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, -5000.f, 0.f));
+		pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
+
+		// Script 설정
+		pObject->AddComponent(new CBossScript(m_pPlayerArr, playerNum, pObject, m_pCurScene));
+
+		m_pCurScene->FindLayer(L"Boss")->AddGameObject(pObject);
+
+
 
 		// ==================
 		// Camera Object 생성
@@ -838,6 +871,7 @@ void CSceneMgr::initGameScene()
 		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Tomb");
 		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Player", L"Item");
 		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Monster", L"Player");
+		CCollisionMgr::GetInst()->CheckCollisionLayer(L"Bullet", L"Boss");
 		//m_pCurScene->awake();
 		//m_pCurScene->start();
 	}
@@ -1309,23 +1343,28 @@ void CSceneMgr::update()
 				}
 
 				// 몬스터 Offset 변경
-				if (L"Monster Object" == vecObject[j]->GetName())
+				else if (L"Monster Object" == vecObject[j]->GetName())
 				{
 					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
 				}
 
-				if (L"Tomb Object" == vecObject[j]->GetName())
+				else if (L"Tomb Object" == vecObject[j]->GetName())
 				{
 					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 50.f + collOffset));
 				}
 
-				if (L"Item Object" == vecObject[j]->GetName())
+				else if (L"Item Object" == vecObject[j]->GetName())
 				{
 					if(vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_HpItem)
 						vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, collOffset));
 
 					else
 						vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, collOffset, 0.f));
+				}
+
+				else if (L"Boss Object" == vecObject[j]->GetName())
+				{
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
 				}
 			}
 		}

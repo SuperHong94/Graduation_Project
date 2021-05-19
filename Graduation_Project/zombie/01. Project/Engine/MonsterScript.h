@@ -185,8 +185,6 @@ public:
 public:
 	CMonsterScript(CGameObject* TargetObject[], int ntargetNum, CGameObject* Object, CScene* pscene);
 	virtual ~CMonsterScript();
-
-	int aa = 0;
 };
 
 

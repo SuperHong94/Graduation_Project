@@ -133,7 +133,7 @@ void CMonsterScript::update()
 				bool ItemSpawn = false;
 				int rnd = rand() % 100;
 
-				if (rnd < 40)
+				if (rnd < 80)
 				{
 					for (int i = 0; i < MAX_LAYER; ++i)
 					{
@@ -146,7 +146,7 @@ void CMonsterScript::update()
 								{
 									// 버프 포션 스폰
 									// 파워 포션 스폰
-									if (rnd < 10)
+									if (rnd < 20)
 									{
 										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_PwPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
 										{
@@ -159,7 +159,7 @@ void CMonsterScript::update()
 									}
 
 									// 방어 포션 스폰
-									else if (rnd < 20)
+									else if (rnd < 40)
 									{
 										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_DfPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
 										{
@@ -172,7 +172,7 @@ void CMonsterScript::update()
 									}
 
 									// 속도 포션 스폰
-									else if (rnd < 30)
+									else if (rnd < 60)
 									{
 										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_SpPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
 										{
@@ -185,7 +185,7 @@ void CMonsterScript::update()
 									}
 
 									// 힐 팩 스폰
-									else if (rnd < 40)
+									else if (rnd < 80)
 									{
 										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_HpItem && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
 										{
