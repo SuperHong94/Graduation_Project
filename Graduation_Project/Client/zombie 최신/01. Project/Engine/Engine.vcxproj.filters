@@ -247,6 +247,8 @@
     <ClInclude Include="ItemScript.h">
       <Filter>04. GameObject\Script</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkMgr.h" />
+    <ClInclude Include="..\..\..\..\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\Protocol.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -419,6 +421,7 @@
     <ClCompile Include="ItemScript.cpp">
       <Filter>04. GameObject\Script</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="std.fx">
