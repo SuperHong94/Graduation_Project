@@ -19,6 +19,8 @@ struct GameMgrStatus
 
 	bool isGameOver = false;
 	bool isGameClear = false;
+	bool bossDead = false;
+	bool bossSpawn = false;
 
 	int zombieGoalCnt = 10;
 
@@ -26,7 +28,9 @@ struct GameMgrStatus
 	bool tombAllDestroy = false;
 
 	float addZombieRange = 0;
-	
+
+	bool cheatBossSpawn = false;
+	bool cheatDestroyTombOn = false;
 };
 
 class GameMgr
@@ -51,6 +55,9 @@ public:
 	// 가까운 리스폰 위치 찾기
 	int FindNearRespawnPostion(Vec3 pos);
 
+	// 보스 스폰 조건 확인
+	void ChekBossSpawn();
+
 	// 게임 승리 조건 확인
 	void CheckGameClear();
 
@@ -61,6 +68,12 @@ public:
 	void IncreaseZombieRange();
 
 	void GameInit();
+
+	// 치트 무덤 파괴
+	void cheatDestroyTomb();
+
+	// 치트 보스 스폰
+	void cheatBossSpawn() { Gstatus->cheatBossSpawn = true; };
 
 	bool GetGameOver() { return Gstatus->isGameOver; };
 	bool GetGameClear() { return Gstatus->isGameClear; };

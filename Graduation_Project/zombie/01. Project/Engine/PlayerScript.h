@@ -11,8 +11,8 @@ struct PlayerStatus
 	float defence = 0.f;
 	float AdditionAttack = 0.f; //추가 공격력
 	float AdditionSpeed = 0.f; //추가 속도
-	//float speed = 4000.f;
-	float speed = 300.f;
+	float speed = 4000.f;
+	//float speed = 300.f;
 	float RollCoolTime = 0.f;
 	bool IsRoll = false;
 	bool IsDead = false;

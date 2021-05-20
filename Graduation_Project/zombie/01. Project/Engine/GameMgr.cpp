@@ -85,6 +85,9 @@ void GameMgr::CheckZombieRespawn()
 
 void GameMgr::GameMgrUpdate()
 {
+	// 보스 스폰
+	ChekBossSpawn();
+
 	CheckGameOver();
 	if (Gstatus->isGameOver)
 	{
@@ -108,7 +111,7 @@ void GameMgr::GameMgrUpdate()
 
 void GameMgr::CheckGameClear()
 {
-	if (Gstatus->DeathZombieCnt >= Gstatus->zombieGoalCnt)
+	if (Gstatus->DeathZombieCnt >= Gstatus->zombieGoalCnt && Gstatus->bossDead)
 	{
 		Gstatus->isGameClear = true;
 		Gstatus->isGameOver = false;
@@ -202,3 +205,45 @@ int GameMgr::FindNearRespawnPostion(Vec3 pos)
 	return n;
 }
 
+void GameMgr::ChekBossSpawn()
+{
+	if (Gstatus->tombAllDestroy || Gstatus->cheatBossSpawn)
+	{
+		if (!Gstatus->bossSpawn)
+		{
+			// 보스 스폰
+			Gstatus->bossSpawn = true;
+
+
+			for (int i = 0; i < MAX_LAYER; ++i)
+			{
+				const vector<CGameObject*>& vecObject = Gstatus->Scene->GetLayer(i)->GetObjects();
+				for (size_t j = 0; j < vecObject.size(); ++j)
+				{
+					if (L"Boss Object" == vecObject[j]->GetName())
+					{
+						vecObject[j]->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
+					}
+				}
+			}
+		}
+	}
+}
+
+void GameMgr::cheatDestroyTomb()
+{
+	if (!Gstatus->cheatDestroyTombOn)
+	{
+		for (int i = 0; i < MAX_LAYER; ++i)
+		{
+			const vector<CGameObject*>& vecObject = Gstatus->Scene->GetLayer(i)->GetObjects();
+			for (size_t j = 0; j < vecObject.size(); ++j)
+			{
+				if (L"Tomb Object" == vecObject[j]->GetName())
+				{
+					vecObject[j]->GetScript<CTombScript>()->setHp(0);
+				}
+			}
+		}
+	}
+}

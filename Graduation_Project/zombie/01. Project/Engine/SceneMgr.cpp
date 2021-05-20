@@ -486,7 +486,7 @@ void CSceneMgr::initGameScene()
 		pObject->FrustumCheck(true);
 		pObject->AddComponent(new CTransform);
 	
-		pObject->Transform()->SetLocalPos(Vec3(-0, 0.f, 0));
+		pObject->Transform()->SetLocalPos(Vec3(-40000.f, 0.f, 0));
 		pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0, 0));
 
 		pObject->AddComponent(new CCollider2D);
@@ -1240,6 +1240,19 @@ void CSceneMgr::update()
 	{
 		// 게임 매니저 업데이트
 		m_pGameManager->GameMgrUpdate();
+
+		// 무덤 파괴
+		if (KEY_TAB(KEY_TYPE::KEY_8))
+		{
+			m_pGameManager->cheatDestroyTomb();
+		}
+
+		// 보스 소환
+		if (KEY_TAB(KEY_TYPE::KEY_9))
+		{
+			m_pGameManager->cheatBossSpawn();
+		}
+
 
 		if (m_pGameManager->GetGameClear())
 		{

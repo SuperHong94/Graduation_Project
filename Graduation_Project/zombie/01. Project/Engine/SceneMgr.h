@@ -52,6 +52,7 @@ public:
 	void update_tool();
 
 	void updateUI();
+
 	/*CScene* GetStartScene() { return m_pStartScene; }
 	CScene* GetGameScene() { return m_pGameScene; }
 	CScene* GetEndScene() { return m_pEndScene; }*/
