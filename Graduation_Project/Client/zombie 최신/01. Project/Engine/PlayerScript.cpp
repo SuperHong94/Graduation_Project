@@ -6,6 +6,7 @@
 #include "Scene.h"
 
 #include "RenderMgr.h"
+#include "NetworkMgr.h"
 
 CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	: CScript((UINT)SCRIPT_TYPE::PLAYERSCRIPT)
@@ -185,7 +186,8 @@ void CPlayerScript::update()
 				if (KEY_HOLD(KEY_TYPE::KEY_W))
 				{
 					keyHold[0] = 1;
-					vPos.z += DT * (status->speed + status->AdditionSpeed);
+					CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_UP, vRot);
+					//vPos.z += DT * (status->speed + status->AdditionSpeed);
 					isMove = true;
 					if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, 1.f)) && !status->IsRoll)
 						status->state = setRunAni(playerDir, Vec3(0.f, 0.f, 1.f));
@@ -194,7 +196,8 @@ void CPlayerScript::update()
 				if (KEY_HOLD(KEY_TYPE::KEY_S))
 				{
 					keyHold[1] = 1;
-					vPos.z -= DT * (status->speed + status->AdditionSpeed);
+					CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_DOWN, vRot);
+					//vPos.z -= DT * (status->speed + status->AdditionSpeed);
 					isMove = true;
 					if (status->state != setRunAni(playerDir, Vec3(0.f, 0.f, -1.f)) && !status->IsRoll)
 						status->state = setRunAni(playerDir, Vec3(0.f, 0.f, -1.f));
@@ -203,7 +206,8 @@ void CPlayerScript::update()
 				if (KEY_HOLD(KEY_TYPE::KEY_A))
 				{
 					keyHold[2] = 1;
-					vPos.x -= DT * (status->speed + status->AdditionSpeed);
+					CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_LEFT, vRot);
+					//vPos.x -= DT * (status->speed + status->AdditionSpeed);
 					isMove = true;
 					if (status->state != setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f)) && !status->IsRoll)
 						status->state = setRunAni(playerDir, Vec3(-1.f, 0.f, 0.f));
@@ -212,7 +216,8 @@ void CPlayerScript::update()
 				if (KEY_HOLD(KEY_TYPE::KEY_D))
 				{
 					keyHold[3] = 1;
-					vPos.x += DT * (status->speed + status->AdditionSpeed);
+					CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_RIGHT, vRot);
+					//vPos.x += DT * (status->speed + status->AdditionSpeed);
 					isMove = true;
 					if (status->state != setRunAni(playerDir, Vec3(1.f, 0.f, 0.f)) && !status->IsRoll)
 						status->state = setRunAni(playerDir, Vec3(1.f, 0.f, 0.f));
