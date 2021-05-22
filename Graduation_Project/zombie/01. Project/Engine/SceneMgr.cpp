@@ -439,13 +439,11 @@ void CSceneMgr::initGameScene()
 			m_pPlayerArr[i]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
 			m_pPlayerArr[i]->Collider2D()->SetOffsetScale(Vec3(100.f, 0.f, 100.f));
 
-
 			// Script 설정
 			// 플레이어 일시
 			if (i == playerID)
 			{
 				m_pPlayerArr[i]->AddComponent(new CPlayerScript(m_pPlayerArr[i], true));
-				m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->SetBulletCollOffset(collOffset);
 			}
 			else
 			{
@@ -453,6 +451,9 @@ void CSceneMgr::initGameScene()
 				//m_pPlayerArr[i]->GetScript<CPlayerScript>()->GetStatus()->isDisappear = true;
 				//m_pPlayerArr[i]->Transform()->SetLocalPos(Vec3(-20000.f, -20000.f, -20000.f));
 			}
+
+			m_pPlayerArr[i]->GetScript<CPlayerScript>()->SetBulletCollOffset(collOffset);
+
 
 			// AddGameObject
 			m_pCurScene->FindLayer(L"Player")->AddGameObject(m_pPlayerArr[i]);
