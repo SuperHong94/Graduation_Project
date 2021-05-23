@@ -476,8 +476,8 @@ void CSceneMgr::initGameScene()
 		// ===================
 		// Boss 坷宏璃飘 积己
 		// ===================
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\BossAttack.fbx");
-		pMeshData->Save(pMeshData->GetPath());
+		//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\BossAttack.fbx");
+		//pMeshData->Save(pMeshData->GetPath());
 		pObject = new CGameObject;
 
 		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\BossAttack.mdat", L"MeshData\\BossAttack.mdat");
@@ -502,7 +502,29 @@ void CSceneMgr::initGameScene()
 
 		m_pCurScene->FindLayer(L"Boss")->AddGameObject(pObject);
 
+		//////////////////////
+		///////////////////////
+		//////////////////////
+		//// Test
+		/////
+		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\RandomBox.fbx");
+		pMeshData->Save(pMeshData->GetPath());
 
+		pObject = new CGameObject;
+
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\RandomBox.mdat", L"MeshData\\RandomBox.mdat");
+		pObject = pMeshData->Instantiate();
+
+		pObject->SetName(L"test Object");
+		pObject->FrustumCheck(true);
+		pObject->AddComponent(new CTransform);
+
+		pObject->Transform()->SetLocalPos(Vec3(-100, 50, 0));
+		pObject->Transform()->SetLocalScale(Vec3(0.5, 0.5, 0.5));
+		pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2,XM_PI, 0));
+
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		//////
 
 		// ==================
 		// Camera Object 积己
