@@ -31,7 +31,7 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 
 		pBullet[i]->Collider2D()->SetOffsetPos(Vec3(BulletCollOffset, 0.f, 0.f));
 
-		pBullet[i]->AddComponent(new CBulletScript(Vec3(0,0,0), status->bulletState));
+		pBullet[i]->AddComponent(new CBulletScript(Vec3(0, 0, 0), status->bulletState));
 		pBullet[i]->GetScript<CBulletScript>()->SetActive(false);
 		//pBullet[i]->Collider2D()->disable();
 		CreateObject(pBullet[i], L"Bullet");
@@ -290,14 +290,6 @@ void CPlayerScript::update()
 
 
 			// 플레이어 위치 방향 설정
-			if (vPos.x > 4990)
-				vPos.x = 4990;
-			if (vPos.x < -4990)
-				vPos.x = -4990;
-			if (vPos.z > 4990)
-				vPos.z = 4990;
-			if (vPos.z < -4990)
-				vPos.z = -4990;
 			Transform()->SetLocalPos(vPos);
 			Transform()->SetLocalRot(vRot);
 			collOffset = 50;
@@ -480,7 +472,7 @@ void CPlayerScript::update()
 							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
 
 							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
-		
+
 						}
 						else if (status->bulletState == BulletState::B_Ice)
 						{
@@ -508,7 +500,61 @@ void CPlayerScript::update()
 
 
 		}
+		else if (status->isDisappear == false)
+		{
+			// 애니메이션 상태가 바뀌었는지 확인
+			if (previousState != status->state)
+			{
+				isAniChange = true;
+				previousState = status->state;
+			}
+			else
+				isAniChange = false;
 
+			if (isAniChange) {
+				if (status->isMove)
+				{
+					float revise = 0;
+					Ptr<CMeshData> pMeshData;
+
+					// 방향별 달리기 애니메이션 설정
+					if (status->state == PlayerState::P_FRun)
+						pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRun.mdat", L"MeshData\\SoldierRun.mdat");
+
+					else if (status->state == PlayerState::P_BRun)
+						pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierBRun.mdat", L"MeshData\\SoldierBRun.mdat");
+
+					else if (status->state == PlayerState::P_LRun)
+					{
+						pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierLRun.mdat", L"MeshData\\SoldierLRun.mdat");
+						revise = 4;
+					}
+
+					else if (status->state == PlayerState::P_RRun)
+					{
+						pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierRRun.mdat", L"MeshData\\SoldierRRun.mdat");
+						revise = 4;
+					}
+
+					if (pMeshData != NULL)
+					{
+						pObject->ChangeAnimation(pMeshData);
+					}
+
+					// 이건 모델 피봇 잘못설정해서 임시로 설정
+					// 수정되면 지울 것
+					Vec3 temp = pObject->Transform()->GetLocalPos();
+					pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f + revise, temp.z));
+				}
+				else
+				{
+					Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+					pObject->ChangeAnimation(pMeshData);
+					Vec3 temp = pObject->Transform()->GetLocalPos();
+					pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
+				}
+			}
+		}
 		// 충돌 오프셋 변경
 		if (status->state == PlayerState::P_BRun || status->state == PlayerState::P_FRun)
 			collOffset = -3;

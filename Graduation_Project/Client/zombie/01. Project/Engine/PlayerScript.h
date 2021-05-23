@@ -15,6 +15,7 @@ struct PlayerStatus
 	bool IsDead = false;
 	float disappearCnt = 0;
 	bool isDisappear = false;
+	bool isMove = false;
 };
 
 class CPlayerScript :

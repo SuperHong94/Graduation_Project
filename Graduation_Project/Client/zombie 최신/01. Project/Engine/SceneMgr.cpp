@@ -1179,7 +1179,6 @@ void CSceneMgr::update()
 	// 충돌 처리
 	CCollisionMgr::GetInst()->update();
 
-
 	if (KEY_TAB(KEY_TYPE::KEY_0))
 	{
 		//SAFE_DELETE(m_pCurScene);

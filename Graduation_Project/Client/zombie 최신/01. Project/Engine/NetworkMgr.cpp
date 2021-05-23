@@ -192,15 +192,18 @@ void CNetworkMgr::process_key(s2c_move* p)
 
 		auto& state = PlayerScript->GetStatus()->state;
 		state = p->ePlayerState;
-		if (state == PlayerState::P_BRun || state == PlayerState::P_FRun || state == PlayerState::P_LRun || state == PlayerState::P_RRun)
+		if (state == PlayerState::P_BRun || state == PlayerState::P_FRun || state == PlayerState::P_LRun || state == PlayerState::P_RRun) {
 			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 53.f, p->z));
-		else
+			PlayerScript->GetStatus()->isMove = true;
+		}
+		else{
 			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
-
+			PlayerScript->GetStatus()->isMove = false;
+		}
 		if (playerID != m_playerId) { //내가 조정하는거 아닐때만
 			PlayerScript->Transform()->SetLocalRot(Vec3(p->rx, p->ry, p->rz));
-			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
-		
+			//PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
+
 		}
 	}
 
@@ -304,7 +307,7 @@ void CNetworkMgr::init()
 	char ip[30];
 	::memset(ip, 0, sizeof(ip));
 	ifstream in("IP.txt");
-	if (!in){
+	if (!in) {
 		exit(-1);
 		cout << "안됨\n";
 	}
@@ -390,4 +393,4 @@ void CNetworkMgr::init_game()
 	std::cout << "플레이어 초기화 완료\n";
 #endif // _DEBUG
 
-}
+	}

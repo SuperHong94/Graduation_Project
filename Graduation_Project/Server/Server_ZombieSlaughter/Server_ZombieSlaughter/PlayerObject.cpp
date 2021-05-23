@@ -20,22 +20,22 @@ void CPlayerObject::Update(c2s_Key* packet)
 	{
 	case DOWN_UP:
 		m_postion.z += dt * m_speed;
-
+		m_postion.y = 53.f;
 		m_ePState = PlayerState::P_FRun;
 		break;
 	case DOWN_DOWN:
 		m_postion.z -= dt * m_speed;
-
+		m_postion.y = 53.f;
 		m_ePState = PlayerState::P_BRun;
 		break;
 	case DOWN_RIGHT:
 		m_postion.x += dt * m_speed;
-
+		m_postion.y = 53.f;
 		m_ePState = PlayerState::P_RRun;
 		break;
 	case DOWN_LEFT:
 		m_postion.x -= dt * m_speed;
-
+		m_postion.y = 53.f;
 		m_ePState = PlayerState::P_LRun;
 		break;
 	case NO_EVENT:

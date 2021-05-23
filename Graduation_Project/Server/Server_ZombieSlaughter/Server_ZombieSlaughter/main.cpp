@@ -23,6 +23,7 @@ struct CLIENT
 
 	//이부분 포인터로 해야할까 다른것으로 해야할까?
 	CPlayerObject* m_pPlayer;
+
 };
 
 constexpr int SERVER_ID = 0;
@@ -36,7 +37,7 @@ int get_new_id()
 {
 	for (int i = SERVER_ID + 1; i <= MAX_USER; ++i)
 	{
-		if (clients[i].m_pPlayer == nullptr)
+		if (clients.count(i)==0)
 			return i;
 	}
 	return -1;
@@ -350,6 +351,8 @@ int main()
 		{
 		case OP_RECV:
 		{
+			if (clients.count(key) == 0)
+				break;
 			//패킷 조립, 수행
 			unsigned char* packet_ptr = my_over->m_buf;
 			int num_data = numBytes + clients[key].m_prev_size; //처리해야할 데이터의 크기=지금받은데이터+지난번에 받은데이터의 나머지

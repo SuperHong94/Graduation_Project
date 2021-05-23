@@ -7,7 +7,7 @@ struct PlayerStatus
 {
 	PlayerState state = P_Spawn;
 	BulletState bulletState = B_Normal;
-	float hp = 100.f;
+	float hp = 10000.f;
 	float defence = 0.f;
 	float AdditionAttack = 0.f; //추가 공격력
 	float AdditionSpeed = 0.f; //추가 속도
@@ -18,6 +18,7 @@ struct PlayerStatus
 	bool IsDead = false;
 	float disappearCnt = 0;
 	bool isDisappear = false;
+	bool isMove = false;
 
 	float powerBuffTime = 0.f;
 	float defenceBuffTime = 0.f;
