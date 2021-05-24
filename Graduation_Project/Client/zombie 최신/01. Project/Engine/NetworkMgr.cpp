@@ -191,6 +191,7 @@ void CNetworkMgr::process_key(s2c_move* p)
 		const auto& PlayerScript = m_pPlayerArray[playerID]->GetScript<CPlayerScript>();
 
 		auto& state = PlayerScript->GetStatus()->state;
+		Vec3 prevPos = PlayerScript->Transform()->GetLocalPos(); //이전 좌표
 		state = p->ePlayerState;
 		if (state == PlayerState::P_BRun || state == PlayerState::P_FRun || state == PlayerState::P_LRun || state == PlayerState::P_RRun) {
 			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 53.f, p->z));
@@ -202,9 +203,11 @@ void CNetworkMgr::process_key(s2c_move* p)
 		}
 		if (playerID != m_playerId) { //내가 조정하는거 아닐때만
 			PlayerScript->Transform()->SetLocalRot(Vec3(p->rx, p->ry, p->rz));
+			if ((prevPos.x == p->x) && (prevPos.y == p->y))
+				PlayerScript->GetStatus()->isMove = false;
 			//PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
 
-		}
+		}w
 	}
 
 }
