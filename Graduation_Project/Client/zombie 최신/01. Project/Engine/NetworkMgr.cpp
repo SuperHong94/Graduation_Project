@@ -197,16 +197,16 @@ void CNetworkMgr::process_key(s2c_move* p)
 			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 53.f, p->z));
 			PlayerScript->GetStatus()->isMove = true;
 		}
-		else{
+		else {
 			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
 			PlayerScript->GetStatus()->isMove = false;
 		}
 		if (playerID != m_playerId) { //내가 조정하는거 아닐때만
 			PlayerScript->Transform()->SetLocalRot(Vec3(p->rx, p->ry, p->rz));
-			/*if ((prevPos.x == p->x) && (prevPos.y == p->y))
-				PlayerScript->GetStatus()->isMove = false;*/
-			//PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
-
+			if ((prevPos.x == p->x) && (prevPos.y == p->y)) {
+				PlayerScript->GetStatus()->isMove = false;
+				PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
+			}
 		}
 	}
 
@@ -396,4 +396,4 @@ void CNetworkMgr::init_game()
 	std::cout << "플레이어 초기화 완료\n";
 #endif // _DEBUG
 
-	}
+}

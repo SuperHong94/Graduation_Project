@@ -21,4 +21,4 @@ binary파일로 로드가 안됨
 
 
 테스트
-aassadf
+aassadfd
