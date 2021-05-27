@@ -502,29 +502,7 @@ void CSceneMgr::initGameScene()
 
 		m_pCurScene->FindLayer(L"Boss")->AddGameObject(pObject);
 
-		//////////////////////
-		///////////////////////
-		//////////////////////
-		//// Test
-		/////
-		pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\RandomBox.fbx");
-		pMeshData->Save(pMeshData->GetPath());
-
-		pObject = new CGameObject;
-
-		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\RandomBox.mdat", L"MeshData\\RandomBox.mdat");
-		pObject = pMeshData->Instantiate();
-
-		pObject->SetName(L"test Object");
-		pObject->FrustumCheck(true);
-		pObject->AddComponent(new CTransform);
-
-		pObject->Transform()->SetLocalPos(Vec3(-100, 50, 0));
-		pObject->Transform()->SetLocalScale(Vec3(0.5, 0.5, 0.5));
-		pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2,XM_PI, 0));
-
-		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
-		//////
+		
 
 		// ==================
 		// Camera Object 持失
@@ -679,6 +657,7 @@ void CSceneMgr::initGameScene()
 			monsterArr[i] = pObject;
 		}
 
+
 		// ====================
 		// Item 持失
 		// ====================
@@ -696,6 +675,10 @@ void CSceneMgr::initGameScene()
 			{
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\HealPack.mdat", L"MeshData\\HealPack.mdat");
 				//pObject->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
+			}
+			else if (i < 50)
+			{
+				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\RandomBox.mdat", L"MeshData\\RandomBox.mdat");
 			}
 			pObject = pMeshData->Instantiate();
 
@@ -731,7 +714,14 @@ void CSceneMgr::initGameScene()
 				pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, collOffset));
 				pObject->Collider2D()->SetOffsetScale(Vec3(350.f, 0.f, 500.f));
 			}
-
+			else if (i < 50)
+			{
+				pObject->AddComponent(new CItemScript(ItemState::I_BulletItem));
+				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI, 0));
+				pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, collOffset));
+				pObject->Collider2D()->SetOffsetScale(Vec3(150.f, 0.f, 150.f));
+	
+			}
 			// AddGameObject
 			m_pCurScene->FindLayer(L"Item")->AddGameObject(pObject);
 

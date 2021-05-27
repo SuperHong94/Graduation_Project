@@ -24,7 +24,7 @@ void CItemScript::update()
 		{
 			activeTime -= DT;
 
-			if (state == ItemState::I_HpItem)
+			if (state == ItemState::I_HpItem || state == ItemState::I_BulletItem)
 			{
 				Vec3 vRot = Transform()->GetLocalRot();
 				Transform()->SetLocalRot(Vec3(vRot.x, vRot.y + DT, 0.f));
@@ -72,6 +72,11 @@ void CItemScript::OnCollisionEnter(CCollider2D* _pOther)
 					if (hp > 100)
 						hp = 100;
 					_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->hp = hp;
+				}
+
+				else if (state == ItemState::I_BulletItem)
+				{
+
 				}
 
 				Transform()->SetLocalPos(Vec3(20000.f, 0.f, 20000.f));
