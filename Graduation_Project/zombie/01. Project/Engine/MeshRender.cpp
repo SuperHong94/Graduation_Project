@@ -31,7 +31,7 @@ void CMeshRender::render()
 		// Transform 정보 업데이트
 		Transform()->UpdateData();
 
-		// Animator3D 컴포넌트가 있는 경우...
+		// Animator3D 컴포넌트가 있는 경우...ㅋ
 		if (Animator3D())
 		{			
 			Animator3D()->UpdateData();

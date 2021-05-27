@@ -49,7 +49,7 @@ CScene* CSceneMgr::GetCurScene()
 	return m_pCurScene;
 }
 
-void CSceneMgr::ChangeScene(CScene * _pNextScene)
+void CSceneMgr::ChangeScene(CScene* _pNextScene)
 {
 	SAFE_DELETE(m_pCurScene);
 	m_pCurScene = _pNextScene;
@@ -90,7 +90,7 @@ void CSceneMgr::CreateTargetUI()
 	 (CResMgr::GetInst()->Load<CTexture>(L"SpeedBuffOff", L"Texture\\UI\\SpeedBuffOff.png")),
 	};
 
-	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"StartBG", L"Texture\\UI\\StartBG.png") };
+	Ptr<CTexture> StartSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"StartBG", L"Texture\\UI\\StartBG.png") };
 
 	Ptr<CTexture> GameClearSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"GameClearBG", L"Texture\\UI\\GameClearBG.png") };
 
@@ -123,7 +123,7 @@ void CSceneMgr::CreateTargetUI()
 				/*pObject->Transform()->SetLocalPos(Vec3((res.fWidth / 2.f) - ((vScale.x / miniMapUIRatio) / 2)
 					, (res.fHeight / 2.f) - ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)  / 2.f)
 					, 1.5f));*/
-				pObject->Transform()->SetLocalPos(Vec3(-(res.fWidth / 2.f) + ((vScale.x / miniMapUIRatio) /2) + vScale.x * 0.015
+				pObject->Transform()->SetLocalPos(Vec3(-(res.fWidth / 2.f) + ((vScale.x / miniMapUIRatio) / 2) + vScale.x * 0.015
 					, -(res.fHeight / 2.f) + (((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)) / 2) + vScale.y * 0.015
 					, 2.f));
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / miniMapUIRatio, (vScale.y / miniMapUIRatio) * (vScale.x / vScale.y), 1.f));
@@ -132,7 +132,7 @@ void CSceneMgr::CreateTargetUI()
 			else if (i == 2)
 			{
 				pObject->SetName(L"PlayerPosUI");
-			
+
 				Vec3 playerPos = m_pPlayerArr[playerID]->Transform()->GetLocalPos();
 				playerPos = Vec3(playerPos.x + 5000.f, 0.f, playerPos.z + 5000.f);
 				Vec2 posRatio = Vec2(playerPos.x / 10000.f * ((vScale.x / miniMapUIRatio)), playerPos.z / 10000.f * ((vScale.y / miniMapUIRatio) * (vScale.x / vScale.y)));
@@ -145,14 +145,14 @@ void CSceneMgr::CreateTargetUI()
 			else if (i == 3)
 			{
 				pObject->SetName(L"QuestUI");
-				pObject->Transform()->SetLocalPos(Vec3(0, res.fHeight / 8, 1.f));	
-				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 2, (vScale.y / 2 ), 1.f));
+				pObject->Transform()->SetLocalPos(Vec3(0, res.fHeight / 8, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 2, (vScale.y / 2), 1.f));
 			}
 
 			else if (i == 4)
 			{
 				pObject->SetName(L"HpBarEdgeUI");
-				pObject->Transform()->SetLocalPos(Vec3(res.fWidth / 5.10, -res.fHeight/ 2.75, 1.f));
+				pObject->Transform()->SetLocalPos(Vec3(res.fWidth / 5.10, -res.fHeight / 2.75, 1.f));
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 6.8, (vScale.y / 7), 1.f));
 			}
 
@@ -173,7 +173,7 @@ void CSceneMgr::CreateTargetUI()
 			else if (i == 7)
 			{
 				pObject->SetName(L"PowerBuffOnUI");
-				pObject->Transform()->SetLocalPos(Vec3(-20000, 0.f , 1.f));
+				pObject->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
 			}
 
@@ -188,7 +188,7 @@ void CSceneMgr::CreateTargetUI()
 			{
 				pObject->SetName(L"DefenceBuffOnUI");
 				pObject->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
-				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25)* res.fWidth / res.fHeight, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
 			}
 
 			else if (i == 10)
@@ -202,7 +202,7 @@ void CSceneMgr::CreateTargetUI()
 			{
 				pObject->SetName(L"SpeedBuffOnUI");
 				pObject->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
-				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25)* res.fWidth / res.fHeight, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
 			}
 
 			else if (i == 12)
@@ -486,7 +486,7 @@ void CSceneMgr::initGameScene()
 		pObject->SetName(L"Boss Object");
 		pObject->FrustumCheck(true);
 		pObject->AddComponent(new CTransform);
-	
+
 		pObject->Transform()->SetLocalPos(Vec3(-40000.f, 0.f, 0));
 		pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0, 0));
 
@@ -521,7 +521,7 @@ void CSceneMgr::initGameScene()
 
 		pObject->Transform()->SetLocalPos(Vec3(-100, 50, 0));
 		pObject->Transform()->SetLocalScale(Vec3(0.5, 0.5, 0.5));
-		pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2,XM_PI, 0));
+		pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI, 0));
 
 		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 		//////
@@ -663,7 +663,7 @@ void CSceneMgr::initGameScene()
 			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
 			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
 			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 3);*/
-			
+
 			pObject->AddComponent(new CCollider2D);
 			pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
 			pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
@@ -686,11 +686,11 @@ void CSceneMgr::initGameScene()
 		{
 			pObject = new CGameObject;
 
-			if(i<10)
+			if (i < 10)
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\PowerPotion.mdat", L"MeshData\\PowerPotion.mdat");
-			else if(i<20)
+			else if (i < 20)
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\DfPotion.mdat", L"MeshData\\DfPotion.mdat");
-			else if(i<30)
+			else if (i < 30)
 				pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SpPotion.mdat", L"MeshData\\SpPotion.mdat");
 			else if (i < 40)
 			{
@@ -727,7 +727,7 @@ void CSceneMgr::initGameScene()
 			else if (i < 40)
 			{
 				pObject->AddComponent(new CItemScript(ItemState::I_HpItem));
-				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f,  0.f));
+				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f, 0.f));
 				pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, collOffset));
 				pObject->Collider2D()->SetOffsetScale(Vec3(350.f, 0.f, 500.f));
 			}
@@ -980,147 +980,147 @@ void CSceneMgr::initGameScene()
 
 	else if (SceneState == SCENE_STATE::GAMECLEAR_SCENE)
 	{
-	// ===============
-	// GameClearScene 생성
-	// ===============
-	m_pCurScene->SetName(L"GameClear Scene");
+		// ===============
+		// GameClearScene 생성
+		// ===============
+		m_pCurScene->SetName(L"GameClear Scene");
 
-	// ===================
-	// Player 오브젝트 생성
-	// ===================
-	pPlayerObject = new CGameObject;
-	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
-	pPlayerObject = pMeshData->Instantiate();
-	pPlayerObject->SetName(L"Player Object");
-	pPlayerObject->AddComponent(new CTransform);
-	pPlayerObject->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
-	pPlayerObject->AddComponent(new CPlayerScript(pPlayerObject, false));
+		// ===================
+		// Player 오브젝트 생성
+		// ===================
+		pPlayerObject = new CGameObject;
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+		pPlayerObject = pMeshData->Instantiate();
+		pPlayerObject->SetName(L"Player Object");
+		pPlayerObject->AddComponent(new CTransform);
+		pPlayerObject->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
+		pPlayerObject->AddComponent(new CPlayerScript(pPlayerObject, false));
 
-	// AddGameObject
-	m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
+		// AddGameObject
+		m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
 
-	// ==================
-	// Camera Object 생성
-	// ==================
-	// Main Camera
-	CGameObject* pMainCam = new CGameObject;
-	pMainCam->SetName(L"MainCam");
-	pMainCam->AddComponent(new CTransform);
-	pMainCam->AddComponent(new CCamera);
-	pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
+		// ==================
+		// Camera Object 생성
+		// ==================
+		// Main Camera
+		CGameObject* pMainCam = new CGameObject;
+		pMainCam->SetName(L"MainCam");
+		pMainCam->AddComponent(new CTransform);
+		pMainCam->AddComponent(new CCamera);
+		pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
 
-	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
-	pMainCam->Camera()->SetFar(100000.f);
-	pMainCam->Camera()->SetLayerAllCheck();
-	pMainCam->Camera()->SetLayerCheck(30, false);
+		pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+		pMainCam->Camera()->SetFar(100000.f);
+		pMainCam->Camera()->SetLayerAllCheck();
+		pMainCam->Camera()->SetLayerCheck(30, false);
 
-	m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
 
-	//====================
-	//UI 오브젝트 생성
-	// ====================
-	// UI Camera
-	CGameObject* pUICam = new CGameObject;
-	pUICam->SetName(L"MainCam");
-	pUICam->AddComponent(new CTransform);
-	pUICam->AddComponent(new CCamera);
+		//====================
+		//UI 오브젝트 생성
+		// ====================
+		// UI Camera
+		CGameObject* pUICam = new CGameObject;
+		pUICam->SetName(L"MainCam");
+		pUICam->AddComponent(new CTransform);
+		pUICam->AddComponent(new CCamera);
 
-	pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
-	pUICam->Camera()->SetFar(100.f);
-	pUICam->Camera()->SetLayerCheck(30, true);
-	pUICam->Camera()->SetWidth(CRenderMgr::GetInst()->GetResolution().fWidth);
-	pUICam->Camera()->SetHeight(CRenderMgr::GetInst()->GetResolution().fHeight);
+		pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
+		pUICam->Camera()->SetFar(100.f);
+		pUICam->Camera()->SetLayerCheck(30, true);
+		pUICam->Camera()->SetWidth(CRenderMgr::GetInst()->GetResolution().fWidth);
+		pUICam->Camera()->SetHeight(CRenderMgr::GetInst()->GetResolution().fHeight);
 
-	m_pCurScene->FindLayer(L"Default")->AddGameObject(pUICam);
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(pUICam);
 
-	CreateTargetUI();
+		CreateTargetUI();
 
-	// Main Camera
-	pMainCam = new CGameObject;
-	pMainCam->SetName(L"MainCam");
-	pMainCam->AddComponent(new CTransform);
-	pMainCam->AddComponent(new CCamera);
-	pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
+		// Main Camera
+		pMainCam = new CGameObject;
+		pMainCam->SetName(L"MainCam");
+		pMainCam->AddComponent(new CTransform);
+		pMainCam->AddComponent(new CCamera);
+		pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
 
-	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
-	pMainCam->Camera()->SetFar(100000.f);
-	pMainCam->Camera()->SetLayerAllCheck();
-	pMainCam->Camera()->SetLayerCheck(30, false);
+		pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+		pMainCam->Camera()->SetFar(100000.f);
+		pMainCam->Camera()->SetLayerAllCheck();
+		pMainCam->Camera()->SetLayerCheck(30, false);
 
-	m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
 
 	}
 
 	else if (SceneState == SCENE_STATE::GAMEOVER_SCENE)
 	{
-	// ===============
-	// GameOverScene 생성
-	// ===============
-	m_pCurScene->SetName(L"GameOver Scene");
+		// ===============
+		// GameOverScene 생성
+		// ===============
+		m_pCurScene->SetName(L"GameOver Scene");
 
-	// ===================
-	// Player 오브젝트 생성
-	// ===================
-	pPlayerObject = new CGameObject;
-	pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
-	pPlayerObject = pMeshData->Instantiate();
-	pPlayerObject->SetName(L"Player Object");
-	pPlayerObject->AddComponent(new CTransform);
-	pPlayerObject->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
-	pPlayerObject->AddComponent(new CPlayerScript(pPlayerObject, false));
+		// ===================
+		// Player 오브젝트 생성
+		// ===================
+		pPlayerObject = new CGameObject;
+		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+		pPlayerObject = pMeshData->Instantiate();
+		pPlayerObject->SetName(L"Player Object");
+		pPlayerObject->AddComponent(new CTransform);
+		pPlayerObject->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
+		pPlayerObject->AddComponent(new CPlayerScript(pPlayerObject, false));
 
-	// AddGameObject
-	m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
+		// AddGameObject
+		m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
 
-	// ==================
-	// Camera Object 생성
-	// ==================
-	// Main Camera
-	CGameObject* pMainCam = new CGameObject;
-	pMainCam->SetName(L"MainCam");
-	pMainCam->AddComponent(new CTransform);
-	pMainCam->AddComponent(new CCamera);
-	pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
+		// ==================
+		// Camera Object 생성
+		// ==================
+		// Main Camera
+		CGameObject* pMainCam = new CGameObject;
+		pMainCam->SetName(L"MainCam");
+		pMainCam->AddComponent(new CTransform);
+		pMainCam->AddComponent(new CCamera);
+		pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
 
-	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
-	pMainCam->Camera()->SetFar(100000.f);
-	pMainCam->Camera()->SetLayerAllCheck();
-	pMainCam->Camera()->SetLayerCheck(30, false);
+		pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+		pMainCam->Camera()->SetFar(100000.f);
+		pMainCam->Camera()->SetLayerAllCheck();
+		pMainCam->Camera()->SetLayerCheck(30, false);
 
-	m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
 
-	//====================
-	//UI 오브젝트 생성
-	// ====================
-	// UI Camera
-	CGameObject* pUICam = new CGameObject;
-	pUICam->SetName(L"MainCam");
-	pUICam->AddComponent(new CTransform);
-	pUICam->AddComponent(new CCamera);
+		//====================
+		//UI 오브젝트 생성
+		// ====================
+		// UI Camera
+		CGameObject* pUICam = new CGameObject;
+		pUICam->SetName(L"MainCam");
+		pUICam->AddComponent(new CTransform);
+		pUICam->AddComponent(new CCamera);
 
-	pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
-	pUICam->Camera()->SetFar(100.f);
-	pUICam->Camera()->SetLayerCheck(30, true);
-	pUICam->Camera()->SetWidth(CRenderMgr::GetInst()->GetResolution().fWidth);
-	pUICam->Camera()->SetHeight(CRenderMgr::GetInst()->GetResolution().fHeight);
+		pUICam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
+		pUICam->Camera()->SetFar(100.f);
+		pUICam->Camera()->SetLayerCheck(30, true);
+		pUICam->Camera()->SetWidth(CRenderMgr::GetInst()->GetResolution().fWidth);
+		pUICam->Camera()->SetHeight(CRenderMgr::GetInst()->GetResolution().fHeight);
 
-	m_pCurScene->FindLayer(L"Default")->AddGameObject(pUICam);
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(pUICam);
 
-	CreateTargetUI();
+		CreateTargetUI();
 
-	// Main Camera
-	pMainCam = new CGameObject;
-	pMainCam->SetName(L"MainCam");
-	pMainCam->AddComponent(new CTransform);
-	pMainCam->AddComponent(new CCamera);
-	pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
+		// Main Camera
+		pMainCam = new CGameObject;
+		pMainCam->SetName(L"MainCam");
+		pMainCam->AddComponent(new CTransform);
+		pMainCam->AddComponent(new CCamera);
+		pMainCam->AddComponent(new CToolCamScript(pPlayerObject));
 
-	pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
-	pMainCam->Camera()->SetFar(100000.f);
-	pMainCam->Camera()->SetLayerAllCheck();
-	pMainCam->Camera()->SetLayerCheck(30, false);
+		pMainCam->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+		pMainCam->Camera()->SetFar(100000.f);
+		pMainCam->Camera()->SetLayerAllCheck();
+		pMainCam->Camera()->SetLayerCheck(30, false);
 
-	m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(pMainCam);
 
 	}
 }
@@ -1223,7 +1223,7 @@ void CSceneMgr::update()
 	CRenderMgr::GetInst()->ClearCamera();
 
 	m_pCurScene->finalupdate();
-	   
+
 	// 충돌 처리
 	CCollisionMgr::GetInst()->update();
 
@@ -1365,12 +1365,12 @@ void CSceneMgr::update()
 
 		// 플레이어 Offset 변경
 		m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->SetBulletCollOffset(collOffset);
-		
+
 		for (int i = 0; i < MAX_LAYER; ++i)
 		{
 			const vector<CGameObject*>& vecObject = m_pCurScene->GetLayer(i)->GetObjects();
 			for (size_t j = 0; j < vecObject.size(); ++j)
-			{	
+			{
 				if (L"Player Object" == vecObject[j]->GetName())
 				{
 					float offset = vecObject[j]->GetScript<CPlayerScript>()->GetCollOffset();
@@ -1391,7 +1391,7 @@ void CSceneMgr::update()
 
 				else if (L"Item Object" == vecObject[j]->GetName())
 				{
-					if(vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_HpItem)
+					if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_HpItem)
 						vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, collOffset));
 
 					else
@@ -1464,11 +1464,11 @@ void CSceneMgr::updateUI()
 						vecObject[j]->Transform()->SetLocalPos(Vec3(20000, 20000, 1.f));
 				}
 
-					//Hp 업데이트
+				//Hp 업데이트
 				else if (L"HpBarUI" == vecObject[j]->GetName())
 				{
 					float hp = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->hp;
-					 
+
 					vecObject[j]->Transform()->SetLocalScale(Vec3(hpBarWidth * hp / 100, hpBarHeight, 1.f));
 
 					float adjust = 100 - hp;
@@ -1479,7 +1479,7 @@ void CSceneMgr::updateUI()
 				else if (L"PowerBuffOnUI" == vecObject[j]->GetName())
 				{
 					float powerBuffTime = m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->powerBuffTime;
-					if(powerBuffTime > 0)
+					if (powerBuffTime > 0)
 						vecObject[j]->Transform()->SetLocalPos(Vec3(-res.fWidth / 6.5, -res.fHeight / 2.3, 1.f));
 
 					else
@@ -1556,7 +1556,7 @@ void CSceneMgr::FindGameObjectByTag(const wstring& _strTag, vector<CGameObject*>
 				_vecFindObj.push_back(vecObject[j]);
 			}
 		}
-	}	
+	}
 }
 
 bool Compare(CGameObject* _pLeft, CGameObject* _pRight)
@@ -1601,7 +1601,7 @@ void CSceneMgr::setMap()
 	Ptr<CMeshData> pMeshData;
 	//pMeshData = CResMgr::GetInst()->LoadFBX(L"FBX\\Tomb2.fbx");
 	//pMeshData->Save(pMeshData->GetPath());
-	
+
 	//울타리 생성
 	for (int i = 1; i < 260; i++)
 	{
@@ -1655,7 +1655,7 @@ void CSceneMgr::setMap()
 		}
 		else if (i == 2)
 		{
-			pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f,-5250.f));
+			pObject->Transform()->SetLocalPos(Vec3(0.f, 0.f, -5250.f));
 			pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, XM_PI, 0.f));
 		}
 		else
@@ -1665,7 +1665,7 @@ void CSceneMgr::setMap()
 		}
 
 		pObject->Transform()->SetLocalScale(Vec3(2.0f, 1.5f, 2.0f));
-	
+
 		//pObject->MeshRender()->SetDynamicShadow(true);
 
 		pObject->AddComponent(new CCollider2D);

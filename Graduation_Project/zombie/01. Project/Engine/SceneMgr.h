@@ -23,7 +23,7 @@ private:
 	CGameObject* monsterArr[100];
 	CGameObject* m_pItem[40];
 	int monsterCnt = 60;
-	int ItemCnt = 40;
+	int ItemCnt = 50;
 	int			sceneNum = 0;
 	bool		isChange = false;
 	float collOffset = 20000.f;
