@@ -67,6 +67,9 @@ public:
 	// 좀비 인식 범위 증가
 	void IncreaseZombieRange();
 
+	// 보스 죽음 확인
+	void checkBossDead();
+
 	void GameInit();
 
 	// 치트 무덤 파괴

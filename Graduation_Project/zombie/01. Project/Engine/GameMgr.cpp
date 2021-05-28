@@ -7,6 +7,7 @@
 
 #include "MonsterScript.h"
 #include "TombScript.h"
+#include "BossScript.h"
 
 GameMgr::GameMgr(CScene* pScene, CGameObject* monsters[], int monsterCount, CGameObject* PlayerArr[], int PlayerCnt, int PlayerID)
 {
@@ -111,6 +112,8 @@ void GameMgr::GameMgrUpdate()
 
 void GameMgr::CheckGameClear()
 {
+	checkBossDead();
+
 	if (Gstatus->DeathZombieCnt >= Gstatus->zombieGoalCnt && Gstatus->bossDead)
 	{
 		Gstatus->isGameClear = true;
@@ -159,6 +162,22 @@ void GameMgr::IncreaseZombieRange()
 	// 무덤이 전부 파괴 되었는지 판단
 	if (Gstatus->destroyTombCnt == 4)
 		Gstatus->tombAllDestroy = true;
+}
+
+void GameMgr::checkBossDead()
+{
+	for (int i = 0; i < MAX_LAYER; ++i)
+	{
+		const vector<CGameObject*>& vecObject = Gstatus->Scene->GetLayer(i)->GetObjects();
+		for (size_t j = 0; j < vecObject.size(); ++j)
+		{
+			if (L"Boss Object" == vecObject[j]->GetName())
+			{
+				if (vecObject[j]->GetScript<CBossScript>()->GetStatus()->IsDisappear)
+					Gstatus->bossDead = true;
+			}
+		}
+	}
 }
 
 

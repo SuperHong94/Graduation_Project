@@ -492,10 +492,10 @@ void CSceneMgr::initGameScene()
 
 		pObject->AddComponent(new CCollider2D);
 		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
-		pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
+		pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 50.f + collOffset));
 
 		//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, -5000.f, 0.f));
-		pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
+		pObject->Collider2D()->SetOffsetScale(Vec3(100.f, 0.f, 100.f));
 
 		// Script ¼³Á¤
 		pObject->AddComponent(new CBossScript(m_pPlayerArr, playerNum, pObject, m_pCurScene));
@@ -1390,7 +1390,7 @@ void CSceneMgr::update()
 
 				else if (L"Boss Object" == vecObject[j]->GetName())
 				{
-					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
+					vecObject[j]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 50.f + collOffset));
 				}
 			}
 		}

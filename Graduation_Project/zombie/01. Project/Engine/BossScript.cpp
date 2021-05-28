@@ -111,7 +111,7 @@ void CBossScript::update()
 		status->state = BossState::B_Die;
 
 		//애니메이션 변경
-		Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\BossDearh.mdat", L"MeshData\\BossDearh.mdat");
+		Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\BossDeath.mdat", L"MeshData\\BossDeath.mdat");
 		pObject->ChangeAnimation(pMeshData);
 		Transform()->SetLocalPos(Vec3(vPos.x, vPos.y, vPos.z));
 	}
@@ -127,6 +127,7 @@ void CBossScript::update()
 			if (!status->IsDisappear)
 			{
 				status->IsDisappear = true;
+				Transform()->SetLocalPos(Vec3(20000.f, 20000.f, 20000.f));
 			}
 		}
 	}
