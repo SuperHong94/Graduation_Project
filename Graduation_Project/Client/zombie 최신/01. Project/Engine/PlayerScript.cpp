@@ -93,6 +93,7 @@ void CPlayerScript::update()
 {
 	if (!status->IsDead)
 	{
+	
 		// 플레이어 일시
 		if (isPlayer)
 		{
@@ -372,6 +373,7 @@ void CPlayerScript::update()
 						// 수정되면 지울 것
 						Vec3 temp = pObject->Transform()->GetLocalPos();
 						pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
+						CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::NO_EVENT, vRot); //idle 상태 보내기
 						collOffset = 50;
 					}
 				}

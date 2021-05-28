@@ -203,9 +203,9 @@ void CNetworkMgr::process_key(s2c_move* p)
 		}
 		if (playerID != m_playerId) { //내가 조정하는거 아닐때만
 			PlayerScript->Transform()->SetLocalRot(Vec3(p->rx, p->ry, p->rz));
-			if ((prevPos.x == p->x) && (prevPos.y == p->y)) {
+			if ((prevPos.x == p->x) && (prevPos.z == p->z)) {
 				PlayerScript->GetStatus()->isMove = false;
-				PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
+				PlayerScript->Transform()->SetLocalPos(Vec3(prevPos.x, 0.f, prevPos.z));
 			}
 		}
 	}
