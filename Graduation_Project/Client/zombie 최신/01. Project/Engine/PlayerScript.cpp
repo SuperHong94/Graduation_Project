@@ -93,7 +93,7 @@ void CPlayerScript::update()
 {
 	if (!status->IsDead)
 	{
-	
+
 		// 플레이어 일시
 		if (isPlayer)
 		{
@@ -362,8 +362,8 @@ void CPlayerScript::update()
 						// 수정되면 지울 것
 						Vec3 temp = pObject->Transform()->GetLocalPos();
 						pObject->Transform()->SetLocalPos(Vec3(temp.x, 53.f + revise, temp.z));
+						status->isIdleOnceSend = false;
 					}
-
 					else
 					{
 						Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
@@ -373,8 +373,11 @@ void CPlayerScript::update()
 						// 수정되면 지울 것
 						Vec3 temp = pObject->Transform()->GetLocalPos();
 						pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
-						CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::NO_EVENT, vRot); //idle 상태 보내기
 						collOffset = 50;
+						if (status->isIdleOnceSend == false) {
+							CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::NO_EVENT, vRot); //idle 상태 보내기
+							status->isIdleOnceSend = true;
+						}
 					}
 				}
 			}
@@ -414,8 +417,6 @@ void CPlayerScript::update()
 
 
 			// 총알
-			//
-
 
 			if (KEY_TAB(KEY_TYPE::KEY_LBTN) && !status->IsRoll)
 			{
