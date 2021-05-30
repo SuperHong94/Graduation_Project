@@ -8,14 +8,15 @@ void CPlayerObject::init() //게임들어갈때 초기화
 
 	m_rotation = { 0.f,0.f,0.f };
 	m_speed = 500;
-	m_eSceneState = SCENE_STATE::START_SCENE; 
+	m_eSceneState = SCENE_STATE::START_SCENE;
 }
 
 void CPlayerObject::Update(c2s_Key* packet)
 {
 
-	EKEY_EVENT send_key;
+
 	float dt = packet->dT;
+	m_rotation = { packet->rX,packet->rY,packet->rZ };
 	switch (packet->key)
 	{
 	case DOWN_UP:
@@ -39,15 +40,17 @@ void CPlayerObject::Update(c2s_Key* packet)
 		m_ePState = PlayerState::P_LRun;
 		break;
 	case NO_EVENT:
-
-	
 		m_ePState = PlayerState::P_Idle;
+		break;
+	case DOWN_LSHIFT:
+		//m_postion = m_postion + (dt * (m_rotation.Normalize()) * m_speed);
+		//m_ePState = PlayerState::P_Roll;
 		break;
 	default:
 		break;
 	}
 
-	m_rotation = { packet->rX,packet->rY,packet->rZ };
+
 	if (m_postion.x > MAX_MAP)
 		m_postion.x = MAX_MAP;
 	if (m_postion.x < MIN_MAP)
