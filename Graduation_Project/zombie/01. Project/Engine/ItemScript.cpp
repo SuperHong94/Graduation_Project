@@ -76,7 +76,15 @@ void CItemScript::OnCollisionEnter(CCollider2D* _pOther)
 
 				else if (state == ItemState::I_BulletItem)
 				{
+					int rnd = rand() % 3;
+					if (rnd == 0)
+						_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->bulletState = BulletState::B_Fire;
 
+					else if (rnd == 1)
+						_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->bulletState = BulletState::B_Ice;
+
+					else if (rnd == 2)
+						_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->bulletState = BulletState::B_Thunder;
 				}
 
 				Transform()->SetLocalPos(Vec3(20000.f, 0.f, 20000.f));
