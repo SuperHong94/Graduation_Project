@@ -144,62 +144,62 @@ void CMonsterScript::update()
 							{
 								if (L"Item Object" == vecObject[j]->GetName() && !ItemSpawn)
 								{
-									// 버프 포션 스폰
-									// 파워 포션 스폰
-									if (rnd < 10)
-									{
-										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_PwPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
-										{
-											vecObject[j]->GetScript<CItemScript>()->setIsSpawn(true);
-											vecObject[j]->GetScript<CItemScript>()->setActiveTime(10.f);
-											vecObject[j]->Transform()->SetLocalPos(Vec3(vPos.x, 50.f, vPos.z));
-											ItemSpawn = true;
-											break;
-										}
-									}
+									//// 버프 포션 스폰
+									//// 파워 포션 스폰
+									//if (rnd < 10)
+									//{
+									//	if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_PwPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
+									//	{
+									//		vecObject[j]->GetScript<CItemScript>()->setIsSpawn(true);
+									//		vecObject[j]->GetScript<CItemScript>()->setActiveTime(10.f);
+									//		vecObject[j]->Transform()->SetLocalPos(Vec3(vPos.x, 50.f, vPos.z));
+									//		ItemSpawn = true;
+									//		break;
+									//	}
+									//}
 
-									// 방어 포션 스폰
-									else if (rnd < 20)
-									{
-										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_DfPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
-										{
-											vecObject[j]->GetScript<CItemScript>()->setIsSpawn(true);
-											vecObject[j]->GetScript<CItemScript>()->setActiveTime(10.f);
-											vecObject[j]->Transform()->SetLocalPos(Vec3(vPos.x, 50.f, vPos.z));
-											ItemSpawn = true;
-											break;
-										}
-									}
+									//// 방어 포션 스폰
+									//else if (rnd < 20)
+									//{
+									//	if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_DfPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
+									//	{
+									//		vecObject[j]->GetScript<CItemScript>()->setIsSpawn(true);
+									//		vecObject[j]->GetScript<CItemScript>()->setActiveTime(10.f);
+									//		vecObject[j]->Transform()->SetLocalPos(Vec3(vPos.x, 50.f, vPos.z));
+									//		ItemSpawn = true;
+									//		break;
+									//	}
+									//}
 
-									// 속도 포션 스폰
-									else if (rnd < 30)
-									{
-										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_SpPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
-										{
-											vecObject[j]->GetScript<CItemScript>()->setIsSpawn(true);
-											vecObject[j]->GetScript<CItemScript>()->setActiveTime(10.f);
-											vecObject[j]->Transform()->SetLocalPos(Vec3(vPos.x, 50.f, vPos.z));
-											ItemSpawn = true;
-											break;
-										}
-									}
+									//// 속도 포션 스폰
+									//else if (rnd < 30)
+									//{
+									//	if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_SpPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
+									//	{
+									//		vecObject[j]->GetScript<CItemScript>()->setIsSpawn(true);
+									//		vecObject[j]->GetScript<CItemScript>()->setActiveTime(10.f);
+									//		vecObject[j]->Transform()->SetLocalPos(Vec3(vPos.x, 50.f, vPos.z));
+									//		ItemSpawn = true;
+									//		break;
+									//	}
+									//}
 
-									// 힐 팩 스폰
-									else if (rnd < 40)
-									{
-										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_HpItem && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
-										{
-											vecObject[j]->GetScript<CItemScript>()->setIsSpawn(true);
-											vecObject[j]->GetScript<CItemScript>()->setActiveTime(10.f);
-											vecObject[j]->Transform()->SetLocalPos(Vec3(vPos.x, 50.f, vPos.z));
-											vecObject[j]->Transform()->SetLocalScale(Vec3(0.2f, 0.2f, 0.2f));
-											ItemSpawn = true;
-											break;
-										}
-									}
+									//// 힐 팩 스폰
+									//else if (rnd < 40)
+									//{
+									//	if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_HpItem && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
+									//	{
+									//		vecObject[j]->GetScript<CItemScript>()->setIsSpawn(true);
+									//		vecObject[j]->GetScript<CItemScript>()->setActiveTime(10.f);
+									//		vecObject[j]->Transform()->SetLocalPos(Vec3(vPos.x, 50.f, vPos.z));
+									//		vecObject[j]->Transform()->SetLocalScale(Vec3(0.2f, 0.2f, 0.2f));
+									//		ItemSpawn = true;
+									//		break;
+									//	}
+									//}
 
-									// 힐 팩 스폰
-									else if (rnd < 100)
+									// 불렛 박스 스폰
+									if (rnd < 100)
 									{
 										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_BulletItem && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
 										{

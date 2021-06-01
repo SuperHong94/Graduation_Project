@@ -484,24 +484,24 @@ void CPlayerScript::update()
 						{
 							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
 							// 총알 크기 설정
-							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 4.5f, 30.f));
+							pBullet[i]->Transform()->SetLocalScale(Vec3(50.f, 3.5f, 30.f));
 						}
 						else if (status->bulletState == BulletState::B_Fire)
 						{
 							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pFire.GetPointer());
-							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 4.5f, 30.f));
+							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 7.f, 30.f));
 		
 						}
 						else if (status->bulletState == BulletState::B_Ice)
 						{
 							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pIce.GetPointer());
-							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 4.5f, 30.f));
+							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 7.f, 30.f));
 
 						}
 						else if (status->bulletState == BulletState::B_Thunder)
 						{
 							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pThunder.GetPointer());
-							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 4.5f, 30.f));
+							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 7.f, 30.f));
 						}
 
 						// 총알 방향 설정
