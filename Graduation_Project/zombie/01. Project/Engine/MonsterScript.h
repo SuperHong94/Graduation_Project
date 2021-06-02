@@ -10,6 +10,7 @@ struct MonsterStatus
 	float distanceToPlayer = 0;
 	float attackRange = 100;
 	float attackDamage = 10.f;
+	float speed = 200.f;
 	bool PlayerInRange = false;
 	bool PlayerInAttackRange = false;
 	bool isAttack = false;
@@ -21,6 +22,11 @@ struct MonsterStatus
 	bool IsDisappear = false;
 	bool IsCollide = false;
 	CGameObject* TargetObject;
+
+	// 특수 총알 효과 지속 시간
+	float IceTime = 0.f;
+	float FireTime = 0.f;
+	float ThunderTime = 0.f;
 };
 
 
