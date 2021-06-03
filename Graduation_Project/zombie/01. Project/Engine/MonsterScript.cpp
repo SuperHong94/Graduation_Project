@@ -31,6 +31,27 @@ CMonsterScript::CMonsterScript(CGameObject* targetObject[], int ntargetNum, CGam
 	sequence1->addChild(CCheckRange);
 	sequence1->addChild(CCheckAttackRange);
 	sequence1->addChild(CAttackPlayer);
+
+	//hp 바
+	HpBarObject = new CGameObject;
+
+	HpBarObject->SetName(L"HpBar Object");
+	HpBarObject->FrustumCheck(true);
+	HpBarObject->AddComponent(new CTransform);
+
+	HpBarObject->Transform()->SetLocalPos(Vec3(-40000.f, 50.f, 0));
+	HpBarObject->Transform()->SetLocalScale(Vec3(50, 8, 1));
+
+	HpBarObject->AddComponent(new CMeshRender);
+	Ptr<CTexture> tex = CResMgr::GetInst()->Load<CTexture>(L"monHpBar", L"Texture\\UI\\HpBar.png");
+
+	HpBarObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
+	HpBarObject->MeshRender()->SetMaterial(pMtrl->Clone());
+
+	HpBarObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, tex.GetPointer());
+	// Script 설정
+	pScene->FindLayer(L"Default")->AddGameObject(HpBarObject);
 }
 
 CMonsterScript::~CMonsterScript()
@@ -88,6 +109,21 @@ void CMonsterScript::update()
 		vDir = vDir.Normalize();
 
 		root->run();
+
+		// Hp Bar 위치 크기 업데이트
+		Vec3 preVpos = HpBarObject->Transform()->GetLocalPos();
+		Vec3 dot1 = XMVector3Dot(Vec3(-1, 0, 0), Vec3(vDir.x, vDir.y, vDir.z));
+		float fdot = dot1.x;
+		Vec3 dot2 = XMVector3Dot(Vec3(1, 0, 0), Vec3(vDir.x, vDir.y, vDir.z));
+		float fdot2 = dot2.x;
+
+		if(vDir.x < 0 && dot1.x > 0.5)
+			HpBarObject->Transform()->SetLocalPos(Vec3(preVpos.x * (1 - 0.4) + (vPos.x - 40) * 0.4, vPos.y + 180, preVpos.z * (1 - 0.4) + (vPos.z) * 0.4));
+		else if (vDir.x > 0 && dot2.x > 0.5)
+			HpBarObject->Transform()->SetLocalPos(Vec3(preVpos.x * (1 - 0.4) + (vPos.x + 40) * 0.4, vPos.y + 180, preVpos.z * (1 - 0.4) + (vPos.z) * 0.4));
+		else
+			HpBarObject->Transform()->SetLocalPos(Vec3(preVpos.x * (1 - 0.4) + (vPos.x) * 0.4, vPos.y + 180, preVpos.z * (1 - 0.4) + (vPos.z) * 0.4));
+		HpBarObject->Transform()->SetLocalScale(Vec3(50 * status->hp / 100. , 10, 1));
 
 		// 특수 총알 효과 시간 차감
 		// 얼음

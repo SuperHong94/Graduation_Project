@@ -172,6 +172,7 @@ private:
 	CScene* pScene;
 	int targetNum;
 	CGameObject* targetObjects[4];
+	CGameObject* HpBarObject;
 
 public:
 	virtual void update();
