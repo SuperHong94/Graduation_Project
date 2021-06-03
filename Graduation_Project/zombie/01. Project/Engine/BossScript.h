@@ -17,10 +17,16 @@ struct BossStatus
 	float attackCoolTime = 2.6f;
 	float attackDelay = 1.2f;	// 정확한 공격 타이밍을 계산하기 위한 변수
 	float hp = 100;
+	float speed = 300;
 	float disappearCnt = 0;
 	bool IsDisappear = false;
 	bool IsCollide = false;
 	CGameObject* TargetObject;
+
+	// 특수 총알 효과 지속 시간
+	float IceTime = 0.f;
+	float FireTime = 0.f;
+	float ThunderTime = 0.f;
 };
 
 class BossCheckPlayerInRange : public Node {
@@ -167,6 +173,7 @@ class CBossScript
 	CScene* pScene;
 	int targetNum;
 	CGameObject* targetObjects[4];
+	CGameObject* HpBarObject;
 
 public:
 	virtual void update();

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "BossScript.h"
 #include "BulletScript.h"
-
+#include "MonsterScript.h"
 
 CBossScript::CBossScript(CGameObject* targetObject[], int ntargetNum, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::BOSSSCRIPT)
@@ -31,6 +31,27 @@ CBossScript::CBossScript(CGameObject* targetObject[], int ntargetNum, CGameObjec
 	sequence1->addChild(CCheckRange);
 	sequence1->addChild(CCheckAttackRange);
 	sequence1->addChild(CAttackPlayer);
+
+	//hp 바
+	HpBarObject = new CGameObject;
+
+	HpBarObject->SetName(L"HpBar Object");
+	HpBarObject->FrustumCheck(true);
+	HpBarObject->AddComponent(new CTransform);
+
+	HpBarObject->Transform()->SetLocalPos(Vec3(-40000.f, 50.f, 0));
+	HpBarObject->Transform()->SetLocalScale(Vec3(100, 8, 1));
+
+	HpBarObject->AddComponent(new CMeshRender);
+	Ptr<CTexture> tex = CResMgr::GetInst()->Load<CTexture>(L"BossHpBar", L"Texture\\UI\\HpBar.png");
+
+	HpBarObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
+	HpBarObject->MeshRender()->SetMaterial(pMtrl->Clone());
+
+	HpBarObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, tex.GetPointer());
+	// Script 설정
+	pScene->FindLayer(L"Default")->AddGameObject(HpBarObject);
 }
 
 CBossScript::~CBossScript()
@@ -87,10 +108,62 @@ void CBossScript::update()
 
 		root->run();
 
+		// Hp Bar 위치 크기 업데이트
+		Vec3 preVpos = HpBarObject->Transform()->GetLocalPos();
+		Vec3 dot1 = XMVector3Dot(Vec3(-1, 0, 0), Vec3(vDir.x, vDir.y, vDir.z));
+		float fdot = dot1.x;
+		Vec3 dot2 = XMVector3Dot(Vec3(1, 0, 0), Vec3(vDir.x, vDir.y, vDir.z));
+		float fdot2 = dot2.x;
+
+		if (HpBarObject->Transform()->GetLocalPos().x < -10000 && vPos.x > -500 && vPos.x < 500)
+			HpBarObject->Transform()->SetLocalPos(vPos);
+
+		else
+		{
+			if (vDir.x < 0 && dot1.x > 0.5)
+				HpBarObject->Transform()->SetLocalPos(Vec3(preVpos.x * (1 - 0.2) + (vPos.x - 30) * 0.2, vPos.y + 230, preVpos.z * (1 - 0.4) + (vPos.z) * 0.4));
+			else if (vDir.x > 0 && dot2.x > 0.5)
+				HpBarObject->Transform()->SetLocalPos(Vec3(preVpos.x * (1 - 0.2) + (vPos.x + 30) * 0.2, vPos.y + 230, preVpos.z * (1 - 0.4) + (vPos.z) * 0.4));
+			else
+				HpBarObject->Transform()->SetLocalPos(Vec3(preVpos.x * (1 - 0.2) + (vPos.x) * 0.2, vPos.y + 230, preVpos.z * (1 - 0.4) + (vPos.z) * 0.4));
+		}
+
+		HpBarObject->Transform()->SetLocalScale(Vec3(100 * status->hp / 100., 10, 1));
+
+		// 특수 총알 효과 시간 차감
+		// 얼음
+		if (status->IceTime > 0)
+			status->IceTime -= DT;
+		else
+			status->IceTime = 0;
+
+		// 불
+		if (status->FireTime > 0)
+		{
+			status->FireTime -= DT;
+			status->hp -= DT * 10;
+		}
+		else
+			status->FireTime = 0;
+
+		// 번개
+		if (status->ThunderTime > 0)
+		{
+			status->ThunderTime -= DT;
+			status->hp -= DT * 7;
+		}
+		else
+			status->ThunderTime = 0;
+
 		//if (status->state == MonsterState::M_Run)
 		if (status->state == BossState::B_Run && !status->IsCollide)
 		{
-			vPos += DT * 200.f * vDir;
+			// 얼음 총알 맞았을 경우
+			if (status->IceTime > 0)
+				vPos += DT * status->speed / 1.5 * vDir;
+
+			else
+				vPos += DT * status->speed * vDir;
 		}
 
 		// 이거 나중에 상태별로 포함되게 수정(run, attack??<- 이부분은 다시 생각)
@@ -174,6 +247,41 @@ void CBossScript::OnCollisionEnter(CCollider2D* _pOther)
 		if (status->hp >= 0)
 			status->hp -= bulletScript->GetDamage();
 
+		if (bulletScript->GetBulletState() == BulletState::B_Fire)
+		{
+			status->FireTime += 3;
+		}
+
+		else if (bulletScript->GetBulletState() == BulletState::B_Ice)
+		{
+			status->IceTime = 2;
+		}
+
+		else if (bulletScript->GetBulletState() == BulletState::B_Thunder)
+		{
+			status->ThunderTime += 3;
+
+			for (int i = 0; i < MAX_LAYER; ++i)
+			{
+				const vector<CGameObject*>& vecObject = pScene->GetLayer(i)->GetObjects();
+				for (size_t j = 0; j < vecObject.size(); ++j)
+				{
+					// 미니맵에 플레이어 위치 업데이트
+					if (L"Monster Object" == vecObject[j]->GetName())
+					{
+						Vec3 monsterPos = vecObject[j]->Transform()->GetLocalPos();
+						Vec3 Pos = Transform()->GetLocalPos();
+
+						Vec3 sub = Pos - monsterPos;
+						float length = sqrt(sub.x * sub.x + sub.y * sub.y + sub.z * sub.z);
+						if (length < 200.f)
+						{
+							vecObject[j]->GetScript<CMonsterScript>()->GetStatus()->ThunderTime = 3.f;
+						}
+					}
+				}
+			}
+		}
 	}
 
 }

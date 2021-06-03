@@ -2,6 +2,7 @@
 #include "MonsterScript.h"
 #include "BulletScript.h"
 #include "ItemScript.h"
+#include "BossScript.h"
 
 CMonsterScript::CMonsterScript(CGameObject* targetObject[], int ntargetNum, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
@@ -145,7 +146,7 @@ void CMonsterScript::update()
 		if (status->ThunderTime > 0)
 		{
 			status->ThunderTime -= DT;
-			status->hp -= DT * 5;
+			status->hp -= DT * 7;
 		}
 		else
 			status->ThunderTime = 0;
@@ -349,8 +350,8 @@ void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 					const vector<CGameObject*>& vecObject = pScene->GetLayer(i)->GetObjects();
 					for (size_t j = 0; j < vecObject.size(); ++j)
 					{
-						// 미니맵에 플레이어 위치 업데이트
-						if (L"Monster Object" == vecObject[j]->GetName())
+						// 미니맵에 플레이어 위치 업데이트5
+						if (L"Monster Object" == vecObject[j]->GetName() || L"Boss Object" == vecObject[j]->GetName())
 						{
 							Vec3 monsterPos = vecObject[j]->Transform()->GetLocalPos();
 							Vec3 Pos = Transform()->GetLocalPos();
@@ -359,7 +360,10 @@ void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 							float length = sqrt(sub.x * sub.x + sub.y * sub.y + sub.z * sub.z);
 							if (length < 200.f)
 							{
-								vecObject[j]->GetScript<CMonsterScript>()->GetStatus()->ThunderTime = 2.f;
+								if(vecObject[j]->GetName() == L"Monster Object")
+									vecObject[j]->GetScript<CMonsterScript>()->GetStatus()->ThunderTime = 3.f;
+								else
+									vecObject[j]->GetScript<CBossScript>()->GetStatus()->ThunderTime = 3.f;
 							}
 						}
 					}
