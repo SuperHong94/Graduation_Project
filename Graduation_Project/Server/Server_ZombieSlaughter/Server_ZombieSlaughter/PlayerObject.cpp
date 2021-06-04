@@ -44,7 +44,7 @@ void CPlayerObject::Update(c2s_Key* packet)
 		break;
 	case DOWN_LSHIFT:
 		//이부분이 문제다
-		//m_postion = m_postion + (dt * (m_rotation.Normalize()) * m_speed);
+		m_postion = m_postion + (dt * (m_rotation.Normalize()) * m_speed);
 		m_ePState = PlayerState::P_Roll;
 		break;
 	default:

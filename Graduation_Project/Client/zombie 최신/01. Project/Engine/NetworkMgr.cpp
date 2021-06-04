@@ -214,6 +214,8 @@ void CNetworkMgr::process_key(s2c_move* p)
 		case P_Spawn:
 			break;
 		case P_Roll:
+			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
+			PlayerScript->GetStatus()->IsRoll = true;
 			break;
 		case p_None:
 			break;

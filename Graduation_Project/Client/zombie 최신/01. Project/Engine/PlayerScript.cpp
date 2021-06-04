@@ -241,7 +241,7 @@ void CPlayerScript::update()
 
 					// 구르기 키 입력 당시 방향을 저장해 무조건 구르기가 끝날때 까지 그 방향으로 이동 되게만 할거임
 					rollDir = playerDir;
-					//CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_LSHIFT, rollDir);
+					CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::DOWN_LSHIFT, rollDir);
 
 				}
 			}
@@ -394,10 +394,10 @@ void CPlayerScript::update()
 					status->RollCoolTime = 0;
 					status->state = PlayerState::p_None;
 
-					for (int i = 0; i < 4; i++)
+					/*for (int i = 0; i < 4; i++)
 						rollDir[i] = 0;
 
-					vPos += 20 * rollDir;
+					vPos += 20 * rollDir;*/
 					pObject->Transform()->SetLocalPos(vPos);
 				}
 			}
