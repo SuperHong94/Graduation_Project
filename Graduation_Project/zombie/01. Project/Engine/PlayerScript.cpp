@@ -431,7 +431,6 @@ void CPlayerScript::update()
 				vBulletDir.z = vBulletTargetPos.z - vPos.z;
 
 
-
 				//printf("%f	%f	%f\n", vBulletDir.x, vBulletDir.y, vBulletDir.z);
 
 				Vec3 vNBulletDir = vBulletDir.Normalize();
@@ -511,6 +510,17 @@ void CPlayerScript::update()
 						break;
 					}
 
+				}
+
+				// 특수 총알 차감
+				if (status->specialBulletCnt > 0)
+				{
+					status->specialBulletCnt--;
+					if (status->specialBulletCnt <= 0)
+					{
+						status->bulletState = BulletState::B_Normal;
+						status->specialBulletCnt = 0;
+					}
 				}
 			}
 

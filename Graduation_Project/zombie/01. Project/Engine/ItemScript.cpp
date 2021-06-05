@@ -85,6 +85,8 @@ void CItemScript::OnCollisionEnter(CCollider2D* _pOther)
 
 					else if (rnd == 2)
 						_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->bulletState = BulletState::B_Thunder;
+
+					_pOther->GetObj()->GetScript<CPlayerScript>()->GetStatus()->specialBulletCnt = 10;
 				}
 
 				Transform()->SetLocalPos(Vec3(20000.f, 0.f, 20000.f));
