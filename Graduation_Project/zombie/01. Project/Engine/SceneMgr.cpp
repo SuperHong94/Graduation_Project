@@ -58,6 +58,17 @@ void CSceneMgr::ChangeScene(CScene * _pNextScene)
 CSceneMgr::CSceneMgr()
 	: m_pCurScene(nullptr)
 {
+	BulletCntArrTex[0] = (CResMgr::GetInst()->Load<CTexture>(L"infinite", L"Texture\\UI\\infinite.png"));
+	BulletCntArrTex[1] = (CResMgr::GetInst()->Load<CTexture>(L"1", L"Texture\\UI\\1.png"));
+	BulletCntArrTex[2] = (CResMgr::GetInst()->Load<CTexture>(L"2", L"Texture\\UI\\2.png"));
+	BulletCntArrTex[3] = (CResMgr::GetInst()->Load<CTexture>(L"3", L"Texture\\UI\\3.png"));
+	BulletCntArrTex[4] = (CResMgr::GetInst()->Load<CTexture>(L"4", L"Texture\\UI\\4.png"));
+	BulletCntArrTex[5] = (CResMgr::GetInst()->Load<CTexture>(L"5", L"Texture\\UI\\5.png"));
+	BulletCntArrTex[6] = (CResMgr::GetInst()->Load<CTexture>(L"6", L"Texture\\UI\\6.png"));
+	BulletCntArrTex[7] = (CResMgr::GetInst()->Load<CTexture>(L"7", L"Texture\\UI\\7.png"));
+	BulletCntArrTex[8] = (CResMgr::GetInst()->Load<CTexture>(L"8", L"Texture\\UI\\8.png"));
+	BulletCntArrTex[9] = (CResMgr::GetInst()->Load<CTexture>(L"9", L"Texture\\UI\\9.png"));
+	BulletCntArrTex[10] = (CResMgr::GetInst()->Load<CTexture>(L"10", L"Texture\\UI\\10.png"));
 }
 
 CSceneMgr::~CSceneMgr()
@@ -74,21 +85,20 @@ void CSceneMgr::CreateTargetUI()
 	hpBarWidth = CRenderMgr::GetInst()->GetResolution().fWidth / 4.1;
 	hpBarHeight = CRenderMgr::GetInst()->GetResolution().fHeight / 45;
 
-	Ptr<CTexture> GameSceneArrTex[13] = {
-	 (CResMgr::GetInst()->Load<CTexture>(L"BGUI", L"Texture\\UI\\BGUI.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"MiniMap", L"Texture\\UI\\MiniMap.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\UI\\playerTest.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"Quest", L"Texture\\UI\\Quest.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"Picture", L"Texture\\UI\\PlayerPicture.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"HpBarEdge", L"Texture\\UI\\HpBarEdge.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"HpBar", L"Texture\\UI\\HpBar.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"PowerBuffOn", L"Texture\\UI\\PowerBuffOn.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"PowerBuffOff", L"Texture\\UI\\PowerBuffOff.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"DefenceBuffOn", L"Texture\\UI\\DefenceBuffOn.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"DefenceBuffOff", L"Texture\\UI\\DefenceBuffOff.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"SpeedBuffOn", L"Texture\\UI\\SpeedBuffOn.png")),
-	 (CResMgr::GetInst()->Load<CTexture>(L"SpeedBuffOff", L"Texture\\UI\\SpeedBuffOff.png")),
-	};
+	GameSceneArrTex[0] = (CResMgr::GetInst()->Load<CTexture>(L"BGUI", L"Texture\\UI\\BGUI.png"));
+	GameSceneArrTex[1] = (CResMgr::GetInst()->Load<CTexture>(L"MiniMap", L"Texture\\UI\\MiniMap.png"));
+	GameSceneArrTex[2] = (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\UI\\playerTest.png"));
+	GameSceneArrTex[3] = (CResMgr::GetInst()->Load<CTexture>(L"Quest", L"Texture\\UI\\Quest.png"));
+	GameSceneArrTex[4] = (CResMgr::GetInst()->Load<CTexture>(L"Picture", L"Texture\\UI\\PlayerPicture.png"));
+	GameSceneArrTex[5] = (CResMgr::GetInst()->Load<CTexture>(L"HpBarEdge", L"Texture\\UI\\HpBarEdge.png"));
+	GameSceneArrTex[6] = (CResMgr::GetInst()->Load<CTexture>(L"HpBar", L"Texture\\UI\\HpBar.png"));
+	GameSceneArrTex[7] = (CResMgr::GetInst()->Load<CTexture>(L"PowerBuffOn", L"Texture\\UI\\PowerBuffOn.png"));
+	GameSceneArrTex[8] = (CResMgr::GetInst()->Load<CTexture>(L"PowerBuffOff", L"Texture\\UI\\PowerBuffOff.png"));
+	GameSceneArrTex[9] = (CResMgr::GetInst()->Load<CTexture>(L"DefenceBuffOn", L"Texture\\UI\\DefenceBuffOn.png"));
+	GameSceneArrTex[10] = (CResMgr::GetInst()->Load<CTexture>(L"DefenceBuffOff", L"Texture\\UI\\DefenceBuffOff.png"));
+	GameSceneArrTex[11] = (CResMgr::GetInst()->Load<CTexture>(L"SpeedBuffOn", L"Texture\\UI\\SpeedBuffOn.png"));
+	GameSceneArrTex[12] = (CResMgr::GetInst()->Load<CTexture>(L"SpeedBuffOff", L"Texture\\UI\\SpeedBuffOff.png"));
+	GameSceneArrTex[13] = (CResMgr::GetInst()->Load<CTexture>(L"infinite", L"Texture\\UI\\infinite.png"));
 
 	Ptr<CTexture> StartSceneArrTex[1] = {  CResMgr::GetInst()->Load<CTexture>(L"StartBG", L"Texture\\UI\\StartBG.png") };
 
@@ -96,7 +106,7 @@ void CSceneMgr::CreateTargetUI()
 
 	Ptr<CTexture> GameOverSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"GameOverBG", L"Texture\\UI\\GameOverBG.png") };
 
-	int NumgameSceneUI = 13;
+	int NumgameSceneUI = 14;
 	int NumStartSceneUI = 1;
 	int NumGameClearSceneUI = 1;
 	int NumGameOVerSceneUI = 1;
@@ -209,6 +219,13 @@ void CSceneMgr::CreateTargetUI()
 			{
 				pObject->SetName(L"SpeedBuffOffUI");
 				pObject->Transform()->SetLocalPos(Vec3(-res.fWidth / (130 / 6), -res.fHeight / 2.3, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
+			}
+
+			else if (i == 13)
+			{
+				pObject->SetName(L"BulletCnt_UI");
+				pObject->Transform()->SetLocalPos(Vec3(res.fWidth / 2.2, -res.fHeight / 2.7, 1.f));
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
 			}
 
@@ -1527,6 +1544,34 @@ void CSceneMgr::updateUI()
 					else
 						vecObject[j]->Transform()->SetLocalPos(Vec3(-20000, 0.f, 1.f));
 				}
+
+				// ÃÑ¾Ë °¹¼ö UI
+				else if (L"BulletCnt_UI" == vecObject[j]->GetName())
+				{
+					if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->specialBulletCnt <= 0)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletCntArrTex[0].GetPointer());
+					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->specialBulletCnt == 1)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletCntArrTex[1].GetPointer());
+					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->specialBulletCnt == 2)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletCntArrTex[2].GetPointer());
+					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->specialBulletCnt == 3)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletCntArrTex[3].GetPointer());
+					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->specialBulletCnt == 4)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletCntArrTex[4].GetPointer());
+					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->specialBulletCnt == 5)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletCntArrTex[5].GetPointer());
+					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->specialBulletCnt == 6)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletCntArrTex[6].GetPointer());
+					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->specialBulletCnt == 7)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletCntArrTex[7].GetPointer());
+					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->specialBulletCnt == 8)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletCntArrTex[8].GetPointer());
+					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->specialBulletCnt == 9)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletCntArrTex[9].GetPointer());
+					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->specialBulletCnt == 10)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletCntArrTex[10].GetPointer());
+				}
+			
 			}
 		}
 	}
@@ -1553,34 +1598,6 @@ bool Compare(CGameObject* _pLeft, CGameObject* _pRight)
 {
 	return (_pLeft->Transform()->GetWorldPos().z < _pRight->Transform()->GetWorldPos().z);
 }
-
-//void CSceneMgr::FindGameObjectByPoint(POINT _point, vector<CGameObject*>& _vecFindObj, CCamera* _pToolCam)
-//{
-//	CCamera* pCam = _pToolCam;
-//	if (CCore::GetInst()->GetSceneMod() == SCENE_MOD::SCENE_PLAY)
-//	{
-//		pCam = CRenderMgr::GetInst()->GetCamera(0);
-//	}
-//
-//	tResolution tRes = CRenderMgr::GetInst()->GetResolution();
-//	Vec3 vPickPos = Vec3((float)_point.x - (tRes.fWidth / 2.f), (tRes.fHeight / 2.f) - (float)_point.y, 0.f);
-//	vPickPos *= pCam->GetScale(); 
-//	vPickPos += pCam->Transform()->GetWorldPos();
-//
-//	for (int i = 0; i < MAX_LAYER; ++i)
-//	{
-//		const vector<CGameObject*>& vecObject = m_pCurScene->GetLayer(i)->GetObjects();
-//		for (size_t j = 0; j < vecObject.size(); ++j)
-//		{
-//			if (vecObject[j]->Transform()->IsCasting(vPickPos))
-//			{
-//				_vecFindObj.push_back(vecObject[j]);
-//			}
-//		}
-//	}
-//
-//	sort(_vecFindObj.begin(), _vecFindObj.end(), Compare);
-//}
 
 void CSceneMgr::setMap()
 {

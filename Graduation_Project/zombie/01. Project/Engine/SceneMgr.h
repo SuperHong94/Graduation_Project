@@ -40,6 +40,9 @@ private:
 	float hpBarWidth = 0;
 	float hpBarHeight = 0;
 
+	Ptr<CTexture> GameSceneArrTex[50];
+	Ptr<CTexture> BulletCntArrTex[11];
+
 	SCENE_STATE SceneState = SCENE_STATE::START_SCENE;
 public:
 	SCENE_STATE setSceneNum(SCENE_STATE s) { SceneState = s; }
@@ -71,8 +74,6 @@ public:
 	void ChangeScene(CScene* _pNextScene);
 	void FindGameObjectByTag( const wstring& _strTag, vector<CGameObject*>& _vecFindObj);
 	void setMap();
-	//void FindGameObjectByPoint(POINT _point, vector<CGameObject*>& _vecFindObj, CCamera* _pToolCam = nullptr);
-
 
 public:
 	void CreateTargetUI();
