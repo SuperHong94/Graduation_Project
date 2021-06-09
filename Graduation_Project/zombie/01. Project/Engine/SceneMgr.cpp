@@ -404,7 +404,7 @@ void CSceneMgr::initGameScene()
 		pObject->Light3D()->SetSpecular(Vec3(0.3f, 0.3f, 0.3f));
 		pObject->Light3D()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
 		pObject->Light3D()->SetLightDir(Vec3(1.f, -1.f, 1.f));
-		pObject->Light3D()->SetLightRange(1000.f);
+		pObject->Light3D()->SetLightRange(10000.f);
 
 		pObject->Transform()->SetLocalPos(Vec3(-1000.f, 1000.f, -1000.f));
 		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
@@ -513,6 +513,8 @@ void CSceneMgr::initGameScene()
 
 		//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, -5000.f, 0.f));
 		pObject->Collider2D()->SetOffsetScale(Vec3(100.f, 0.f, 100.f));
+
+		pObject->MeshRender()->SetDynamicShadow(true);
 
 		// Script 설정
 		pObject->AddComponent(new CBossScript(m_pPlayerArr, playerNum, pObject, m_pCurScene));
@@ -653,7 +655,7 @@ void CSceneMgr::initGameScene()
 			pObject->Transform()->SetLocalPos(Vec3(randomXPos, 0.f, randomZPos));
 			pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 
-			//pObject->MeshRender()->SetDynamicShadow(true);
+			pObject->MeshRender()->SetDynamicShadow(true);
 			/*pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 0);
 			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 1);
 			pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DistortionMtrl"), 2);
@@ -716,6 +718,8 @@ void CSceneMgr::initGameScene()
 			pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
 			pObject->Collider2D()->SetOffsetPos(Vec3(0.f, collOffset, 0.f));
 			pObject->Collider2D()->SetOffsetScale(Vec3(50.f, 0.f, 50.f));
+
+			pObject->MeshRender()->SetDynamicShadow(true);
 
 			// Script 설정
 			if (i < 10)
@@ -1634,7 +1638,7 @@ void CSceneMgr::setMap()
 				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
 			else
 				pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, 0.f, 0.f));
-			//pObject->MeshRender()->SetDynamicShadow(true);
+			pObject->MeshRender()->SetDynamicShadow(true);
 
 			m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
 		}
@@ -1673,7 +1677,7 @@ void CSceneMgr::setMap()
 
 		pObject->Transform()->SetLocalScale(Vec3(2.0f, 1.5f, 2.0f));
 
-		//pObject->MeshRender()->SetDynamicShadow(true);
+		pObject->MeshRender()->SetDynamicShadow(true);
 
 		pObject->AddComponent(new CCollider2D);
 		pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, 50.f + collOffset));
