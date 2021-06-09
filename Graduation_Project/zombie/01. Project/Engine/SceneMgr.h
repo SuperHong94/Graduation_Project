@@ -5,7 +5,7 @@ class CScene;
 class CCamera;
 class CGameObject;
 
-enum class SCENE_STATE 
+enum class SCENE_STATE
 {
 	START_SCENE,
 	GAME_SCENE,
@@ -60,7 +60,7 @@ public:
 	CScene* GetGameScene() { return m_pGameScene; }
 	CScene* GetEndScene() { return m_pEndScene; }*/
 
-	bool CheckIsChange(){return isChange;}
+	bool CheckIsChange() { return isChange; }
 	void SetIsChange(bool b) { isChange = b; }
 
 	float GetCollOffset() { return collOffset; };
@@ -72,7 +72,7 @@ public:
 public:
 	CScene* GetCurScene();
 	void ChangeScene(CScene* _pNextScene);
-	void FindGameObjectByTag( const wstring& _strTag, vector<CGameObject*>& _vecFindObj);
+	void FindGameObjectByTag(const wstring& _strTag, vector<CGameObject*>& _vecFindObj);
 	void setMap();
 
 public:

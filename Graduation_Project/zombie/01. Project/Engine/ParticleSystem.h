@@ -11,9 +11,9 @@ class CStructuredBuffer;
 class CParticleSystem :
 	public CComponent
 {
-private:	
-	CStructuredBuffer*	m_pParticleBuffer; // 파티클 데이터 저장
-	CStructuredBuffer*	m_pSharedBuffer;   // 파티클 공유 메모리
+private:
+	CStructuredBuffer* m_pParticleBuffer; // 파티클 데이터 저장
+	CStructuredBuffer* m_pSharedBuffer;   // 파티클 공유 메모리
 	UINT				m_iMaxParticle;    // 최대 파티클 개수
 
 	Ptr<CMaterial>		m_pUpdateMtrl;		// 컴퓨트 쉐이더

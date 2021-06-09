@@ -71,34 +71,34 @@ void CPathMgr::init()
 	wcscat_s(g_szProjPath, L"01. Project\\");
 }
 
-wchar_t * CPathMgr::GetResPath()
+wchar_t* CPathMgr::GetResPath()
 {
 	return g_szResPath;
 }
 
-wchar_t * CPathMgr::GetIncludePath()
+wchar_t* CPathMgr::GetIncludePath()
 {
 	return g_szIncPath;
 }
 
-wchar_t * CPathMgr::GetProjectPath()
+wchar_t* CPathMgr::GetProjectPath()
 {
 	return g_szProjPath;
 }
 
-wchar_t * CPathMgr::GetFileName(const wchar_t * _strPath)
+wchar_t* CPathMgr::GetFileName(const wchar_t* _strPath)
 {
 	_wsplitpath_s(_strPath, NULL, 0, NULL, 0, g_szFile, 255, NULL, 0);
 	return g_szFile;
 }
 
-wchar_t * CPathMgr::GetExt(const wchar_t * _strPath)
+wchar_t* CPathMgr::GetExt(const wchar_t* _strPath)
 {
 	_wsplitpath_s(_strPath, NULL, 0, NULL, 0, nullptr, 0, g_szExt, 50);
 	return g_szExt;
 }
 
-wchar_t * CPathMgr::GetRelativePath(const wchar_t * _pFullPath)
+wchar_t* CPathMgr::GetRelativePath(const wchar_t* _pFullPath)
 {
 	wmemset(g_szRelativePath, 0, 255);
 
@@ -109,7 +109,7 @@ wchar_t * CPathMgr::GetRelativePath(const wchar_t * _pFullPath)
 	return g_szRelativePath;
 }
 
-wchar_t * CPathMgr::GetSolutionPath()
+wchar_t* CPathMgr::GetSolutionPath()
 {
 	return g_szSolutionPath;
 }

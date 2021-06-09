@@ -18,7 +18,7 @@ class CAnimation2D :
 	public CEntity
 {
 private:
-	CAnimator2D*		m_pAnimator;
+	CAnimator2D* m_pAnimator;
 	vector<tAnim2DFrm>  m_vecFrm;
 	int                 m_iCurFrm;
 
@@ -45,8 +45,8 @@ public:
 	void LoadFromScene(FILE* _pFile);
 
 private:
-	void SetAnimator2D(CAnimator2D* _pAnimator2D){m_pAnimator = _pAnimator2D;}
-	
+	void SetAnimator2D(CAnimator2D* _pAnimator2D) { m_pAnimator = _pAnimator2D; }
+
 
 public:
 	CAnimation2D();

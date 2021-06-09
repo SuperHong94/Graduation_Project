@@ -113,7 +113,7 @@ public:
 	void TransferLayer(int _iLayerIdx, bool _bMoveAll);
 	static void TransferLayer(CGameObject* _pTarget, const wstring& _strLayerName, bool _bMoveAll);
 	static void TransferLayer(CGameObject* _pTarget, int _iLayerIdx, bool _bMoveAll);
-	
+
 	static void EableObject(CGameObject* _pTarget);
 	static void Disable(CGameObject* _pTarget);
 

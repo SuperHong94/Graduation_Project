@@ -15,11 +15,11 @@ private:
 
 public:
 	void init();
-	void update();	
+	void update();
 
 public:
-	float GetDeltaTime() { return m_fDeltaTime;}
-	void DTFreeze(){m_bFreeze = true;}
+	float GetDeltaTime() { return m_fDeltaTime; }
+	void DTFreeze() { m_bFreeze = true; }
 	SINGLE(CTimeMgr);
 };
 

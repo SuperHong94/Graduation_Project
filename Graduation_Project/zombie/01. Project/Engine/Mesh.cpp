@@ -11,10 +11,10 @@
 CMesh::CMesh()
 	: CResource(RES_TYPE::MESH)
 	, m_pVB(nullptr)
-	, m_tVtxView{}	
+	, m_tVtxView{}
 	, m_iVtxSize(0)
-	, m_iVtxCount(0)	  
-    , m_pVtxSysMem(nullptr)    
+	, m_iVtxCount(0)
+	, m_pVtxSysMem(nullptr)
 	, m_pBoneFrameData(nullptr)
 	, m_pBoneOffset(nullptr)
 {
@@ -28,7 +28,7 @@ CMesh::~CMesh()
 	{
 		SAFE_DELETE(m_vecIdxInfo[i].pIdxSysMem);
 	}
-	
+
 	SAFE_DELETE(m_pBoneFrameData);
 	SAFE_DELETE(m_pBoneOffset);
 }
@@ -44,13 +44,13 @@ void CMesh::Create(UINT _iVtxSize, UINT _iVtxCount, BYTE* _pVtxSysMem
 	tInfo.iIdxCount = _iIdxCount;
 
 	D3D12_HEAP_PROPERTIES tHeapProperty = {};
-		
+
 	tHeapProperty.Type = D3D12_HEAP_TYPE_UPLOAD;
 	tHeapProperty.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
 	tHeapProperty.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
 	tHeapProperty.CreationNodeMask = 1;
 	tHeapProperty.VisibleNodeMask = 1;
-	
+
 	D3D12_RESOURCE_DESC tResDesc = {};
 
 	tResDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
@@ -77,14 +77,14 @@ void CMesh::Create(UINT _iVtxSize, UINT _iVtxCount, BYTE* _pVtxSysMem
 	UINT8* pVertexDataBegin = nullptr;
 	D3D12_RANGE readRange{ 0, 0 }; // We do not intend to read from this resource on the CPU.	
 	m_pVB->Map(0, &readRange, reinterpret_cast<void**>(&pVertexDataBegin));
-	memcpy(pVertexDataBegin, _pVtxSysMem, (tResDesc.Width * tResDesc.Height) );
+	memcpy(pVertexDataBegin, _pVtxSysMem, (tResDesc.Width * tResDesc.Height));
 	m_pVB->Unmap(0, nullptr);
 
 	// Initialize the vertex buffer view.
 	m_tVtxView.BufferLocation = m_pVB->GetGPUVirtualAddress();
 	m_tVtxView.StrideInBytes = sizeof(VTX);
 	m_tVtxView.SizeInBytes = (UINT)tResDesc.Width;
-	   
+
 	// IdxBuffer
 	tHeapProperty = {};
 	tHeapProperty.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -118,7 +118,7 @@ void CMesh::Create(UINT _iVtxSize, UINT _iVtxCount, BYTE* _pVtxSysMem
 	UINT8* pIdxDataBegin = nullptr;
 	readRange = D3D12_RANGE{ 0, 0 }; // We do not intend to read from this resource on the CPU.	
 	tInfo.pIB->Map(0, &readRange, reinterpret_cast<void**>(&pIdxDataBegin));
-	memcpy(pIdxDataBegin, _pIdxSysMem, (tResDesc.Width * tResDesc.Height) );
+	memcpy(pIdxDataBegin, _pIdxSysMem, (tResDesc.Width * tResDesc.Height));
 	tInfo.pIB->Unmap(0, nullptr);
 
 	// Initialize the Index buffer view.
@@ -133,7 +133,7 @@ void CMesh::Create(UINT _iVtxSize, UINT _iVtxCount, BYTE* _pVtxSysMem
 }
 
 
-CMesh * CMesh::CreateFromContainer(CFBXLoader & _loader)
+CMesh* CMesh::CreateFromContainer(CFBXLoader& _loader)
 {
 	const tContainer* container = &_loader.GetContainer(0);
 
@@ -193,8 +193,8 @@ CMesh * CMesh::CreateFromContainer(CFBXLoader & _loader)
 	// Initialize the vertex buffer view.
 	tVtxView.BufferLocation = pVB->GetGPUVirtualAddress();
 	tVtxView.StrideInBytes = sizeof(VTX);
-	tVtxView.SizeInBytes = (UINT)tResDesc.Width;	
-	   
+	tVtxView.SizeInBytes = (UINT)tResDesc.Width;
+
 	CMesh* pMesh = new CMesh;
 	pMesh->m_pVB = pVB;
 	pMesh->m_iVtxCount = iVtxCount;
@@ -212,7 +212,7 @@ CMesh * CMesh::CreateFromContainer(CFBXLoader & _loader)
 		info.eIdxFormat = DXGI_FORMAT_R32_UINT;
 		info.pIdxSysMem = malloc(GetSizeofFormat(info.eIdxFormat) * info.iIdxCount);
 		memcpy(info.pIdxSysMem, &container->vecIdx[i][0], GetSizeofFormat(info.eIdxFormat) * info.iIdxCount);
-		
+
 
 		tHeapProperty = {};
 		tHeapProperty.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -354,10 +354,10 @@ void CMesh::render(UINT _iSubset)
 {
 	assert(_iSubset < m_vecIdxInfo.size());
 
-	CDevice::GetInst()->UpdateTable();	
-		
+	CDevice::GetInst()->UpdateTable();
+
 	CMDLIST->IASetVertexBuffers(0, 1, &m_tVtxView);
-	CMDLIST->IASetIndexBuffer(&m_vecIdxInfo[_iSubset].tIdxView);	
+	CMDLIST->IASetIndexBuffer(&m_vecIdxInfo[_iSubset].tIdxView);
 	CMDLIST->DrawIndexedInstanced(m_vecIdxInfo[_iSubset].iIdxCount, 1, 0, 0, 0);
 }
 
@@ -378,8 +378,8 @@ void CMesh::render_instancing(UINT _iSubset, CInstancingBuffer* _pInstBuffer)
 
 	CDevice::GetInst()->UpdateTable();
 
-	D3D12_VERTEX_BUFFER_VIEW arrBuffer[2] = { m_tVtxView, *_pInstBuffer->GetBufferView()};
-	
+	D3D12_VERTEX_BUFFER_VIEW arrBuffer[2] = { m_tVtxView, *_pInstBuffer->GetBufferView() };
+
 	UINT		  iStride[2] = { m_iVtxSize	, sizeof(tInstancingData) };
 	UINT		  iOffset[2] = { 0, 0 };
 
@@ -388,7 +388,7 @@ void CMesh::render_instancing(UINT _iSubset, CInstancingBuffer* _pInstBuffer)
 	CMDLIST->DrawIndexedInstanced(m_vecIdxInfo[_iSubset].iIdxCount, _pInstBuffer->GetInstanceCount(), 0, 0, 0);
 }
 
-void CMesh::Load(const wstring & _strFilePath)
+void CMesh::Load(const wstring& _strFilePath)
 {
 	FILE* pFile = nullptr;
 	_wfopen_s(&pFile, _strFilePath.c_str(), L"rb");
@@ -459,7 +459,7 @@ void CMesh::Load(const wstring & _strFilePath)
 	{
 		tIndexInfo info = {};
 		fread(&info, sizeof(tIndexInfo), 1, pFile);
-		
+
 
 		UINT iByteWidth = info.iIdxCount * GetSizeofFormat(info.eIdxFormat);
 
@@ -486,7 +486,7 @@ void CMesh::Load(const wstring & _strFilePath)
 		tResDesc.SampleDesc.Quality = 0;
 		tResDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 		tResDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
-		
+
 		memset(&info, 0, sizeof(info.pIB));
 
 		DEVICE->CreateCommittedResource(
@@ -589,7 +589,7 @@ void CMesh::Load(const wstring & _strFilePath)
 	fclose(pFile);
 }
 
-void CMesh::Save(const wstring & _strPath)
+void CMesh::Save(const wstring& _strPath)
 {
 	wstring strFileName = CPathMgr::GetResPath();
 	strFileName += _strPath;
@@ -613,7 +613,7 @@ void CMesh::Save(const wstring & _strPath)
 	int iByteSize = m_iVtxSize * m_iVtxCount;
 	fwrite(&iByteSize, sizeof(int), 1, pFile);
 	fwrite(m_pVtxSysMem, iByteSize, 1, pFile);
-	
+
 	// ¿Œµ¶Ω∫ ¡§∫∏
 	UINT iMtrlCount = (UINT)m_vecIdxInfo.size();
 	fwrite(&iMtrlCount, sizeof(int), 1, pFile);

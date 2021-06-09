@@ -24,7 +24,7 @@ struct tLightColor
 struct tLight3DInfo
 {
     tLightColor tCol;
-    float4      vLightPos;   
+    float4      vLightPos;
     float4      vLightDir;
     int         iLight3DType;
     float       fRange;
@@ -40,10 +40,10 @@ cbuffer TRANSFORM_MATRIX : register(b0)
     row_major matrix g_matProj;
     row_major matrix g_matWV;
     row_major matrix g_matWVP;
-    
+
     row_major matrix g_matWorldInv;
     row_major matrix g_matViewInv;
-    row_major matrix g_matProjInv;    
+    row_major matrix g_matProjInv;
 };
 
 cbuffer MATERIAL_PARAM : register(b1)

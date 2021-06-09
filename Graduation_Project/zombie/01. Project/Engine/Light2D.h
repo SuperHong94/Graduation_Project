@@ -6,16 +6,16 @@ class CLight2D :
 {
 private:
 	tLight2D   m_LightInfo;
-	
-public:	
+
+public:
 	virtual void finalupdate();
 
 	void UpdateData();
 
 public:
 	void SetLightColor(const Vec3& _vColor) { m_LightInfo.vLightColor = _vColor; Changed(); }
-	void SetLightRange(float _fRange) { m_LightInfo.fRange = _fRange; Changed();}
-	void SetLightType(LIGHT_TYPE _eType) { m_LightInfo.iLightType = (int)_eType; Changed();}
+	void SetLightRange(float _fRange) { m_LightInfo.fRange = _fRange; Changed(); }
+	void SetLightType(LIGHT_TYPE _eType) { m_LightInfo.iLightType = (int)_eType; Changed(); }
 
 	Vec3 GetLightColor() { return m_LightInfo.vLightColor; }
 	float GetLightRange() { return m_LightInfo.fRange; }

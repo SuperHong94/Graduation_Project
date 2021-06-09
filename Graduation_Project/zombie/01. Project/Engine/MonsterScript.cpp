@@ -118,13 +118,13 @@ void CMonsterScript::update()
 		Vec3 dot2 = XMVector3Dot(Vec3(1, 0, 0), Vec3(vDir.x, vDir.y, vDir.z));
 		float fdot2 = dot2.x;
 
-		if(vDir.x < 0 && dot1.x > 0.5)
+		if (vDir.x < 0 && dot1.x > 0.5)
 			HpBarObject->Transform()->SetLocalPos(Vec3(preVpos.x * (1 - 0.4) + (vPos.x - 40) * 0.4, vPos.y + 180, preVpos.z * (1 - 0.4) + (vPos.z) * 0.4));
 		else if (vDir.x > 0 && dot2.x > 0.5)
 			HpBarObject->Transform()->SetLocalPos(Vec3(preVpos.x * (1 - 0.4) + (vPos.x + 40) * 0.4, vPos.y + 180, preVpos.z * (1 - 0.4) + (vPos.z) * 0.4));
 		else
 			HpBarObject->Transform()->SetLocalPos(Vec3(preVpos.x * (1 - 0.4) + (vPos.x) * 0.4, vPos.y + 180, preVpos.z * (1 - 0.4) + (vPos.z) * 0.4));
-		HpBarObject->Transform()->SetLocalScale(Vec3(50 * status->hp / 100. , 10, 1));
+		HpBarObject->Transform()->SetLocalScale(Vec3(50 * status->hp / 100., 10, 1));
 
 		// 특수 총알 효과 시간 차감
 		// 얼음
@@ -155,9 +155,9 @@ void CMonsterScript::update()
 		if (status->state == MonsterState::M_Run && !status->IsCollide)
 		{
 			// 얼음 총알 맞았을 경우
-			if(status->IceTime > 0)
+			if (status->IceTime > 0)
 				vPos += DT * status->speed / 3 * vDir;
-			
+
 			else
 				vPos += DT * status->speed * vDir;
 		}
@@ -188,12 +188,13 @@ void CMonsterScript::update()
 	if (status->hp <= 0 && status->state == MonsterState::M_Die)
 	{
 		status->disappearCnt += DT;
-		if (status->disappearCnt > 3.2)
+		if (status->disappearCnt > 2.3)
 		{
 			//DeleteObject(GetObj());
 			//pObject->SetDead();
 			if (!status->IsDisappear)
 			{
+				status->disappearCnt = 0;
 				status->IsDisappear = true;
 
 				//아이템 스폰
@@ -283,7 +284,7 @@ void CMonsterScript::update()
 						}
 					}
 				}
-					
+
 			}
 		}
 	}
@@ -360,7 +361,7 @@ void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 							float length = sqrt(sub.x * sub.x + sub.y * sub.y + sub.z * sub.z);
 							if (length < 200.f)
 							{
-								if(vecObject[j]->GetName() == L"Monster Object")
+								if (vecObject[j]->GetName() == L"Monster Object")
 									vecObject[j]->GetScript<CMonsterScript>()->GetStatus()->ThunderTime = 3.f;
 								else
 									vecObject[j]->GetScript<CBossScript>()->GetStatus()->ThunderTime = 3.f;
@@ -416,11 +417,11 @@ void CMonsterScript::OnCollision(CCollider2D* _pOther)
 		vPos += DT * 100.f * vDir;
 		Transform()->SetLocalPos(vPos);
 
-	/*	if (vDir == vOtherDir)
-		{
-			vOtherPos -= DT * 2.f * vOtherDir;
-			_pOther->GetObj()->Transform()->SetLocalPos(vOtherPos);
-		}*/
+		/*	if (vDir == vOtherDir)
+			{
+				vOtherPos -= DT * 2.f * vOtherDir;
+				_pOther->GetObj()->Transform()->SetLocalPos(vOtherPos);
+			}*/
 	}
 }
 

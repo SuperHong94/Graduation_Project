@@ -24,7 +24,7 @@ template<typename T>
 class Ptr
 {
 private:
-	T*			m_pRes;
+	T* m_pRes;
 
 public:
 	Ptr()
@@ -35,7 +35,7 @@ public:
 	Ptr(T* _pRes)
 		: m_pRes(_pRes)
 	{
-		if(nullptr != _pRes)
+		if (nullptr != _pRes)
 			m_pRes->AddRef();
 	}
 
@@ -48,7 +48,7 @@ public:
 
 	~Ptr()
 	{
-		if(nullptr != m_pRes)
+		if (nullptr != m_pRes)
 			m_pRes->SubRef();
 	}
 
@@ -98,7 +98,7 @@ public:
 	{
 		return m_pRes;
 	}
-	
+
 	/*operator T* ()
 	{
 		return m_pRes;

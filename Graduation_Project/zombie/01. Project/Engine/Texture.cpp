@@ -9,10 +9,10 @@
 CTexture::CTexture()
 	: CResource(RES_TYPE::TEXTURE)
 	, m_tDesc{}
-	, m_pTex2D(nullptr)		
+	, m_pTex2D(nullptr)
 	, m_pSRV(nullptr)
 	, m_pRTV(nullptr)
-	, m_pDSV(nullptr)	
+	, m_pDSV(nullptr)
 	, m_pUAV(nullptr)
 	, m_eState(D3D12_RESOURCE_STATE_COMMON)
 {
@@ -23,9 +23,9 @@ CTexture::~CTexture()
 }
 
 void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat
-	, const D3D12_HEAP_PROPERTIES & _HeapProperty, D3D12_HEAP_FLAGS _eHeapFlag, D3D12_RESOURCE_FLAGS _eResFlag
+	, const D3D12_HEAP_PROPERTIES& _HeapProperty, D3D12_HEAP_FLAGS _eHeapFlag, D3D12_RESOURCE_FLAGS _eResFlag
 	, Vec4 _vClearColor)
-{	
+{
 	m_tDesc.MipLevels = 1;
 	m_tDesc.Format = _eFormat;
 	m_tDesc.Width = _iWidth;
@@ -45,12 +45,12 @@ void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat
 		CD3DX12_CLEAR_VALUE depthOptimizedClearValue(DXGI_FORMAT_D32_FLOAT, 1.0f, 0);
 		pValue = &depthOptimizedClearValue;
 		m_eState = D3D12_RESOURCE_STATES::D3D12_RESOURCE_STATE_DEPTH_WRITE;
-	}	
+	}
 	else if (_eResFlag & D3D12_RESOURCE_FLAGS::D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET)
 	{
 		//m_tDesc.Flags |= D3D12_RESOURCE_FLAG_ALLOW_SIMULTANEOUS_ACCESS;
 		m_eState = D3D12_RESOURCE_STATE_COMMON;
-		float arrFloat[4] = { _vClearColor.x, _vClearColor .y, _vClearColor .z, _vClearColor .w};
+		float arrFloat[4] = { _vClearColor.x, _vClearColor.y, _vClearColor.z, _vClearColor.w };
 		CD3DX12_CLEAR_VALUE depthOptimizedClearValue(_eFormat, arrFloat);
 		pValue = &depthOptimizedClearValue;
 	}
@@ -75,7 +75,7 @@ void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat
 		tDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 		tDesc.NodeMask = 0;
 		hr = DEVICE->CreateDescriptorHeap(&tDesc, IID_PPV_ARGS(&m_pDSV));
-		
+
 		D3D12_CPU_DESCRIPTOR_HANDLE hDSVHandle = m_pDSV->GetCPUDescriptorHandleForHeapStart();
 		DEVICE->CreateDepthStencilView(m_pTex2D.Get(), nullptr, hDSVHandle);
 	}
@@ -94,7 +94,7 @@ void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat
 
 			DEVICE->CreateRenderTargetView(m_pTex2D.Get(), nullptr, hRTVHeap);
 		}
-		
+
 		if (_eResFlag & D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS)
 		{
 			D3D12_DESCRIPTOR_HEAP_DESC uavHeapDesc = {};
@@ -105,9 +105,9 @@ void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat
 
 			D3D12_CPU_DESCRIPTOR_HANDLE handle = m_pUAV->GetCPUDescriptorHandleForHeapStart();
 
-			D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};			
+			D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
 			uavDesc.Format = _eFormat;
-			uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;			
+			uavDesc.ViewDimension = D3D12_UAV_DIMENSION_TEXTURE2D;
 
 			DEVICE->CreateUnorderedAccessView(m_pTex2D.Get(), nullptr, &uavDesc, handle);
 		}
@@ -186,17 +186,17 @@ void CTexture::CreateFromResource(ComPtr<ID3D12Resource> _pTex2D)
 	}
 }
 
-void CTexture::Load(const wstring & _strFullPath)
+void CTexture::Load(const wstring& _strFullPath)
 {
 	// 확장자명 얻기
-	wchar_t szExt[50] = L"";	
+	wchar_t szExt[50] = L"";
 	_wsplitpath_s(_strFullPath.c_str(), nullptr, 0, nullptr, 0, nullptr, 0, szExt, 50);
 
 	wstring strExt = szExt;
 
 	if (L".dds" == strExt || L".DDS" == strExt)
 	{
-		if(FAILED(LoadFromDDSFile(_strFullPath.c_str(), DDS_FLAGS_NONE, nullptr, m_Image)))
+		if (FAILED(LoadFromDDSFile(_strFullPath.c_str(), DDS_FLAGS_NONE, nullptr, m_Image)))
 		{
 			assert(nullptr);
 		}
@@ -222,7 +222,7 @@ void CTexture::Load(const wstring & _strFullPath)
 	m_tDesc = m_pTex2D->GetDesc();
 
 	vector<D3D12_SUBRESOURCE_DATA> vecSubresources;
-	
+
 	hr = PrepareUpload(DEVICE.Get()
 		, m_Image.GetImages()
 		, m_Image.GetImageCount()
@@ -234,7 +234,7 @@ void CTexture::Load(const wstring & _strFullPath)
 
 	// upload is implemented by application developer. Here's one solution using <d3dx12.h>
 	const UINT64 uploadBufferSize = GetRequiredIntermediateSize(m_pTex2D.Get(), 0, static_cast<unsigned int>(vecSubresources.size()));
-	
+
 	CD3DX12_HEAP_PROPERTIES tUploadHeap = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 	CD3DX12_RESOURCE_DESC    tDesc = CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize);
 	ComPtr<ID3D12Resource> textureUploadHeap;
@@ -248,7 +248,7 @@ void CTexture::Load(const wstring & _strFullPath)
 
 	if (FAILED(hr))
 		assert(nullptr);
-	
+
 	UpdateSubresources(CMDLIST_RES.Get()
 		, m_pTex2D.Get()
 		, textureUploadHeap.Get()
@@ -273,7 +273,7 @@ void CTexture::Load(const wstring & _strFullPath)
 	srvDesc.Format = m_Image.GetMetadata().format;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = 1;
-	DEVICE->CreateShaderResourceView(m_pTex2D.Get(), &srvDesc, m_pSRV->GetCPUDescriptorHandleForHeapStart());	
+	DEVICE->CreateShaderResourceView(m_pTex2D.Get(), &srvDesc, m_pSRV->GetCPUDescriptorHandleForHeapStart());
 
 	m_tDesc = m_pTex2D->GetDesc();
 }
@@ -297,6 +297,6 @@ void CTexture::Save(const wstring& _strPath)
 	{
 		SaveToWICFile(*pImage, WIC_FLAGS_NONE, GUID_ContainerFormatPng, strPath.c_str());
 	}
-	
+
 }
 
