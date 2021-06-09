@@ -394,11 +394,12 @@ void CPlayerScript::update()
 					status->RollCoolTime = 0;
 					status->state = PlayerState::p_None;
 
-					/*for (int i = 0; i < 4; i++)
+					for (int i = 0; i < 4; i++)
 						rollDir[i] = 0;
 
-					vPos += 20 * rollDir;*/
+					vPos += 20 * rollDir;
 					pObject->Transform()->SetLocalPos(vPos);
+					CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::NO_EVENT, vRot); //idle 상태 보내기
 				}
 			}
 
@@ -580,6 +581,26 @@ void CPlayerScript::update()
 					}
 				}
 			}
+			// 구르기 쿨 타임 체크
+			if (status->IsRoll)
+			{
+				Vec3 vPos = pObject->Transform()->GetLocalPos();
+				Vec3 vRot = pObject->Transform()->GetLocalRot();
+				status->RollCoolTime += DT;
+				if (status->RollCoolTime >= shiftCoolTime)
+				{
+					status->IsRoll = false;
+					status->RollCoolTime = 0;
+					status->state = PlayerState::p_None;
+
+					/*for (int i = 0; i < 4; i++)
+						rollDir[i] = 0;*/
+
+					vPos += 20 * rollDir;
+					pObject->Transform()->SetLocalPos(vPos);
+				}
+			}
+
 		}
 		// 충돌 오프셋 변경
 		if (status->state == PlayerState::P_BRun || status->state == PlayerState::P_FRun)
