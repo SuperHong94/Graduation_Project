@@ -14,8 +14,8 @@ CLayer::~CLayer()
 	Safe_Delete_Vector(m_vecParentObj);
 }
 
-void CLayer::AddGameObject(CGameObject * _pObject, bool _bMoveAll)
-{	
+void CLayer::AddGameObject(CGameObject* _pObject, bool _bMoveAll)
+{
 	if (!_pObject->GetParent())
 	{
 		// 최상위 오브젝트
@@ -30,7 +30,7 @@ void CLayer::AddGameObject(CGameObject * _pObject, bool _bMoveAll)
 	}
 
 	_pObject->SetLayerIdx(m_iLayerIdx);
-	
+
 	// 너비우선 탐색
 	list<CGameObject*> queue;
 
@@ -77,7 +77,7 @@ void CLayer::CheckParentObj()
 	}
 }
 
-void CLayer::RemoveParentObj(CGameObject * _pObject)
+void CLayer::RemoveParentObj(CGameObject* _pObject)
 {
 	vector<CGameObject*>::iterator iter = m_vecParentObj.begin();
 	for (; iter != m_vecParentObj.end(); ++iter)
@@ -96,7 +96,7 @@ void CLayer::awake()
 {
 	for (UINT i = 0; i < m_vecParentObj.size(); ++i)
 	{
-		if(m_vecParentObj[i]->IsActive())
+		if (m_vecParentObj[i]->IsActive())
 			m_vecParentObj[i]->awake();
 	}
 }
@@ -116,7 +116,7 @@ void CLayer::update()
 	{
 		if (m_vecParentObj[i]->IsActive())
 			m_vecParentObj[i]->update();
-	}	
+	}
 }
 
 void CLayer::lateupdate()
@@ -145,8 +145,8 @@ void CLayer::finalupdate()
 		(*iter)->RegisterToLayer();
 
 		if ((*iter)->IsDead())
-			iter = m_vecParentObj.erase(iter);		
-		else		
+			iter = m_vecParentObj.erase(iter);
+		else
 			++iter;
 	}
 }

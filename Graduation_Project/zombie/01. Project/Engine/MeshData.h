@@ -19,11 +19,11 @@ private:
 	// Animation3D
 public:
 	static CMeshData* LoadFromFBX(const wstring& _strFilePath);
-	
+
 	virtual void Load(const wstring& _strFilePath);
 	virtual void Save(const wstring& _strFilePath);
 
-	CGameObject* Instantiate();	
+	CGameObject* Instantiate();
 
 	Ptr<CMesh> getMesh() { return m_pMesh; }
 	vector<Ptr<CMaterial>> getMtrl() { return m_vecMtrl; }

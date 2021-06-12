@@ -15,6 +15,5 @@ public:
 
 private:
 	void ChangeWindowSize(HWND _hWnd, const tResolution& _resolution);
-
 };
 

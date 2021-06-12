@@ -19,7 +19,7 @@ public:
 	void UpdateData(TEXTURE_REGISTER _iRegister);		// rendering 단계에서
 	void UpdateData_CS(TEXTURE_REGISTER _iRegister);	// computeshader 단계에서
 	void UpdateRWData(UAV_REGISTER _iRegister);					// uav 는 computeshader 단계에서밖에
-	
+
 
 	ComPtr<ID3D12DescriptorHeap> GetSRV() { return m_pSRV; }
 	ComPtr<ID3D12DescriptorHeap> GetUAV() { return m_pUAV; }

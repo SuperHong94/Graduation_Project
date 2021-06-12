@@ -430,16 +430,32 @@ void CPlayerScript::update()
 				vBulletDir.y = 0;
 				vBulletDir.z = vBulletTargetPos.z - vPos.z;
 
+
 				//printf("%f	%f	%f\n", vBulletDir.x, vBulletDir.y, vBulletDir.z);
 
 				Vec3 vNBulletDir = vBulletDir.Normalize();
 
-				// 텍스처
-				Ptr<CTexture> pNormal = CResMgr::GetInst()->Load<CTexture>(L"NormalB", L"Texture\\Bullet\\NormalBullet.png");
+				//텍스처
+				//텍스처
+				Ptr<CTexture> pNormal;
+				Ptr<CTexture> pFire;
+				Ptr<CTexture> pIce;
+				Ptr<CTexture> pThunder;
+				if (status->bulletState == BulletState::B_Normal)
+					pNormal = CResMgr::GetInst()->Load<CTexture>(L"NormalB", L"Texture\\Bullet\\NormalBullet.png");
+				else if (status->bulletState == BulletState::B_Fire)
+					pFire = CResMgr::GetInst()->Load<CTexture>(L"FireB", L"Texture\\Bullet\\FireBullet.png");
+				else if (status->bulletState == BulletState::B_Ice)
+					pIce = CResMgr::GetInst()->Load<CTexture>(L"IceB", L"Texture\\Bullet\\IceBullet.png");
+				else if (status->bulletState == BulletState::B_Thunder)
+					pThunder = CResMgr::GetInst()->Load<CTexture>(L"ThunderB", L"Texture\\Bullet\\ThunderBullet.png");
 
-				// 총알 위치
+				// 총알 위치 & 상태
 				for (int i = 0; i < BulletCnt; i++)
 				{
+					// 상태
+					pBullet[i]->GetScript<CBulletScript>()->SetState(status->bulletState);
+
 					if (!pBullet[i]->GetScript<CBulletScript>()->GetActive())
 					{
 
@@ -466,29 +482,25 @@ void CPlayerScript::update()
 						if (status->bulletState == BulletState::B_Normal)
 						{
 							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
-
 							// 총알 크기 설정
-							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 4.5f, 30.f));
+							pBullet[i]->Transform()->SetLocalScale(Vec3(50.f, 3.5f, 30.f));
 						}
 						else if (status->bulletState == BulletState::B_Fire)
 						{
-							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
-
-							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pFire.GetPointer());
+							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 7.f, 30.f));
 		
 						}
 						else if (status->bulletState == BulletState::B_Ice)
 						{
-							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
-
-							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pIce.GetPointer());
+							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 7.f, 30.f));
 
 						}
 						else if (status->bulletState == BulletState::B_Thunder)
 						{
-							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
-
-							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 2.f, 30.f));
+							pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pThunder.GetPointer());
+							pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 7.f, 30.f));
 						}
 
 						// 총알 방향 설정
@@ -498,6 +510,17 @@ void CPlayerScript::update()
 						break;
 					}
 
+				}
+
+				// 특수 총알 차감
+				if (status->specialBulletCnt > 0)
+				{
+					status->specialBulletCnt--;
+					if (status->specialBulletCnt <= 0)
+					{
+						status->bulletState = BulletState::B_Normal;
+						status->specialBulletCnt = 0;
+					}
 				}
 			}
 

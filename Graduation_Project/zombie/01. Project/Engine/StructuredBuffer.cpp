@@ -14,7 +14,7 @@ CStructuredBuffer::CStructuredBuffer()
 }
 
 CStructuredBuffer::~CStructuredBuffer()
-{	
+{
 
 }
 
@@ -25,13 +25,13 @@ void CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, void* _p
 	m_pUAV = nullptr;
 
 	m_iElementSize = _iElementSize;
-	m_iElementCount = _iElementCount;	
+	m_iElementCount = _iElementCount;
 
 	if (_pSysmem)
 		m_eResState = D3D12_RESOURCE_STATE_COPY_DEST;
 	else
 		m_eResState = D3D12_RESOURCE_STATE_COMMON;
-		
+
 
 	// 滚欺 Desc 累己
 	D3D12_RESOURCE_DESC tBufferDesc = {};
@@ -43,7 +43,7 @@ void CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, void* _p
 	tBufferDesc.MipLevels = 1;
 	tBufferDesc.Format = DXGI_FORMAT_UNKNOWN;
 	tBufferDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	tBufferDesc.Flags =  D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
+	tBufferDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS;
 	tBufferDesc.SampleDesc.Count = 1;
 	tBufferDesc.SampleDesc.Quality = 0;
 
@@ -79,6 +79,7 @@ void CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, void* _p
 
 		// Buffer Create
 		CD3DX12_HEAP_PROPERTIES tUploadHeap = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+
 		DEVICE->CreateCommittedResource(
 			&tUploadHeap,
 			D3D12_HEAP_FLAG_NONE,
@@ -98,10 +99,10 @@ void CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, void* _p
 
 		CMDLIST_RES->CopyBufferRegion(m_pBuffer.Get(), 0, pReadBuffer.Get(), 0, m_iElementSize * m_iElementCount);
 		CMDLIST_RES->ResourceBarrier(1, &resurceBarrier);
-		CDevice::GetInst()->ExcuteResourceLoad();				
+		CDevice::GetInst()->ExcuteResourceLoad();
 
 		m_eResState = D3D12_RESOURCE_STATE_COMMON;
-	}	
+	}
 
 
 	// UAV 积己
@@ -126,7 +127,7 @@ void CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, void* _p
 
 	DEVICE->CreateUnorderedAccessView(m_pBuffer.Get(), nullptr, &uavDesc, handle);
 
-	
+
 	// SRV 积己
 	// SRV 甫 历厘且 DescriptorHeap Create
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
@@ -140,7 +141,7 @@ void CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, void* _p
 	// SRV DescriptorHeap 俊 SRV 积己
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.Format = DXGI_FORMAT_UNKNOWN;	
+	srvDesc.Format = DXGI_FORMAT_UNKNOWN;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 
 	srvDesc.Buffer.FirstElement = 0;

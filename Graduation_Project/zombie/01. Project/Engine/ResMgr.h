@@ -41,7 +41,7 @@ public:
 	Ptr<T> Load(const wstring& _strKey, const wstring& _strPath/*상대 경로*/);
 
 	template<typename T>
-	bool DestroyResource(const wstring & _strKey);
+	bool DestroyResource(const wstring& _strKey);
 
 	Ptr<CTexture> CreateTexture(const wstring& _strName, UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat
 		, const D3D12_HEAP_PROPERTIES& _HeapProperty, D3D12_HEAP_FLAGS _eHeapFlag
@@ -50,7 +50,7 @@ public:
 	Ptr<CTexture> CreateTextureFromResource(const wstring& _strName, ComPtr<ID3D12Resource> _pTex2D);
 
 	// FBX
-	Ptr<CMeshData> LoadFBX(const wstring & _strPath);
+	Ptr<CMeshData> LoadFBX(const wstring& _strPath);
 };
 
 
@@ -73,7 +73,7 @@ RES_TYPE GetType()
 }
 
 template<typename T>
-inline void CResMgr::AddRes(const wstring & _strKey, Ptr<T> _pRes)
+inline void CResMgr::AddRes(const wstring& _strKey, Ptr<T> _pRes)
 {
 	Ptr<T> pRes = FindRes<T>(_strKey);
 
@@ -101,7 +101,7 @@ void CResMgr::AddCloneRes(Ptr<T> _pCloneRes)
 }
 
 template<typename T>
-inline Ptr<T> CResMgr::FindRes(const wstring & _strKey)
+inline Ptr<T> CResMgr::FindRes(const wstring& _strKey)
 {
 	static map<wstring, CResource*>::iterator iter;
 
@@ -118,7 +118,7 @@ inline Ptr<T> CResMgr::FindRes(const wstring & _strKey)
 }
 
 template<typename T>
-inline Ptr<T> CResMgr::Load(const wstring & _strKey, const wstring & _strPath)
+inline Ptr<T> CResMgr::Load(const wstring& _strKey, const wstring& _strPath)
 {
 	Ptr<T> pRes = FindRes<T>(_strKey);
 
@@ -143,7 +143,7 @@ inline Ptr<T> CResMgr::Load(const wstring & _strKey, const wstring & _strPath)
 }
 
 template<typename T>
-inline bool CResMgr::DestroyResource(const wstring & _strKey)
+inline bool CResMgr::DestroyResource(const wstring& _strKey)
 {
 	static map<wstring, CResource*>::iterator iter;
 

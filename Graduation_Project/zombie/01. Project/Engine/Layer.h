@@ -6,7 +6,7 @@ class CGameObject;
 class CLayer :
 	public CEntity
 {
-private:	
+private:
 	vector<CGameObject*>		m_vecParentObj; // 최상위 부모 오브젝트만
 	vector<CGameObject*>		m_vecLayerObj;  // 해당 레이어에 속한 모든 오브젝트
 

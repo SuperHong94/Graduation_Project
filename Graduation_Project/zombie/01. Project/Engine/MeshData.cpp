@@ -19,7 +19,7 @@ CMeshData::~CMeshData()
 {
 }
 
-CMeshData * CMeshData::LoadFromFBX(const wstring& _strPath)
+CMeshData* CMeshData::LoadFromFBX(const wstring& _strPath)
 {
 	wstring strFullPath = CPathMgr::GetResPath();
 	strFullPath += _strPath;
@@ -59,7 +59,7 @@ CMeshData * CMeshData::LoadFromFBX(const wstring& _strPath)
 }
 
 
-void CMeshData::Load(const wstring & _strFilePath)
+void CMeshData::Load(const wstring& _strFilePath)
 {
 	FILE* pFile = NULL;
 	_wfopen_s(&pFile, _strFilePath.c_str(), L"rb");
@@ -73,7 +73,7 @@ void CMeshData::Load(const wstring & _strFilePath)
 	// material 정보 읽기
 	UINT iMtrlCount = 0;
 	fread(&iMtrlCount, sizeof(UINT), 1, pFile);
-		
+
 	m_vecMtrl.resize(iMtrlCount);
 
 	for (UINT i = 0; i < iMtrlCount; ++i)
@@ -82,7 +82,7 @@ void CMeshData::Load(const wstring & _strFilePath)
 		fread(&idx, 4, 1, pFile);
 		if (idx == -1)
 			break;
-		
+
 		wstring strKey = LoadWString(pFile);
 		wstring strPath = LoadWString(pFile);
 
@@ -104,7 +104,7 @@ void CMeshData::Save(const wstring& _strFilePath)
 
 	// Mesh 를 파일로 저장
 	m_pMesh->Save(m_pMesh->GetPath());
-	
+
 	// Mesh Key 저장	
 	// Mesh Data 저장
 	SaveWString(pFile, m_pMesh->GetName().c_str());
@@ -112,7 +112,7 @@ void CMeshData::Save(const wstring& _strFilePath)
 
 	// material 정보 저장
 	UINT iMtrlCount = m_pMesh->GetSubsetCount();
-	iMtrlCount = (UINT)m_vecMtrl.size();	
+	iMtrlCount = (UINT)m_vecMtrl.size();
 	fwrite(&iMtrlCount, sizeof(UINT), 1, pFile);
 
 	UINT i = 0;
@@ -136,30 +136,30 @@ void CMeshData::Save(const wstring& _strFilePath)
 	fclose(pFile);
 }
 
-CGameObject * CMeshData::Instantiate()
+CGameObject* CMeshData::Instantiate()
 {
 	// Mesh
 	// Material
 
-	CGameObject* pNewObj = new CGameObject;	
+	CGameObject* pNewObj = new CGameObject;
 	pNewObj->AddComponent(new CTransform);
 	pNewObj->AddComponent(new CMeshRender);
 
 	pNewObj->MeshRender()->SetMesh(m_pMesh);
-	
+
 	for (UINT i = 0; i < m_vecMtrl.size(); ++i)
 	{
 		pNewObj->MeshRender()->SetMaterial(m_vecMtrl[i], i);
 	}
 
 	if (false == m_pMesh->IsAnimMesh())
-		return pNewObj;	
-	
+		return pNewObj;
+
 	CAnimator3D* pAnimator = new CAnimator3D;
 	pNewObj->AddComponent(pAnimator);
-	
+
 	pAnimator->SetBones(m_pMesh->GetBones());
-	pAnimator->SetAnimClip(m_pMesh->GetAnimClip());	
+	pAnimator->SetAnimClip(m_pMesh->GetAnimClip());
 
 	return pNewObj;
 }

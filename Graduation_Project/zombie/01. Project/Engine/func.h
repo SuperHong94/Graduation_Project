@@ -14,7 +14,7 @@ void Safe_Delete_Map(map<T1, T2>& _map)
 }
 
 template<typename T, int iSize>
-void Safe_Delete_Array(T*(&_arr)[iSize])
+void Safe_Delete_Array(T* (&_arr)[iSize])
 {
 	for (UINT i = 0; i < iSize; ++i)
 	{
@@ -36,7 +36,7 @@ wchar_t* LoadWString(FILE* _pFile);
 
 
 
-Matrix GetMatrix(FbxAMatrix & _mat);
+Matrix GetMatrix(FbxAMatrix& _mat);
 
 
-Vec3 DecomposeRotMat(const Matrix & _matRot);
+Vec3 DecomposeRotMat(const Matrix& _matRot);

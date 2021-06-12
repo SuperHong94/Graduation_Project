@@ -247,6 +247,9 @@
     <ClInclude Include="ItemScript.h">
       <Filter>04. GameObject\Script</Filter>
     </ClInclude>
+    <ClInclude Include="BossScript.h">
+      <Filter>04. GameObject\Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -417,6 +420,9 @@
     </ClCompile>
     <ClCompile Include="global.cpp" />
     <ClCompile Include="ItemScript.cpp">
+      <Filter>04. GameObject\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="BossScript.cpp">
       <Filter>04. GameObject\Script</Filter>
     </ClCompile>
   </ItemGroup>

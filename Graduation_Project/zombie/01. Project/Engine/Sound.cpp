@@ -4,17 +4,17 @@
 #include "ResMgr.h"
 
 
-FMOD_RESULT CHANNEL_CALLBACK(FMOD_CHANNELCONTROL *channelcontrol, FMOD_CHANNELCONTROL_TYPE controltype
+FMOD_RESULT CHANNEL_CALLBACK(FMOD_CHANNELCONTROL* channelcontrol, FMOD_CHANNELCONTROL_TYPE controltype
 	, FMOD_CHANNELCONTROL_CALLBACK_TYPE callbacktype
-	, void *commanddata1, void *commanddata2)
+	, void* commanddata1, void* commanddata2)
 {
-	FMOD::Channel *cppchannel = (FMOD::Channel *)channelcontrol;
+	FMOD::Channel* cppchannel = (FMOD::Channel*)channelcontrol;
 	CSound* pSound = nullptr;
 
 	switch (controltype)
 	{
 	case FMOD_CHANNELCONTROL_CALLBACK_END:
-	{		
+	{
 		cppchannel->getUserData((void**)&pSound);
 		pSound->RemoveChannel(cppchannel);
 	}
@@ -29,7 +29,7 @@ FMOD::System* CSound::g_pFMOD = nullptr;
 
 CSound::CSound()
 	: CResource(RES_TYPE::SOUND)
-	, m_pSound(nullptr)	
+	, m_pSound(nullptr)
 {
 }
 
@@ -59,7 +59,7 @@ void CSound::Play(int _iRoopCount, bool _bOverlap)
 
 	FMOD::Channel* pChannel = nullptr;
 	g_pFMOD->playSound(m_pSound, nullptr, false, &pChannel);
-		
+
 	pChannel->setCallback(CHANNEL_CALLBACK);
 	pChannel->setUserData(this);
 
@@ -79,10 +79,10 @@ void CSound::Stop()
 	{
 		iter = m_listChannel.begin();
 		(*iter)->stop();
-	}	
+	}
 }
 
-void CSound::RemoveChannel(FMOD::Channel * _pTargetChannel)
+void CSound::RemoveChannel(FMOD::Channel* _pTargetChannel)
 {
 	list<FMOD::Channel*>::iterator iter = m_listChannel.begin();
 	for (; iter != m_listChannel.end(); ++iter)
@@ -91,7 +91,7 @@ void CSound::RemoveChannel(FMOD::Channel * _pTargetChannel)
 		{
 			m_listChannel.erase(iter);
 			return;
-		}		
+		}
 	}
 }
 

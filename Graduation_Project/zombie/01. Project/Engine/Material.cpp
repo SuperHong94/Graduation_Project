@@ -15,7 +15,7 @@ CMaterial::CMaterial()
 {
 	m_tParam.m_vDiff = Vec4(0.5f, 0.5f, 0.5f, 0.5f);
 	m_tParam.m_vSpec = Vec4(1.f, 1.f, 1.f, 1.f);
-	m_tParam.m_vEmv = Vec4(0.f, 0.f, 0.f, 0.f);	
+	m_tParam.m_vEmv = Vec4(0.f, 0.f, 0.f, 0.f);
 }
 
 CMaterial::~CMaterial()
@@ -28,13 +28,13 @@ void CMaterial::SetShader(Ptr<CShader> _pShader)
 	m_pShader = _pShader;
 }
 
-void CMaterial::SetData(SHADER_PARAM _eParam, void * _pData)
+void CMaterial::SetData(SHADER_PARAM _eParam, void* _pData)
 {
 	switch (_eParam)
 	{
-	case SHADER_PARAM::INT_0:		
-	case SHADER_PARAM::INT_1:		
-	case SHADER_PARAM::INT_2:	
+	case SHADER_PARAM::INT_0:
+	case SHADER_PARAM::INT_1:
+	case SHADER_PARAM::INT_2:
 	case SHADER_PARAM::INT_3:
 		m_tParam.m_arrInt[(UINT)_eParam - (UINT)SHADER_PARAM::INT_0] = *((int*)_pData);
 		break;
@@ -83,7 +83,7 @@ void CMaterial::UpdateData(bool _bInstancing)
 {
 	// Material 이 참조하는 쉐이더가 없는 경우
 	assert(m_pShader.GetPointer());
-	
+
 	// Texture Register Update
 	UINT iOffsetPos = (UINT)TEXTURE_REGISTER::t0;
 
@@ -95,13 +95,13 @@ void CMaterial::UpdateData(bool _bInstancing)
 			m_tParam.m_iArrTex[i] = 1;
 		}
 		else
-		{			
+		{
 			m_tParam.m_iArrTex[i] = 0;
 		}
 	}
 
 	static CConstantBuffer* pCB = CDevice::GetInst()->GetCB(CONST_REGISTER::b1);
-	CDevice::GetInst()->SetConstBufferToRegister(pCB, pCB->AddData(&m_tParam));	
+	CDevice::GetInst()->SetConstBufferToRegister(pCB, pCB->AddData(&m_tParam));
 
 	m_pShader->UpdateData(_bInstancing);
 }
@@ -136,9 +136,9 @@ void CMaterial::Dispatch(UINT _x, UINT _y, UINT _z)
 	UpdateData_CS();
 
 	// Compute Descriptor heap update 하기
-	CDevice::GetInst()->UpdateTable_CS(); 
+	CDevice::GetInst()->UpdateTable_CS();
 
-	CMDLIST_CS->Dispatch(_x, _y, _z);	
+	CMDLIST_CS->Dispatch(_x, _y, _z);
 
 	CDevice::GetInst()->ExcuteComputeShader();
 
@@ -146,7 +146,7 @@ void CMaterial::Dispatch(UINT _x, UINT _y, UINT _z)
 	CDevice::GetInst()->ClearDymmyDescriptorHeap_CS();
 }
 
-void CMaterial::Load(const wstring & _strFullPath)
+void CMaterial::Load(const wstring& _strFullPath)
 {
 	FILE* pFile = nullptr;
 	_wfopen_s(&pFile, _strFullPath.c_str(), L"rb");
@@ -182,11 +182,11 @@ void CMaterial::Load(const wstring & _strFullPath)
 	fclose(pFile);
 }
 
-void CMaterial::Save(const wstring & _strPath)
+void CMaterial::Save(const wstring& _strPath)
 {
 	if (!m_bFileSave)
 		return;
-	
+
 	wstring strFilePath = CPathMgr::GetResPath();
 	strFilePath += _strPath;
 	SetPath(_strPath);
@@ -199,7 +199,7 @@ void CMaterial::Save(const wstring & _strPath)
 
 	// 쉐이더 파라미터
 	fwrite(&m_tParam, sizeof(tMtrlParam), 1, pFile);
-	
+
 	UINT iMaxCount = (UINT)SHADER_PARAM::TEX_END - (UINT)SHADER_PARAM::TEX_0;
 	for (UINT i = 0; i < iMaxCount; ++i)
 	{
@@ -210,7 +210,7 @@ void CMaterial::Save(const wstring & _strPath)
 			fwrite(&iExist, 4, 1, pFile);
 			continue;
 		}
-		
+
 		fwrite(&iExist, 4, 1, pFile);
 		SaveWString(pFile, m_arrTex[i]->GetName());
 		SaveWString(pFile, m_arrTex[i]->GetPath());
@@ -219,7 +219,7 @@ void CMaterial::Save(const wstring & _strPath)
 	fclose(pFile);
 }
 
-CMaterial * CMaterial::Clone()
+CMaterial* CMaterial::Clone()
 {
 	CResource::Clone();
 
@@ -229,13 +229,13 @@ CMaterial * CMaterial::Clone()
 	wsprintf(szAdd, L"_Clone_%d.mtrl", GetCloneCount());
 
 	// Naming
-	wstring strPath = L"Material\\"; 
+	wstring strPath = L"Material\\";
 	strPath += CPathMgr::GetFileName(GetName().c_str());
 	//strPath += szAdd;
 
 	pClone->SetName(strPath);
 	pClone->SetPath(strPath);
-		
+
 	CResMgr::GetInst()->AddCloneRes<CMaterial>(pClone);
 
 	//if (SCENE_MOD::SCENE_STOP == CCore::GetInst()->GetSceneMod())

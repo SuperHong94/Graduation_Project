@@ -22,7 +22,7 @@ CLight3D::CLight3D()
 	m_pCamObj->Camera()->SetLayerAllCheck(); // 모든 레이어를 찍는다(shadow map)
 }
 
-CLight3D::CLight3D(const CLight3D & _light)
+CLight3D::CLight3D(const CLight3D& _light)
 	: CComponent(_light)
 	, m_tLightInfo(_light.m_tLightInfo)
 	, m_pLightMtrl(_light.m_pLightMtrl)
@@ -64,7 +64,7 @@ void CLight3D::SetLightType(LIGHT_TYPE _eType)
 	}
 }
 
-void CLight3D::SetLightPos(const Vec3 & _vPos)
+void CLight3D::SetLightPos(const Vec3& _vPos)
 {
 	m_tLightInfo.vLightPos = _vPos;
 	Transform()->SetLocalPos(_vPos);
@@ -80,7 +80,7 @@ void CLight3D::SetLightDir(const Vec3& _vDir)
 
 void CLight3D::finalupdate()
 {
-	m_tLightInfo.vLightPos = Transform()->GetWorldPos();	
+	m_tLightInfo.vLightPos = Transform()->GetWorldPos();
 	Transform()->SetLocalScale(Vec3(m_tLightInfo.fRange, m_tLightInfo.fRange, m_tLightInfo.fRange));
 	m_iArrIdx = CRenderMgr::GetInst()->RegisterLight3D(this);
 
@@ -119,10 +119,10 @@ void CLight3D::render_shadowmap()
 	m_pCamObj->Camera()->render_shadowmap();
 }
 
-void CLight3D::SaveToScene(FILE * _pFile)
+void CLight3D::SaveToScene(FILE* _pFile)
 {
 }
 
-void CLight3D::LoadFromScene(FILE * _pFile)
+void CLight3D::LoadFromScene(FILE* _pFile)
 {
 }

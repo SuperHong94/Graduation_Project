@@ -22,6 +22,8 @@ struct PlayerStatus
 	float powerBuffTime = 0.f;
 	float defenceBuffTime = 0.f;
 	float speedBuffTime = 0.f;
+
+	int specialBulletCnt = 0;
 };
 
 class CPlayerScript :
