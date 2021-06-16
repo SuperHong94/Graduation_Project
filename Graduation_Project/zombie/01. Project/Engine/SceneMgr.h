@@ -22,6 +22,7 @@ private:
 	CGameObject* m_pPlayerArr[4];
 	CGameObject* monsterArr[100];
 	CGameObject* m_pItem[50];
+	CGameObject* m_Light;
 	int monsterCnt = 60;
 	int ItemCnt = 50;
 	int			sceneNum = 0;
