@@ -173,6 +173,14 @@ private:
 	int targetNum;
 	CGameObject* targetObjects[4];
 	CGameObject* HpBarObject;
+	CGameObject* ParticleObject;
+	CGameObject* TParticleObject;
+	CGameObject* IParticleObject;
+
+	bool IsParticleOn = false;
+	int ParticleState = -1;
+	int PreParticleState = -1;
+	bool IsParticleChange = false;
 
 public:
 	virtual void update();
@@ -184,7 +192,8 @@ public:
 	MonsterStatus* GetStatus() { return status; };
 	void SetStatus(MonsterStatus* st);
 	int findNearTarget();
-
+	void SetParticleOn(bool b) { IsParticleOn = b; };
+	void SetParticleState(int n) { ParticleState = n; };
 
 public:
 	CLONE(CMonsterScript);

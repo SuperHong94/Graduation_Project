@@ -15,7 +15,8 @@
 #include "MeshRender.h"
 #include "Collider2D.h"
 #include "ParticleSystem.h"
-
+#include "TParticleSystem.h"
+#include "IParticleSystem.h"
 
 CCamera::CCamera()
 	: CComponent(COMPONENT_TYPE::CAMERA)
@@ -113,6 +114,14 @@ void CCamera::SortGameObject()
 					{
 						m_vecParticle.push_back(vecObj[i]);
 					}
+					else if (vecObj[i]->TParticlesystem())
+					{
+						m_vecTParticle.push_back(vecObj[i]);
+					}
+					else if (vecObj[i]->IParticlesystem())
+					{
+						m_vecIParticle.push_back(vecObj[i]);
+					}
 				}
 			}
 		}
@@ -187,6 +196,16 @@ void CCamera::render_forward()
 	for (size_t i = 0; i < m_vecParticle.size(); ++i)
 	{
 		m_vecParticle[i]->Particlesystem()->render();
+	}
+
+	for (size_t i = 0; i < m_vecTParticle.size(); ++i)
+	{
+		m_vecTParticle[i]->TParticlesystem()->render();
+	}
+
+	for (size_t i = 0; i < m_vecIParticle.size(); ++i)
+	{
+		m_vecIParticle[i]->IParticlesystem()->render();
 	}
 
 	for (size_t i = 0; i < m_vecDeferred.size(); ++i)

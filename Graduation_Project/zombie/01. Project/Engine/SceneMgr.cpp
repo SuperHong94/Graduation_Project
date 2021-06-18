@@ -17,6 +17,8 @@
 #include "Light2D.h"
 #include "Light3D.h"
 #include "ParticleSystem.h"
+#include "TParticleSystem.h"
+#include "IParticleSystem.h"
 
 #include "TimeMgr.h"
 #include "KeyMgr.h"

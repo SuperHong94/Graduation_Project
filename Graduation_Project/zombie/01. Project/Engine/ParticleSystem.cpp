@@ -19,10 +19,10 @@ CParticleSystem::CParticleSystem()
 	, m_fMaxLifeTime(1.f)
 	, m_fMinSpeed(100)
 	, m_fMaxSpeed(50.f)
-	, m_fStartScale(30.f)
+	, m_fStartScale(20.f)
 	, m_fEndScale(10.f)
-	, m_vStartColor(Vec4(0.2f, 0.2f, 0.8f, 1.4f))
-	, m_vEndColor(Vec4(0.6f, 0.6f, 0.8f, 1.0f))
+	, m_vStartColor(Vec4(1.0f, 1.0f, 1.0f, 1.0f))
+	, m_vEndColor(Vec4(1.0f, 1.0f, 1.0f, 0.2f))
 {
 	// 구조화 버퍼 생성
 	m_pParticleBuffer = new CStructuredBuffer;
@@ -36,7 +36,7 @@ CParticleSystem::CParticleSystem()
 
 	// Material
 	m_pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"ParticleMtrl");
-	Ptr<CTexture> pParticle = CResMgr::GetInst()->Load<CTexture>(L"Texture\\Particle\\CartoonSmoke.png", L"Texture\\Particle\\Bubbles50px.png");
+	Ptr<CTexture> pParticle = CResMgr::GetInst()->Load<CTexture>(L"Texture\\Particle\\Fire.png", L"Texture\\Particle\\Fire.png");
 	m_pMtrl->SetData(SHADER_PARAM::TEX_0, pParticle.GetPointer());
 
 	// ParticleUpdate

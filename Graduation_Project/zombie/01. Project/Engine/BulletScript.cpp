@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "BulletScript.h"
-
+#include "MonsterScript.h"
 
 CBulletScript::CBulletScript(Vec3 Dir, BulletState bState)
 	: CScript((UINT)SCRIPT_TYPE::BULLETSCRIPT)
@@ -77,6 +77,12 @@ void CBulletScript::OnCollisionEnter(CCollider2D* _pOther)
 		{
 			//DeleteObject(GetObj());
 			BulletActive = false;
+			if(bulletState == B_Fire)
+				_pOther->GetObj()->GetScript<CMonsterScript>()->SetParticleState(1);
+			else if (bulletState == B_Ice)
+				_pOther->GetObj()->GetScript<CMonsterScript>()->SetParticleState(2);
+			else if (bulletState == B_Thunder)
+				_pOther->GetObj()->GetScript<CMonsterScript>()->SetParticleState(3);
 		}
 
 		if (L"Tomb Object" == _pOther->GetObj()->GetName())

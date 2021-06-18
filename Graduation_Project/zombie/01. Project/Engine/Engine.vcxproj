@@ -193,6 +193,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="GridScript.h" />
     <ClInclude Include="InstancingBuffer.h" />
     <ClInclude Include="InstancingMgr.h" />
+    <ClInclude Include="IParticleSystem.h" />
     <ClInclude Include="ItemScript.h" />
     <ClInclude Include="KeyMgr.h" />
     <ClInclude Include="Layer.h" />
@@ -228,6 +229,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="TimeMgr.h" />
     <ClInclude Include="TombScript.h" />
     <ClInclude Include="ToolCamScript.h" />
+    <ClInclude Include="TParticleSystem.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +258,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="GridScript.cpp" />
     <ClCompile Include="InstancingBuffer.cpp" />
     <ClCompile Include="InstancingMgr.cpp" />
+    <ClCompile Include="IParticleSystem.cpp" />
     <ClCompile Include="ItemScript.cpp" />
     <ClCompile Include="KeyMgr.cpp" />
     <ClCompile Include="Layer.cpp" />
@@ -294,6 +297,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="TimeMgr.cpp" />
     <ClCompile Include="TombScript.cpp" />
     <ClCompile Include="ToolCamScript.cpp" />
+    <ClCompile Include="TParticleSystem.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>

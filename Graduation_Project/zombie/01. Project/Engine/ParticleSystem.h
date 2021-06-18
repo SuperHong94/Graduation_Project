@@ -42,6 +42,7 @@ public:
 public:
 	void SetStartColor(const Vec4& _vColor) { m_vStartColor = _vColor; }
 	void SetEndColor(const Vec4& _vColor) { m_vEndColor = _vColor; }
+	void SetMtrl(Ptr < CMaterial> m) { m_pMtrl = m; };
 
 public:
 	CLONE(CParticleSystem);
