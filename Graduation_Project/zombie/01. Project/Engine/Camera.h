@@ -36,6 +36,7 @@ private:
 	vector<CGameObject*>	m_vecParticle;
 	vector<CGameObject*>	m_vecTParticle;
 	vector<CGameObject*>	m_vecIParticle;
+	vector<CGameObject*>	m_vecFParticle;
 	vector<CGameObject*>	m_vecPostEffect;
 
 	vector<CGameObject*>	m_vecShadowObj;

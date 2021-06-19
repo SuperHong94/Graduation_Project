@@ -17,6 +17,7 @@
 #include "ParticleSystem.h"
 #include "TParticleSystem.h"
 #include "IParticleSystem.h"
+#include "FParticleSystem.h"
 
 CCamera::CCamera()
 	: CComponent(COMPONENT_TYPE::CAMERA)
@@ -110,17 +111,22 @@ void CCamera::SortGameObject()
 						else if (SHADER_POV::POSTEFFECT == vecObj[i]->MeshRender()->GetSharedMaterial()->GetShader()->GetShaderPOV())
 							m_vecPostEffect.push_back(vecObj[i]);
 					}
-					else if (vecObj[i]->Particlesystem())
+				
+					else if (vecObj[i]->TParticlesystem())
 					{
 						m_vecParticle.push_back(vecObj[i]);
 					}
-					else if (vecObj[i]->TParticlesystem())
-					{
-						m_vecTParticle.push_back(vecObj[i]);
-					}
 					else if (vecObj[i]->IParticlesystem())
 					{
-						m_vecIParticle.push_back(vecObj[i]);
+						m_vecParticle.push_back(vecObj[i]);
+					}
+					else if (vecObj[i]->FParticlesystem())
+					{
+						m_vecParticle.push_back(vecObj[i]);
+					}
+					else if (vecObj[i]->Particlesystem())
+					{
+						m_vecParticle.push_back(vecObj[i]);
 					}
 				}
 			}
@@ -193,12 +199,8 @@ void CCamera::render_forward()
 			m_vecForward[i]->Collider2D()->render();
 	}
 
-	for (size_t i = 0; i < m_vecParticle.size(); ++i)
-	{
-		m_vecParticle[i]->Particlesystem()->render();
-	}
 
-	for (size_t i = 0; i < m_vecTParticle.size(); ++i)
+	/*for (size_t i = 0; i < m_vecTParticle.size(); ++i)
 	{
 		m_vecTParticle[i]->TParticlesystem()->render();
 	}
@@ -206,6 +208,16 @@ void CCamera::render_forward()
 	for (size_t i = 0; i < m_vecIParticle.size(); ++i)
 	{
 		m_vecIParticle[i]->IParticlesystem()->render();
+	}
+
+	for (size_t i = 0; i < m_vecFParticle.size(); ++i)
+	{
+		m_vecFParticle[i]->FParticlesystem()->render();
+	}*/
+
+	for (size_t i = 0; i < m_vecParticle.size(); ++i)
+	{
+		m_vecParticle[i]->Particlesystem()->render();
 	}
 
 	for (size_t i = 0; i < m_vecDeferred.size(); ++i)

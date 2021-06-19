@@ -173,7 +173,7 @@ private:
 	int targetNum;
 	CGameObject* targetObjects[4];
 	CGameObject* HpBarObject;
-	CGameObject* ParticleObject;
+	CGameObject* FParticleObject;
 	CGameObject* TParticleObject;
 	CGameObject* IParticleObject;
 

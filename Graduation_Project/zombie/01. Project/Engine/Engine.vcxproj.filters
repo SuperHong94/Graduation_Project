@@ -256,6 +256,9 @@
     <ClInclude Include="TParticleSystem.h">
       <Filter>04. GameObject\Component</Filter>
     </ClInclude>
+    <ClInclude Include="FParticleSystem.h">
+      <Filter>04. GameObject\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -435,6 +438,9 @@
       <Filter>04. GameObject\Component</Filter>
     </ClCompile>
     <ClCompile Include="TParticleSystem.cpp">
+      <Filter>04. GameObject\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="FParticleSystem.cpp">
       <Filter>04. GameObject\Component</Filter>
     </ClCompile>
   </ItemGroup>

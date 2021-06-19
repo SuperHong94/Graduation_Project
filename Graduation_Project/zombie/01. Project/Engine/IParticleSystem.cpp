@@ -9,7 +9,7 @@
 #include "Transform.h"
 
 CIParticleSystem::CIParticleSystem()
-	: CComponent(COMPONENT_TYPE::IPARTICLESYSTEM)
+	: CComponent(COMPONENT_TYPE::PARTICLESYSTEM)
 	, m_pParticleBuffer(nullptr)
 	, m_pSharedBuffer(nullptr)
 	, m_iMaxParticle(1000)
@@ -35,7 +35,7 @@ CIParticleSystem::CIParticleSystem()
 	m_pMesh = CResMgr::GetInst()->FindRes<CMesh>(L"PointMesh");
 
 	// Material
-	m_pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"ParticleMtrl");
+	m_pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"IParticleMtrl");
 	Ptr<CTexture> pParticle = CResMgr::GetInst()->Load<CTexture>(L"Texture\\Particle\\Ice.png", L"Texture\\Particle\\Ice.png");
 	m_pMtrl->SetData(SHADER_PARAM::TEX_0, pParticle.GetPointer());
 

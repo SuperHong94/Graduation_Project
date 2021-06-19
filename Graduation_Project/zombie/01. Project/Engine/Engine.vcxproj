@@ -185,6 +185,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="EventMgr.h" />
     <ClInclude Include="extern.h" />
     <ClInclude Include="FBXLoader.h" />
+    <ClInclude Include="FParticleSystem.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="func.h" />
     <ClInclude Include="GameMgr.h" />
@@ -250,6 +251,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EventMgr.cpp" />
     <ClCompile Include="FBXLoader.cpp" />
+    <ClCompile Include="FParticleSystem.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="func.cpp" />
     <ClCompile Include="GameMgr.cpp" />

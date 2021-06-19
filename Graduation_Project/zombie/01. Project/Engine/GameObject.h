@@ -18,6 +18,8 @@ class CAnimator3D;
 class CParticleSystem;
 class CTParticleSystem;
 class CIParticleSystem;
+class CFParticleSystem;
+
 
 class CGameObject :
 	public CEntity
@@ -60,8 +62,9 @@ public:
 	CLight2D* Light2D() { return (CLight2D*)m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D]; }
 	CLight3D* Light3D() { return (CLight3D*)m_arrCom[(UINT)COMPONENT_TYPE::LIGHT3D]; }
 	CParticleSystem* Particlesystem() { return (CParticleSystem*)m_arrCom[(UINT)COMPONENT_TYPE::PARTICLESYSTEM]; }
-	CTParticleSystem* TParticlesystem() { return (CTParticleSystem*)m_arrCom[(UINT)COMPONENT_TYPE::TPARTICLESYSTEM]; }
-	CIParticleSystem* IParticlesystem() { return (CIParticleSystem*)m_arrCom[(UINT)COMPONENT_TYPE::IPARTICLESYSTEM]; }
+	CTParticleSystem* TParticlesystem() { return (CTParticleSystem*)m_arrCom[(UINT)COMPONENT_TYPE::PARTICLESYSTEM]; }
+	CIParticleSystem* IParticlesystem() { return (CIParticleSystem*)m_arrCom[(UINT)COMPONENT_TYPE::PARTICLESYSTEM]; }
+	CFParticleSystem* FParticlesystem() { return (CFParticleSystem*)m_arrCom[(UINT)COMPONENT_TYPE::PARTICLESYSTEM]; }
 
 	const vector<CScript*>& GetScripts() const { return m_vecScript; }
 

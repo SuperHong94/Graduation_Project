@@ -19,6 +19,7 @@
 #include "ParticleSystem.h"
 #include "TParticleSystem.h"
 #include "IParticleSystem.h"
+#include "FParticleSystem.h"
 
 #include "TimeMgr.h"
 #include "KeyMgr.h"
