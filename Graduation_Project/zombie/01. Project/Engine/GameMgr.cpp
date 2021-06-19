@@ -65,6 +65,13 @@ void GameMgr::CheckZombieRespawn()
 			status->hp = 100;
 			status->disappearCnt = 0;
 			status->IsDisappear = false;
+			/*status->IceTime = 0.f;
+			status->FireTime = 0.f;
+			status->ThunderTime = 0.f;*/
+			/*status->IsParticleOn = false;
+			status->ParticleState = -1;
+			status->PreParticleState = -1;
+			status->IsParticleChange = false;*/
 
 			Gstatus->monsterArr[i]->GetScript<CMonsterScript>()->SetStatus(status);
 

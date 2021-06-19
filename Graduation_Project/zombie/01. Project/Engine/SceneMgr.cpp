@@ -764,14 +764,15 @@ void CSceneMgr::initGameScene()
 		pObject = new CGameObject;
 		pObject->SetName(L"Particle");
 		pObject->AddComponent(new CTransform);
-		pObject->AddComponent(new CParticleSystem);
+		pObject->AddComponent(new CTParticleSystem);
 
-		pObject->FrustumCheck(false);
+		pObject->FrustumCheck(true);
 		pObject->Transform()->SetLocalPos(Vec3(0.f, 50.f, 0.f));
 
 		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
-
-
+		pObject->SetDead();
+		pObject->SetAlive();
+		
 		//// ====================
 		//// Skybox 오브젝트 생성
 		//// ====================

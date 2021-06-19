@@ -8,6 +8,7 @@
 #include "IParticleSystem.h"
 #include "FParticleSystem.h"
 
+
 CMonsterScript::CMonsterScript(CGameObject* targetObject[], int ntargetNum, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
 {
@@ -57,6 +58,40 @@ CMonsterScript::CMonsterScript(CGameObject* targetObject[], int ntargetNum, CGam
 	HpBarObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, tex.GetPointer());
 	// Script 설정
 	pScene->FindLayer(L"Default")->AddGameObject(HpBarObject);
+
+	//////////////////////////////////////////////////////////////////
+	// 파티클 생성
+	FParticleObject = new CGameObject;
+	FParticleObject->SetName(L"Particle");
+	FParticleObject->AddComponent(new CTransform);
+	FParticleObject->AddComponent(new CFParticleSystem);
+
+	FParticleObject->FrustumCheck(true);
+	FParticleObject->Transform()->SetLocalPos(Vec3(50.f, 50.f, 0.f));
+	pScene->FindLayer(L"Default")->AddGameObject(FParticleObject);
+	FParticleObject->SetDead();
+	
+	//////////////////////////////////////////////////////////////////
+	IParticleObject = new CGameObject;
+	IParticleObject->SetName(L"Particle");
+	IParticleObject->AddComponent(new CTransform);
+	IParticleObject->AddComponent(new CIParticleSystem);
+
+	IParticleObject->FrustumCheck(true);
+	IParticleObject->Transform()->SetLocalPos(Vec3(50.f, 50.f, 0.f));
+	pScene->FindLayer(L"Default")->AddGameObject(IParticleObject);
+	IParticleObject->SetDead();
+	
+	//////////////////////////////////////////////////////////////////
+	TParticleObject = new CGameObject;
+	TParticleObject->SetName(L"Particle");
+	TParticleObject->AddComponent(new CTransform);
+	TParticleObject->AddComponent(new CTParticleSystem);
+
+	TParticleObject->FrustumCheck(true);
+	TParticleObject->Transform()->SetLocalPos(Vec3(50.f, 50.f, 0.f));
+	pScene->FindLayer(L"Default")->AddGameObject(TParticleObject);
+	TParticleObject->SetDead();
 }
 
 CMonsterScript::~CMonsterScript()
@@ -75,6 +110,7 @@ void CMonsterScript::update()
 	Vec3 vPos = Transform()->GetLocalPos();
 	Vec3 vTargetPos = status->TargetObject->Transform()->GetLocalPos();
 	Vec3 vDir;
+	
 
 	//// 총알 충돌 확인
 	//vector<CGameObject*> vBobjects = pScene->FindLayer(L"Bullet")->GetObjects();
@@ -94,8 +130,9 @@ void CMonsterScript::update()
 	//		//}
 	//	}
 	//}
+	HpBarObject->Transform()->SetLocalScale(Vec3(50 * status->hp / 100., 10, 1));
 
-	if (status->state != MonsterState::M_Die)
+	if (status->hp > 0)
 	{
 		// 좀비 방향 설정
 		Vec2 v1, v2;
@@ -132,163 +169,85 @@ void CMonsterScript::update()
 
 		// 특수 총알 효과 시간 차감 & 파티클 효과 설정
 
-		// 번개 총알은 안 맞아도 주변에서 맞으면 효과가 생김
-		// 그래서 아래 조건으로 파트클 상태 검사해야됨
-		if (status->ThunderTime > 0)
-			ParticleState = 3;
+		//// 번개 총알은 안 맞아도 주변에서 맞으면 효과가 생김
+		//// 그래서 아래 조건으로 파트클 상태 검사해야됨
+		//if (status->ThunderTime > 0)
+		//	status->ParticleState = 3;
 
-		if (PreParticleState == ParticleState)
-			IsParticleChange = false;
+		//if (status->PreParticleState == status->ParticleState)
+		//	status->IsParticleChange = false;
 
-		else
-			IsParticleChange = true;
+		//else
+		//	status->IsParticleChange = true;
 
-		//PreParticleState = ParticleState;
+		////PreParticleState = ParticleState;
 
-		Vec3 particlePos = Vec3(vPos.x, 100, vPos.z);
 
-		// 얼음
-		if (status->IceTime > 0)
-		{
-			PreParticleState = 2;
-
-			status->IceTime -= DT;
-			IsParticleOn = true;
-
-			if (IsParticleChange)
-			{
-				//DeleteObject(ParticleObject);
-				IParticleObject = new CGameObject;
-				IParticleObject->SetName(L"Particle");
-				IParticleObject->AddComponent(new CTransform);
-				IParticleObject->AddComponent(new CIParticleSystem);
-
-				IParticleObject->FrustumCheck(false);
-				IParticleObject->Transform()->SetLocalPos(particlePos);
-
-				/*Ptr<CMaterial> m_pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"ParticleMtrl");
-				Ptr<CTexture> pParticle = CResMgr::GetInst()->Load<CTexture>(L"Texture\\Particle\\Ice.png", L"Texture\\Particle\\Ice.png");
-				m_pMtrl->SetData(SHADER_PARAM::TEX_0, pParticle.GetPointer());
-				IParticleObject->Particlesystem()->SetMtrl(m_pMtrl);*/
-
-				pScene->FindLayer(L"Default")->AddGameObject(IParticleObject);
-			}
-		}
-		else
-			status->IceTime = 0;
-
-		// 불
-		if (status->FireTime > 0)
-		{
-			PreParticleState = 1;
-			
-			status->FireTime -= DT;
-			status->hp -= DT * 10;
-			IsParticleOn = true;
-
-			if (IsParticleChange)
-			{
-				//DeleteObject(ParticleObject);
-				FParticleObject = new CGameObject;
-				FParticleObject->SetName(L"Particle");
-				FParticleObject->AddComponent(new CTransform);
-				FParticleObject->AddComponent(new CFParticleSystem);
-
-				FParticleObject->FrustumCheck(false);
-				FParticleObject->Transform()->SetLocalPos(particlePos);
-
-				/*Ptr<CMaterial> m_pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"ParticleMtrl");
-				Ptr<CTexture> pParticle = CResMgr::GetInst()->Load<CTexture>(L"Texture\\Particle\\Fire.png", L"Texture\\Particle\\Fire.png");
-				m_pMtrl->SetData(SHADER_PARAM::TEX_0, pParticle.GetPointer());
-				ParticleObject->Particlesystem()->SetMtrl(m_pMtrl);*/
-
-				pScene->FindLayer(L"Default")->AddGameObject(FParticleObject);
-			}
-		}
-		else
-			status->FireTime = 0;
-
+		//// 얼음
+		//if (status->IceTime > 0)
+		//{
+		//	particleNum = 1;
+		//	status->IceTime -= DT;
+		//}
+		//else
+		//{
+		//	//particleNum = -1;
+		//	status->IceTime = 0;
+		//}
+		//// 불
+		//if (status->FireTime > 0)
+		//{
+		//	particleNum = 2;
+		//	status->FireTime -= DT;
+		//	status->hp -= DT * 10;
+		//}
+		//else
+		//{
+		//	//particleNum = -1;
+		//	status->FireTime = 0;
+		//}
 		// 번개
 		if (status->ThunderTime > 0)
 		{
-			PreParticleState = 3;
-
+			particleNum = 3;
 			status->ThunderTime -= DT;
 			status->hp -= DT * 7;
-			IsParticleOn = true;
-
-			if (IsParticleChange)
-			{
-				//DeleteObject(ParticleObject);
-				TParticleObject = new CGameObject;
-				TParticleObject->SetName(L"Particle");
-				TParticleObject->AddComponent(new CTransform);
-				TParticleObject->AddComponent(new CTParticleSystem);
-
-				TParticleObject->FrustumCheck(false);
-				TParticleObject->Transform()->SetLocalPos(particlePos);
-
-				/*Ptr<CMaterial> m_pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"ParticleMtrl");
-				Ptr<CTexture> pParticle = CResMgr::GetInst()->Load<CTexture>(L"Texture\\Particle\\Thunder.png", L"Texture\\Particle\\Thunder.png");
-				m_pMtrl->SetData(SHADER_PARAM::TEX_0, pParticle.GetPointer());
-				TParticleObject->Particlesystem()->SetMtrl(m_pMtrl);*/
-
-				pScene->FindLayer(L"Default")->AddGameObject(TParticleObject);
-			}
 		}
-		else
-			status->ThunderTime = 0;
+		//else
+		//{
+		//	//particleNum = -1;
+		//	status->ThunderTime = 0;
+		//}
 
-		if (IsParticleOn)
+
+	/*	FParticleObject->SetAlive();
+		IParticleObject->SetAlive();*/
+		//TParticleObject->SetAlive();
+
+		Vec3 particlePos = Vec3(vPos.x, 100, vPos.z);
+
+		if (!FParticleObject->IsDead() && status->FireTime > 0.f)
+			FParticleObject->Transform()->SetLocalPos(particlePos);
+	/*	else
+			FParticleObject->Transform()->SetLocalPos(Vec3(particlePos.x, particlePos.y, particlePos.z));*/
+
+		if (!IParticleObject->IsDead() && status->IceTime > 0.f)
+			IParticleObject->Transform()->SetLocalPos(particlePos);
+		/*else
+			IParticleObject->Transform()->SetLocalPos(Vec3(particlePos.x, particlePos.y, particlePos.z));*/
+
+		if (!TParticleObject->IsDead() && status->ThunderTime > 0.f)
 		{
-			//파티클 위치 업데이트
-			if(status->IceTime > 0)
-				IParticleObject->Transform()->SetLocalPos(particlePos);
-			else if (status->FireTime > 0)
-				FParticleObject->Transform()->SetLocalPos(particlePos);
-			else if (status->ThunderTime > 0)
-				TParticleObject->Transform()->SetLocalPos(particlePos);
-
-		
-			if (FParticleObject != NULL && status->FireTime <= 0)
-			{
-				DeleteObject(FParticleObject);
-				IsParticleOn = false;
-				PreParticleState = -1;
-			}
-			else if (IParticleObject != NULL && status->IceTime <= 0)
-			{
-				DeleteObject(IParticleObject);
-				IsParticleOn = false;
-				PreParticleState = -1;
-			}
-			else if (TParticleObject != NULL && status->ThunderTime <= 0)
-			{
-				DeleteObject(TParticleObject);
-				IsParticleOn = false;
-				PreParticleState = -1;
-			}
-	
-
-			if (status->hp <= 0)
-			{
-				if(FParticleObject != NULL)
-					DeleteObject(FParticleObject);
-				else if (IParticleObject != NULL)
-					DeleteObject(IParticleObject);
-				else if (TParticleObject != NULL)
-					DeleteObject(TParticleObject);
-				PreParticleState = -1;
-				//ParticleObject->Transform()->SetLocalPos(Vec3(particlePos.x, -1000, particlePos.z));
-				
-				//DeleteObject(ParticleObject);
-				IsParticleOn = false;
-			}
-
-			////파티클 위치 업데이트
-			//else if (IsParticleOn)
-			//	ParticleObject->Transform()->SetLocalPos(particlePos);
+			TParticleObject->Transform()->SetLocalPos(particlePos);
 		}
+		/*else
+			TParticleObject->Transform()->SetLocalPos(Vec3(particlePos.x, particlePos.y, particlePos.z));*/
+
+		/*FParticleObject->SetAlive();
+		FParticleObject->Transform()->SetLocalPos(particlePos);
+		IParticleObject->Transform()->SetLocalPos(particlePos);
+		TParticleObject->Transform()->SetLocalPos(particlePos);*/
+		//FParticleObject->Transform()->SetLocalPos(Vec3(50.f, 50.f, 0.f));
 
 		//if (status->state == MonsterState::M_Run)
 		if (status->state == MonsterState::M_Run && !status->IsCollide)
@@ -301,6 +260,9 @@ void CMonsterScript::update()
 				vPos += DT * status->speed * vDir;
 		}
 
+
+
+
 		// 이거 나중에 상태별로 포함되게 수정(run, attack??<- 이부분은 다시 생각)
 
 		// 플레이어가 좀비 인지 범위에 있을 경우에만 움직임 설정
@@ -310,6 +272,85 @@ void CMonsterScript::update()
 			Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
 			Transform()->SetLocalPos(vPos);
 		}
+	}
+
+	//particleNum = 3;
+	if (particleNum == 1)
+		IParticleObject->SetAlive();
+	else if (particleNum == 2)
+		FParticleObject->SetAlive();
+	if (particleNum == 3)
+	{
+		TParticleObject->SetAlive();
+		nn++;
+		if (nn == 1)
+			int c = 3;
+	}
+
+
+	//if (status->IsParticleOn && status->hp > 0 && status->state != MonsterState::M_Die)
+	//{
+	//	//파티클 위치 업데이트
+	//	if (status->FireTime > 0.f)
+	//		FParticleObject->Transform()->SetLocalPos(particlePos);
+	//	else
+	//		FParticleObject->Transform()->SetLocalPos(Vec3(particlePos.x, particlePos.y - 1000, particlePos.z));
+
+	//	if (status->IceTime > 0.f)
+	//		IParticleObject->Transform()->SetLocalPos(particlePos);
+	//	else
+	//		IParticleObject->Transform()->SetLocalPos(Vec3(particlePos.x, particlePos.y - 1000, particlePos.z));
+
+
+	//	if (status->ThunderTime > 0.f)
+	//		TParticleObject->Transform()->SetLocalPos(particlePos);
+	//	else
+	//		TParticleObject->Transform()->SetLocalPos(Vec3(particlePos.x, particlePos.y - 1000, particlePos.z));
+	//
+	//	/*if (status->FireTime <= 0.f && FParticleObject != NULL && status->PreParticleState == 1 && !status->IsParticleChange)
+	//	{
+	//		DeleteObject(FParticleObject);
+	//		status->IsParticleOn = false;
+	//		status->PreParticleState = -1;
+	//		status->ParticleState = -1;
+	//	}
+	//	else if (status->IceTime <= 0.f && IParticleObject != NULL && status->PreParticleState == 2 && !status->IsParticleChange)
+	//	{
+	//		DeleteObject(IParticleObject);
+	//		status->IsParticleOn = false;
+	//		status->PreParticleState = -1;
+	//		status->ParticleState = -1;
+	//	}
+	//	else if (status->ThunderTime <= 0.f && TParticleObject != NULL && status->PreParticleState == 3 && !status->IsParticleChange)
+	//	{
+	//		DeleteObject(TParticleObject);
+	//		status->IsParticleOn = false;
+	//		status->PreParticleState = -1;
+	//		status->ParticleState = -1;
+	//	}*/
+
+
+	//	////파티클 위치 업데이트
+	//	//else if (IsParticleOn)
+	//	//	ParticleObject->Transform()->SetLocalPos(particlePos);
+	//}
+
+	//파티클 제거
+	if (status->hp <= 0 || status->state == MonsterState::M_Die)
+	{
+	/*	if(!FParticleObject->IsDead())
+			FParticleObject->SetDead();
+		if (!IParticleObject->IsDead())
+			IParticleObject->SetDead();
+		if (!TParticleObject->IsDead())
+			TParticleObject->SetDead();*/
+
+		//status->PreParticleState = -1;
+		//status->ParticleState = -1;
+		////ParticleObject->Transform()->SetLocalPos(Vec3(particlePos.x, -1000, particlePos.z));
+
+		////DeleteObject(ParticleObject);
+		//status->IsParticleOn = false;
 	}
 
 	// 몬스터 죽을시 애니메이션 변경
@@ -474,16 +515,25 @@ void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 			if (bulletScript->GetBulletState() == BulletState::B_Fire)
 			{
 				status->FireTime += 3;
+				status->IceTime = 0;
+				status->ThunderTime = 0;
+				status->ParticleState = 1;
 			}
 
 			else if (bulletScript->GetBulletState() == BulletState::B_Ice)
 			{
+				status->FireTime = 0;
 				status->IceTime = 2;
+				status->ThunderTime = 0;
+				status->ParticleState = 2;
 			}
 
 			else if (bulletScript->GetBulletState() == BulletState::B_Thunder)
 			{
+				status->FireTime = 0;
+				status->IceTime = 0;
 				status->ThunderTime += 2;
+				status->ParticleState = 3;
 
 				for (int i = 0; i < MAX_LAYER; ++i)
 				{
@@ -501,9 +551,19 @@ void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 							if (length < 200.f)
 							{
 								if (vecObject[j]->GetName() == L"Monster Object")
+								{
+									/*vecObject[j]->GetScript<CMonsterScript>()->GetStatus()->FireTime = 0.f;
+									vecObject[j]->GetScript<CMonsterScript>()->GetStatus()->IceTime = 0.f;
 									vecObject[j]->GetScript<CMonsterScript>()->GetStatus()->ThunderTime = 1.5f;
+									vecObject[j]->GetScript<CMonsterScript>()->SetParticleState(3);*/
+								}
 								else
+								{
+									vecObject[j]->GetScript<CBossScript>()->GetStatus()->FireTime = 0.f;
+									vecObject[j]->GetScript<CBossScript>()->GetStatus()->IceTime = 0.f;
 									vecObject[j]->GetScript<CBossScript>()->GetStatus()->ThunderTime = 1.5f;
+									//vecObject[j]->GetScript<CBossScript>()->SetParticleState(3);
+								}
 							}
 						}
 					}

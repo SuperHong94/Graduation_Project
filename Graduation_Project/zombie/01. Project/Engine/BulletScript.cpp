@@ -77,12 +77,12 @@ void CBulletScript::OnCollisionEnter(CCollider2D* _pOther)
 		{
 			//DeleteObject(GetObj());
 			BulletActive = false;
-			if(bulletState == B_Fire)
+			/*if(bulletState == B_Fire)
 				_pOther->GetObj()->GetScript<CMonsterScript>()->SetParticleState(1);
 			else if (bulletState == B_Ice)
 				_pOther->GetObj()->GetScript<CMonsterScript>()->SetParticleState(2);
 			else if (bulletState == B_Thunder)
-				_pOther->GetObj()->GetScript<CMonsterScript>()->SetParticleState(3);
+				_pOther->GetObj()->GetScript<CMonsterScript>()->SetParticleState(3);*/
 		}
 
 		if (L"Tomb Object" == _pOther->GetObj()->GetName())
