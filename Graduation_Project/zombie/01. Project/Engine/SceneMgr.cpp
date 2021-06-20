@@ -761,17 +761,15 @@ void CSceneMgr::initGameScene()
 		// ====================
 		// Particle Object 积己
 		// ====================
-		pObject = new CGameObject;
-		pObject->SetName(L"Particle");
-		pObject->AddComponent(new CTransform);
-		pObject->AddComponent(new CTParticleSystem);
+	/*	p = new CGameObject;
+		p->SetName(L"Particle");
+		p->AddComponent(new CTransform);
+		p->AddComponent(new CTParticleSystem);
 
-		pObject->FrustumCheck(true);
-		pObject->Transform()->SetLocalPos(Vec3(0.f, 50.f, 0.f));
+		p->FrustumCheck(true);
+		p->Transform()->SetLocalPos(Vec3(0.f, 50.f, 0.f));
 
-		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
-		pObject->SetDead();
-		pObject->SetAlive();
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(p);*/
 		
 		//// ====================
 		//// Skybox 坷宏璃飘 积己

@@ -361,9 +361,6 @@
     <ClCompile Include="BulletScript.cpp">
       <Filter>04. GameObject\Script</Filter>
     </ClCompile>
-    <ClCompile Include="MonsterScript.cpp">
-      <Filter>04. GameObject\Script</Filter>
-    </ClCompile>
     <ClCompile Include="ToolCamScript.cpp">
       <Filter>04. GameObject\Script</Filter>
     </ClCompile>
@@ -442,6 +439,9 @@
     </ClCompile>
     <ClCompile Include="FParticleSystem.cpp">
       <Filter>04. GameObject\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterScript.cpp">
+      <Filter>04. GameObject\Script</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

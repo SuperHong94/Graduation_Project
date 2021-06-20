@@ -15,29 +15,29 @@ class CRenderMgr
 {
 	SINGLE(CRenderMgr);
 
-private:	
+private:
 	Ptr<CTexture>			m_pRenderTargetTex;
 	Ptr<CTexture>			m_pDepthStencilTex;
-		
+
 	tResolution				m_tResolution;
 
 	//CRenderTarget24*		m_arrRT[(UINT)RT_TYPE::END];
-	CMRT*					m_arrMRT[(UINT)MRT_TYPE::END];	
+	CMRT* m_arrMRT[(UINT)MRT_TYPE::END];
 
 	tLight2DInfo			m_tLight2DInfo;
 
 	vector<CLight3D*>		m_vecLight3D;
 	vector<CCamera*>		m_vecCam;
-	
-	UINT					m_iRTVHeapSize;	
+
+	UINT					m_iRTVHeapSize;
 
 	HWND					m_hWnd;
 	bool					m_bWindowed;
 
 public:
-	void init(HWND _hWnd, const tResolution & _res, bool _bWindow);
+	void init(HWND _hWnd, const tResolution& _res, bool _bWindow);
 	void render();
-	void render_tool();		
+	void render_tool();
 
 
 	void render_shadowmap();
@@ -46,7 +46,7 @@ public:
 
 private:
 	void CreateMRT();
-	
+
 	void UpdateLight2D();
 	void UpdateLight3D();
 
@@ -61,7 +61,7 @@ public:
 
 		m_tLight2DInfo.arrLight2D[m_tLight2DInfo.iCount++] = _Light2D;
 	}
-	
+
 	int RegisterLight3D(CLight3D* _pLight3D) {
 		if (m_vecLight3D.size() >= 100)
 			return -1;
@@ -79,9 +79,9 @@ public:
 	UINT GetRTVHeapSize() { return m_iRTVHeapSize; }
 
 	CMRT* GetMRT(MRT_TYPE _eType) { return m_arrMRT[(UINT)_eType]; }
-	
+
 	void CopySwapToPosteffect();
-	
+
 
 	friend class CSceneMgr;
 };

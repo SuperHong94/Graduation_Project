@@ -29,10 +29,9 @@ struct MonsterStatus
 	float ThunderTime = 0.f;
 
 	// ÆÄÆ¼Å¬
-	bool IsParticleOn = false;
-	int ParticleState = -1;
-	int PreParticleState = -1;
-	bool IsParticleChange = false;
+	bool IsFParticleOn = false;
+	bool IsTParticleOn = false;
+	bool IsIParticleOn = false;
 };
 
 
@@ -183,8 +182,6 @@ private:
 	CGameObject* TParticleObject;
 	CGameObject* IParticleObject;
 
-	int particleNum = 0;
-	int nn = 0;
 public:
 	virtual void update();
 
@@ -195,9 +192,8 @@ public:
 	MonsterStatus* GetStatus() { return status; };
 	void SetStatus(MonsterStatus* st);
 	int findNearTarget();
-	
-	void SetParticleOn(bool b) { status->IsParticleOn = b; };
-	void SetParticleState(int n) { status->ParticleState = n; };
+
+	void checkParticle();
 
 public:
 	CLONE(CMonsterScript);

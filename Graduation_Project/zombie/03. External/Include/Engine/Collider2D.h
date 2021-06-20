@@ -16,14 +16,14 @@ private:
 	Vec3			m_vOffsetScale;
 	COLLIDER2D_TYPE m_eType;
 	int				m_iCollisionCount;	// 충돌 횟수
-		
+
 	Ptr<CMesh>      m_pColMesh;			// 충돌체를 그리기 위한 Mesh
 	Ptr<CMaterial>	m_pColMtrl;			// 충돌체를 그리기 위한 Material
 
 	Matrix			m_matColWorld;		// 충돌체 월드 행렬
 
 	UINT			m_iColID;			// 충돌체 고유 ID 값
-	
+
 
 public:
 	virtual void update();
@@ -40,7 +40,7 @@ public:
 
 	const Vec3& GetOffsetPos() { return m_vOffsetPos; }
 	const Vec3& GetOffsetScale() { return m_vOffsetScale; }
-	COLLIDER2D_TYPE GetColliderType() { return m_eType;}
+	COLLIDER2D_TYPE GetColliderType() { return m_eType; }
 
 	void SetCollider2DType(COLLIDER2D_TYPE _eType);
 	UINT GetColID() { return m_iColID; }

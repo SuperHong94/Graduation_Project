@@ -80,6 +80,9 @@ public:
 	bool IsDead() { return m_bDead; }
 	void SetDead();
 	void SetAlive();
+	void SetObjectDead() { m_bDead = true; };
+	void SetObjectAlive() { m_bDead = false; };
+
 
 	void RegisterToLayer();
 	void ChangeAnimation(Ptr<CMeshData> pMeshData);

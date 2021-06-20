@@ -26,6 +26,7 @@ enum class SCRIPT_TYPE
 	ENDSCENESCRIPT,
 	TOMBSCRIPT,
 	ITEMSCRIPT,
+	BOSSSCRIPT,
 	END,
 };
 
@@ -59,6 +60,14 @@ enum MonsterState
 	M_Damage,
 	M_Die,
 	M_Respawn,
+};
+
+enum BossState
+{
+	B_IDLE,
+	B_Run,
+	B_Attack,
+	B_Die,
 };
 
 enum ItemState
@@ -104,7 +113,7 @@ public:
 	void TransferLayer(int _iLayerIdx, bool _bMoveAll);
 	static void TransferLayer(CGameObject* _pTarget, const wstring& _strLayerName, bool _bMoveAll);
 	static void TransferLayer(CGameObject* _pTarget, int _iLayerIdx, bool _bMoveAll);
-	
+
 	static void EableObject(CGameObject* _pTarget);
 	static void Disable(CGameObject* _pTarget);
 
