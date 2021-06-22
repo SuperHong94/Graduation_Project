@@ -16,7 +16,7 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	status = new PlayerStatus();
 	isPlayer = player;
 
-	// 醚舅 积己ぉ
+	// 醚舅 积己
 	for (int i = 0; i < BulletCnt; i++)
 	{
 		pBullet[i] = new CGameObject;
@@ -35,6 +35,10 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 		//pBullet[i]->Collider2D()->disable();
 		CreateObject(pBullet[i], L"Bullet");
 	}
+
+	// 荤款靛
+	sound = new CSound;
+	sound->Load(L"Sound\\Shot.mp3");
 }
 
 CPlayerScript::~CPlayerScript()
@@ -420,6 +424,7 @@ void CPlayerScript::update()
 
 			if (KEY_TAB(KEY_TYPE::KEY_LBTN) && !status->IsRoll)
 			{
+				sound->Play(0, false);
 				bulletHeight = 100;
 
 				vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;

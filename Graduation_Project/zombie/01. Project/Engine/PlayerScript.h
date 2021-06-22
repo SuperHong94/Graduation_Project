@@ -2,6 +2,7 @@
 #include "Script.h"
 #include "Scene.h"
 #include "SceneMgr.h"
+#include "Sound.h"
 
 struct PlayerStatus
 {
@@ -52,6 +53,8 @@ private:
 
 	float BulletCollOffset = 0.f;
 	float collOffset = 20000;
+
+	CSound* sound;
 
 public:
 	virtual void awake();
