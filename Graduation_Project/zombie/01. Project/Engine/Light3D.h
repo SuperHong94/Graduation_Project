@@ -17,6 +17,7 @@ private:
 	int				m_iArrIdx;
 
 	CGameObject* m_pCamObj; // 광원 시점으로 카메라 관리
+	Vec3 vPos = Vec3(0.f, 0.f, 0.f);
 
 public:
 	void SetLightType(LIGHT_TYPE _eType);
@@ -37,6 +38,8 @@ public:
 
 	virtual void SaveToScene(FILE* _pFile);
 	virtual void LoadFromScene(FILE* _pFile);
+
+	void updateCameraTransform(Vec3 v) { vPos = v; };
 
 public:
 	CLONE(CLight3D);

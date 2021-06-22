@@ -142,6 +142,7 @@ float4 PS_Particle(GS_OUT _in) : SV_Target
     float fRatio = tData[_in.iInstID].m_fCurTime / tData[_in.iInstID].m_fLifeTime;
     float4 vCurColor = (g_vec4_1 - g_vec4_0) * fRatio + g_vec4_0;
     return vCurColor * g_tex_0.Sample(g_sam_0, _in.vUV);
+    //return g_tex_0.Sample(g_sam_0, _in.vUV);
 }
 
 

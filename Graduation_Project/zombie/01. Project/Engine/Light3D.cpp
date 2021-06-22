@@ -6,6 +6,14 @@
 #include "Camera.h"
 
 #include "ResMgr.h"
+#include "iostream"
+using namespace std;
+
+float a1;
+float a2;
+float a3;
+int a4;
+
 
 CLight3D::CLight3D()
 	: CComponent(COMPONENT_TYPE::LIGHT3D)
@@ -46,12 +54,15 @@ void CLight3D::SetLightType(LIGHT_TYPE _eType)
 	{
 		m_pVolumeMesh = CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh");
 		m_pLightMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"DirLightMtrl");
+		//m_pCamObj->Transform()->SetLocalScale(Vec3(2, 2, 2));
 
 		m_pCamObj->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAPHIC);
 		m_pCamObj->Camera()->SetScale(1.f);
 		m_pCamObj->Camera()->SetFar(100000.f);
-		m_pCamObj->Camera()->SetWidth(512.f);
-		m_pCamObj->Camera()->SetHeight(512.f);
+		m_pCamObj->Camera()->SetWidth(5120.f);
+		m_pCamObj->Camera()->SetHeight(5120.f);
+		//m_pCamObj->Camera()->SetFOV(XM_PI / 2);
+
 	}
 	else if (LIGHT_TYPE::POINT == (LIGHT_TYPE)m_tLightInfo.iLightType)
 	{
@@ -63,6 +74,7 @@ void CLight3D::SetLightType(LIGHT_TYPE _eType)
 		m_pVolumeMesh = CResMgr::GetInst()->FindRes<CMesh>(L"ConeMesh");
 	}
 }
+
 
 void CLight3D::SetLightPos(const Vec3& _vPos)
 {
@@ -86,6 +98,7 @@ void CLight3D::finalupdate()
 
 	// 광원 관리 카메라도 광원과 같은 Transform 정보를 가지게 한다.
 	*m_pCamObj->Transform() = *Transform();
+	m_pCamObj->Transform()->SetLocalPos(vPos);
 	m_pCamObj->finalupdate(); // 렌더매니저에 등록하지 않게 해두었다.
 }
 

@@ -30,6 +30,9 @@ public:
 	void SetAddDamage(float damage) { AddDamage = damage; };
 	float GetAddDamage() { return AddDamage; };
 
+	void SetState(BulletState state) { bulletState = state; };
+	BulletState GetState() { return bulletState; };
+
 public:
 	CBulletScript(Vec3 Dir, BulletState bState);
 	//CBulletScript();

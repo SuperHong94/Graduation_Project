@@ -12,7 +12,7 @@ enum class PROJ_TYPE
 class CCamera :
 	public CComponent
 {
-private:	
+private:
 	CFrustum	m_frustum;
 
 	float		m_fNear;	// View Space 에서 시야 범위
@@ -30,23 +30,20 @@ private:
 
 	PROJ_TYPE	m_eProjType;
 	UINT		m_iLayerCheck; // 카메라가 찍는 Layer 비트값
-		
-	vector<CGameObject*>				m_vecPostEffect;
 
-	// 인스턴싱 버전
-	map<ULONG64, vector<tInstObj>>		m_mapInstGroup_F; // Foward
-	map<ULONG64, vector<tInstObj>>		m_mapInstGroup_D; // Deferred
-	map<ULONG64, vector<tInstObj>>		m_mapInstGroup_P; // Post
+	vector<CGameObject*>	m_vecDeferred;
+	vector<CGameObject*>	m_vecForward;
+	vector<CGameObject*>	m_vecParticle;
+	vector<CGameObject*>	m_vecTParticle;
+	vector<CGameObject*>	m_vecIParticle;
+	vector<CGameObject*>	m_vecFParticle;
+	vector<CGameObject*>	m_vecPostEffect;
 
-	map<INT_PTR, vector<tInstObj>>		m_mapSingleObj; // Single Object
-
-
-	vector<CGameObject*>				m_vecParticle;
-	vector<CGameObject*>				m_vecShadowObj;
+	vector<CGameObject*>	m_vecShadowObj;
 
 	bool		m_bModule;
 
-public:	
+public:
 	virtual void finalupdate();
 
 	void SortGameObject(); // 렌더링 시점 분류
@@ -62,9 +59,9 @@ public:
 	void SetProjType(PROJ_TYPE _eType) { m_eProjType = _eType; Changed(); }
 	PROJ_TYPE GetProjType() { return m_eProjType; }
 
-	void SetFar(float _far) { m_fFar = _far; Changed();}
+	void SetFar(float _far) { m_fFar = _far; Changed(); }
 	void SetScale(float _fScale) { m_fScale = _fScale; if (m_fScale < 0.01f) m_fScale = 0.01f; Changed(); }
-	void SetFOV(float _fAngle) { m_fFOV = _fAngle; Changed();}
+	void SetFOV(float _fAngle) { m_fFOV = _fAngle; Changed(); }
 	void SetWidth(float _fWidth) { m_fWidth = _fWidth; }
 	void SetHeight(float _fHeight) { m_fHeight = _fHeight; }
 
@@ -80,7 +77,7 @@ public:
 		else
 			m_iLayerCheck &= ~(1 << _iLayerIdx);
 	}
-	void SetLayerAllCheck(){m_iLayerCheck = 0xffffffff;}
+	void SetLayerAllCheck() { m_iLayerCheck = 0xffffffff; }
 	void SetLayerAllRelease() { m_iLayerCheck = 0; }
 
 	void SetModule(bool _bModule) { m_bModule = _bModule; }
@@ -95,7 +92,7 @@ public:
 	virtual void SaveToScene(FILE* _pFile);
 	virtual void LoadFromScene(FILE* _pFile);
 
-	
+
 public:
 	CCamera();
 	virtual ~CCamera();

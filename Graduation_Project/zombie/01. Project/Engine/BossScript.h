@@ -27,6 +27,11 @@ struct BossStatus
 	float IceTime = 0.f;
 	float FireTime = 0.f;
 	float ThunderTime = 0.f;
+
+	// ÆÄÆ¼Å¬
+	bool IsFParticleOn = false;
+	bool IsTParticleOn = false;
+	bool IsIParticleOn = false;
 };
 
 class BossCheckPlayerInRange : public Node {
@@ -174,6 +179,9 @@ class CBossScript
 	int targetNum;
 	CGameObject* targetObjects[4];
 	CGameObject* HpBarObject;
+	CGameObject* FParticleObject;
+	CGameObject* TParticleObject;
+	CGameObject* IParticleObject;
 
 public:
 	virtual void update();
@@ -186,6 +194,7 @@ public:
 	void SetStatus(BossStatus* st);
 	int findNearTarget();
 
+	void checkParticle();
 
 public:
 	CLONE(CBossScript);

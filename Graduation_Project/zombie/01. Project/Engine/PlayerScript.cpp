@@ -557,7 +557,7 @@ void CPlayerScript::update()
 	{
 		status->disappearCnt += DT;
 		{
-			if (status->disappearCnt >= 3.4f)
+			if (status->disappearCnt >= 2.0f)
 			{
 				status->isDisappear = true;
 				Vec3 vPos = pObject->Transform()->GetLocalPos();

@@ -10,17 +10,29 @@ struct MonsterStatus
 	float distanceToPlayer = 0;
 	float attackRange = 100;
 	float attackDamage = 10.f;
+	float speed = 200.f;
 	bool PlayerInRange = false;
 	bool PlayerInAttackRange = false;
 	bool isAttack = false;
 	float recognizeRange = 1000.f;	// 인지 범위
-	float attackCoolTime = 2.6f;
+	float attackCoolTime = 0.7f;
 	float attackDelay = 1.2f;	// 정확한 공격 타이밍을 계산하기 위한 변수
 	float hp = 100;
 	float disappearCnt = 0;
 	bool IsDisappear = false;
 	bool IsCollide = false;
 	CGameObject* TargetObject;
+
+	// 특수 총알 효과 지속 시간
+	float IceTime = 0.f;
+	float FireTime = 0.f;
+	float ThunderTime = 0.f;
+
+	// 파티클
+	bool IsParticleOn = false;
+	int ParticleState = -1;
+	int PreParticleState = -1;
+	bool IsParticleChange = false;
 };
 
 
@@ -166,7 +178,13 @@ private:
 	CScene* pScene;
 	int targetNum;
 	CGameObject* targetObjects[4];
+	CGameObject* HpBarObject;
+	CGameObject* FParticleObject;
+	CGameObject* TParticleObject;
+	CGameObject* IParticleObject;
 
+	int particleNum = 0;
+	int nn = 0;
 public:
 	virtual void update();
 
@@ -177,7 +195,9 @@ public:
 	MonsterStatus* GetStatus() { return status; };
 	void SetStatus(MonsterStatus* st);
 	int findNearTarget();
-
+	
+	void SetParticleOn(bool b) { status->IsParticleOn = b; };
+	void SetParticleState(int n) { status->ParticleState = n; };
 
 public:
 	CLONE(CMonsterScript);
@@ -185,8 +205,6 @@ public:
 public:
 	CMonsterScript(CGameObject* TargetObject[], int ntargetNum, CGameObject* Object, CScene* pscene);
 	virtual ~CMonsterScript();
-
-	int aa = 0;
 };
 
 

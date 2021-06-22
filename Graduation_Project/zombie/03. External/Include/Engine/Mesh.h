@@ -13,7 +13,7 @@ struct tIndexInfo
 	D3D12_INDEX_BUFFER_VIEW		tIdxView;
 	DXGI_FORMAT					eIdxFormat;
 	UINT						iIdxCount;
-	void*						pIdxSysMem;
+	void* pIdxSysMem;
 };
 
 class CMesh :
@@ -22,26 +22,26 @@ class CMesh :
 private:
 	ComPtr<ID3D12Resource>		m_pVB;
 	D3D12_VERTEX_BUFFER_VIEW	m_tVtxView; // 버텍스 버퍼 정보 구조체(stride, total size, 가상 GPU 주소)
-	
+
 	UINT						m_iVtxSize;
 	UINT						m_iVtxCount;
-	void*						m_pVtxSysMem;
+	void* m_pVtxSysMem;
 
 	vector<tIndexInfo>			m_vecIdxInfo;
 
 	// Animation3D 정보
 	vector<tMTAnimClip>			m_vecAnimClip;
-	vector<tMTBone>				m_vecBones;	
+	vector<tMTBone>				m_vecBones;
 
-	CStructuredBuffer*			m_pBoneFrameData; // 전체 본 프레임 정보
-	CStructuredBuffer*			m_pBoneOffset;	   // 각 뼈의 offset 행렬
+	CStructuredBuffer* m_pBoneFrameData; // 전체 본 프레임 정보
+	CStructuredBuffer* m_pBoneOffset;	   // 각 뼈의 offset 행렬
 
 
 public:
 	void Create(UINT _iVtxSize, UINT _iVtxCount, BYTE* _pVtxSysMem
 		, DXGI_FORMAT _iIdxFormat, UINT _iIdxCount, BYTE* _pIdxSysMem);
 
-	static CMesh * CreateFromContainer(CFBXLoader & _loader);
+	static CMesh* CreateFromContainer(CFBXLoader& _loader);
 
 	void render(UINT _iSubset = 0);
 	void render_particle(UINT _iInstancCount, UINT _iSubset = 0);
@@ -49,14 +49,14 @@ public:
 
 public:
 	UINT GetSubsetCount() { return (UINT)m_vecIdxInfo.size(); }
-	const vector<tMTBone>* GetBones() { return &m_vecBones; }	
-	const vector<tMTAnimClip>* GetAnimClip() { return &m_vecAnimClip; }	
-	CStructuredBuffer*	GetBoneFrameDataBuffer() { return m_pBoneFrameData; } // 전체 본 프레임 정보
-	CStructuredBuffer*	GetBoneOffsetBuffer() { return  m_pBoneOffset; }	   // 각 뼈의 offset 행렬	
+	const vector<tMTBone>* GetBones() { return &m_vecBones; }
+	const vector<tMTAnimClip>* GetAnimClip() { return &m_vecAnimClip; }
+	CStructuredBuffer* GetBoneFrameDataBuffer() { return m_pBoneFrameData; } // 전체 본 프레임 정보
+	CStructuredBuffer* GetBoneOffsetBuffer() { return  m_pBoneOffset; }	   // 각 뼈의 offset 행렬	
 	UINT GetBoneCount() { return (UINT)m_vecBones.size(); }
 	bool IsAnimMesh() { return !m_vecAnimClip.empty(); }
 
-public:	
+public:
 	virtual void Load(const wstring& _strFullPath);
 	virtual void Save(const wstring& _strPath/*상대 경로*/);
 

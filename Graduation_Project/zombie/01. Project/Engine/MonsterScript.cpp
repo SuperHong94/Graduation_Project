@@ -1,8 +1,13 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "MonsterScript.h"
 #include "BulletScript.h"
 #include "ItemScript.h"
 #include "BossScript.h"
+#include "ParticleSystem.h"
+#include "TParticleSystem.h"
+#include "IParticleSystem.h"
+#include "FParticleSystem.h"
+
 
 CMonsterScript::CMonsterScript(CGameObject* targetObject[], int ntargetNum, CGameObject* Object, CScene* pscene)
 	: CScript((UINT)SCRIPT_TYPE::MONSTERSCRIPT)
@@ -33,7 +38,7 @@ CMonsterScript::CMonsterScript(CGameObject* targetObject[], int ntargetNum, CGam
 	sequence1->addChild(CCheckAttackRange);
 	sequence1->addChild(CAttackPlayer);
 
-	//hp ¹Ù
+	//hp ë°”
 	HpBarObject = new CGameObject;
 
 	HpBarObject->SetName(L"HpBar Object");
@@ -51,7 +56,7 @@ CMonsterScript::CMonsterScript(CGameObject* targetObject[], int ntargetNum, CGam
 	HpBarObject->MeshRender()->SetMaterial(pMtrl->Clone());
 
 	HpBarObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, tex.GetPointer());
-	// Script ¼³Á¤
+	// Script ì„¤ì •
 	pScene->FindLayer(L"Default")->AddGameObject(HpBarObject);
 }
 
@@ -62,38 +67,28 @@ CMonsterScript::~CMonsterScript()
 
 void CMonsterScript::update()
 {
-	// Ãæµ¹Ã¼ À§Ä¡ ¼³Á¤
+	// ì¶©ëŒì²´ ìœ„ì¹˜ ì„¤ì •
 
 	int a = findNearTarget();
 	status->TargetObject = targetObjects[findNearTarget()];
 
-	//// Transform ¿ùµå ÁÂÇ¥Á¤º¸ ¾ò±â
+	//// Transform ì›”ë“œ ì¢Œí‘œì •ë³´ ì–»ê¸°
 	Vec3 vPos = Transform()->GetLocalPos();
 	Vec3 vTargetPos = status->TargetObject->Transform()->GetLocalPos();
 	Vec3 vDir;
+	
 
-	//// ÃÑ¾Ë Ãæµ¹ È®ÀÎ
-	//vector<CGameObject*> vBobjects = pScene->FindLayer(L"Bullet")->GetObjects();
-	//int bb = vBobjects.size();
-	//for (int i = 0; i < vBobjects.size(); i++)
-	//{
-	//	if (vBobjects[i])
-	//	{
-	//		//Vec3 vBPos = vBobjects[i]->Transform()->GetLocalPos();
-	//		//if (vPos.x - 30 <= vBPos.x && vPos.x + 30 >= vBPos.x &&
-	//		//	vPos.z - 30 <= vBPos.z && vPos.z + 30 >= vBPos.z)
-	//		//{
-	//		//	//*vBobjects[i]disable();
-	//		//	status->hp -= 40;
-	//		//	if (status->hp <= 0)
-	//		//		DeleteObject(GetObj());
-	//		//}
-	//	}
-	//}
+	/////////////////////////////////////////////////////
+	// íŠ¹ìˆ˜ ì´ì•Œ íš¨ê³¼ ì‹œê°„ ì°¨ê° & íŒŒí‹°í´ íš¨ê³¼ ì„¤ì •
+	checkParticle();
+	/////////////////////////////////////////////////////
 
-	if (status->state != MonsterState::M_Die)
+	
+	HpBarObject->Transform()->SetLocalScale(Vec3(50 * status->hp / 100., 10, 1));
+
+	if (status->hp > 0)
 	{
-		// Á»ºñ ¹æÇâ ¼³Á¤
+		// ì¢€ë¹„ ë°©í–¥ ì„¤ì •
 		Vec2 v1, v2;
 		v1.x = vPos.x;
 		v1.y = vPos.z;
@@ -111,7 +106,7 @@ void CMonsterScript::update()
 
 		root->run();
 
-		// Hp Bar À§Ä¡ Å©±â ¾÷µ¥ÀÌÆ®
+		// Hp Bar ìœ„ì¹˜ í¬ê¸° ì—…ë°ì´íŠ¸
 		Vec3 preVpos = HpBarObject->Transform()->GetLocalPos();
 		Vec3 dot1 = XMVector3Dot(Vec3(-1, 0, 0), Vec3(vDir.x, vDir.y, vDir.z));
 		float fdot = dot1.x;
@@ -125,36 +120,12 @@ void CMonsterScript::update()
 		else
 			HpBarObject->Transform()->SetLocalPos(Vec3(preVpos.x * (1 - 0.4) + (vPos.x) * 0.4, vPos.y + 180, preVpos.z * (1 - 0.4) + (vPos.z) * 0.4));
 		HpBarObject->Transform()->SetLocalScale(Vec3(50 * status->hp / 100., 10, 1));
-
-		// Æ¯¼ö ÃÑ¾Ë È¿°ú ½Ã°£ Â÷°¨
-		// ¾óÀ½
-		if (status->IceTime > 0)
-			status->IceTime -= DT;
-		else
-			status->IceTime = 0;
-
-		// ºÒ
-		if (status->FireTime > 0)
-		{
-			status->FireTime -= DT;
-			status->hp -= DT * 10;
-		}
-		else
-			status->FireTime = 0;
-
-		// ¹ø°³
-		if (status->ThunderTime > 0)
-		{
-			status->ThunderTime -= DT;
-			status->hp -= DT * 7;
-		}
-		else
-			status->ThunderTime = 0;
+		 
 
 		//if (status->state == MonsterState::M_Run)
 		if (status->state == MonsterState::M_Run && !status->IsCollide)
 		{
-			// ¾óÀ½ ÃÑ¾Ë ¸Â¾ÒÀ» °æ¿ì
+			// ì–¼ìŒ ì´ì•Œ ë§ì•˜ì„ ê²½ìš°
 			if (status->IceTime > 0)
 				vPos += DT * status->speed / 3 * vDir;
 
@@ -162,9 +133,10 @@ void CMonsterScript::update()
 				vPos += DT * status->speed * vDir;
 		}
 
-		// ÀÌ°Å ³ªÁß¿¡ »óÅÂº°·Î Æ÷ÇÔµÇ°Ô ¼öÁ¤(run, attack??<- ÀÌºÎºĞÀº ´Ù½Ã »ı°¢)
 
-		// ÇÃ·¹ÀÌ¾î°¡ Á»ºñ ÀÎÁö ¹üÀ§¿¡ ÀÖÀ» °æ¿ì¿¡¸¸ ¿òÁ÷ÀÓ ¼³Á¤
+		// ì´ê±° ë‚˜ì¤‘ì— ìƒíƒœë³„ë¡œ í¬í•¨ë˜ê²Œ ìˆ˜ì •(run, attack??<- ì´ë¶€ë¶„ì€ ë‹¤ì‹œ ìƒê°)
+
+		// í”Œë ˆì´ì–´ê°€ ì¢€ë¹„ ì¸ì§€ ë²”ìœ„ì— ìˆì„ ê²½ìš°ì—ë§Œ ì›€ì§ì„ ì„¤ì •
 		if (XZdistanceToTarget <= status->recognizeRange)
 		{
 			float temp = atan2(vTargetPos.z - vPos.z, vTargetPos.x - vPos.x);
@@ -173,22 +145,22 @@ void CMonsterScript::update()
 		}
 	}
 
-	// ¸ó½ºÅÍ Á×À»½Ã ¾Ö´Ï¸ŞÀÌ¼Ç º¯°æ
+	// ëª¬ìŠ¤í„° ì£½ì„ì‹œ ì• ë‹ˆë©”ì´ì…˜ ë³€ê²½
 	if (status->hp <= 0 && status->state != MonsterState::M_Die)
 	{
 		status->state = MonsterState::M_Die;
 
-		//¾Ö´Ï¸ŞÀÌ¼Ç º¯°æ
+		//ì• ë‹ˆë©”ì´ì…˜ ë³€ê²½
 		Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\Zombie1Death.mdat", L"MeshData\\Zombie1Death.mdat");
 		pObject->ChangeAnimation(pMeshData);
 		Transform()->SetLocalPos(Vec3(vPos.x, vPos.y + 75, vPos.z));
 	}
 
-	// ¸ó½ºÅÍ ½ÃÃ¼ »ç¶óÁö´Â ½Ã°£ Ã¼Å©
+	// ëª¬ìŠ¤í„° ì‹œì²´ ì‚¬ë¼ì§€ëŠ” ì‹œê°„ ì²´í¬
 	if (status->hp <= 0 && status->state == MonsterState::M_Die)
 	{
 		status->disappearCnt += DT;
-		if (status->disappearCnt > 2.3)
+		if (status->disappearCnt > 2.0)
 		{
 			//DeleteObject(GetObj());
 			//pObject->SetDead();
@@ -197,11 +169,11 @@ void CMonsterScript::update()
 				status->disappearCnt = 0;
 				status->IsDisappear = true;
 
-				//¾ÆÀÌÅÛ ½ºÆù
+				//ì•„ì´í…œ ìŠ¤í°
 				bool ItemSpawn = false;
 				int rnd = rand() % 100;
 
-				if (rnd < 80)
+				if (rnd < 200)
 				{
 					for (int i = 0; i < MAX_LAYER; ++i)
 					{
@@ -212,8 +184,8 @@ void CMonsterScript::update()
 							{
 								if (L"Item Object" == vecObject[j]->GetName() && !ItemSpawn)
 								{
-									//// ¹öÇÁ Æ÷¼Ç ½ºÆù
-									//// ÆÄ¿ö Æ÷¼Ç ½ºÆù
+									////// ë²„í”„ í¬ì…˜ ìŠ¤í°
+									////// íŒŒì›Œ í¬ì…˜ ìŠ¤í°
 									//if (rnd < 10)
 									//{
 									//	if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_PwPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
@@ -226,7 +198,7 @@ void CMonsterScript::update()
 									//	}
 									//}
 
-									//// ¹æ¾î Æ÷¼Ç ½ºÆù
+									//// ë°©ì–´ í¬ì…˜ ìŠ¤í°
 									//else if (rnd < 20)
 									//{
 									//	if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_DfPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
@@ -239,7 +211,7 @@ void CMonsterScript::update()
 									//	}
 									//}
 
-									//// ¼Óµµ Æ÷¼Ç ½ºÆù
+									//// ì†ë„ í¬ì…˜ ìŠ¤í°
 									//else if (rnd < 30)
 									//{
 									//	if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_SpPotion && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
@@ -252,7 +224,7 @@ void CMonsterScript::update()
 									//	}
 									//}
 
-									//// Èú ÆÑ ½ºÆù
+									//// í íŒ© ìŠ¤í°
 									//else if (rnd < 40)
 									//{
 									//	if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_HpItem && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
@@ -266,8 +238,8 @@ void CMonsterScript::update()
 									//	}
 									//}
 
-									// ºÒ·¿ ¹Ú½º ½ºÆù
-									if (rnd < 100)
+									// ë¶ˆë › ë°•ìŠ¤ ìŠ¤í°
+									if (rnd < 200)
 									{
 										if (vecObject[j]->GetScript<CItemScript>()->getState() == ItemState::I_BulletItem && !vecObject[j]->GetScript<CItemScript>()->getIsSpawn())
 										{
@@ -289,7 +261,7 @@ void CMonsterScript::update()
 		}
 	}
 
-	// °ø°İ Äğ Å¸ÀÓ Ã¼Å©
+	// ê³µê²© ì¿¨ íƒ€ì„ ì²´í¬
 	if (status->isAttack)
 	{
 		status->attackCoolTime -= DT;
@@ -323,7 +295,7 @@ int CMonsterScript::findNearTarget()
 
 void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 {
-	// Ãæµ¹ÀÌ ¹ß»ıÇÏ°í, »ó´ë ¹°Ã¼°¡ ÃÑ¾ËÀÌ¸é Ã¼·Â °¨¼Ò
+	// ì¶©ëŒì´ ë°œìƒí•˜ê³ , ìƒëŒ€ ë¬¼ì²´ê°€ ì´ì•Œì´ë©´ ì²´ë ¥ ê°ì†Œ
 	if (L"Bullet Object" == _pOther->GetObj()->GetName())
 	{
 		CBulletScript* bulletScript = _pOther->GetObj()->GetScript<CBulletScript>();
@@ -334,24 +306,30 @@ void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 
 			if (bulletScript->GetBulletState() == BulletState::B_Fire)
 			{
-				status->FireTime += 3;
+				status->FireTime = 3;
+				status->IceTime = 0;
+				status->ThunderTime = 0;
 			}
 
 			else if (bulletScript->GetBulletState() == BulletState::B_Ice)
 			{
+				status->FireTime = 0;
 				status->IceTime = 2;
+				status->ThunderTime = 0;
 			}
 
 			else if (bulletScript->GetBulletState() == BulletState::B_Thunder)
 			{
-				status->ThunderTime += 3;
+				status->FireTime = 0;
+				status->IceTime = 0;
+				status->ThunderTime = 2;
 
 				for (int i = 0; i < MAX_LAYER; ++i)
 				{
 					const vector<CGameObject*>& vecObject = pScene->GetLayer(i)->GetObjects();
 					for (size_t j = 0; j < vecObject.size(); ++j)
 					{
-						// ¹Ì´Ï¸Ê¿¡ ÇÃ·¹ÀÌ¾î À§Ä¡ ¾÷µ¥ÀÌÆ®5
+						// ë¯¸ë‹ˆë§µì— í”Œë ˆì´ì–´ ìœ„ì¹˜ ì—…ë°ì´íŠ¸5
 						if (L"Monster Object" == vecObject[j]->GetName() || L"Boss Object" == vecObject[j]->GetName())
 						{
 							Vec3 monsterPos = vecObject[j]->Transform()->GetLocalPos();
@@ -362,9 +340,17 @@ void CMonsterScript::OnCollisionEnter(CCollider2D* _pOther)
 							if (length < 200.f)
 							{
 								if (vecObject[j]->GetName() == L"Monster Object")
-									vecObject[j]->GetScript<CMonsterScript>()->GetStatus()->ThunderTime = 3.f;
+								{
+									vecObject[j]->GetScript<CMonsterScript>()->GetStatus()->FireTime = 0.f;
+									vecObject[j]->GetScript<CMonsterScript>()->GetStatus()->IceTime = 0.f;
+									vecObject[j]->GetScript<CMonsterScript>()->GetStatus()->ThunderTime = 1.5f;
+								}
 								else
-									vecObject[j]->GetScript<CBossScript>()->GetStatus()->ThunderTime = 3.f;
+								{
+									vecObject[j]->GetScript<CBossScript>()->GetStatus()->FireTime = 0.f;
+									vecObject[j]->GetScript<CBossScript>()->GetStatus()->IceTime = 0.f;
+									vecObject[j]->GetScript<CBossScript>()->GetStatus()->ThunderTime = 1.5f;
+								}
 							}
 						}
 					}
@@ -436,4 +422,135 @@ void CMonsterScript::SetStatus(MonsterStatus* st)
 	status->hp = st->hp;
 	status->disappearCnt = st->disappearCnt;
 	status->IsDisappear = st->IsDisappear;
+	status->IceTime = st->IceTime;
+	status->FireTime = st->FireTime;
+	status->ThunderTime = st->ThunderTime;
+}
+
+void CMonsterScript::checkParticle()
+{
+	Vec3 mPos = Transform()->GetLocalPos();
+	Vec3 particlePos = Vec3(mPos.x, 100, mPos.z);
+
+	// ì–¼ìŒ
+	if (status->IceTime > 0)
+	{
+		if (!status->IsIParticleOn)
+		{
+			IParticleObject = new CGameObject;
+			IParticleObject->SetName(L"IParticle");
+			IParticleObject->AddComponent(new CTransform);
+			IParticleObject->AddComponent(new CIParticleSystem);
+
+			IParticleObject->FrustumCheck(true);
+			IParticleObject->Transform()->SetLocalPos(Vec3(particlePos));
+			pScene->FindLayer(L"Default")->AddGameObject(IParticleObject);
+
+			status->IsIParticleOn = true;
+		}
+		status->IceTime -= DT;
+	}
+	else if (status->IceTime <= 0)
+	{
+		status->IceTime = 0;
+		if (status->IsIParticleOn)
+		{
+			IParticleObject->SetDead();
+			status->IsIParticleOn = false;
+		}
+	}
+
+	// ë¶ˆ
+	if (status->FireTime > 0)
+	{
+		if (!status->IsFParticleOn)
+		{
+			FParticleObject = new CGameObject;
+			FParticleObject->SetName(L"TParticle");
+			FParticleObject->AddComponent(new CTransform);
+			FParticleObject->AddComponent(new CFParticleSystem);
+
+			FParticleObject->FrustumCheck(true);
+			FParticleObject->Transform()->SetLocalPos(particlePos);
+			pScene->FindLayer(L"Default")->AddGameObject(FParticleObject);
+
+			status->IsFParticleOn = true;
+		}
+		status->FireTime -= DT;
+		status->hp -= DT * 10;
+	}
+	else if (status->FireTime <= 0)
+	{
+		status->FireTime = 0;
+		if (status->IsFParticleOn)
+		{
+			FParticleObject->SetDead();
+			status->IsFParticleOn = false;
+		}
+	}
+
+	// ë²ˆê°œ
+	if (status->ThunderTime > 0.f)
+	{
+		if (!status->IsTParticleOn)
+		{
+			TParticleObject = new CGameObject;
+			TParticleObject->SetName(L"TParticle");
+			TParticleObject->AddComponent(new CTransform);
+			TParticleObject->AddComponent(new CTParticleSystem);
+
+			TParticleObject->FrustumCheck(true);
+			TParticleObject->Transform()->SetLocalPos(particlePos);
+			pScene->FindLayer(L"Default")->AddGameObject(TParticleObject);
+
+			status->IsTParticleOn = true;
+		}
+		status->ThunderTime -= DT;
+		status->hp -= DT * 7;
+	}
+
+	else if (status->ThunderTime <= 0.f)
+	{
+		status->ThunderTime = 0;
+		if (status->IsTParticleOn)
+		{
+			TParticleObject->SetDead();
+			status->IsTParticleOn = false;
+		}
+	}
+
+
+	if (status->IsFParticleOn)
+		FParticleObject->Transform()->SetLocalPos(particlePos);
+
+	if (status->IsIParticleOn)
+		IParticleObject->Transform()->SetLocalPos(particlePos);
+
+	if (status->IsTParticleOn)
+		TParticleObject->Transform()->SetLocalPos(particlePos);
+
+	// ì£½ì—ˆì„ ë•Œ íŒŒí‹°í´ ì œê±°
+	if (status->hp <= 0)
+	{
+		if (status->IsFParticleOn)
+		{
+			FParticleObject->SetDead();
+			status->FireTime = 0;
+			status->IsFParticleOn = false;
+		}
+
+		if (status->IsIParticleOn)
+		{
+			IParticleObject->SetDead();
+			status->IceTime = 0;
+			status->IsIParticleOn = false;
+		}
+
+		if (status->IsTParticleOn)
+		{
+			TParticleObject->SetDead();
+			status->ThunderTime = 0;
+			status->IsTParticleOn = false;
+		}
+	}
 }

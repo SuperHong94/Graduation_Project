@@ -225,6 +225,69 @@ void CResMgr::CreateDefaultShader()
 
 	AddRes(L"ParticleShader", pShader);
 
+	// ===============
+	// TParticle Shader
+	// ===============
+	pShader = new CShader;
+	pShader->CreateVertexShader(L"Shader\\particle.fx", "VS_Particle", "vs_5_0");
+	pShader->CreateGeometryShader(L"Shader\\particle.fx", "GS_Particle", "gs_5_0");
+	pShader->CreatePixelShader(L"Shader\\particle.fx", "PS_Particle", "ps_5_0");
+
+	pShader->SetBlendState(BLEND_TYPE::ALPHABLEND); // 알파 블랜드 사용
+	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS_NO_WRITE); // 깊이테스트 o, 깊이 기록 x
+
+	pShader->Create(SHADER_POV::PARTICLE, D3D_PRIMITIVE_TOPOLOGY_POINTLIST); // TOPOLOGY 가 점 형태(정점 1개)
+
+	pShader->AddShaderParam(tShaderParam{ L"Start Scale", SHADER_PARAM::FLOAT_0 });
+	pShader->AddShaderParam(tShaderParam{ L"End Scale", SHADER_PARAM::FLOAT_1 });
+	pShader->AddShaderParam(tShaderParam{ L"Start Color", SHADER_PARAM::VEC4_0 });
+	pShader->AddShaderParam(tShaderParam{ L"End Color", SHADER_PARAM::VEC4_1 });
+	pShader->AddShaderParam(tShaderParam{ L"Particle Texture", SHADER_PARAM::TEX_0 });
+
+	AddRes(L"TParticleShader", pShader);
+
+	// ===============
+	// IParticle Shader
+	// ===============
+	pShader = new CShader;
+	pShader->CreateVertexShader(L"Shader\\particle.fx", "VS_Particle", "vs_5_0");
+	pShader->CreateGeometryShader(L"Shader\\particle.fx", "GS_Particle", "gs_5_0");
+	pShader->CreatePixelShader(L"Shader\\particle.fx", "PS_Particle", "ps_5_0");
+
+	pShader->SetBlendState(BLEND_TYPE::ALPHABLEND); // 알파 블랜드 사용
+	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS_NO_WRITE); // 깊이테스트 o, 깊이 기록 x
+
+	pShader->Create(SHADER_POV::PARTICLE, D3D_PRIMITIVE_TOPOLOGY_POINTLIST); // TOPOLOGY 가 점 형태(정점 1개)
+
+	pShader->AddShaderParam(tShaderParam{ L"Start Scale", SHADER_PARAM::FLOAT_0 });
+	pShader->AddShaderParam(tShaderParam{ L"End Scale", SHADER_PARAM::FLOAT_1 });
+	pShader->AddShaderParam(tShaderParam{ L"Start Color", SHADER_PARAM::VEC4_0 });
+	pShader->AddShaderParam(tShaderParam{ L"End Color", SHADER_PARAM::VEC4_1 });
+	pShader->AddShaderParam(tShaderParam{ L"Particle Texture", SHADER_PARAM::TEX_0 });
+
+	AddRes(L"IParticleShader", pShader);
+
+	// ===============
+	// TParticle Shader
+	// ===============
+	pShader = new CShader;
+	pShader->CreateVertexShader(L"Shader\\particle.fx", "VS_Particle", "vs_5_0");
+	pShader->CreateGeometryShader(L"Shader\\particle.fx", "GS_Particle", "gs_5_0");
+	pShader->CreatePixelShader(L"Shader\\particle.fx", "PS_Particle", "ps_5_0");
+
+	pShader->SetBlendState(BLEND_TYPE::ALPHABLEND); // 알파 블랜드 사용
+	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS_NO_WRITE); // 깊이테스트 o, 깊이 기록 x
+
+	pShader->Create(SHADER_POV::PARTICLE, D3D_PRIMITIVE_TOPOLOGY_POINTLIST); // TOPOLOGY 가 점 형태(정점 1개)
+
+	pShader->AddShaderParam(tShaderParam{ L"Start Scale", SHADER_PARAM::FLOAT_0 });
+	pShader->AddShaderParam(tShaderParam{ L"End Scale", SHADER_PARAM::FLOAT_1 });
+	pShader->AddShaderParam(tShaderParam{ L"Start Color", SHADER_PARAM::VEC4_0 });
+	pShader->AddShaderParam(tShaderParam{ L"End Color", SHADER_PARAM::VEC4_1 });
+	pShader->AddShaderParam(tShaderParam{ L"Particle Texture", SHADER_PARAM::TEX_0 });
+
+	AddRes(L"FParticleShader", pShader);
+
 	// ======================
 	// Particle Update Shader
 	// ======================
@@ -394,6 +457,24 @@ void CResMgr::CreateDefaultMaterial()
 	pMtrl->DisableFileSave();
 	pMtrl->SetShader(FindRes<CShader>(L"ParticleShader"));
 	AddRes(L"ParticleMtrl", pMtrl);
+
+	// Particle Mtrl
+	pMtrl = new CMaterial;
+	pMtrl->DisableFileSave();
+	pMtrl->SetShader(FindRes<CShader>(L"IParticleShader"));
+	AddRes(L"IParticleMtrl", pMtrl);
+
+	// Particle Mtrl
+	pMtrl = new CMaterial;
+	pMtrl->DisableFileSave();
+	pMtrl->SetShader(FindRes<CShader>(L"TParticleShader"));
+	AddRes(L"TParticleMtrl", pMtrl);
+
+	// Particle Mtrl
+	pMtrl = new CMaterial;
+	pMtrl->DisableFileSave();
+	pMtrl->SetShader(FindRes<CShader>(L"FParticleShader"));
+	AddRes(L"FParticleMtrl", pMtrl);
 
 	// Particle Update
 	pMtrl = new CMaterial;

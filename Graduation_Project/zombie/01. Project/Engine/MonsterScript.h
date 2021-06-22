@@ -15,7 +15,7 @@ struct MonsterStatus
 	bool PlayerInAttackRange = false;
 	bool isAttack = false;
 	float recognizeRange = 1000.f;	// 인지 범위
-	float attackCoolTime = 2.6f;
+	float attackCoolTime = 0.7f;
 	float attackDelay = 1.2f;	// 정확한 공격 타이밍을 계산하기 위한 변수
 	float hp = 100;
 	float disappearCnt = 0;
@@ -27,6 +27,11 @@ struct MonsterStatus
 	float IceTime = 0.f;
 	float FireTime = 0.f;
 	float ThunderTime = 0.f;
+
+	// 파티클
+	bool IsFParticleOn = false;
+	bool IsTParticleOn = false;
+	bool IsIParticleOn = false;
 };
 
 
@@ -173,6 +178,9 @@ private:
 	int targetNum;
 	CGameObject* targetObjects[4];
 	CGameObject* HpBarObject;
+	CGameObject* FParticleObject;
+	CGameObject* TParticleObject;
+	CGameObject* IParticleObject;
 
 public:
 	virtual void update();
@@ -185,6 +193,7 @@ public:
 	void SetStatus(MonsterStatus* st);
 	int findNearTarget();
 
+	void checkParticle();
 
 public:
 	CLONE(CMonsterScript);

@@ -34,7 +34,7 @@ private:
 	Ptr<CMaterial>		m_pCloneMtrl;
 
 	float bulletHeight = 0;
-	float shiftCoolTime = 1.2f;
+	float shiftCoolTime = 0.9f;
 	float AddAtk = 10;	// 추가 공격력 수치 (수정시 이걸로)
 	float Adddefence = 5;	// 방어력 수치 (수정시 이걸로)
 	float AddSpead = 150;  // 추가 이속 수치 (수정시 이걸로)

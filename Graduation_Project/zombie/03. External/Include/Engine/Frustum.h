@@ -7,10 +7,10 @@ class CFrustum :
 	public CEntity
 {
 private:
-	CCamera*	m_pCam;
+	CCamera* m_pCam;
 	Vec3		m_arrProj[8];
 	Vec4		m_arrFace[(UINT)FACE_TYPE::FT_END];
-	
+
 public:
 	void init();
 	void finalupdate();

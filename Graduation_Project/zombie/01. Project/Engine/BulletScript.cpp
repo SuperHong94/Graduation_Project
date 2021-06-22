@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "BulletScript.h"
-
+#include "MonsterScript.h"
 
 CBulletScript::CBulletScript(Vec3 Dir, BulletState bState)
 	: CScript((UINT)SCRIPT_TYPE::BULLETSCRIPT)

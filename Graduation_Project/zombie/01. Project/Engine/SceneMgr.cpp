@@ -17,6 +17,9 @@
 #include "Light2D.h"
 #include "Light3D.h"
 #include "ParticleSystem.h"
+#include "TParticleSystem.h"
+#include "IParticleSystem.h"
+#include "FParticleSystem.h"
 
 #include "TimeMgr.h"
 #include "KeyMgr.h"
@@ -394,20 +397,20 @@ void CSceneMgr::initGameScene()
 		// ====================
 		// 3D Light Object 추가
 		// ====================
-		pObject = new CGameObject;
-		pObject->AddComponent(new CTransform);
-		pObject->AddComponent(new CLight3D);
+		m_Light = new CGameObject;
+		m_Light->AddComponent(new CTransform);
+		m_Light->AddComponent(new CLight3D);
 
-		pObject->Light3D()->SetLightPos(Vec3(0.f, 500.f, 0.f));
-		pObject->Light3D()->SetLightType(LIGHT_TYPE::DIR);
-		pObject->Light3D()->SetDiffuseColor(Vec3(1.f, 1.f, 1.f));
-		pObject->Light3D()->SetSpecular(Vec3(0.3f, 0.3f, 0.3f));
-		pObject->Light3D()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
-		pObject->Light3D()->SetLightDir(Vec3(1.f, -1.f, 1.f));
-		pObject->Light3D()->SetLightRange(10000.f);
+		m_Light->Light3D()->SetLightPos(Vec3(0.f, 500.f, 0.f));
+		m_Light->Light3D()->SetLightType(LIGHT_TYPE::DIR);
+		m_Light->Light3D()->SetDiffuseColor(Vec3(1.f, 1.f, 1.f));
+		m_Light->Light3D()->SetSpecular(Vec3(0.3f, 0.3f, 0.3f));
+		m_Light->Light3D()->SetAmbient(Vec3(0.1f, 0.1f, 0.1f));
+		m_Light->Light3D()->SetLightDir(Vec3(1.f, -1.f, 1.f));
+		m_Light->Light3D()->SetLightRange(10000.f);
 
-		pObject->Transform()->SetLocalPos(Vec3(-1000.f, 1000.f, -1000.f));
-		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
+		m_Light->Transform()->SetLocalPos(Vec3(-1000.f, 1000.f, -1000.f));
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(m_Light);
 
 
 		// ===================
@@ -758,17 +761,16 @@ void CSceneMgr::initGameScene()
 		// ====================
 		// Particle Object 생성
 		// ====================
-		pObject = new CGameObject;
-		pObject->SetName(L"Particle");
-		pObject->AddComponent(new CTransform);
-		pObject->AddComponent(new CParticleSystem);
+	/*	p = new CGameObject;
+		p->SetName(L"Particle");
+		p->AddComponent(new CTransform);
+		p->AddComponent(new CTParticleSystem);
 
-		pObject->FrustumCheck(false);
-		pObject->Transform()->SetLocalPos(Vec3(0.f, 50.f, 0.f));
+		p->FrustumCheck(true);
+		p->Transform()->SetLocalPos(Vec3(0.f, 50.f, 0.f));
 
-		m_pCurScene->FindLayer(L"Default")->AddGameObject(pObject);
-
-
+		m_pCurScene->FindLayer(L"Default")->AddGameObject(p);*/
+		
 		//// ====================
 		//// Skybox 오브젝트 생성
 		//// ====================
@@ -816,7 +818,7 @@ void CSceneMgr::initGameScene()
 				pObject->AddComponent(new CMeshRender);
 
 				// Transform 설정
-				pObject->Transform()->SetLocalPos(Vec3(-6000 + i * 1000, 0.f, -6000 + j * 1000));
+				pObject->Transform()->SetLocalPos(Vec3(-6000 + i * 1000, -8.f, -6000 + j * 1000));
 				pObject->Transform()->SetLocalScale(Vec3(1000.f, 1000.f, 1.f));
 				pObject->Transform()->SetLocalRot(Vec3(XM_PI / 2.f, 0.f, 0.f));
 
@@ -1275,6 +1277,10 @@ void CSceneMgr::update()
 		// 게임 매니저 업데이트
 		m_pGameManager->GameMgrUpdate();
 
+		// 조명 위치 업데이트
+		Vec3 pPos = m_pPlayerArr[playerID]->Transform()->GetLocalPos();
+		m_Light->Light3D()->updateCameraTransform(Vec3(pPos.x, 2600, pPos.z));
+
 		// 무덤 파괴
 		if (KEY_TAB(KEY_TYPE::KEY_8))
 		{
@@ -1702,7 +1708,7 @@ void CSceneMgr::setMap()
 	//		pObject->SetName(L"Ground");
 	//		pObject->FrustumCheck(false);
 	//		pObject->AddComponent(new CTransform);
-	//		pObject->Transform()->SetLocalPos(Vec3(-5000 + i * 2000, 0.f, -5000 + j * 2000));
+	//		pObject->Transform()->(Vec3(-5000 + i * 2000, 0.f, -5000 + j * 2000));
 	//		pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
 	//		pObject->Transform()->SetLocalScale(Vec3(2.f, 2.f, 1.f));
 	//		//pObject->MeshRender()->SetDynamicShadow(true);
@@ -1725,7 +1731,7 @@ void CSceneMgr::setMap()
 					pObject->SetName(L"Path");
 					pObject->FrustumCheck(true);
 					pObject->AddComponent(new CTransform);
-					pObject->Transform()->SetLocalPos(Vec3(-4800.f + j * 200, -7.f, -200 + i * 200));
+					pObject->Transform()->SetLocalPos(Vec3(-4800.f + j * 200, -15.f, -200 + i * 200));
 					pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
 					pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 					//pObject->MeshRender()->SetDynamicShadow(true);
@@ -1738,7 +1744,7 @@ void CSceneMgr::setMap()
 					pObject->SetName(L"Path2");
 					pObject->FrustumCheck(true);
 					pObject->AddComponent(new CTransform);
-					pObject->Transform()->SetLocalPos(Vec3(-4800.f + j * 200, -7.f, -200 + i * 200));
+					pObject->Transform()->SetLocalPos(Vec3(-4800.f + j * 200, -15.f, -200 + i * 200));
 					pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
 					pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 					//pObject->MeshRender()->SetDynamicShadow(true);
@@ -1757,7 +1763,7 @@ void CSceneMgr::setMap()
 						pObject->SetName(L"Path");
 						pObject->FrustumCheck(true);
 						pObject->AddComponent(new CTransform);
-						pObject->Transform()->SetLocalPos(Vec3(-200 + (i - 3) * 200, -7.f, -4800.f + j * 200));
+						pObject->Transform()->SetLocalPos(Vec3(-200 + (i - 3) * 200, -15.f, -4800.f + j * 200));
 						pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
 						pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 						//pObject->MeshRender()->SetDynamicShadow(true);
@@ -1770,7 +1776,7 @@ void CSceneMgr::setMap()
 						pObject->SetName(L"Path2");
 						pObject->FrustumCheck(true);
 						pObject->AddComponent(new CTransform);
-						pObject->Transform()->SetLocalPos(Vec3(-200 + (i - 3) * 200, -7.f, -4800.f + j * 200));
+						pObject->Transform()->SetLocalPos(Vec3(-200 + (i - 3) * 200, -15.f, -4800.f + j * 200));
 						pObject->Transform()->SetLocalRot(Vec3(-XM_PI / 2, -XM_PI / 2, 0.f));
 						pObject->Transform()->SetLocalScale(Vec3(1.f, 1.f, 1.f));
 						//pObject->MeshRender()->SetDynamicShadow(true);
