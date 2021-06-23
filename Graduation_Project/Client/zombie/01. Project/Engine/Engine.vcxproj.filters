@@ -65,9 +65,6 @@
     <Filter Include="Manager\Mgr">
       <UniqueIdentifier>{55d486ed-0b12-44e1-983b-f31b8e66b98c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Network">
-      <UniqueIdentifier>{0f6eaa24-6065-4b49-8f9f-6991060cd151}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -247,12 +244,11 @@
     <ClInclude Include="TimeMgr.h">
       <Filter>Manager\Mgr</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkMgr.h">
-      <Filter>Network</Filter>
+    <ClInclude Include="ItemScript.h">
+      <Filter>04. GameObject\Script</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\Protocol.h">
-      <Filter>Network</Filter>
-    </ClInclude>
+    <ClInclude Include="NetworkMgr.h" />
+    <ClInclude Include="..\..\..\..\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\Protocol.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -421,9 +417,11 @@
     <ClCompile Include="TimeMgr.cpp">
       <Filter>Manager\Mgr</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkMgr.cpp">
-      <Filter>Network</Filter>
+    <ClCompile Include="global.cpp" />
+    <ClCompile Include="ItemScript.cpp">
+      <Filter>04. GameObject\Script</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="std.fx">
@@ -464,7 +462,6 @@
     <None Include="SimpleMath.inl">
       <Filter>0. Defalt</Filter>
     </None>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc">

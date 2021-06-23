@@ -53,6 +53,7 @@ using std::make_pair;
 #include "func.h"   // 전역 함수
 
 
+
 // 서버관련 lib, 헤더추가
 #include <WS2tcpip.h>
 #include <MSWSock.h>//acceptEx를위해서
@@ -67,6 +68,5 @@ using std::make_pair;
 
 
 #endif
-
-//#define FRAME_BUFFER_WIDTH		1280
-//#define FRAME_BUFFER_HEIGHT		768
+#define FRAME_BUFFER_WIDTH		1280
+#define FRAME_BUFFER_HEIGHT		768

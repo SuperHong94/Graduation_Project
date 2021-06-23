@@ -17,9 +17,9 @@ class CTexture :
 private:
 	ScratchImage			 	 m_Image;
 	D3D12_RESOURCE_DESC			 m_tDesc;
-	ComPtr<ID3D12Resource>		 m_pTex2D;	
+	ComPtr<ID3D12Resource>		 m_pTex2D;
 	ComPtr<ID3D12DescriptorHeap> m_pDSV;
-	ComPtr<ID3D12DescriptorHeap> m_pRTV;	
+	ComPtr<ID3D12DescriptorHeap> m_pRTV;
 	ComPtr<ID3D12DescriptorHeap> m_pSRV;
 	ComPtr<ID3D12DescriptorHeap> m_pUAV;
 
@@ -43,7 +43,7 @@ public:
 	void SetResState(D3D12_RESOURCE_STATES _eState) { m_eState = _eState; }
 
 	float Width() { return (float)m_tDesc.Width; }
-	float Height() { return (float)m_tDesc.Height;}
+	float Height() { return (float)m_tDesc.Height; }
 
 
 

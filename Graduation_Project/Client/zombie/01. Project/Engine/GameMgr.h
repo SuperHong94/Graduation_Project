@@ -14,13 +14,13 @@ struct GameMgrStatus
 	CGameObject* playerArr[4];
 	CGameObject* tombArr[4];
 
-	int playerCnt;
+	int playerCnt = 4;
 	int playerID;
 
 	bool isGameOver = false;
 	bool isGameClear = false;
 
-	int zombieGoalCnt = 1;
+	int zombieGoalCnt = 10;
 
 	int destroyTombCnt = 0;
 	bool tombAllDestroy = false;

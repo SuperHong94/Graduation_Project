@@ -191,16 +191,41 @@ void CNetworkMgr::process_key(s2c_move* p)
 		const auto& PlayerScript = m_pPlayerArray[playerID]->GetScript<CPlayerScript>();
 
 		auto& state = PlayerScript->GetStatus()->state;
+		Vec3 prevPos = PlayerScript->Transform()->GetLocalPos(); //이전 좌표
 		state = p->ePlayerState;
-		if (state == PlayerState::P_BRun || state == PlayerState::P_FRun || state == PlayerState::P_LRun || state == PlayerState::P_RRun)
-			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 53.f, p->z));
-		else
-			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
 
+		switch (state)
+		{
+		case P_Idle:
+			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
+			PlayerScript->GetStatus()->isMove = false;
+			break;
+		case P_FRun:
+		case P_BRun:
+		case P_LRun:
+		case P_RRun:
+			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 53.f, p->z));
+			PlayerScript->GetStatus()->isMove = true;
+			break;
+		case P_Attack:
+			break;
+		case P_Die:
+			break;
+		case P_Spawn:
+			break;
+		case P_Roll:
+			//PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
+			PlayerScript->GetStatus()->IsRoll = true;
+			break;
+		case p_None:
+			break;
+		default:
+			break;
+		}
+	
+		
 		if (playerID != m_playerId) { //내가 조정하는거 아닐때만
 			PlayerScript->Transform()->SetLocalRot(Vec3(p->rx, p->ry, p->rz));
-			PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
-		
 		}
 	}
 
@@ -304,7 +329,7 @@ void CNetworkMgr::init()
 	char ip[30];
 	::memset(ip, 0, sizeof(ip));
 	ifstream in("IP.txt");
-	if (!in){
+	if (!in) {
 		exit(-1);
 		cout << "안됨\n";
 	}

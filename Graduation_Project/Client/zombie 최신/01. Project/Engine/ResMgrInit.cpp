@@ -28,31 +28,9 @@ void CResMgr::CreateDefaultShader()
 	// ==============
 	pShader = new CShader;
 	pShader->CreateVertexShader(L"Shader\\std.fx", "VS_Tex", "vs_5_0");
-	pShader->CreateVertexInstShader(L"Shader\\std.fx", "VS_Tex_Inst", "vs_5_0");
 	pShader->CreatePixelShader(L"Shader\\std.fx", "PS_Tex", "ps_5_0");
 
-	 //BlendState 설정
-	 pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
-
-	// DSState
-	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS);
-
-	// Shader Parameter 알림
-	pShader->AddShaderParam(tShaderParam{ L"Output Texture", SHADER_PARAM::TEX_0 });
-
-	pShader->Create(SHADER_POV::FORWARD);
-
-	AddRes(L"TexShader", pShader);
-
-	// ==============
-	// Texture Shader2
-	// ==============
-	pShader = new CShader;
-	pShader->CreateVertexShader(L"Shader\\std.fx", "VS_Tex", "vs_5_0");
-	pShader->CreateVertexInstShader(L"Shader\\std.fx", "VS_Tex_Inst", "vs_5_0");
-	pShader->CreatePixelShader(L"Shader\\std.fx", "PS_Tex", "ps_5_0");
-
-	//BlendState 설정
+	// BlendState 설정
 	pShader->SetBlendState(BLEND_TYPE::ALPHABLEND);
 
 	// DSState
@@ -63,7 +41,7 @@ void CResMgr::CreateDefaultShader()
 
 	pShader->Create(SHADER_POV::FORWARD);
 
-	AddRes(L"TexShader2", pShader);
+	AddRes(L"TexShader", pShader);
 
 	// =================
 	// Collider2D Shader
@@ -115,9 +93,8 @@ void CResMgr::CreateDefaultShader()
 	// ============
 	pShader = new CShader;
 	pShader->CreateVertexShader(L"Shader\\std3d.fx", "VS_Std3D", "vs_5_0");
-	pShader->CreateVertexInstShader(L"Shader\\std3d.fx", "VS_Std3D_Inst", "vs_5_0");
 	pShader->CreatePixelShader(L"Shader\\std3d.fx", "PS_Std3D", "ps_5_0");
-	
+
 	pShader->Create(SHADER_POV::DEFERRED);
 	AddRes(L"Std3DShader", pShader);
 
@@ -143,7 +120,7 @@ void CResMgr::CreateDefaultShader()
 	pShader->SetRasterizerType(RS_TYPE::CULL_NONE);
 	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS_NO_WRITE);
 	pShader->Create(SHADER_POV::FORWARD);
-	AddRes(L"GridShader", pShader);	
+	AddRes(L"GridShader", pShader);
 
 	// ===============
 	// DirLight Shader
@@ -223,8 +200,8 @@ void CResMgr::CreateDefaultShader()
 	// int 1 개 필요
 	//=======================
 	pShader = new CShader;
-	pShader->CreateComputeShader(L"Shader\\compute.fx", "CS_TEST", "cs_5_0");		
-	pShader->AddShaderParam(tShaderParam{ L"Test Value", SHADER_PARAM::INT_0 });	
+	pShader->CreateComputeShader(L"Shader\\compute.fx", "CS_TEST", "cs_5_0");
+	pShader->AddShaderParam(tShaderParam{ L"Test Value", SHADER_PARAM::INT_0 });
 	AddRes(L"CSTestShader", pShader);
 
 	// ===============
@@ -233,7 +210,7 @@ void CResMgr::CreateDefaultShader()
 	pShader = new CShader;
 	pShader->CreateVertexShader(L"Shader\\particle.fx", "VS_Particle", "vs_5_0");
 	pShader->CreateGeometryShader(L"Shader\\particle.fx", "GS_Particle", "gs_5_0");
-	pShader->CreatePixelShader(L"Shader\\particle.fx", "PS_Particle", "ps_5_0");	
+	pShader->CreatePixelShader(L"Shader\\particle.fx", "PS_Particle", "ps_5_0");
 
 	pShader->SetBlendState(BLEND_TYPE::ALPHABLEND); // 알파 블랜드 사용
 	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS_NO_WRITE); // 깊이테스트 o, 깊이 기록 x
@@ -248,29 +225,74 @@ void CResMgr::CreateDefaultShader()
 
 	AddRes(L"ParticleShader", pShader);
 
-
-	// ==========================
-	// Tesselation Test Shader
-	// ==========================
+	// ===============
+	// TParticle Shader
+	// ===============
 	pShader = new CShader;
-	pShader->CreateVertexShader(L"Shader\\tessellation.fx", "VS_Tess", "vs_5_0");
-	pShader->CreateHullShader(L"Shader\\tessellation.fx", "HS_Tess", "hs_5_0");
-	pShader->CreateDomainShader(L"Shader\\tessellation.fx", "DS_Tess", "ds_5_0");
-	pShader->CreatePixelShader(L"Shader\\tessellation.fx", "PS_Tess", "ps_5_0");
+	pShader->CreateVertexShader(L"Shader\\particle.fx", "VS_Particle", "vs_5_0");
+	pShader->CreateGeometryShader(L"Shader\\particle.fx", "GS_Particle", "gs_5_0");
+	pShader->CreatePixelShader(L"Shader\\particle.fx", "PS_Particle", "ps_5_0");
 
-	pShader->SetRasterizerType(RS_TYPE::WIRE_FRAME);	
-	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS);
+	pShader->SetBlendState(BLEND_TYPE::ALPHABLEND); // 알파 블랜드 사용
+	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS_NO_WRITE); // 깊이테스트 o, 깊이 기록 x
 
-	pShader->Create(SHADER_POV::FORWARD, D3D_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
+	pShader->Create(SHADER_POV::PARTICLE, D3D_PRIMITIVE_TOPOLOGY_POINTLIST); // TOPOLOGY 가 점 형태(정점 1개)
 
-	AddRes(L"TessShader", pShader);
+	pShader->AddShaderParam(tShaderParam{ L"Start Scale", SHADER_PARAM::FLOAT_0 });
+	pShader->AddShaderParam(tShaderParam{ L"End Scale", SHADER_PARAM::FLOAT_1 });
+	pShader->AddShaderParam(tShaderParam{ L"Start Color", SHADER_PARAM::VEC4_0 });
+	pShader->AddShaderParam(tShaderParam{ L"End Color", SHADER_PARAM::VEC4_1 });
+	pShader->AddShaderParam(tShaderParam{ L"Particle Texture", SHADER_PARAM::TEX_0 });
 
+	AddRes(L"TParticleShader", pShader);
+
+	// ===============
+	// IParticle Shader
+	// ===============
+	pShader = new CShader;
+	pShader->CreateVertexShader(L"Shader\\particle.fx", "VS_Particle", "vs_5_0");
+	pShader->CreateGeometryShader(L"Shader\\particle.fx", "GS_Particle", "gs_5_0");
+	pShader->CreatePixelShader(L"Shader\\particle.fx", "PS_Particle", "ps_5_0");
+
+	pShader->SetBlendState(BLEND_TYPE::ALPHABLEND); // 알파 블랜드 사용
+	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS_NO_WRITE); // 깊이테스트 o, 깊이 기록 x
+
+	pShader->Create(SHADER_POV::PARTICLE, D3D_PRIMITIVE_TOPOLOGY_POINTLIST); // TOPOLOGY 가 점 형태(정점 1개)
+
+	pShader->AddShaderParam(tShaderParam{ L"Start Scale", SHADER_PARAM::FLOAT_0 });
+	pShader->AddShaderParam(tShaderParam{ L"End Scale", SHADER_PARAM::FLOAT_1 });
+	pShader->AddShaderParam(tShaderParam{ L"Start Color", SHADER_PARAM::VEC4_0 });
+	pShader->AddShaderParam(tShaderParam{ L"End Color", SHADER_PARAM::VEC4_1 });
+	pShader->AddShaderParam(tShaderParam{ L"Particle Texture", SHADER_PARAM::TEX_0 });
+
+	AddRes(L"IParticleShader", pShader);
+
+	// ===============
+	// TParticle Shader
+	// ===============
+	pShader = new CShader;
+	pShader->CreateVertexShader(L"Shader\\particle.fx", "VS_Particle", "vs_5_0");
+	pShader->CreateGeometryShader(L"Shader\\particle.fx", "GS_Particle", "gs_5_0");
+	pShader->CreatePixelShader(L"Shader\\particle.fx", "PS_Particle", "ps_5_0");
+
+	pShader->SetBlendState(BLEND_TYPE::ALPHABLEND); // 알파 블랜드 사용
+	pShader->SetDepthStencilType(DEPTH_STENCIL_TYPE::LESS_NO_WRITE); // 깊이테스트 o, 깊이 기록 x
+
+	pShader->Create(SHADER_POV::PARTICLE, D3D_PRIMITIVE_TOPOLOGY_POINTLIST); // TOPOLOGY 가 점 형태(정점 1개)
+
+	pShader->AddShaderParam(tShaderParam{ L"Start Scale", SHADER_PARAM::FLOAT_0 });
+	pShader->AddShaderParam(tShaderParam{ L"End Scale", SHADER_PARAM::FLOAT_1 });
+	pShader->AddShaderParam(tShaderParam{ L"Start Color", SHADER_PARAM::VEC4_0 });
+	pShader->AddShaderParam(tShaderParam{ L"End Color", SHADER_PARAM::VEC4_1 });
+	pShader->AddShaderParam(tShaderParam{ L"Particle Texture", SHADER_PARAM::TEX_0 });
+
+	AddRes(L"FParticleShader", pShader);
 
 	// ======================
 	// Particle Update Shader
 	// ======================
 	pShader = new CShader;
-	pShader->CreateComputeShader(L"Shader\\particle.fx", "CS_ParticleUpdate", "cs_5_0");	
+	pShader->CreateComputeShader(L"Shader\\particle.fx", "CS_ParticleUpdate", "cs_5_0");
 	AddRes(L"ParticleUpdateShader", pShader);
 
 	// =======================
@@ -280,15 +302,6 @@ void CResMgr::CreateDefaultShader()
 	pShader->CreateComputeShader(L"Shader\\animation.fx", "CS_Animation3D", "cs_5_0");
 	AddRes(L"Animaion3DUpdateShader", pShader);
 
-	// =======================
-	// Copy Bone Matrix Shader
-	// =======================
-	pShader = new CShader;
-	pShader->CreateComputeShader(L"Shader\\compute.fx", "CS_CopyBoneMatrix", "cs_5_0");
-	pShader->AddShaderParam(tShaderParam{ L"Bone Count", SHADER_PARAM::INT_0 });
-	pShader->AddShaderParam(tShaderParam{ L"Row Index", SHADER_PARAM::INT_1 });
-	AddRes(L"CopyBoneMatrixShader", pShader);
-	
 	// =================
 	// Distortion Shader
 	// =================
@@ -329,11 +342,6 @@ void CResMgr::CreateDefaultMaterial()
 	pMtrl->SetShader(FindRes<CShader>(L"TexShader"));
 	AddRes(L"TexMtrl", pMtrl);
 
-	pMtrl = new CMaterial;
-	pMtrl->DisableFileSave();
-	pMtrl->SetShader(FindRes<CShader>(L"TexShader2"));
-	AddRes(L"TexMtrl2", pMtrl);
-
 	int a = 0;
 	pMtrl = new CMaterial;
 	pMtrl->DisableFileSave();
@@ -368,18 +376,12 @@ void CResMgr::CreateDefaultMaterial()
 	pMtrl->SetShader(FindRes<CShader>(L"SkyboxShader"));
 	AddRes(L"SkyboxMtrl", pMtrl);
 
-	pMtrl = new CMaterial;	
+	pMtrl = new CMaterial;
 	pMtrl->DisableFileSave();
-	pMtrl->SetShader(FindRes<CShader>(L"GridShader"));	
+	pMtrl->SetShader(FindRes<CShader>(L"GridShader"));
 	//Ptr<CTexture> pPositionTargetTex = CResMgr::GetInst()->FindRes<CTexture>(L"PositionTargetTex");
 	//pMtrl->SetData(SHADER_PARAM::TEX_0, pPositionTargetTex.GetPointer());
 	AddRes(L"GridMtrl", pMtrl);
-
-	// Tess Mtrl
-	pMtrl = new CMaterial;
-	pMtrl->DisableFileSave();
-	pMtrl->SetShader(FindRes<CShader>(L"TessShader"));
-	AddRes(L"TessMtrl", pMtrl);
 
 	{
 		pMtrl = new CMaterial;
@@ -447,14 +449,32 @@ void CResMgr::CreateDefaultMaterial()
 
 	pMtrl = new CMaterial;
 	pMtrl->DisableFileSave();
-	pMtrl->SetShader(FindRes<CShader>(L"CSTestShader"));	
+	pMtrl->SetShader(FindRes<CShader>(L"CSTestShader"));
 	AddRes(L"CSTestMtrl", pMtrl);
-	   
+
 	// Particle Mtrl
 	pMtrl = new CMaterial;
 	pMtrl->DisableFileSave();
 	pMtrl->SetShader(FindRes<CShader>(L"ParticleShader"));
 	AddRes(L"ParticleMtrl", pMtrl);
+
+	// Particle Mtrl
+	pMtrl = new CMaterial;
+	pMtrl->DisableFileSave();
+	pMtrl->SetShader(FindRes<CShader>(L"IParticleShader"));
+	AddRes(L"IParticleMtrl", pMtrl);
+
+	// Particle Mtrl
+	pMtrl = new CMaterial;
+	pMtrl->DisableFileSave();
+	pMtrl->SetShader(FindRes<CShader>(L"TParticleShader"));
+	AddRes(L"TParticleMtrl", pMtrl);
+
+	// Particle Mtrl
+	pMtrl = new CMaterial;
+	pMtrl->DisableFileSave();
+	pMtrl->SetShader(FindRes<CShader>(L"FParticleShader"));
+	AddRes(L"FParticleMtrl", pMtrl);
 
 	// Particle Update
 	pMtrl = new CMaterial;
@@ -473,12 +493,6 @@ void CResMgr::CreateDefaultMaterial()
 	pMtrl->DisableFileSave();
 	pMtrl->SetShader(FindRes<CShader>(L"Animaion3DUpdateShader"));
 	AddRes(L"Animation3DUpdateMtrl", pMtrl);
-
-	// Copy Bone Matrix
-	pMtrl = new CMaterial;
-	pMtrl->DisableFileSave();
-	pMtrl->SetShader(FindRes<CShader>(L"CopyBoneMatrixShader"));
-	AddRes(L"CopyBoneMatrixMtrl", pMtrl);
 
 	//pMtrl = new CMaterial;
 	////pMtrl->DisableFileSave();
@@ -510,7 +524,7 @@ void CResMgr::CreateDefaultMesh()
 
 	UINT iIdx = 0;
 
-	pMesh->Create(sizeof(VTX), 1, (BYTE*)&v 
+	pMesh->Create(sizeof(VTX), 1, (BYTE*)&v
 		, DXGI_FORMAT_R32_UINT, 1, (BYTE*)&iIdx);
 
 	AddRes(L"PointMesh", pMesh);
@@ -521,7 +535,7 @@ void CResMgr::CreateDefaultMesh()
 	// =============	
 	pMesh = new CMesh;
 
-	
+
 	// 1. 입력 조립기 단계에 전달할, 정점 3개로 구성된 삼각형 1개
 	v.vPos = Vec3(-0.5f, 0.5f, 0.f);
 	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);

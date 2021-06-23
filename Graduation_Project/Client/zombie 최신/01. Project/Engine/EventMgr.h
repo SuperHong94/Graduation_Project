@@ -20,7 +20,7 @@ private:
 public:
 	void update();
 	void clear() { m_vecEvent.clear(); }
-	void AddEvent(tEvent& _event){	m_vecEvent.push_back(_event);}
+	void AddEvent(tEvent& _event) { m_vecEvent.push_back(_event); }
 
 	const vector<tEvent>& GetEventList() { return m_vecEvent; }
 

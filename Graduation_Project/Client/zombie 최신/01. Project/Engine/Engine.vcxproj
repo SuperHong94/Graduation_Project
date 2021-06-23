@@ -171,6 +171,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="Animator2D.h" />
     <ClInclude Include="Animator3D.h" />
     <ClInclude Include="BehaviourTree.h" />
+    <ClInclude Include="BossScript.h" />
     <ClInclude Include="BulletScript.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider2D.h" />
@@ -185,6 +186,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="EventMgr.h" />
     <ClInclude Include="extern.h" />
     <ClInclude Include="FBXLoader.h" />
+    <ClInclude Include="FParticleSystem.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="func.h" />
     <ClInclude Include="GameMgr.h" />
@@ -193,6 +195,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="GridScript.h" />
     <ClInclude Include="InstancingBuffer.h" />
     <ClInclude Include="InstancingMgr.h" />
+    <ClInclude Include="IParticleSystem.h" />
     <ClInclude Include="ItemScript.h" />
     <ClInclude Include="KeyMgr.h" />
     <ClInclude Include="Layer.h" />
@@ -229,6 +232,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="TimeMgr.h" />
     <ClInclude Include="TombScript.h" />
     <ClInclude Include="ToolCamScript.h" />
+    <ClInclude Include="TParticleSystem.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
@@ -236,6 +240,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="Animator2D.cpp" />
     <ClCompile Include="Animator3D.cpp" />
     <ClCompile Include="BehaviourTree.cpp" />
+    <ClCompile Include="BossScript.cpp" />
     <ClCompile Include="BulletScript.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider2D.cpp" />
@@ -248,6 +253,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EventMgr.cpp" />
     <ClCompile Include="FBXLoader.cpp" />
+    <ClCompile Include="FParticleSystem.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="func.cpp" />
     <ClCompile Include="GameMgr.cpp" />
@@ -256,6 +262,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="GridScript.cpp" />
     <ClCompile Include="InstancingBuffer.cpp" />
     <ClCompile Include="InstancingMgr.cpp" />
+    <ClCompile Include="IParticleSystem.cpp" />
     <ClCompile Include="ItemScript.cpp" />
     <ClCompile Include="KeyMgr.cpp" />
     <ClCompile Include="Layer.cpp" />
@@ -295,6 +302,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="TimeMgr.cpp" />
     <ClCompile Include="TombScript.cpp" />
     <ClCompile Include="ToolCamScript.cpp" />
+    <ClCompile Include="TParticleSystem.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>

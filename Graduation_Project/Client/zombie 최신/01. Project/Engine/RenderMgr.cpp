@@ -15,13 +15,13 @@
 #include "MRT.h"
 
 CRenderMgr::CRenderMgr()
-	: m_arrMRT{}		
-	, m_iRTVHeapSize(0)	
-{	
+	: m_arrMRT{}
+	, m_iRTVHeapSize(0)
+{
 }
 
 CRenderMgr::~CRenderMgr()
-{	
+{
 	Safe_Delete_Array(m_arrMRT);
 }
 
@@ -32,7 +32,7 @@ void CRenderMgr::render()
 	CDevice::GetInst()->render_start(arrColor);
 
 	// 전역버퍼 데이터 업데이트
-	static CConstantBuffer* pGlobalBuffer = CDevice::GetInst()->GetCB(CONST_REGISTER::b5);		
+	static CConstantBuffer* pGlobalBuffer = CDevice::GetInst()->GetCB(CONST_REGISTER::b5);
 	CDevice::GetInst()->SetConstBufferToRegister(pGlobalBuffer, pGlobalBuffer->AddData(&g_global));
 
 	// 광원 정보 업데이트
@@ -49,12 +49,12 @@ void CRenderMgr::render()
 	// LightMRT 초기화
 	m_arrMRT[(UINT)MRT_TYPE::LIGHT]->Clear();
 
-	
+
 	// ==================================
 	// Main Camera 로 Deferred 렌더링 진행
 	// ==================================
 	m_vecCam[0]->SortGameObject();
-		
+
 	// Deferred MRT 셋팅
 	m_arrMRT[(UINT)MRT_TYPE::DEFERRED]->OMSet();
 	m_vecCam[0]->render_deferred();
@@ -65,7 +65,7 @@ void CRenderMgr::render()
 
 	// Render Light
 	render_lights();
-		
+
 	// Merge (Diffuse Target, Diffuse Light Target, Specular Target )		
 	merge_light();
 
@@ -82,7 +82,7 @@ void CRenderMgr::render()
 	{
 		m_vecCam[i]->SortGameObject();
 		m_vecCam[i]->render_forward();
-	}	
+	}
 
 	// 출력
 	CDevice::GetInst()->render_present();
@@ -112,7 +112,7 @@ void CRenderMgr::UpdateLight2D()
 void CRenderMgr::UpdateLight3D()
 {
 	static CConstantBuffer* pLight3DBuffer = CDevice::GetInst()->GetCB(CONST_REGISTER::b4);
-	
+
 	tLight3DInfo tLight3DArray;
 
 	for (size_t i = 0; i < m_vecLight3D.size(); ++i)
@@ -121,12 +121,12 @@ void CRenderMgr::UpdateLight3D()
 		tLight3DArray.arrLight3D[i] = info;
 	}
 	tLight3DArray.iCurCount = (UINT)m_vecLight3D.size();
-	
+
 	UINT iOffsetPos = pLight3DBuffer->AddData(&tLight3DArray);
 	CDevice::GetInst()->SetConstBufferToRegister(pLight3DBuffer, iOffsetPos);
 }
 
-CCamera * CRenderMgr::GetMainCam()
+CCamera* CRenderMgr::GetMainCam()
 {
 	/*if (CCore::GetInst()->GetSceneMod() == SCENE_MOD::SCENE_PLAY)
 	{
@@ -163,7 +163,7 @@ void CRenderMgr::CopySwapToPosteffect()
 
 
 void CRenderMgr::render_shadowmap()
-{	
+{
 	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SHADOWMAP)->Clear();
 	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SHADOWMAP)->OMSet();
 
@@ -174,7 +174,7 @@ void CRenderMgr::render_shadowmap()
 			continue;
 
 		m_vecLight3D[i]->render_shadowmap();
-	}	
+	}
 
 	CRenderMgr::GetInst()->GetMRT(MRT_TYPE::SHADOWMAP)->TargetToResBarrier();
 }
@@ -182,7 +182,7 @@ void CRenderMgr::render_shadowmap()
 void CRenderMgr::render_lights()
 {
 	m_arrMRT[(UINT)MRT_TYPE::LIGHT]->OMSet();
-		
+
 	// 광원을 그린다.
 	CCamera* pMainCam = CRenderMgr::GetInst()->GetMainCam();
 	if (nullptr == pMainCam)

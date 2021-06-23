@@ -32,15 +32,15 @@ void CLight2D::UpdateData()
 }
 
 
-void CLight2D::SaveToScene(FILE * _pFile)
+void CLight2D::SaveToScene(FILE* _pFile)
 {
 	UINT iType = (UINT)GetComponentType();
 	fwrite(&iType, sizeof(UINT), 1, _pFile);
 
-	fwrite(&m_LightInfo, sizeof(tLight2D), 1, _pFile);	
+	fwrite(&m_LightInfo, sizeof(tLight2D), 1, _pFile);
 }
 
-void CLight2D::LoadFromScene(FILE * _pFile)
+void CLight2D::LoadFromScene(FILE* _pFile)
 {
 	fread(&m_LightInfo, sizeof(tLight2D), 1, _pFile);
 }

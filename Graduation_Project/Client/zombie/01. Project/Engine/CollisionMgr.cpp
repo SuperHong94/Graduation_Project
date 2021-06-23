@@ -6,7 +6,7 @@
 #include "Layer.h"
 #include "GameObject.h"
 #include "Collider2D.h"
-
+#include "BulletScript.h"
 
 CCollisionMgr::CCollisionMgr()
 	: m_LayerCheck{}
@@ -72,10 +72,18 @@ void CCollisionMgr::CollisionLayer(const CLayer * _pLayer1, const CLayer * _pLay
 	const vector<CGameObject*>& vecObj1 = _pLayer1->GetObjects();
 	const vector<CGameObject*>& vecObj2 = _pLayer2->GetObjects();
 
+
 	map<DWORD_PTR, bool>::iterator iter;
 
 	for (size_t i = 0; i < vecObj1.size(); ++i)
 	{
+		// 총알이 비활성 일시
+		if (vecObj1[i]->GetName() == L"Bullet Object")
+		{
+			if (!vecObj1[i]->GetScript<CBulletScript>()->GetActive())
+				continue;
+		}
+
 		CCollider2D* pCollider1 = vecObj1[i]->Collider2D();
 
 		if (nullptr == pCollider1)
@@ -86,7 +94,17 @@ void CCollisionMgr::CollisionLayer(const CLayer * _pLayer1, const CLayer * _pLay
 			j = i + 1;
 
 		for (; j < vecObj2.size(); ++j)
-		{			
+		{		
+			// 총알이 비활성 일시
+			if (vecObj2[j]->GetName() == L"Bullet Object")
+			{
+				if (!vecObj2[j]->GetScript<CBulletScript>()->GetActive())
+				{
+					int a = 3;
+					continue;
+				}
+			}
+
 			CCollider2D* pCollider2 = vecObj2[j]->Collider2D();
 
 			if (nullptr == pCollider2)

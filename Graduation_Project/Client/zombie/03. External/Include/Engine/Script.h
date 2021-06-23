@@ -25,22 +25,11 @@ enum class SCRIPT_TYPE
 	STARTSCENESCRIPT,
 	ENDSCENESCRIPT,
 	TOMBSCRIPT,
+	ITEMSCRIPT,
 	END,
 };
 
-//enum PlayerState
-//{
-//	P_Idle,
-//	P_FRun,
-//	P_BRun,
-//	P_LRun,
-//	P_RRun,
-//	P_Attack,
-//	P_Die,
-//	P_Spawn,
-//	P_Roll,
-//	p_None,
-//};
+
 
 enum BulletState
 {
@@ -58,6 +47,15 @@ enum MonsterState
 	M_Damage,
 	M_Die,
 	M_Respawn,
+};
+
+enum ItemState
+{
+	I_PwPotion,
+	I_DfPotion,
+	I_SpPotion,
+	I_HpItem,
+	I_BulletItem,
 };
 
 

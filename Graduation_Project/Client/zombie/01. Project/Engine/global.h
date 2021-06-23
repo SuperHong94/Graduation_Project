@@ -68,5 +68,5 @@ using std::make_pair;
 
 #endif
 
-#define FRAME_BUFFER_WIDTH		1280
-#define FRAME_BUFFER_HEIGHT		768
+//#define FRAME_BUFFER_WIDTH		1280
+//#define FRAME_BUFFER_HEIGHT		768

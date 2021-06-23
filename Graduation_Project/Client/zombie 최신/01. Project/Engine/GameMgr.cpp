@@ -7,6 +7,7 @@
 
 #include "MonsterScript.h"
 #include "TombScript.h"
+#include "BossScript.h"
 
 GameMgr::GameMgr(CScene* pScene, CGameObject* monsters[], int monsterCount, CGameObject* PlayerArr[], int PlayerCnt, int PlayerID)
 {
@@ -64,6 +65,13 @@ void GameMgr::CheckZombieRespawn()
 			status->hp = 100;
 			status->disappearCnt = 0;
 			status->IsDisappear = false;
+			status->IceTime = 0.f;
+			status->FireTime = 0.f;
+			status->ThunderTime = 0.f;
+			/*status->IsParticleOn = false;
+			status->ParticleState = -1;
+			status->PreParticleState = -1;
+			status->IsParticleChange = false;*/
 
 			Gstatus->monsterArr[i]->GetScript<CMonsterScript>()->SetStatus(status);
 
@@ -85,6 +93,9 @@ void GameMgr::CheckZombieRespawn()
 
 void GameMgr::GameMgrUpdate()
 {
+	// 보스 스폰
+	ChekBossSpawn();
+
 	CheckGameOver();
 	if (Gstatus->isGameOver)
 	{
@@ -108,7 +119,9 @@ void GameMgr::GameMgrUpdate()
 
 void GameMgr::CheckGameClear()
 {
-	if (Gstatus->DeathZombieCnt >= Gstatus->zombieGoalCnt)
+	checkBossDead();
+
+	if (Gstatus->DeathZombieCnt >= Gstatus->zombieGoalCnt && Gstatus->bossDead)
 	{
 		Gstatus->isGameClear = true;
 		Gstatus->isGameOver = false;
@@ -158,6 +171,22 @@ void GameMgr::IncreaseZombieRange()
 		Gstatus->tombAllDestroy = true;
 }
 
+void GameMgr::checkBossDead()
+{
+	for (int i = 0; i < MAX_LAYER; ++i)
+	{
+		const vector<CGameObject*>& vecObject = Gstatus->Scene->GetLayer(i)->GetObjects();
+		for (size_t j = 0; j < vecObject.size(); ++j)
+		{
+			if (L"Boss Object" == vecObject[j]->GetName())
+			{
+				if (vecObject[j]->GetScript<CBossScript>()->GetStatus()->IsDisappear)
+					Gstatus->bossDead = true;
+			}
+		}
+	}
+}
+
 
 void GameMgr::tombArrInit(int i, CGameObject* tomb)
 {
@@ -202,3 +231,45 @@ int GameMgr::FindNearRespawnPostion(Vec3 pos)
 	return n;
 }
 
+void GameMgr::ChekBossSpawn()
+{
+	if (Gstatus->tombAllDestroy || Gstatus->cheatBossSpawn)
+	{
+		if (!Gstatus->bossSpawn)
+		{
+			// 보스 스폰
+			Gstatus->bossSpawn = true;
+
+
+			for (int i = 0; i < MAX_LAYER; ++i)
+			{
+				const vector<CGameObject*>& vecObject = Gstatus->Scene->GetLayer(i)->GetObjects();
+				for (size_t j = 0; j < vecObject.size(); ++j)
+				{
+					if (L"Boss Object" == vecObject[j]->GetName())
+					{
+						vecObject[j]->Transform()->SetLocalPos(Vec3(0.f, 0.f, 0.f));
+					}
+				}
+			}
+		}
+	}
+}
+
+void GameMgr::cheatDestroyTomb()
+{
+	if (!Gstatus->cheatDestroyTombOn)
+	{
+		for (int i = 0; i < MAX_LAYER; ++i)
+		{
+			const vector<CGameObject*>& vecObject = Gstatus->Scene->GetLayer(i)->GetObjects();
+			for (size_t j = 0; j < vecObject.size(); ++j)
+			{
+				if (L"Tomb Object" == vecObject[j]->GetName())
+				{
+					vecObject[j]->GetScript<CTombScript>()->setHp(0);
+				}
+			}
+		}
+	}
+}

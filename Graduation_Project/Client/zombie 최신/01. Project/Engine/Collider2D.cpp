@@ -26,7 +26,7 @@ CCollider2D::CCollider2D()
 	SetCollider2DType(m_eType);
 }
 
-CCollider2D::CCollider2D(const CCollider2D & _other)
+CCollider2D::CCollider2D(const CCollider2D& _other)
 	: CComponent(COMPONENT_TYPE::COLLIDER2D)
 	, m_vOffsetPos(_other.m_vOffsetPos)
 	, m_vOffsetScale(_other.m_vOffsetScale)
@@ -35,11 +35,11 @@ CCollider2D::CCollider2D(const CCollider2D & _other)
 	, m_pColMesh(_other.m_pColMesh)
 	, m_pColMtrl(_other.m_pColMtrl)
 	, m_matColWorld(_other.m_matColWorld)
-	, m_iColID(g_iColID++)				
+	, m_iColID(g_iColID++)
 {
 }
 
-void CCollider2D::operator=(const CCollider2D & _other)
+void CCollider2D::operator=(const CCollider2D& _other)
 {
 	UINT iColID = m_iColID;
 	memcpy(this, &_other, sizeof(CCollider2D));
@@ -76,9 +76,9 @@ void CCollider2D::render()
 
 	static CConstantBuffer* pCB = CDevice::GetInst()->GetCB(CONST_REGISTER::b0);
 
-	g_transform.matWorld = m_matColWorld;	
-	CDevice::GetInst()->SetConstBufferToRegister(pCB, pCB->AddData(&g_transform));	
-	
+	g_transform.matWorld = m_matColWorld;
+	CDevice::GetInst()->SetConstBufferToRegister(pCB, pCB->AddData(&g_transform));
+
 	m_pColMtrl->UpdateData();
 	m_pColMesh->render();
 
@@ -103,8 +103,8 @@ void CCollider2D::SetCollider2DType(COLLIDER2D_TYPE _eType)
 	}
 }
 
-void CCollider2D::OnCollisionEnter(CCollider2D * _pOther)
-{	
+void CCollider2D::OnCollisionEnter(CCollider2D* _pOther)
+{
 	m_iCollisionCount += 1;
 
 	const vector<CScript*>& vecScripts = GetObj()->GetScripts();
@@ -114,7 +114,7 @@ void CCollider2D::OnCollisionEnter(CCollider2D * _pOther)
 	}
 }
 
-void CCollider2D::OnCollision(CCollider2D * _pOther)
+void CCollider2D::OnCollision(CCollider2D* _pOther)
 {
 	if (0 < m_iCollisionCount)
 	{
@@ -125,13 +125,13 @@ void CCollider2D::OnCollision(CCollider2D * _pOther)
 	for (size_t i = 0; i < vecScripts.size(); ++i)
 	{
 		vecScripts[i]->OnCollision(_pOther);
-	}	
+	}
 }
 
-void CCollider2D::OnCollisionExit(CCollider2D * _pOther)
-{	
+void CCollider2D::OnCollisionExit(CCollider2D* _pOther)
+{
 	m_iCollisionCount -= 1;
-	if(m_iCollisionCount == 0)
+	if (m_iCollisionCount == 0)
 		m_pColMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"Collider2DMtrl_0");
 
 	const vector<CScript*>& vecScripts = GetObj()->GetScripts();
@@ -142,7 +142,7 @@ void CCollider2D::OnCollisionExit(CCollider2D * _pOther)
 }
 
 
-void CCollider2D::SaveToScene(FILE * _pFile)
+void CCollider2D::SaveToScene(FILE* _pFile)
 {
 	UINT iType = (UINT)GetComponentType();
 	fwrite(&iType, sizeof(UINT), 1, _pFile);
@@ -152,7 +152,7 @@ void CCollider2D::SaveToScene(FILE * _pFile)
 	fwrite(&m_eType, sizeof(UINT), 1, _pFile);
 }
 
-void CCollider2D::LoadFromScene(FILE * _pFile)
+void CCollider2D::LoadFromScene(FILE* _pFile)
 {
 	fread(&m_vOffsetPos, sizeof(Vec3), 1, _pFile);
 	fread(&m_vOffsetScale, sizeof(Vec3), 1, _pFile);

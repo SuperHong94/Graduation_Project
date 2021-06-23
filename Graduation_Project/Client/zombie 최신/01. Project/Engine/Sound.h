@@ -20,9 +20,9 @@ public:
 	static FMOD::System* g_pFMOD;
 
 private:
-	FMOD::Sound*			m_pSound;
+	FMOD::Sound* m_pSound;
 	list<FMOD::Channel*>	m_listChannel;
-	
+
 
 
 public:

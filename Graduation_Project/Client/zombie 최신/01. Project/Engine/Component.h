@@ -6,7 +6,7 @@ class CComponent :
 	public CEntity
 {
 private:
-	CGameObject*		m_pObject;
+	CGameObject* m_pObject;
 	COMPONENT_TYPE		m_eComType;
 	bool				m_bChange;
 	bool				m_bActive;

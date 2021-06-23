@@ -1,7 +1,5 @@
 #pragma once
 
-#define INSTANCING_COUNT 100 // 인스턴싱 제한조건( n 개 이상 중복 시 인스턴싱으로 전환)
-
 #define SINGLE(type) private: type(); ~type();\
 public:\
 static type* GetInst()\
@@ -26,6 +24,7 @@ static type* GetInst()\
 
 #define DT CTimeMgr::GetInst()->GetDeltaTime()
 
+
 #define CLONE(type) public: type* Clone() { return new type(*this); }
 #define CLONE_DISABLE(type) type* Clone() { assert(nullptr); return nullptr;} \
                             type(const type& _class){assert(nullptr);}
@@ -47,27 +46,27 @@ enum class CONST_REGISTER
 	b1 = 1,
 	b2 = 2,
 	b3 = 3,
-	b4 = 4,	
+	b4 = 4,
 	b5 = 5,
 
-	END,	
+	END,
 };
 
 enum class TEXTURE_REGISTER
 {
-	t0	= (UINT)CONST_REGISTER::END,
-	t1	, 
-	t2	, 
-	t3	, 
-	t4	, 
-	t5	, 
-	t6	, 
-	t7	, 
-	t8	, 
-	t9	, 
-	t10 , 
-	t11 , 
-	t12 , 
+	t0 = (UINT)CONST_REGISTER::END,
+	t1,
+	t2,
+	t3,
+	t4,
+	t5,
+	t6,
+	t7,
+	t8,
+	t9,
+	t10,
+	t11,
+	t12,
 	END,
 };
 
@@ -76,7 +75,7 @@ enum class UAV_REGISTER
 	u0 = (UINT)TEXTURE_REGISTER::END,
 	u1,
 	u2,
-	u3,		
+	u3,
 	END,
 };
 
@@ -147,6 +146,8 @@ enum class COMPONENT_TYPE
 	LIGHT2D,
 	LIGHT3D,
 	PARTICLESYSTEM,
+	TPARTICLESYSTEM,
+	IPARTICLESYSTEM,
 	END,
 	SCRIPT,
 };

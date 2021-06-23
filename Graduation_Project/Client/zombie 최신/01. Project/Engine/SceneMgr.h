@@ -5,7 +5,13 @@ class CScene;
 class CCamera;
 class CGameObject;
 
-
+enum class SCENE_STATE
+{
+	START_SCENE,
+	GAME_SCENE,
+	GAMECLEAR_SCENE,
+	GAMEOVER_SCENE,
+};
 
 class CSceneMgr
 {
@@ -15,9 +21,10 @@ private:
 	GameMgr* m_pGameManager;
 	CGameObject* m_pPlayerArr[4];
 	CGameObject* monsterArr[100];
-	CGameObject* m_pItem[40];
+	CGameObject* m_pItem[50];
+	CGameObject* m_Light;
 	int monsterCnt = 60;
-	int ItemCnt = 40;
+	int ItemCnt = 50;
 	int			sceneNum = 0;
 	bool		isChange = false;
 	float collOffset = 20000.f;
@@ -34,6 +41,9 @@ private:
 	float hpBarWidth = 0;
 	float hpBarHeight = 0;
 
+	Ptr<CTexture> GameSceneArrTex[50];
+	Ptr<CTexture> BulletCntArrTex[11];
+
 	SCENE_STATE SceneState = SCENE_STATE::START_SCENE;
 public:
 	SCENE_STATE setSceneNum(SCENE_STATE s) { SceneState = s; }
@@ -46,11 +56,12 @@ public:
 	void update_tool();
 
 	void updateUI();
+
 	/*CScene* GetStartScene() { return m_pStartScene; }
 	CScene* GetGameScene() { return m_pGameScene; }
 	CScene* GetEndScene() { return m_pEndScene; }*/
 
-	bool CheckIsChange(){return isChange;}
+	bool CheckIsChange() { return isChange; }
 	void SetIsChange(bool b) { isChange = b; }
 
 	float GetCollOffset() { return collOffset; };
@@ -60,14 +71,10 @@ public:
 	void initValue();
 
 public:
-
-	void NewCurScene() { m_pCurScene = new CScene; };
 	CScene* GetCurScene();
 	void ChangeScene(CScene* _pNextScene);
-	void FindGameObjectByTag( const wstring& _strTag, vector<CGameObject*>& _vecFindObj);
+	void FindGameObjectByTag(const wstring& _strTag, vector<CGameObject*>& _vecFindObj);
 	void setMap();
-	//void FindGameObjectByPoint(POINT _point, vector<CGameObject*>& _vecFindObj, CCamera* _pToolCam = nullptr);
-
 
 public:
 	void CreateTargetUI();

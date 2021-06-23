@@ -10,6 +10,8 @@ private:
 	float BulletSpeed = 1000.f;
 	float damage = 30;
 	BulletState bulletState = BulletState::B_Normal;
+	bool BulletActive = false;
+	float AddDamage = 0.f;
 
 public:
 	virtual void update();
@@ -20,6 +22,13 @@ public:
 	virtual BulletState GetBulletState() { return bulletState; };
 
 	float GetDamage() { return damage; };
+	bool GetActive() { return BulletActive; };
+	void SetActive(bool b) { BulletActive = b; };
+
+	void SetDir(Vec3 d) { vBulletDir = d; };
+
+	void SetAddDamage(float damage) { AddDamage = damage; };
+	float GetAddDamage() { return AddDamage; };
 
 public:
 	CBulletScript(Vec3 Dir, BulletState bState);

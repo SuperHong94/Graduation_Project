@@ -19,21 +19,21 @@ CShader::CShader()
 	, m_pPipelineStateInst(nullptr)
 	, m_eBlendType(BLEND_TYPE::DEFAULT)
 	, m_eDSType(DEPTH_STENCIL_TYPE::LESS)
-	, m_tPipeline {}
+	, m_tPipeline{}
 	, m_tCSStateDesc{}
 {
 }
 
 CShader::~CShader()
-{	
+{
 }
 
 void CShader::SetDepthStencilType(DEPTH_STENCIL_TYPE _eType)
 {
-	m_eDSType = _eType;	
+	m_eDSType = _eType;
 }
 
-void CShader::CreateVertexShader(const wstring & _strPath, const string & _strFuncName, const string & _strhlslVersion)
+void CShader::CreateVertexShader(const wstring& _strPath, const string& _strFuncName, const string& _strhlslVersion)
 {
 	int iFlag = 0;
 #ifdef _DEBUG
@@ -41,8 +41,8 @@ void CShader::CreateVertexShader(const wstring & _strPath, const string & _strFu
 #endif
 
 	wstring strPath = CPathMgr::GetResPath();
-	strPath += _strPath;	
-	
+	strPath += _strPath;
+
 	char* pErr = nullptr;
 
 	if (FAILED(D3DCompileFromFile(strPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE
@@ -55,7 +55,7 @@ void CShader::CreateVertexShader(const wstring & _strPath, const string & _strFu
 	m_tPipeline.VS = { m_pVSBlob->GetBufferPointer(), m_pVSBlob->GetBufferSize() };
 }
 
-void CShader::CreateVertexInstShader(const wstring & _strPath, const string & _strFuncName, const string & _strhlslVersion)
+void CShader::CreateVertexInstShader(const wstring& _strPath, const string& _strFuncName, const string& _strhlslVersion)
 {
 	int iFlag = 0;
 #ifdef _DEBUG
@@ -72,10 +72,10 @@ void CShader::CreateVertexInstShader(const wstring & _strPath, const string & _s
 	{
 		pErr = (char*)m_pErrBlob->GetBufferPointer();
 		MessageBoxA(nullptr, pErr, "Shader Create Failed !!!", MB_OK);
-	}	
+	}
 }
 
-void CShader::CreateHullShader(const wstring & _strPath, const string & _strFuncName, const string & _strhlslVersion)
+void CShader::CreateHullShader(const wstring& _strPath, const string& _strFuncName, const string& _strhlslVersion)
 {
 	int iFlag = 0;
 #ifdef _DEBUG
@@ -98,7 +98,7 @@ void CShader::CreateHullShader(const wstring & _strPath, const string & _strFunc
 }
 
 
-void CShader::CreateDomainShader(const wstring & _strPath, const string & _strFuncName, const string & _strhlslVersion)
+void CShader::CreateDomainShader(const wstring& _strPath, const string& _strFuncName, const string& _strhlslVersion)
 {
 	int iFlag = 0;
 #ifdef _DEBUG
@@ -120,7 +120,7 @@ void CShader::CreateDomainShader(const wstring & _strPath, const string & _strFu
 	m_tPipeline.DS = { m_pDSBlob->GetBufferPointer(), m_pDSBlob->GetBufferSize() };
 }
 
-void CShader::CreateGeometryShader(const wstring & _strPath, const string & _strFuncName, const string & _strhlslVersion)
+void CShader::CreateGeometryShader(const wstring& _strPath, const string& _strFuncName, const string& _strhlslVersion)
 {
 	int iFlag = 0;
 #ifdef _DEBUG
@@ -143,7 +143,7 @@ void CShader::CreateGeometryShader(const wstring & _strPath, const string & _str
 }
 
 
-void CShader::CreatePixelShader(const wstring & _strPath, const string & _strFuncName, const string & _strhlslVersion)
+void CShader::CreatePixelShader(const wstring& _strPath, const string& _strFuncName, const string& _strhlslVersion)
 {
 	int iFlag = 0;
 #ifdef _DEBUG
@@ -166,7 +166,7 @@ void CShader::CreatePixelShader(const wstring & _strPath, const string & _strFun
 }
 
 
-void CShader::CreateComputeShader(const wstring & _strPath, const string & _strFuncName, const string & _strhlslVersion)
+void CShader::CreateComputeShader(const wstring& _strPath, const string& _strFuncName, const string& _strhlslVersion)
 {
 	int iFlag = 0;
 #ifdef _DEBUG
@@ -204,13 +204,13 @@ void CShader::UpdateData(bool _bInstancing)
 		CMDLIST->SetPipelineState(m_pPipelineState.Get());
 	}
 	D3D_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST;
-	
+
 	CMDLIST->IASetPrimitiveTopology(m_eTopology);
 }
 
 void CShader::UpdateData_CS()
 {
-	CMDLIST_CS->SetPipelineState(m_pPilelineState_CS.Get());	
+	CMDLIST_CS->SetPipelineState(m_pPilelineState_CS.Get());
 }
 
 void CShader::Create(SHADER_POV _ePOV, D3D_PRIMITIVE_TOPOLOGY _eTopology)
@@ -235,12 +235,12 @@ void CShader::Create(SHADER_POV _ePOV, D3D_PRIMITIVE_TOPOLOGY _eTopology)
 		{ "WORLD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1},
 		{ "WORLD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 32, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1},
 		{ "WORLD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1},
-		
+
 		{ "WV", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 64, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1}	,
 		{ "WV", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 80, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1}	,
 		{ "WV", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 96, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1}	,
 		{ "WV", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 112, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1}	,
-		 
+
 		{ "WVP", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 128, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1} ,
 		{ "WVP", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 144, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1} ,
 		{ "WVP", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 160, D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA, 1} ,
@@ -253,12 +253,12 @@ void CShader::Create(SHADER_POV _ePOV, D3D_PRIMITIVE_TOPOLOGY _eTopology)
 
 	m_tPipeline.RasterizerState = g_arrRSDesc[(UINT)m_eRSType];
 	m_tPipeline.BlendState = g_arrBlendDesc[(UINT)m_eBlendType];
-	
+
 	m_tPipeline.DepthStencilState = g_arrDepthStencilDesc[(UINT)m_eDSType];
 
-	m_tPipeline.SampleMask = UINT_MAX;	
+	m_tPipeline.SampleMask = UINT_MAX;
 	m_tPipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-	m_tPipeline.SampleDesc.Count = 1;	
+	m_tPipeline.SampleDesc.Count = 1;
 
 	switch (m_ePOV)
 	{
@@ -272,7 +272,7 @@ void CShader::Create(SHADER_POV _ePOV, D3D_PRIMITIVE_TOPOLOGY _eTopology)
 	case SHADER_POV::POST_EFFECT:
 	case SHADER_POV::PARTICLE:
 		m_tPipeline.NumRenderTargets = 1;
-		m_tPipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;	
+		m_tPipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 		break;
 	case SHADER_POV::LIGHTING:
 		m_tPipeline.NumRenderTargets = 2;
@@ -343,12 +343,12 @@ void CShader::Create(SHADER_POV _ePOV, D3D_PRIMITIVE_TOPOLOGY _eTopology)
 	case D3D_PRIMITIVE_TOPOLOGY_32_CONTROL_POINT_PATCHLIST:
 		m_tPipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH;
 		//m_tPipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-		
+
 		break;
 	default:
 		assert(nullptr);
 	}
-	
+
 	HRESULT hr = DEVICE->CreateGraphicsPipelineState(&m_tPipeline, IID_PPV_ARGS(&m_pPipelineState));
 	if (FAILED(hr))
 		assert(nullptr);

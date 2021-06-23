@@ -5,7 +5,7 @@ class CTombScript :
 	public CScript
 {
 private:
-	int hp = 100;
+	float hp = 100;
 	bool IsDisappear = false;
 
 public:
@@ -18,6 +18,9 @@ public:
 	bool CheckIsDisappear() { return IsDisappear; };
 public:
 	CLONE(CTombScript);
+
+	float getHp() { return hp; };
+	void setHp(float n) { hp = n; };
 
 public:
 	CTombScript();

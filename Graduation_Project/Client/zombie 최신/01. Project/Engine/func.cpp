@@ -147,14 +147,14 @@ int GetSizeofFormat(DXGI_FORMAT _eFormat)
 	return iRetByte / 8;
 }
 
-void SaveWString(FILE * _pFile, const wstring & _str)
+void SaveWString(FILE* _pFile, const wstring& _str)
 {
 	BYTE c = (BYTE)_str.length();
 	fwrite(&c, 1, 1, _pFile);
 	fwrite(_str.c_str(), 2, c, _pFile);
 }
 
-wchar_t* LoadWString(FILE * _pFile)
+wchar_t* LoadWString(FILE* _pFile)
 {
 	static wchar_t szStr[255] = {};
 
@@ -167,7 +167,7 @@ wchar_t* LoadWString(FILE * _pFile)
 }
 
 
-Matrix GetMatrix(FbxAMatrix & _mat)
+Matrix GetMatrix(FbxAMatrix& _mat)
 {
 	Matrix mat;
 	for (int i = 0; i < 4; ++i)
@@ -186,7 +186,7 @@ bool closeEnough(const float& a, const float& b, const float& epsilon = std::num
 	return (epsilon > std::abs(a - b));
 }
 
-Vec3 DecomposeRotMat(const Matrix & _matRot)
+Vec3 DecomposeRotMat(const Matrix& _matRot)
 {
 	// _mat 을 분해 후 다시 행렬 만들기	
 	Vec4 vMat[4];

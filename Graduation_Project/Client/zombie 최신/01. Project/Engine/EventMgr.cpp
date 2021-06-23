@@ -20,7 +20,7 @@ void CEventMgr::update()
 {
 	// 삭제 예정 Objects 메모리 해제
 	for (size_t i = 0; i < m_vecDead.size(); ++i)
-	{		
+	{
 		m_vecDead[i]->ClearParent();
 		SAFE_DELETE(m_vecDead[i]);
 	}
@@ -33,11 +33,11 @@ void CEventMgr::update()
 	}
 }
 
-void CEventMgr::Execute(tEvent & _event)
+void CEventMgr::Execute(tEvent& _event)
 {
 	switch (_event.eType)
 	{
-	case EVENT_TYPE::CREATE_OBJECT:		
+	case EVENT_TYPE::CREATE_OBJECT:
 		CSceneMgr::GetInst()->GetCurScene()->AddGameObject((int)_event.lParam, (CGameObject*)_event.wParam, true);
 		break;
 
@@ -57,13 +57,13 @@ void CEventMgr::Execute(tEvent & _event)
 		((CGameObject*)_event.wParam)->ClearParent();
 		break;
 
-	case EVENT_TYPE::TRANSFER_LAYER:		
+	case EVENT_TYPE::TRANSFER_LAYER:
 	{
 		bool bMoveAll = LOWORD(_event.lParam);
-		int iLayerIdx = HIWORD(_event.lParam);		
-		CSceneMgr::GetInst()->GetCurScene()->AddGameObject(iLayerIdx, ((CGameObject*)_event.wParam), bMoveAll);		
+		int iLayerIdx = HIWORD(_event.lParam);
+		CSceneMgr::GetInst()->GetCurScene()->AddGameObject(iLayerIdx, ((CGameObject*)_event.wParam), bMoveAll);
 	}
-		break;
+	break;
 
 	case EVENT_TYPE::ACTIVATE_GAMEOBJECT:
 		((CGameObject*)_event.wParam)->enable();

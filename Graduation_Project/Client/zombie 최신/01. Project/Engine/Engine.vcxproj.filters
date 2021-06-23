@@ -247,6 +247,18 @@
     <ClInclude Include="ItemScript.h">
       <Filter>04. GameObject\Script</Filter>
     </ClInclude>
+    <ClInclude Include="BossScript.h">
+      <Filter>04. GameObject\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="IParticleSystem.h">
+      <Filter>04. GameObject\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="TParticleSystem.h">
+      <Filter>04. GameObject\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="FParticleSystem.h">
+      <Filter>04. GameObject\Component</Filter>
+    </ClInclude>
     <ClInclude Include="NetworkMgr.h" />
     <ClInclude Include="..\..\..\..\Server\Server_ZombieSlaughter\Server_ZombieSlaughter\Protocol.h" />
   </ItemGroup>
@@ -351,9 +363,6 @@
     <ClCompile Include="BulletScript.cpp">
       <Filter>04. GameObject\Script</Filter>
     </ClCompile>
-    <ClCompile Include="MonsterScript.cpp">
-      <Filter>04. GameObject\Script</Filter>
-    </ClCompile>
     <ClCompile Include="ToolCamScript.cpp">
       <Filter>04. GameObject\Script</Filter>
     </ClCompile>
@@ -419,6 +428,21 @@
     </ClCompile>
     <ClCompile Include="global.cpp" />
     <ClCompile Include="ItemScript.cpp">
+      <Filter>04. GameObject\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="BossScript.cpp">
+      <Filter>04. GameObject\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="IParticleSystem.cpp">
+      <Filter>04. GameObject\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="TParticleSystem.cpp">
+      <Filter>04. GameObject\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="FParticleSystem.cpp">
+      <Filter>04. GameObject\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterScript.cpp">
       <Filter>04. GameObject\Script</Filter>
     </ClCompile>
     <ClCompile Include="NetworkMgr.cpp" />

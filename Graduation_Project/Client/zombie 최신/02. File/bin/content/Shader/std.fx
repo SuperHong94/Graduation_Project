@@ -7,7 +7,7 @@
 struct VS_INPUT
 {
     float3 vPos : POSITION; // sementic (지시자) 정점 Layout 과 연동       
-    float4 vColor : COLOR;    
+    float4 vColor : COLOR;
     float2 vUV : TEXCOORD;
     float3 vNormal : NORMAL;
     float3 vTangent : TANGENT;
@@ -16,11 +16,11 @@ struct VS_INPUT
 
 struct VS_OUTPUT
 {
-    float4 vOutPos : SV_Position; 
+    float4 vOutPos : SV_Position;
     float4 vOutColor : COLOR;
     float3 vViewNormal : NORMAL;
     float3 vViewTangent : TANGENT;
-    float3 vViewBinormal : BINORMAL;    
+    float3 vViewBinormal : BINORMAL;
     float3 vViewPos : POSITION;
     float2 vUV : TEXCOORD;
 };
@@ -32,18 +32,18 @@ struct VS_OUTPUT
 // ==================
 VS_OUTPUT VS_Test(VS_INPUT _input)
 {
-    VS_OUTPUT output = (VS_OUTPUT) 0;      
-  
+    VS_OUTPUT output = (VS_OUTPUT)0;
+
     output.vOutPos = mul(float4(_input.vPos, 1.f), g_matWVP);
     output.vViewPos = mul(float4(_input.vPos, 1.f), g_matWV).xyz;
-    
+
     output.vViewNormal = normalize(mul(float4(_input.vNormal, 0.f), g_matWV)).xyz;
     output.vViewTangent = normalize(mul(float4(_input.vTangent, 0.f), g_matWV)).xyz;
-    output.vViewBinormal = normalize(mul(float4(_input.vBinormal, 0.f), g_matWV)).xyz;    
-    
+    output.vViewBinormal = normalize(mul(float4(_input.vBinormal, 0.f), g_matWV)).xyz;
+
     output.vOutColor = _input.vColor;
-    
-    
+
+
     output.vUV = _input.vUV;
 
     return output;
@@ -52,9 +52,9 @@ VS_OUTPUT VS_Test(VS_INPUT _input)
 float4 PS_Test(VS_OUTPUT _input) : SV_Target
 {
     float4 vOutColor = g_tex_0.Sample(g_sam_0, _input.vUV);
-    float4 vNormal = g_tex_1.Sample(g_sam_0, _input.vUV);   
+    float4 vNormal = g_tex_1.Sample(g_sam_0, _input.vUV);
     vNormal = vNormal * 2.f - 1.f; // 표면 좌표에서의 Normal
-        
+
     // 표면 좌표계 기준의 Normal 방향을
     // 현재 표면 기준으로 가져올 회전 행렬
     float3x3 matTBN =
@@ -63,12 +63,12 @@ float4 PS_Test(VS_OUTPUT _input) : SV_Target
         _input.vViewBinormal,
         _input.vViewNormal
     };
-    
+
     // 표면 좌표 방향에 행렬을 곱해서 View Space 표면으로 가져온다.
     float3 vViewNormal = mul(vNormal.xyz, matTBN);
-    
-    tLightColor tCol = (tLightColor) 0.f;
-    
+
+    tLightColor tCol = (tLightColor)0.f;
+
     for (int i = 0; i < g_iLight3DCount; ++i)
     {
         tLightColor tTemp = CalLight(i, vViewNormal, _input.vViewPos);
@@ -76,11 +76,11 @@ float4 PS_Test(VS_OUTPUT _input) : SV_Target
         tCol.vSpec += tTemp.vSpec;
         tCol.vAmb += tTemp.vAmb;
     }
-        
-    vOutColor = vOutColor * tCol.vDiff 
-                 + tCol.vSpec 
-                 + tCol.vAmb;   
-    
+
+    vOutColor = vOutColor * tCol.vDiff
+                 + tCol.vSpec
+                 + tCol.vAmb;
+
     return vOutColor;
 }
 
@@ -102,8 +102,8 @@ struct VS_COL_OUTPUT
 // ==================
 VS_COL_OUTPUT VS_Color(VS_COL_INPUT _input)
 {
-    VS_COL_OUTPUT output = (VS_COL_OUTPUT) 0;
-    
+    VS_COL_OUTPUT output = (VS_COL_OUTPUT)0;
+
     // 투영좌표계를 반환할 때에는 float4 4번째 w 요소에 1.f 을 넣어준다.
     float4 vWorldPos = mul(float4(_input.vPos, 1.f), g_matWorld);
     float4 vViewPos = mul(vWorldPos, g_matView);
@@ -129,13 +129,6 @@ struct TEX_INPUT
 {
     float3 vPos : POSITION;
     float2 vUV : TEXCOORD;
-    
-    // Instancing
-    row_major matrix matWorld : WORLD;
-    row_major matrix matWV : WV;
-    row_major matrix matWVP : WVP;
-    
-    uint iInstanceID : SV_InstanceID;
 };
 
 struct TEX_OUTPUT
@@ -146,8 +139,8 @@ struct TEX_OUTPUT
 
 TEX_OUTPUT VS_Tex(TEX_INPUT _input)
 {
-    TEX_OUTPUT output = (TEX_OUTPUT) 0;
-    
+    TEX_OUTPUT output = (TEX_OUTPUT)0;
+
     // 투영좌표계를 반환할 때에는 float4 4번째 w 요소에 1.f 을 넣어준다.
     float4 vWorldPos = mul(float4(_input.vPos, 1.f), g_matWorld);
     float4 vViewPos = mul(vWorldPos, g_matView);
@@ -158,21 +151,6 @@ TEX_OUTPUT VS_Tex(TEX_INPUT _input)
 
     return output;
 }
-
-
-TEX_OUTPUT VS_Tex_Inst(TEX_INPUT _input)
-{
-    TEX_OUTPUT output = (TEX_OUTPUT) 0;
-    
-    // 투영좌표계를 반환할 때에는 float4 4번째 w 요소에 1.f 을 넣어준다.   
-    float4 vProjPos = mul(float4(_input.vPos, 1.f), _input.matWVP);
-
-    output.vOutPos = vProjPos;
-    output.vUV = _input.vUV;
-
-    return output;
-}
-
 
 float4 PS_Tex(TEX_OUTPUT _input) : SV_Target
 {
@@ -192,8 +170,8 @@ float4 PS_Tex(TEX_OUTPUT _input) : SV_Target
 // =================
 TEX_OUTPUT VS_Collider2D(TEX_INPUT _input)
 {
-    TEX_OUTPUT output = (TEX_OUTPUT) 0;
-    
+    TEX_OUTPUT output = (TEX_OUTPUT)0;
+
     // 투영좌표계를 반환할 때에는 float4 4번째 w 요소에 1.f 을 넣어준다.
     float4 vWorldPos = mul(float4(_input.vPos, 1.f), g_matWorld);
     float4 vViewPos = mul(vWorldPos, g_matView);
@@ -210,7 +188,7 @@ float4 PS_Collider2D(TEX_OUTPUT _input) : SV_Target
     if (g_int_0)
         return float4(1.f, 0.2f, 0.f, 1.f);
     else
-        return float4(0.f, 1.f, 0.f, 0.f);
+        return float4(0.f, 1.f, 0.f, 1.f);
 }
 
 // ==================
@@ -234,7 +212,7 @@ struct VTX_OUTPUT
 
 VTX_OUTPUT VS_Std2D(VTX_INPUT _input)
 {
-    VTX_OUTPUT output = (VTX_OUTPUT) 0.f;
+    VTX_OUTPUT output = (VTX_OUTPUT)0.f;
 
     float4 vPosition = (float4) 0.f;
 
@@ -249,7 +227,7 @@ VTX_OUTPUT VS_Std2D(VTX_INPUT _input)
     {
         vPosition = mul(float4(_input.vPos, 1.f), g_matWVP);
     }
-       
+
     output.vPos = vPosition;
     output.vUV = _input.vUV;
 
@@ -283,7 +261,7 @@ float4 PS_Std2D(VTX_OUTPUT _input) : SV_Target
     }
 
     vColor.rgb *= vLightPow;
-    
+
     return vColor;
 }
 
@@ -295,7 +273,7 @@ float4 PS_Std2D(VTX_OUTPUT _input) : SV_Target
 // ==================
 VTX_OUTPUT VS_2DShadow(VTX_INPUT _input)
 {
-    VTX_OUTPUT output = (VTX_OUTPUT) 0.f;
+    VTX_OUTPUT output = (VTX_OUTPUT)0.f;
 
     if (_input.vPos.y == 0.5f)
     {
@@ -312,7 +290,7 @@ VTX_OUTPUT VS_2DShadow(VTX_INPUT _input)
 float4 PS_2DShadow(VTX_OUTPUT _input) : SV_Target
 {
     float4 vColor = (float4) 0.f;
-    
+
     if (IsAnim2D)
     {
         float2 vUV = g_vLT + (g_vLen * _input.vUV);
