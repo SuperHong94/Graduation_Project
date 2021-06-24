@@ -1,5 +1,6 @@
 #pragma once
 #include "GameMgr.h"
+#include "Sound.h"
 
 class CScene;
 class CCamera;
@@ -30,6 +31,8 @@ private:
 	float collOffset = 20000.f;
 	bool QuestVisible = true;
 	bool pressI = false;
+
+	CSound* startSound;
 
 	// 서버와 통신 해야됨
 	int playerNum = 4;

@@ -922,7 +922,10 @@ void CSceneMgr::initGameScene()
 		// StartScene 积己
 		// ===============
 		m_pCurScene->SetName(L"Start Scene");
-
+		startSound = new CSound;
+		startSound->Load(L"Sound\\Start.mp3");
+		startSound->Play(0, false, 0.8);
+	
 		// ===================
 		// Player 坷宏璃飘 积己
 		// ===================
@@ -1260,6 +1263,8 @@ void CSceneMgr::update()
 		{
 			//SAFE_DELETE(m_pCurScene);
 			m_pCurScene = new CScene;
+			startSound->Stop();
+
 			//delete m_pCurScene;
 			SceneState = SCENE_STATE::GAME_SCENE;
 

@@ -55,7 +55,6 @@ private:
 	float collOffset = 20000;
 	
 	CSound* sound;
-	CBGM* m_bgm;
 
 public:
 	virtual void awake();

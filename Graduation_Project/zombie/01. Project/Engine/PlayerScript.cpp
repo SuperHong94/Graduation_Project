@@ -39,8 +39,8 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	// »ç¿îµå
 	sound = new CSound;
 	sound->Load(L"Sound\\Shot.mp3");
-	CBGM::Init();
-	m_bgm = new CBGM("Sound/Shot.mp3", false);
+	//CBGM::Init();
+	//m_bgm = new CBGM("Sound/Shot.mp3", false);
 }
 
 CPlayerScript::~CPlayerScript()
@@ -422,7 +422,7 @@ void CPlayerScript::update()
 			// ÃÑ¾Ë
 			if (KEY_TAB(KEY_TYPE::KEY_LBTN) && !status->IsRoll)
 			{
-				sound->Play(1, true);
+				sound->Play(1, true, 0.4);
 				bulletHeight = 100;
 
 				vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
