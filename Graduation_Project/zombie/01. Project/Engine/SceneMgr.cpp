@@ -72,6 +72,12 @@ CSceneMgr::CSceneMgr()
 	BulletCntArrTex[8] = (CResMgr::GetInst()->Load<CTexture>(L"8", L"Texture\\UI\\8.png"));
 	BulletCntArrTex[9] = (CResMgr::GetInst()->Load<CTexture>(L"9", L"Texture\\UI\\9.png"));
 	BulletCntArrTex[10] = (CResMgr::GetInst()->Load<CTexture>(L"10", L"Texture\\UI\\10.png"));
+
+
+	BulletArrTex[0] = (CResMgr::GetInst()->Load<CTexture>(L"Bullet", L"Texture\\UI\\FBullet.png"));		/////////////////////////////
+	BulletArrTex[1] = (CResMgr::GetInst()->Load<CTexture>(L"FBullet", L"Texture\\UI\\FBullet.png"));
+	BulletArrTex[2] = (CResMgr::GetInst()->Load<CTexture>(L"TBullet", L"Texture\\UI\\TBullet.png"));
+	BulletArrTex[3] = (CResMgr::GetInst()->Load<CTexture>(L"IBullet", L"Texture\\UI\\IBullet.png"));
 }
 
 CSceneMgr::~CSceneMgr()
@@ -102,6 +108,7 @@ void CSceneMgr::CreateTargetUI()
 	GameSceneArrTex[11] = (CResMgr::GetInst()->Load<CTexture>(L"SpeedBuffOn", L"Texture\\UI\\SpeedBuffOn.png"));
 	GameSceneArrTex[12] = (CResMgr::GetInst()->Load<CTexture>(L"SpeedBuffOff", L"Texture\\UI\\SpeedBuffOff.png"));
 	GameSceneArrTex[13] = (CResMgr::GetInst()->Load<CTexture>(L"infinite", L"Texture\\UI\\infinite.png"));
+	GameSceneArrTex[14] = (CResMgr::GetInst()->Load<CTexture>(L"BulletUI", L"Texture\\UI\\FBullet.png"));		/////////////////////////////
 
 	Ptr<CTexture> StartSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"StartBG", L"Texture\\UI\\StartBG.png") };
 
@@ -109,7 +116,7 @@ void CSceneMgr::CreateTargetUI()
 
 	Ptr<CTexture> GameOverSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"GameOverBG", L"Texture\\UI\\GameOverBG.png") };
 
-	int NumgameSceneUI = 14;
+	int NumgameSceneUI = 15;
 	int NumStartSceneUI = 1;
 	int NumGameClearSceneUI = 1;
 	int NumGameOVerSceneUI = 1;
@@ -231,6 +238,14 @@ void CSceneMgr::CreateTargetUI()
 				pObject->Transform()->SetLocalPos(Vec3(res.fWidth / 2.2, -res.fHeight / 2.7, 1.f));
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
 			}
+
+			else if (i == 14)
+			{
+				pObject->SetName(L"Bullet_UI");
+				pObject->Transform()->SetLocalPos(Vec3(res.fWidth / 2.5, -res.fHeight / 2.7, 1.f));
+				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 25, (vScale.y / 25) * res.fWidth / res.fHeight, 1.f));
+			}
+
 
 			// MeshRender 설정
 			pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
@@ -924,7 +939,7 @@ void CSceneMgr::initGameScene()
 		m_pCurScene->SetName(L"Start Scene");
 		startSound = new CSound;
 		startSound->Load(L"Sound\\Start.mp3");
-		startSound->Play(0, false, 0.8);
+		startSound->Play(1, false, 1);
 	
 		// ===================
 		// Player 오브젝트 생성
@@ -1587,6 +1602,17 @@ void CSceneMgr::updateUI()
 						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletCntArrTex[10].GetPointer());
 				}
 
+				else if (L"Bullet_UI" == vecObject[j]->GetName())
+				{
+					if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->bulletState == BulletState::B_Normal)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletArrTex[0].GetPointer());
+					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->bulletState == BulletState::B_Fire)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletArrTex[1].GetPointer());
+					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->bulletState == BulletState::B_Thunder)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletArrTex[2].GetPointer());
+					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->bulletState == BulletState::B_Ice)
+						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletArrTex[3].GetPointer());
+				}
 			}
 		}
 	}

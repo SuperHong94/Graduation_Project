@@ -46,6 +46,7 @@ private:
 
 	Ptr<CTexture> GameSceneArrTex[50];
 	Ptr<CTexture> BulletCntArrTex[11];
+	Ptr<CTexture> BulletArrTex[4];
 
 	SCENE_STATE SceneState = SCENE_STATE::START_SCENE;
 public:
