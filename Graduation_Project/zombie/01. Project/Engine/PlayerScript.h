@@ -53,8 +53,9 @@ private:
 
 	float BulletCollOffset = 0.f;
 	float collOffset = 20000;
-
+	
 	CSound* sound;
+	CBGM* m_bgm;
 
 public:
 	virtual void awake();
