@@ -19,6 +19,9 @@ struct PlayerStatus
 	float disappearCnt = 0;
 	bool isDisappear = false;
 
+	bool isMove = false;
+
+	bool isIdleOnceSend = false; //IDLE 상태에서는 처음 IDLE될때 한번만 보내기위한 변수이다.
 	float powerBuffTime = 0.f;
 	float defenceBuffTime = 0.f;
 	float speedBuffTime = 0.f;

@@ -5,13 +5,6 @@ class CScene;
 class CCamera;
 class CGameObject;
 
-enum class SCENE_STATE
-{
-	START_SCENE,
-	GAME_SCENE,
-	GAMECLEAR_SCENE,
-	GAMEOVER_SCENE,
-};
 
 class CSceneMgr
 {
@@ -71,6 +64,7 @@ public:
 	void initValue();
 
 public:
+	void NewCurScene() { m_pCurScene = new CScene; };
 	CScene* GetCurScene();
 	void ChangeScene(CScene* _pNextScene);
 	void FindGameObjectByTag(const wstring& _strTag, vector<CGameObject*>& _vecFindObj);
