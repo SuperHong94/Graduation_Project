@@ -31,6 +31,9 @@ struct GameMgrStatus
 
 	bool cheatBossSpawn = false;
 	bool cheatDestroyTombOn = false;
+
+	float TotalTime = 300.f;
+	float Timer = 300.f;
 };
 
 class GameMgr
@@ -78,7 +81,13 @@ public:
 	// 치트 보스 스폰
 	void cheatBossSpawn() { Gstatus->cheatBossSpawn = true; };
 
+	// 타이머 업데이트
+	void TimerUpdate();
+
 	bool GetGameOver() { return Gstatus->isGameOver; };
 	bool GetGameClear() { return Gstatus->isGameClear; };
+
+	float GetTimer() { return Gstatus->Timer; };
+	float GetTotalTimer() { return Gstatus->TotalTime; };
 };
 

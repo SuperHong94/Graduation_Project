@@ -43,6 +43,8 @@ private:
 	float miniMapUIRatio = 6.8;
 	float hpBarWidth = 0;
 	float hpBarHeight = 0;
+	float timerBarWidth = 0;
+	float timerBarHeight = 0;
 
 	Ptr<CTexture> GameSceneArrTex[50];
 	Ptr<CTexture> BulletCntArrTex[11];

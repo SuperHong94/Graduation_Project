@@ -94,6 +94,9 @@ void CSceneMgr::CreateTargetUI()
 	hpBarWidth = CRenderMgr::GetInst()->GetResolution().fWidth / 4.1;
 	hpBarHeight = CRenderMgr::GetInst()->GetResolution().fHeight / 45;
 
+	timerBarWidth = vScale.x / 1.114;
+	timerBarHeight = (vScale.y / 33) * res.fWidth / res.fHeight;
+
 	GameSceneArrTex[0] = (CResMgr::GetInst()->Load<CTexture>(L"BGUI", L"Texture\\UI\\BGUI.png"));
 	GameSceneArrTex[1] = (CResMgr::GetInst()->Load<CTexture>(L"MiniMap", L"Texture\\UI\\MiniMap.png"));
 	GameSceneArrTex[2] = (CResMgr::GetInst()->Load<CTexture>(L"miniMapPlayer", L"Texture\\UI\\playerTest.png"));
@@ -109,6 +112,10 @@ void CSceneMgr::CreateTargetUI()
 	GameSceneArrTex[12] = (CResMgr::GetInst()->Load<CTexture>(L"SpeedBuffOff", L"Texture\\UI\\SpeedBuffOff.png"));
 	GameSceneArrTex[13] = (CResMgr::GetInst()->Load<CTexture>(L"infinite", L"Texture\\UI\\infinite.png"));
 	GameSceneArrTex[14] = (CResMgr::GetInst()->Load<CTexture>(L"BulletUI", L"Texture\\UI\\Bullet.png"));
+	GameSceneArrTex[15] = (CResMgr::GetInst()->Load<CTexture>(L"TimerBGUI", L"Texture\\UI\\HpBarEdge.png"));
+	GameSceneArrTex[16] = (CResMgr::GetInst()->Load<CTexture>(L"TimerUI", L"Texture\\UI\\TimerBar.png"));
+	GameSceneArrTex[17] = (CResMgr::GetInst()->Load<CTexture>(L"ZombieFaceUI", L"Texture\\UI\\ZombieFace.png"));
+	GameSceneArrTex[18] = (CResMgr::GetInst()->Load<CTexture>(L"DeathUI", L"Texture\\UI\\Death.png"));
 
 	Ptr<CTexture> StartSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"StartBG", L"Texture\\UI\\StartBG.png") };
 
@@ -116,7 +123,7 @@ void CSceneMgr::CreateTargetUI()
 
 	Ptr<CTexture> GameOverSceneArrTex[1] = { CResMgr::GetInst()->Load<CTexture>(L"GameOverBG", L"Texture\\UI\\GameOverBG.png") };
 
-	int NumgameSceneUI = 15;
+	int NumgameSceneUI = 30;
 	int NumStartSceneUI = 1;
 	int NumGameClearSceneUI = 1;
 	int NumGameOVerSceneUI = 1;
@@ -246,6 +253,33 @@ void CSceneMgr::CreateTargetUI()
 				pObject->Transform()->SetLocalScale(Vec3(vScale.x / 18, (vScale.y / 18) * res.fWidth / res.fHeight, 1.f));
 			}
 
+			else if (i == 15)
+			{
+			pObject->SetName(L"TimerBG_UI");
+			pObject->Transform()->SetLocalPos(Vec3(0.f, res.fHeight / 2.2, 1.5f));
+			pObject->Transform()->SetLocalScale(Vec3(vScale.x / 1.1, (vScale.y / 30) * res.fWidth / res.fHeight, 1.f));
+			}
+
+			else if (i == 16)
+			{
+			pObject->SetName(L"Timer_UI");
+			pObject->Transform()->SetLocalPos(Vec3(0.f, res.fHeight / 2.2, 1.4f));
+			pObject->Transform()->SetLocalScale(Vec3(timerBarWidth, timerBarHeight, 1.f));
+			}
+
+			else if (i == 17)
+			{
+			pObject->SetName(L"ZombieFace_UI");
+			pObject->Transform()->SetLocalPos(Vec3(res.fWidth / 2.2, res.fHeight / 2.2, 1.f));
+			pObject->Transform()->SetLocalScale(Vec3(vScale.x / 34, (vScale.y / 34)* res.fWidth / res.fHeight, 1.1f));
+			}
+
+			else if (i == 18)
+			{
+			pObject->SetName(L"Death_UI");
+			pObject->Transform()->SetLocalPos(Vec3(-res.fWidth / 2.2, res.fHeight / 2.2, 1.f));
+			pObject->Transform()->SetLocalScale(Vec3(vScale.x / 30, (vScale.y / 30) * res.fWidth / res.fHeight, 1.f));
+			}
 
 			// MeshRender 설정
 			pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
@@ -1618,6 +1652,28 @@ void CSceneMgr::updateUI()
 						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletArrTex[2].GetPointer());
 					else if (m_pPlayerArr[playerID]->GetScript<CPlayerScript>()->GetStatus()->bulletState == BulletState::B_Ice)
 						vecObject[j]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, BulletArrTex[3].GetPointer());
+				}
+
+				//타이머 업데이트
+				else if (L"Timer_UI" == vecObject[j]->GetName())
+				{
+				float time = m_pGameManager->GetTimer();
+				float totalTime = m_pGameManager->GetTotalTimer();
+
+				vecObject[j]->Transform()->SetLocalScale(Vec3(timerBarWidth * time / totalTime, timerBarHeight, 1.f));
+
+				float adjust = totalTime - time;
+				vecObject[j]->Transform()->SetLocalPos(Vec3(0.f - adjust * 1.92, res.fHeight / 2.2, 1.4f));
+				}
+
+				//좀비 아이콘 업데이트
+				else if (L"ZombieFace_UI" == vecObject[j]->GetName())
+				{
+				float time = m_pGameManager->GetTimer();
+				float totalTime = m_pGameManager->GetTotalTimer();
+
+				float adjust = totalTime - time;
+				vecObject[j]->Transform()->SetLocalPos(Vec3(res.fWidth / 2.2 - adjust * 4.0, res.fHeight / 2.2, 1.1f));
 				}
 			}
 		}
