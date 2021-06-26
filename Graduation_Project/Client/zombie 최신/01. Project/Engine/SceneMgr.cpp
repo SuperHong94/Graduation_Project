@@ -1267,10 +1267,10 @@ void CSceneMgr::update()
 		if (KEY_TAB(KEY_TYPE::KEY_SPACE))
 		{
 			//SAFE_DELETE(m_pCurScene);
-			m_pCurScene = new CScene;
-			//delete m_pCurScene;
-			SceneState = SCENE_STATE::GAME_SCENE;
-
+			//m_pCurScene = new CScene;
+			////delete m_pCurScene;
+			//SceneState = SCENE_STATE::GAME_SCENE;
+			CNetworkMgr::GetInst()->send_chage_scene();
 			// 변수값 초기화
 			initValue();
 
