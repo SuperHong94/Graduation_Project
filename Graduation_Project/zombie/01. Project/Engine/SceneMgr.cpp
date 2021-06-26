@@ -1050,6 +1050,9 @@ void CSceneMgr::initGameScene()
 		// ===============
 		m_pCurScene->SetName(L"GameClear Scene");
 
+		victorySound = new CSound;
+		victorySound->Load(L"Sound\\Victory.mp3");
+		victorySound->Play(0, false, 1);
 		// ===================
 		// Player 오브젝트 생성
 		// ===================
@@ -1123,6 +1126,9 @@ void CSceneMgr::initGameScene()
 		// ===============
 		m_pCurScene->SetName(L"GameOver Scene");
 
+		defeatSound = new CSound;
+		defeatSound->Load(L"Sound\\Defeat.mp3");
+		defeatSound->Play(0, false, 1);
 		// ===================
 		// Player 오브젝트 생성
 		// ===================
@@ -1389,6 +1395,9 @@ void CSceneMgr::update()
 		{
 			//SAFE_DELETE(m_pCurScene);
 			m_pCurScene = new CScene;
+
+			victorySound->Stop();
+			delete(victorySound);
 			//delete m_pCurScene;
 			SceneState = SCENE_STATE::START_SCENE;
 			init();
@@ -1403,6 +1412,9 @@ void CSceneMgr::update()
 		{
 			//SAFE_DELETE(m_pCurScene);
 			m_pCurScene = new CScene;
+
+			defeatSound->Stop();
+			delete(defeatSound);
 			//delete m_pCurScene;
 			SceneState = SCENE_STATE::START_SCENE;
 			init();

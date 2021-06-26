@@ -33,6 +33,8 @@ private:
 	bool pressI = false;
 
 	CSound* startSound;
+	CSound* victorySound;
+	CSound* defeatSound;
 
 	// 서버와 통신 해야됨
 	int playerNum = 4;
