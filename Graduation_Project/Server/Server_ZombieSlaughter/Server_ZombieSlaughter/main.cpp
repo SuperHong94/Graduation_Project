@@ -234,7 +234,7 @@ void proccess_packet(int c_id, unsigned char* buf)
 		upadate_scene_state(c_id, packet); //해당 이벤트에 맞게 씬을 업데이트
 	}
 	break;
-	case C2S_ROLL_END:
+	case C2S_ROLL_START:
 	{
 		c2s_roll_start* packet = reinterpret_cast<c2s_roll_start*>(buf);
 		roll_update(packet);
