@@ -44,7 +44,7 @@ int get_new_id()
 }
 
 
-
+void roll_update(c2s_roll_start* packet);
 void send_add_client(int c_id, int other_id);
 
 void send_packet(int c_id, void* packet)
@@ -93,6 +93,7 @@ void send_move_packet(int c_id, int other_id) //c_id에게 other_id 정보 보내기
 	//p.type = S2C_DUMMY;
 	send_packet(c_id, &packet);
 }
+
 void send_login_result(int c_id)
 {
 	s2c_loginOK packet;
@@ -180,6 +181,29 @@ void send_add_client(int c_id, int other_id)
 
 	send_packet(c_id, &packet);
 }
+
+void send_roll_packet(int c_id, int other_id)
+{
+	const auto& dir = clients[other_id].m_pPlayer->GetRotation();
+	s2c_roll_start packet;
+	packet.size = sizeof(s2c_roll_start);
+	packet.type = S2C_ROLL_START;
+	packet.id = other_id;
+	packet.x = dir.x;
+	packet.y = dir.y;
+	packet.z = dir.z;
+	send_packet(c_id, &packet);
+
+}
+void roll_update(c2s_roll_start* packet)
+{
+	int c_id = packet->id;
+	
+	clients[c_id].m_pPlayer->UpdateRollStart(packet);
+	for (auto& c : clients)
+		if (c.second.m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) //게임씬일때 보내기
+			send_roll_packet(c.second.m_id, c_id); //c.secnod.m_id에게 c_id 정보 보내기
+}
 void proccess_packet(int c_id, unsigned char* buf)
 {
 	//buf[1]에 type이 들어감
@@ -208,6 +232,12 @@ void proccess_packet(int c_id, unsigned char* buf)
 
 		c2s_chage_scene* packet = reinterpret_cast<c2s_chage_scene*>(buf);
 		upadate_scene_state(c_id, packet); //해당 이벤트에 맞게 씬을 업데이트
+	}
+	break;
+	case C2S_ROLL_END:
+	{
+		c2s_roll_start* packet = reinterpret_cast<c2s_roll_start*>(buf);
+		roll_update(packet);
 	}
 	break;
 	default:

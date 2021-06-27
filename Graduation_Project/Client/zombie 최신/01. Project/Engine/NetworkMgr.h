@@ -38,6 +38,7 @@ public:
 	void send_chage_scene();
 
 	void send_Key_packet(EKEY_EVENT key, Vec3 Rotation);
+	void send_rollStart_packet(const Vec3& dir);
 
 public: //오브젝트 관련 메소드
 

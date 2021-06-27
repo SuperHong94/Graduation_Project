@@ -167,6 +167,13 @@ void CNetworkMgr::process(char* buf)
 		}
 	}
 	break;
+	case S2C_ROLL_START:
+	{
+		s2c_roll_start* packet = reinterpret_cast<s2c_roll_start*>(packet);
+		int id = packet->id - 1;
+		m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->IsRoll = true;
+	}
+	break;
 	case S2C_DUMMY:
 	{
 #ifdef _DEBUG
@@ -215,7 +222,7 @@ void CNetworkMgr::process_key(s2c_move* p)
 			break;
 		case P_Roll:
 			//PlayerScript->Transform()->SetLocalPos(Vec3(p->x, 0.f, p->z));
-			PlayerScript->GetStatus()->IsRoll = true;
+			
 			break;
 		case p_None:
 			break;
@@ -284,6 +291,17 @@ void CNetworkMgr::send_Key_packet(EKEY_EVENT key, Vec3 Rotation)
 	std::cout << "서버에게" << key << " 키 정보를 보낸다.\n";
 #endif // _DEBUG
 
+	send_packet(&packet);
+}
+
+void CNetworkMgr::send_rollStart_packet(const Vec3& dir)
+{
+	c2s_roll_start packet;
+	packet.id = m_id;
+	packet.size = sizeof(c2s_roll_start);
+	packet.x = dir.x;
+	packet.y = dir.y;
+	packet.z = dir.z;
 	send_packet(&packet);
 }
 

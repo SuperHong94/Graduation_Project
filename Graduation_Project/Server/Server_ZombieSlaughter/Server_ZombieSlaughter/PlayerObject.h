@@ -7,6 +7,7 @@ private:
 	int m_speed;
 	PlayerState m_ePState;
 	SCENE_STATE m_eSceneState;
+	bool m_isRoll=false;
 public:
 	void init();
 	Vec3 GetPostion() { return m_postion; };
@@ -23,5 +24,7 @@ public:
 
 	SCENE_STATE GetSceneState() { return m_eSceneState; };
 	void SetSceneState(SCENE_STATE eSstate) { m_eSceneState = eSstate; };
+
+	void UpdateRollStart(c2s_roll_start* packet);
 };
 

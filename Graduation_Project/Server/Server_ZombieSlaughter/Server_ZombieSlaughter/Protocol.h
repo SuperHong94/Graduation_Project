@@ -53,6 +53,11 @@ constexpr unsigned char C2S_CHANGE_SCENE= 8;
 constexpr unsigned char S2C_CHANGE_SCENE = 9;
 constexpr unsigned char S2C_DUMMY = 10;
 
+constexpr unsigned char C2S_ROLL_START = 11;
+constexpr unsigned char C2S_ROLL_END = 12;
+constexpr unsigned char S2C_ROLL_START = 13;
+constexpr unsigned char S2C_ROLL_END = 14;
+
 
 enum EKEY_EVENT
 {
@@ -108,6 +113,14 @@ struct c2s_chage_scene
 	int id; //누가 보냈는지
 	SCENE_STATE eSceneStatae; //클라이언트의 현재씬
 
+};
+
+struct c2s_roll_start
+{
+	unsigned char size;
+	unsigned char type;
+	int id; //누가 구르기 시작했는지 보내기
+	float x, y, z; // 어떤방향으로 굴렀느지 보내기
 };
 
 //////////////////
@@ -168,5 +181,14 @@ struct s2c_dummy
 	unsigned char size;
 	unsigned char type;
 };
+
+struct s2c_roll_start
+{
+	unsigned char size;
+	unsigned char type;
+	int id; //누가 구르기 시작했는지 보내기
+	float x, y, z; // 어떤방향으로 굴렀느지 보내기
+};
+
 
 #pragma pack(pop)
