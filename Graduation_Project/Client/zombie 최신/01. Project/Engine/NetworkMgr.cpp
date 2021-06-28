@@ -176,6 +176,15 @@ void CNetworkMgr::process(char* buf)
 		m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalRot({ packet->x, packet->y, packet->z });
 	}
 	break;
+	case S2C_ROLL_END:
+	{
+		s2c_roll_end* packet = reinterpret_cast<s2c_roll_end*>(buf);
+		int id = packet->id - 1;
+		m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->IsRoll = false;
+		m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->state == PlayerState::P_Idle;
+		m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos({ packet->px, packet->py, packet->pz });
+	}
+	break;
 	case S2C_DUMMY:
 	{
 #ifdef _DEBUG
@@ -305,6 +314,18 @@ void CNetworkMgr::send_rollStart_packet(const Vec3& dir)
 	packet.x = dir.x;
 	packet.y = dir.y;
 	packet.z = dir.z;
+	send_packet(&packet);
+}
+
+void CNetworkMgr::send_rollEnd_packet(const Vec3& pos)
+{
+	c2s_roll_end packet;
+	packet.id = m_id;
+	packet.type = C2S_ROLL_END;
+	packet.size = sizeof(c2s_roll_end);
+	packet.px = pos.x;
+	packet.py = pos.y;
+	packet.pz = pos.z;
 	send_packet(&packet);
 }
 

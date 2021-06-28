@@ -37,7 +37,7 @@ int get_new_id()
 {
 	for (int i = SERVER_ID + 1; i <= MAX_USER; ++i)
 	{
-		if (clients.count(i)==0)
+		if (clients.count(i) == 0)
 			return i;
 	}
 	return -1;
@@ -195,10 +195,22 @@ void send_roll_packet(int c_id, int other_id)
 	send_packet(c_id, &packet);
 
 }
+void send_roll_end_packet(int c_id, int other_id)
+{
+	const auto& pos = clients[other_id].m_pPlayer->GetRotation();
+	s2c_roll_end packet;
+	packet.size = sizeof(s2c_roll_end);
+	packet.type = S2C_ROLL_END;
+	packet.id = other_id;
+	packet.px = pos.x;
+	packet.py = pos.y;
+	packet.pz = pos.z;
+	send_packet(c_id, &packet);
+}
 void roll_update(c2s_roll_start* packet)
 {
 	int c_id = packet->id;
-	
+
 	clients[c_id].m_pPlayer->UpdateRollStart(packet);
 	for (auto& c : clients)
 		if (c.second.m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) //게임씬일때 보내기
@@ -238,6 +250,17 @@ void proccess_packet(int c_id, unsigned char* buf)
 	{
 		c2s_roll_start* packet = reinterpret_cast<c2s_roll_start*>(buf);
 		roll_update(packet);
+	}
+	break;
+	case C2S_ROLL_END:
+	{
+		c2s_roll_end* packet = reinterpret_cast<c2s_roll_end*>(buf);
+		int c_id = packet->id;
+
+		clients[c_id].m_pPlayer->UpdateRollEnd(packet);
+		for (auto& c : clients)
+			if (c.second.m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) //게임씬일때 보내기
+				send_roll_end_packet(c.second.m_id, c_id); //c.secnod.m_id에게 c_id 정보 보내기
 	}
 	break;
 	default:
@@ -429,7 +452,7 @@ int main()
 				clients[c_id].m_pPlayer->init();
 				CreateIoCompletionPort(reinterpret_cast<HANDLE>(c_sock), h_iocp, c_id, 0);
 				do_recv(c_id);
-		}
+			}
 			//계속 Accept해야됨
 			memset(&accept_over.m_over, 0, sizeof(accept_over.m_over));
 
@@ -440,13 +463,13 @@ int main()
 		break;
 		default:
 			break;
+		}
+
+
+
+
+
 	}
-
-
-
-
-
-}
 	closesocket(listenSocket);
 	WSACleanup();
 

@@ -406,6 +406,7 @@ void CPlayerScript::update()
 
 					vPos += 20 * rollDir;
 					pObject->Transform()->SetLocalPos(vPos);
+					CNetworkMgr::GetInst()->send_rollEnd_packet(vPos);
 					//CNetworkMgr::GetInst()->send_Key_packet(EKEY_EVENT::NO_EVENT, vRot); //idle 상태 보내기
 				}
 			}

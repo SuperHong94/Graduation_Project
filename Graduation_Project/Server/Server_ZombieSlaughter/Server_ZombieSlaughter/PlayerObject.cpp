@@ -67,5 +67,13 @@ void CPlayerObject::Update(c2s_Key* packet)
 void CPlayerObject::UpdateRollStart(c2s_roll_start* packet)
 {
 	m_rotation = { packet->x,packet->y,packet->z };
+	m_ePState = PlayerState::P_Roll;
 	m_isRoll = true;
+}
+
+void CPlayerObject::UpdateRollEnd(c2s_roll_end* packet)
+{
+	m_postion = { packet->px,packet->py,packet->pz };
+	m_ePState = PlayerState::P_Idle;
+	m_isRoll = false;
 }

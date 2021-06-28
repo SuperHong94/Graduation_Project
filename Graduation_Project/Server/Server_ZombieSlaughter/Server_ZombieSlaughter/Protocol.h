@@ -123,6 +123,14 @@ struct c2s_roll_start
 	float x, y, z; // 어떤방향으로 굴렀느지 보내기
 };
 
+struct c2s_roll_end
+{
+	unsigned char size;
+	unsigned char type;
+	int id; //누가 구르기 끝냈는지 보내기
+	float px, py, pz; // 구르기 끝났을때 position;
+};
+
 //////////////////
 //Server->Client
 //////////////////
@@ -188,6 +196,15 @@ struct s2c_roll_start
 	unsigned char type;
 	int id; //누가 구르기 시작했는지 보내기
 	float x, y, z; // 어떤방향으로 굴렀느지 보내기
+};
+
+
+struct s2c_roll_end
+{
+	unsigned char size;
+	unsigned char type;
+	int id; //누가 구르기 끝냈는지 보내기
+	float px, py, pz; // 구르기 끝났을때 position;
 };
 
 

@@ -26,5 +26,6 @@ public:
 	void SetSceneState(SCENE_STATE eSstate) { m_eSceneState = eSstate; };
 
 	void UpdateRollStart(c2s_roll_start* packet);
+	void UpdateRollEnd(c2s_roll_end* packet);
 };
 
