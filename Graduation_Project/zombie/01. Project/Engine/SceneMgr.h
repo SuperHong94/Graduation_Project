@@ -1,5 +1,6 @@
 #pragma once
 #include "GameMgr.h"
+#include "Sound.h"
 
 class CScene;
 class CCamera;
@@ -31,6 +32,10 @@ private:
 	bool QuestVisible = true;
 	bool pressI = false;
 
+	CSound* startSound;
+	CSound* victorySound;
+	CSound* defeatSound;
+
 	// 서버와 통신 해야됨
 	int playerNum = 4;
 	// 임시 설정 
@@ -40,9 +45,12 @@ private:
 	float miniMapUIRatio = 6.8;
 	float hpBarWidth = 0;
 	float hpBarHeight = 0;
+	float timerBarWidth = 0;
+	float timerBarHeight = 0;
 
 	Ptr<CTexture> GameSceneArrTex[50];
 	Ptr<CTexture> BulletCntArrTex[11];
+	Ptr<CTexture> BulletArrTex[4];
 
 	SCENE_STATE SceneState = SCENE_STATE::START_SCENE;
 public:

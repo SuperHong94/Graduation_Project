@@ -16,7 +16,7 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	status = new PlayerStatus();
 	isPlayer = player;
 
-	// ÃÑ¾Ë »ý¼º¤©
+	// ÃÑ¾Ë »ý¼º
 	for (int i = 0; i < BulletCnt; i++)
 	{
 		pBullet[i] = new CGameObject;
@@ -35,6 +35,12 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 		//pBullet[i]->Collider2D()->disable();
 		CreateObject(pBullet[i], L"Bullet");
 	}
+
+	// »ç¿îµå
+	sound = new CSound;
+	sound->Load(L"Sound\\Shot.mp3");
+	//CBGM::Init();
+	//m_bgm = new CBGM("Sound/Shot.mp3", false);
 }
 
 CPlayerScript::~CPlayerScript()
@@ -413,13 +419,10 @@ void CPlayerScript::update()
 			if (!status->IsRoll)
 				Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
 
-
 			// ÃÑ¾Ë
-			//
-
-
 			if (KEY_TAB(KEY_TYPE::KEY_LBTN) && !status->IsRoll)
 			{
+				sound->Play(1, true, 0.4);
 				bulletHeight = 100;
 
 				vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
@@ -463,7 +466,7 @@ void CPlayerScript::update()
 
 						pBullet[i]->GetScript<CBulletScript>()->SetDir(vNBulletDir);
 
-						pBullet[i]->Transform()->SetLocalPos(Vec3(vPos.x + vNBulletDir.x * 70, bulletHeight, vPos.z + vNBulletDir.z * 65));
+						pBullet[i]->Transform()->SetLocalPos(Vec3(vPos.x + vNBulletDir.x * 40, bulletHeight, vPos.z + vNBulletDir.z * 35));
 
 						/*			pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
 									pBullet->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));*/

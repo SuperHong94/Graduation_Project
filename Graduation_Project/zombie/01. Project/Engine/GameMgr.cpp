@@ -93,6 +93,14 @@ void GameMgr::CheckZombieRespawn()
 
 void GameMgr::GameMgrUpdate()
 {
+	//타이머
+	TimerUpdate();
+	if (Gstatus->Timer <= 0)
+	{
+		Gstatus->isGameOver = true;
+		return;
+	}
+
 	// 보스 스폰
 	ChekBossSpawn();
 
@@ -272,4 +280,9 @@ void GameMgr::cheatDestroyTomb()
 			}
 		}
 	}
+}
+
+void GameMgr::TimerUpdate()
+{
+	Gstatus->Timer -= DT;
 }
