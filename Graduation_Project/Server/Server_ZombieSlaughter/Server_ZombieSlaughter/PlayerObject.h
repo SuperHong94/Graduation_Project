@@ -1,7 +1,7 @@
 #pragma once
 class CPlayerObject
 {
-private:
+protected:
 	Vec3 m_postion;
 	Vec3 m_rotation;
 	int m_speed;

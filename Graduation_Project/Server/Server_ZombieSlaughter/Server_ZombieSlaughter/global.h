@@ -1,5 +1,5 @@
 #pragma once
-
+#include "stdafx.h"
 #include <iostream>
 #include <unordered_map>
 #include <map>
@@ -11,6 +11,9 @@
 #pragma comment(lib, "MSWSock.lib") //acceptEx를위해서
 #include "Protocol.h"
 
+
+//오브젝트 관련
+#include "Object.h"
 
 //수학
 #include "SimpleMath.h"

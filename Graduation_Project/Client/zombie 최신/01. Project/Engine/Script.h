@@ -32,13 +32,6 @@ enum class SCRIPT_TYPE
 
 
 
-enum BulletState
-{
-	B_Normal,
-	B_Fire,
-	B_Ice,
-	B_Thunder,
-};
 
 enum MonsterState
 {

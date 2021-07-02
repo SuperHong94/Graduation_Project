@@ -1,0 +1,2 @@
+준서 클라 Script.h에 있는 enum중에
+Bullet State 프로토콜 헤더에 넣기

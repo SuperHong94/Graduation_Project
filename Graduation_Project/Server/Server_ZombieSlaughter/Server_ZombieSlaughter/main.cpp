@@ -213,7 +213,7 @@ void roll_update(c2s_roll_start* packet)
 
 	clients[c_id].m_pPlayer->UpdateRollStart(packet);
 	for (auto& c : clients)
-		if (c.second.m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) //게임씬일때 보내기
+		if (c.second.m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE && c.second.m_id != c_id) //게임씬일때 보내기
 			send_roll_packet(c.second.m_id, c_id); //c.secnod.m_id에게 c_id 정보 보내기
 }
 void proccess_packet(int c_id, unsigned char* buf)
@@ -259,7 +259,7 @@ void proccess_packet(int c_id, unsigned char* buf)
 
 		clients[c_id].m_pPlayer->UpdateRollEnd(packet);
 		for (auto& c : clients)
-			if (c.second.m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) //게임씬일때 보내기
+			if (c.second.m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE && c.second.m_id != c_id) //게임씬일때 보내기
 				send_roll_end_packet(c.second.m_id, c_id); //c.secnod.m_id에게 c_id 정보 보내기
 	}
 	break;

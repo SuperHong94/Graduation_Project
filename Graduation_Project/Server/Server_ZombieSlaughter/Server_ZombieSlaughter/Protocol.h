@@ -10,6 +10,15 @@ constexpr int MAX_NAME = 100;
 constexpr int MAX_BUFFER = 1024;
 
 
+
+enum BulletState
+{
+	B_Normal,
+	B_Fire,
+	B_Ice,
+	B_Thunder,
+};
+
 enum PlayerState
 {
 	P_Idle,
