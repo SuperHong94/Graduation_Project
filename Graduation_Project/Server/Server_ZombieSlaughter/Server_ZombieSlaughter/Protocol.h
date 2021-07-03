@@ -67,6 +67,9 @@ constexpr unsigned char C2S_ROLL_END = 12;
 constexpr unsigned char S2C_ROLL_START = 13;
 constexpr unsigned char S2C_ROLL_END = 14;
 
+constexpr unsigned char C2S_FIRE = 15;	//총알 발사 보내기
+
+
 
 enum EKEY_EVENT
 {
@@ -138,6 +141,19 @@ struct c2s_roll_end
 	unsigned char type;
 	int id; //누가 구르기 끝냈는지 보내기
 	float px, py, pz; // 구르기 끝났을때 position;
+};
+
+
+struct c2s_fire
+{
+	unsigned char size;
+	unsigned char type;
+	//int id;  누가쐈는지 알 필요가 있나?
+
+	float dX, dY, dZ; // 총알 방향
+	float pX, pY, pZ; //총알 발사 위치
+	BulletState eBulletState; //어떤 총알 발사했는지 보내기
+
 };
 
 //////////////////
