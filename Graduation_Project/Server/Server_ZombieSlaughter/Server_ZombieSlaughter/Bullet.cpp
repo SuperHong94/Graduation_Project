@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Object.h"
 #include "Bullet.h"
 
 CBullet::CBullet()

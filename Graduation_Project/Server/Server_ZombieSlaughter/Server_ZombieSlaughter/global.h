@@ -13,7 +13,7 @@
 
 
 //오브젝트 관련
-#include "Object.h"
+
 
 //수학
 #include "SimpleMath.h"
