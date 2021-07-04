@@ -15,8 +15,8 @@ struct VS_DIR_OUTPUT
 // ======================
 VS_DIR_OUTPUT VS_Dir(float3 _vPos : POSITION, float4 _vColor : COLOR)
 {
-    VS_DIR_OUTPUT output = (VS_DIR_OUTPUT) 0;
-    
+    VS_DIR_OUTPUT output = (VS_DIR_OUTPUT)0;
+
     // 투영좌표계를 반환할 때에는 float4 4번째 w 요소에 1.f 을 넣어준다.
     float4 vWorldPos = mul(float4(_vPos, 1.f), g_matWorld);
     float4 vViewPos = mul(vWorldPos, g_matView);
@@ -60,7 +60,7 @@ struct VTX_OUT
 
 VTX_OUT VS_Grid(VTX_IN _in)
 {
-    VTX_OUT output = (VTX_OUT) 0.f;
+    VTX_OUT output = (VTX_OUT)0.f;
 
     output.vPosition = mul(float4(_in.vPos, 1.f), g_matWVP);
     output.vWorldPos = mul(float4(_in.vPos, 1.f), g_matWorld).xyz;
@@ -74,17 +74,17 @@ float4 PS_Grid(VTX_OUT _in) : SV_Target
 {
     //float2 vFullUV = float2(_in.vPosition.x / g_vResolution.x, _in.vPosition.y / g_vResolution.y);
     //float3 vTargetViewPos = g_tex_0.Sample(g_sam_0, vFullUV).xyz;
-    
+
     //float fLen = length(vTargetViewPos);    
     //float fMax = fLen * 0.01f; // 거리값의 10%를 최대보간값으로 본다.    
-    
+
     //float fDepthRatio = 1.f;
     //if (vTargetViewPos.z != 0.f)
     //{        
     //    fDepthRatio = 1.f - saturate((length(_in.vViewPos) - length(vTargetViewPos)) / fMax);
     //}
-    
-    
+
+
     // 현재 월드 위치값이 카메라로부터 멀면    
     float fDist = abs(distance(_in.vWorldPos, g_vec4_0.xyz));
     float fThickness = g_float_1 * (fDist / abs(g_vec4_0.y)) * 2.f;
@@ -102,14 +102,14 @@ float4 PS_Grid(VTX_OUT _in) : SV_Target
         clip(-1);
     }
 
-    float fX = abs(_in.vWorldPos.x - (float) ((int) _in.vWorldPos.x / iStep) * iStep);
-    float fZ = abs(_in.vWorldPos.z - (float) ((int) _in.vWorldPos.z / iStep) * iStep);
+    float fX = abs(_in.vWorldPos.x - (float)((int)_in.vWorldPos.x / iStep) * iStep);
+    float fZ = abs(_in.vWorldPos.z - (float)((int)_in.vWorldPos.z / iStep) * iStep);
 
     if (fThickness / 2.f < fX)
-        fX = (float) iStep - fX;
+        fX = (float)iStep - fX;
     if (fThickness / 2.f < fZ)
-        fZ = (float) iStep - fZ;
-    
+        fZ = (float)iStep - fZ;
+
     float fXRatio = 0.f;
     float fZRatio = 0.f;
     float fRatio = 0.f;
@@ -127,7 +127,7 @@ float4 PS_Grid(VTX_OUT _in) : SV_Target
 
         return float4(g_vec4_1.rgb, fRatio); // * fDepthRatio);
     }
-    
+
     // 현재 단계 라인
     iStep = 1;
     for (i = 0; i < g_int_0; ++i)
@@ -135,14 +135,14 @@ float4 PS_Grid(VTX_OUT _in) : SV_Target
         iStep *= 10;
     }
 
-    fX = abs(_in.vWorldPos.x - (float) ((int) _in.vWorldPos.x / iStep) * iStep);
-    fZ = abs(_in.vWorldPos.z - (float) ((int) _in.vWorldPos.z / iStep) * iStep);
+    fX = abs(_in.vWorldPos.x - (float)((int)_in.vWorldPos.x / iStep) * iStep);
+    fZ = abs(_in.vWorldPos.z - (float)((int)_in.vWorldPos.z / iStep) * iStep);
 
     if (fThickness / 2.f < fX)
-        fX = (float) iStep - fX;
+        fX = (float)iStep - fX;
     if (fThickness / 2.f < fZ)
-        fZ = (float) iStep - fZ;
-    
+        fZ = (float)iStep - fZ;
+
     fXRatio = 0.f;
     fZRatio = 0.f;
     fRatio = 0.f;
@@ -160,7 +160,7 @@ float4 PS_Grid(VTX_OUT _in) : SV_Target
 
         return float4(g_vec4_1.rgb, fRatio * g_float_0); // * fDepthRatio);
     }
-    
+
     clip(-1);
     return float4(0.f, 0.f, 0.f, 0.f);
 }

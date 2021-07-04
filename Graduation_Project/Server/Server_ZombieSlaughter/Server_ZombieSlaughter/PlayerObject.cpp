@@ -3,7 +3,11 @@
 
 void CPlayerObject::init() //게임들어갈때 초기화
 {
+<<<<<<< HEAD
+	m_postion = { 200.f,0.f,200.f };
+=======
 	m_postion = { 0.f,0.f,0.f };
+>>>>>>> yjs
 	m_rotation = { 0.f,0.f,0.f };
 	m_speed = 500;
 	m_eSceneState = SCENE_STATE::GAME_SCENE; 

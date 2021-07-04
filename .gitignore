@@ -40,7 +40,7 @@ ipch/
 *.exe
 
 
-<<<<<<< HEAD
+
 *.pdb
 *.log
 *.idb
@@ -57,7 +57,7 @@ v16/
 *.idb
 *.pdb
 *.zip
-=======
+
 *.zip
 
->>>>>>> yjs
+

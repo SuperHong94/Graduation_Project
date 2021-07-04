@@ -6,7 +6,7 @@
 #include "Layer.h"
 #include "GameObject.h"
 #include "Collider2D.h"
-
+#include "BulletScript.h"
 
 CCollisionMgr::CCollisionMgr()
 	: m_LayerCheck{}
@@ -29,17 +29,17 @@ void CCollisionMgr::update()
 	for (int i = 0; i < MAX_LAYER; ++i)
 	{
 		for (int j = 0; j < MAX_LAYER; ++j)
-		{			
+		{
 			if (m_LayerCheck[i] & (1 << j))
 			{
 				// i <= j
-				CollisionLayer(pCurScene->GetLayer(i), pCurScene->GetLayer(j));				
+				CollisionLayer(pCurScene->GetLayer(i), pCurScene->GetLayer(j));
 			}
 		}
 	}
 }
 
-void CCollisionMgr::CheckCollisionLayer(const wstring & _strLayerName1, const wstring & _strLayerName2)
+void CCollisionMgr::CheckCollisionLayer(const wstring& _strLayerName1, const wstring& _strLayerName2)
 {
 	CLayer* pLayer1 = CSceneMgr::GetInst()->GetCurScene()->FindLayer(_strLayerName1);
 	CLayer* pLayer2 = CSceneMgr::GetInst()->GetCurScene()->FindLayer(_strLayerName2);
@@ -67,26 +67,44 @@ void CCollisionMgr::CheckCollisionLayer(int _iLayerIdx1, int _iLyaerIdx2)
 	m_LayerCheck[iMinIdx] |= (1 << iMaxIdx);
 }
 
-void CCollisionMgr::CollisionLayer(const CLayer * _pLayer1, const CLayer * _pLayer2)
+void CCollisionMgr::CollisionLayer(const CLayer* _pLayer1, const CLayer* _pLayer2)
 {
 	const vector<CGameObject*>& vecObj1 = _pLayer1->GetObjects();
 	const vector<CGameObject*>& vecObj2 = _pLayer2->GetObjects();
+
 
 	map<DWORD_PTR, bool>::iterator iter;
 
 	for (size_t i = 0; i < vecObj1.size(); ++i)
 	{
+		// 총알이 비활성 일시
+		if (vecObj1[i]->GetName() == L"Bullet Object")
+		{
+			if (!vecObj1[i]->GetScript<CBulletScript>()->GetActive())
+				continue;
+		}
+
 		CCollider2D* pCollider1 = vecObj1[i]->Collider2D();
 
 		if (nullptr == pCollider1)
 			continue;
 
-		size_t j = 0;		
+		size_t j = 0;
 		if (_pLayer1 == _pLayer2) // 동일한 레이어 간의 충돌을 검사하는 경우
 			j = i + 1;
 
 		for (; j < vecObj2.size(); ++j)
-		{			
+		{
+			// 총알이 비활성 일시
+			if (vecObj2[j]->GetName() == L"Bullet Object")
+			{
+				if (!vecObj2[j]->GetScript<CBulletScript>()->GetActive())
+				{
+					int a = 3;
+					continue;
+				}
+			}
+
 			CCollider2D* pCollider2 = vecObj2[j]->Collider2D();
 
 			if (nullptr == pCollider2)
@@ -117,7 +135,7 @@ void CCollisionMgr::CollisionLayer(const CLayer * _pLayer1, const CLayer * _pLay
 					{
 						pCollider1->OnCollision(pCollider2);
 						pCollider2->OnCollision(pCollider1);
-					}					
+					}
 				}
 				// 처음 충돌했다
 				else
@@ -152,7 +170,7 @@ void CCollisionMgr::CollisionLayer(const CLayer * _pLayer1, const CLayer * _pLay
 	}
 }
 
-bool CCollisionMgr::IsCollision(CCollider2D * _pCollider1, CCollider2D * _pCollider2)
+bool CCollisionMgr::IsCollision(CCollider2D* _pCollider1, CCollider2D* _pCollider2)
 {
 	if (!_pCollider1->IsActive() || !_pCollider1->GetObj()->IsActive() || !_pCollider2->IsActive() || !_pCollider2->GetObj()->IsActive())
 		return false;
@@ -172,19 +190,19 @@ bool CCollisionMgr::IsCollision(CCollider2D * _pCollider1, CCollider2D * _pColli
 	else
 	{
 		return CollisionRectCircle(_pCollider1, _pCollider2);
-	}	
+	}
 
 	return false;
 }
 
-bool CCollisionMgr::CollisionRect(CCollider2D * _pCollider1, CCollider2D * _pCollider2)
+bool CCollisionMgr::CollisionRect(CCollider2D* _pCollider1, CCollider2D* _pCollider2)
 {
 	static Vec3 arrLocal[4] = {					// 0 -- 1
 		  Vec3(-0.5f, 0.f, 0.5f)				// |	|
 		, Vec3(0.5f, 0.f, 0.5f)					// 3 -- 2
 		, Vec3(0.5f, 0.f, -0.5f)
-		, Vec3(-0.5f, 0.f, -0.5f)};
-	
+		, Vec3(-0.5f, 0.f, -0.5f) };
+
 
 	const Matrix& matCol1 = _pCollider1->GetColliderWorldMat();
 	const Matrix& matCol2 = _pCollider2->GetColliderWorldMat();
@@ -192,7 +210,7 @@ bool CCollisionMgr::CollisionRect(CCollider2D * _pCollider1, CCollider2D * _pCol
 	Vec3 arrCol1[4] = {};
 	Vec3 arrCol2[4] = {};
 	Vec3 arrCenter[2] = {};
-	
+
 	for (UINT i = 0; i < 4; ++i)
 	{
 		arrCol1[i] = XMVector3TransformCoord(arrLocal[i], matCol1);
@@ -209,7 +227,7 @@ bool CCollisionMgr::CollisionRect(CCollider2D * _pCollider1, CCollider2D * _pCol
 	arrCenter[1].y = 0.f;
 
 	Vec3 vCenter = arrCenter[1] - arrCenter[0];
-	
+
 	Vec3 arrOriginVec[4] = { arrCol1[3] - arrCol1[0]
 		, arrCol1[1] - arrCol1[0]
 		, arrCol2[3] - arrCol2[0]
@@ -231,7 +249,7 @@ bool CCollisionMgr::CollisionRect(CCollider2D * _pCollider1, CCollider2D * _pCol
 	for (UINT i = 0; i < 4; ++i)
 	{
 		float fCenter = abs(vCenter.Dot(arrProjVec[i])); // 중심 거리 벡터를 해당 투영축으로 투영시킨 길이
-		
+
 		float fAcc = 0.f;
 		for (UINT j = 0; j < 4; ++j)
 			fAcc += abs(arrOriginVec[j].Dot(arrProjVec[i]));
@@ -313,12 +331,12 @@ bool CCollisionMgr::CollisionRRect(CCollider2D* _pCollider1, CCollider2D* _pColl
 	return true;
 }
 
-bool CCollisionMgr::CollisionCircle(CCollider2D * _pCollider1, CCollider2D * _pCollider2)
+bool CCollisionMgr::CollisionCircle(CCollider2D* _pCollider1, CCollider2D* _pCollider2)
 {
 	return false;
 }
 
-bool CCollisionMgr::CollisionRectCircle(CCollider2D * _pCollider1, CCollider2D * _pCollider2)
+bool CCollisionMgr::CollisionRectCircle(CCollider2D* _pCollider1, CCollider2D* _pCollider2)
 {
 	return false;
 }

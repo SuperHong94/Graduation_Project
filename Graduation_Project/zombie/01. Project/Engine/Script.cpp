@@ -11,7 +11,7 @@ CScript::~CScript()
 {
 }
 
-void CScript::CreateObject(CGameObject * _pNewObject, int _iLayerIdx)
+void CScript::CreateObject(CGameObject* _pNewObject, int _iLayerIdx)
 {
 	tEvent evt = {};
 
@@ -22,7 +22,7 @@ void CScript::CreateObject(CGameObject * _pNewObject, int _iLayerIdx)
 	CEventMgr::GetInst()->AddEvent(evt);
 }
 
-void CScript::CreateObject(CGameObject * _pNewObject, const wstring & _strLayerName)
+void CScript::CreateObject(CGameObject* _pNewObject, const wstring& _strLayerName)
 {
 	// 생성 이벤트 등록
 	CLayer* pLayer = CSceneMgr::GetInst()->GetCurScene()->FindLayer(_strLayerName);
@@ -38,17 +38,17 @@ void CScript::CreateObject(CGameObject * _pNewObject, const wstring & _strLayerN
 	CEventMgr::GetInst()->AddEvent(evt);
 }
 
-void CScript::DeleteObject(CGameObject * _pDeleteObject)
+void CScript::DeleteObject(CGameObject* _pDeleteObject)
 {
 	tEvent evt = {};
 
 	evt.eType = EVENT_TYPE::DELETE_OBJECT;
-	evt.wParam = (DWORD_PTR)_pDeleteObject;	
+	evt.wParam = (DWORD_PTR)_pDeleteObject;
 
 	CEventMgr::GetInst()->AddEvent(evt);
 }
 
-void CScript::AddChild(CGameObject * _pChildObject)
+void CScript::AddChild(CGameObject* _pChildObject)
 {
 	tEvent evt = {};
 
@@ -59,7 +59,7 @@ void CScript::AddChild(CGameObject * _pChildObject)
 	CEventMgr::GetInst()->AddEvent(evt);
 }
 
-void CScript::AddChild(CGameObject * _pParent, CGameObject * _pChild)
+void CScript::AddChild(CGameObject* _pParent, CGameObject* _pChild)
 {
 	tEvent evt = {};
 
@@ -75,22 +75,22 @@ void CScript::ClearParent()
 	tEvent evt = {};
 
 	evt.eType = EVENT_TYPE::CLEAR_PARENT;
-	evt.wParam = (DWORD_PTR)GetObj();	
+	evt.wParam = (DWORD_PTR)GetObj();
 
 	CEventMgr::GetInst()->AddEvent(evt);
 }
 
-void CScript::ClearParent(CGameObject * _pTarget)
+void CScript::ClearParent(CGameObject* _pTarget)
 {
 	tEvent evt = {};
 
 	evt.eType = EVENT_TYPE::CLEAR_PARENT;
-	evt.wParam = (DWORD_PTR)_pTarget;	
+	evt.wParam = (DWORD_PTR)_pTarget;
 
 	CEventMgr::GetInst()->AddEvent(evt);
 }
 
-void CScript::TransferLayer(const wstring & _strLayerName, bool _bMoveAll)
+void CScript::TransferLayer(const wstring& _strLayerName, bool _bMoveAll)
 {
 	CLayer* pLayer = CSceneMgr::GetInst()->GetCurScene()->FindLayer(_strLayerName);
 	assert(nullptr != pLayer);
@@ -120,7 +120,7 @@ void CScript::TransferLayer(int _iLayerIdx, bool _bMoveAll)
 	CEventMgr::GetInst()->AddEvent(evt);
 }
 
-void CScript::TransferLayer(CGameObject * _pTarget, const wstring & _strLayerName, bool _bMoveAll)
+void CScript::TransferLayer(CGameObject* _pTarget, const wstring& _strLayerName, bool _bMoveAll)
 {
 	CLayer* pLayer = CSceneMgr::GetInst()->GetCurScene()->FindLayer(_strLayerName);
 	assert(nullptr != pLayer);
@@ -137,7 +137,7 @@ void CScript::TransferLayer(CGameObject * _pTarget, const wstring & _strLayerNam
 	CEventMgr::GetInst()->AddEvent(evt);
 }
 
-void CScript::TransferLayer(CGameObject * _pTarget, int _iLayerIdx, bool _bMoveAll)
+void CScript::TransferLayer(CGameObject* _pTarget, int _iLayerIdx, bool _bMoveAll)
 {
 	assert(0 <= _iLayerIdx && _iLayerIdx < 32);
 
@@ -150,7 +150,7 @@ void CScript::TransferLayer(CGameObject * _pTarget, int _iLayerIdx, bool _bMoveA
 	CEventMgr::GetInst()->AddEvent(evt);
 }
 
-void CScript::EableObject(CGameObject * _pTarget)
+void CScript::EableObject(CGameObject* _pTarget)
 {
 	tEvent evt = {};
 
@@ -159,7 +159,7 @@ void CScript::EableObject(CGameObject * _pTarget)
 	CEventMgr::GetInst()->AddEvent(evt);
 }
 
-void CScript::Disable(CGameObject * _pTarget)
+void CScript::Disable(CGameObject* _pTarget)
 {
 	tEvent evt = {};
 

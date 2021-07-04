@@ -30,10 +30,10 @@ public:
 	virtual CResource* Clone() { return nullptr; }
 	void SaveToScene(FILE* _pFile);
 
-	
+
 public:
 	CResource(RES_TYPE _eType);
-	CResource(const CResource & _res);
+	CResource(const CResource& _res);
 	virtual ~CResource();
 
 	template<typename T>

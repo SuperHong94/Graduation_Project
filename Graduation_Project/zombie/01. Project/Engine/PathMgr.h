@@ -20,7 +20,7 @@ public:
 	static wchar_t* GetProjectPath();
 	static wchar_t* GetFileName(const wchar_t* _strPath);
 	static wchar_t* GetExt(const wchar_t* _strPath);
-	static wchar_t * GetRelativePath(const wchar_t * _pFullPath);
+	static wchar_t* GetRelativePath(const wchar_t* _pFullPath);
 	static wchar_t* GetSolutionPath();
 
 private:

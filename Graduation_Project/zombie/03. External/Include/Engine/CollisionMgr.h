@@ -22,7 +22,7 @@ private:
 public:
 	void init();
 	void update();
-	
+
 public:
 	void CheckCollisionLayer(const wstring& _strLayerName1, const wstring& _strLayerName2);
 	void CheckCollisionLayer(int _iLayerIdx1, int _iLyaerIdx2);

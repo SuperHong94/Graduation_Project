@@ -36,7 +36,7 @@ private:
 	DEPTH_STENCIL_TYPE					m_eDSType;
 
 	SHADER_POV							m_ePOV; // 호출 시점
-	
+
 
 public:
 	void Create(SHADER_POV _ePOV, D3D_PRIMITIVE_TOPOLOGY _eTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

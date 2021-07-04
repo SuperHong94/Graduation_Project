@@ -83,7 +83,7 @@ Vec3 CTransform::GetWorldScale()
 	return vWorldScale;
 }
 
-bool CTransform::IsCasting(const Vec3 & _vPos)
+bool CTransform::IsCasting(const Vec3& _vPos)
 {
 	Vec3 vWorldPos = GetWorldPos();
 	Vec3 vWorldScale = GetWorldScale();
@@ -104,7 +104,7 @@ float CTransform::GetMaxScale()
 }
 
 
-void CTransform::LookAt(const Vec3 & _vLook)
+void CTransform::LookAt(const Vec3& _vLook)
 {
 	Vec3 vFront = _vLook;
 	vFront.Normalize();
@@ -137,7 +137,7 @@ void CTransform::LookAt(const Vec3 & _vLook)
 }
 
 
-void CTransform::SaveToScene(FILE * _pFile)
+void CTransform::SaveToScene(FILE* _pFile)
 {
 	UINT iType = (UINT)GetComponentType();
 	fwrite(&iType, sizeof(UINT), 1, _pFile);
@@ -147,7 +147,7 @@ void CTransform::SaveToScene(FILE * _pFile)
 	fwrite(&m_vLocalRot, sizeof(Vec3), 1, _pFile);
 }
 
-void CTransform::LoadFromScene(FILE * _pFile)
+void CTransform::LoadFromScene(FILE* _pFile)
 {
 	fread(&m_vLocalPos, sizeof(Vec3), 1, _pFile);
 	fread(&m_vLocalScale, sizeof(Vec3), 1, _pFile);

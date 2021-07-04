@@ -12,12 +12,12 @@ CAnimator2D::CAnimator2D()
 {
 }
 
-CAnimator2D::CAnimator2D(const CAnimator2D & _origin)
+CAnimator2D::CAnimator2D(const CAnimator2D& _origin)
 	: CComponent(_origin)
 	, m_bRepeat(_origin.m_bRepeat)
 {
 	for (auto& pair : _origin.m_mapAnim)
-	{			
+	{
 		CAnimation2D* pCopyAnim = new CAnimation2D(*pair.second);
 		pCopyAnim->SetAnimator2D(this);
 		m_mapAnim.insert(make_pair(pair.first, pCopyAnim));
@@ -56,10 +56,10 @@ void CAnimator2D::finalupdate()
 		}
 
 		m_pCurAnim->finalupdate();
-	}	
+	}
 }
 
-bool CAnimator2D::AddAnimation(const wstring & _strAnimKey
+bool CAnimator2D::AddAnimation(const wstring& _strAnimKey
 	, Ptr<CTexture> _pTex
 	, Vec2 _vLT, Vec2 _vGap
 	, int _iFrmCount, float _fDuration)
@@ -80,7 +80,7 @@ bool CAnimator2D::AddAnimation(const wstring & _strAnimKey
 	return true;
 }
 
-void CAnimator2D::PlayAnimation(const wstring & _strAnimKey, bool _bRepeat)
+void CAnimator2D::PlayAnimation(const wstring& _strAnimKey, bool _bRepeat)
 {
 	m_pCurAnim = FindAnimation(_strAnimKey);
 
@@ -91,7 +91,7 @@ void CAnimator2D::PlayAnimation(const wstring & _strAnimKey, bool _bRepeat)
 	}
 
 	m_bRepeat = _bRepeat;
-	m_bPlay = true;	
+	m_bPlay = true;
 }
 
 void CAnimator2D::StopAnimation()
@@ -99,26 +99,26 @@ void CAnimator2D::StopAnimation()
 	m_bPlay = false;
 	if (nullptr == m_pCurAnim)
 		return;
-	
-	m_pCurAnim->Play();	
+
+	m_pCurAnim->Play();
 }
 
-CAnimation2D * CAnimator2D::FindAnimation(const wstring & _strKey)
+CAnimation2D* CAnimator2D::FindAnimation(const wstring& _strKey)
 {
 	map<wstring, CAnimation2D*>::iterator iter = m_mapAnim.find(_strKey);
 
 	if (iter == m_mapAnim.end())
-		return nullptr;	
+		return nullptr;
 
 	return iter->second;
 }
 
 void CAnimator2D::UpdateData()
 {
-	if (m_pCurAnim) 
+	if (m_pCurAnim)
 	{
 		m_pCurAnim->UpdateData();
-	}		
+	}
 }
 
 //void CAnimator2D::ClearData()
@@ -130,7 +130,7 @@ void CAnimator2D::UpdateData()
 //	//pAnimBuffer->UpdateData((UINT)SHADER_TYPE::ST_VERTEX | (UINT)SHADER_TYPE::ST_PIXEL);
 //}
 
-void CAnimator2D::SaveToScene(FILE * _pFile)
+void CAnimator2D::SaveToScene(FILE* _pFile)
 {
 	UINT iType = (UINT)GetComponentType();
 	fwrite(&iType, sizeof(UINT), 1, _pFile);
@@ -150,10 +150,10 @@ void CAnimator2D::SaveToScene(FILE * _pFile)
 	if (nullptr != m_pCurAnim)
 	{
 		SaveWString(_pFile, m_pCurAnim->GetName());
-	}	
+	}
 }
 
-void CAnimator2D::LoadFromScene(FILE * _pFile)
+void CAnimator2D::LoadFromScene(FILE* _pFile)
 {
 	fread(&m_bRepeat, 1, 1, _pFile);
 
@@ -174,7 +174,7 @@ void CAnimator2D::LoadFromScene(FILE * _pFile)
 
 	if (pData)
 	{
-		wstring strCurAnim = LoadWString(_pFile);		
+		wstring strCurAnim = LoadWString(_pFile);
 		m_pCurAnim = FindAnimation(strCurAnim);
 		assert(m_pCurAnim);
 	}

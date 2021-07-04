@@ -39,7 +39,7 @@ void CResMgr::init()
 }
 
 Ptr<CTexture> CResMgr::CreateTexture(const wstring& _strName, UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat
-	, const D3D12_HEAP_PROPERTIES & _HeapProperty, D3D12_HEAP_FLAGS _eHeapFlag
+	, const D3D12_HEAP_PROPERTIES& _HeapProperty, D3D12_HEAP_FLAGS _eHeapFlag
 	, D3D12_RESOURCE_FLAGS _eResFlag, Vec4 _vClearColor)
 {
 	Ptr<CTexture> pNewTexture = new CTexture;
@@ -49,16 +49,16 @@ Ptr<CTexture> CResMgr::CreateTexture(const wstring& _strName, UINT _iWidth, UINT
 	return pNewTexture;
 }
 
-Ptr<CTexture> CResMgr::CreateTextureFromResource(const wstring & _strName, ComPtr<ID3D12Resource> _pTex2D)
+Ptr<CTexture> CResMgr::CreateTextureFromResource(const wstring& _strName, ComPtr<ID3D12Resource> _pTex2D)
 {
 	Ptr<CTexture> pNewTexture = new CTexture;
-	pNewTexture->CreateFromResource(_pTex2D);	
+	pNewTexture->CreateFromResource(_pTex2D);
 	AddRes<CTexture>(_strName, pNewTexture);
 
 	return pNewTexture;
 }
 
-Ptr<CMeshData> CResMgr::LoadFBX(const wstring & _strPath)
+Ptr<CMeshData> CResMgr::LoadFBX(const wstring& _strPath)
 {
 	wstring strFileName = CPathMgr::GetFileName(_strPath.c_str());
 
@@ -78,9 +78,9 @@ Ptr<CMeshData> CResMgr::LoadFBX(const wstring & _strPath)
 	return pMeshData;
 }
 
-FMOD_RESULT CHANNEL_CALLBACK(FMOD_CHANNELCONTROL *channelcontrol, FMOD_CHANNELCONTROL_TYPE controltype
+FMOD_RESULT CHANNEL_CALLBACK(FMOD_CHANNELCONTROL* channelcontrol, FMOD_CHANNELCONTROL_TYPE controltype
 	, FMOD_CHANNELCONTROL_CALLBACK_TYPE callbacktype
-	, void *commanddata1, void *commanddata2);
+	, void* commanddata1, void* commanddata2);
 
 void CResMgr::InitSound()
 {
@@ -92,5 +92,5 @@ void CResMgr::InitSound()
 	}
 
 	// 32개 채널 생성
-	CSound::g_pFMOD->init(32, FMOD_DEFAULT, nullptr);	
+	CSound::g_pFMOD->init(32, FMOD_DEFAULT, nullptr);
 }

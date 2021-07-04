@@ -49,7 +49,11 @@ constexpr unsigned char S2C_REMOVE_CLIENT= 6;
 
 constexpr unsigned char C2S_MOUSE_EVENT= 7;
 constexpr unsigned char C2S_CHANGE_SCENE= 8;
+<<<<<<< HEAD
+constexpr unsigned char S2C_CHANGE_SCENE = 9;
+=======
 constexpr unsigned char S2C_CHAGE_SCENE = 9;
+>>>>>>> yjs
 
 enum EKEY_EVENT
 {
@@ -137,12 +141,21 @@ struct s2c_remove_client
 	
 };
 
+<<<<<<< HEAD
+struct s2c_change_Scene
+{
+	unsigned char size;
+	unsigned char type;
+
+	SCENE_STATE eScene_state;//바꾸는 씬 정보
+=======
 struct s2c_chage_Scene
 {
 	unsigned char size;
 	unsigned char type;
 	int id; //바꾸는 씬 정보
 	SCENE_STATE eScene_state;
+>>>>>>> yjs
 
 };
 struct s2c_add_client //이게 초기 데이터도 보내는거임
@@ -152,6 +165,10 @@ struct s2c_add_client //이게 초기 데이터도 보내는거임
 	int id;//추가할 클라ID
 	float x, y, z; //추가할 클라의 좌표값
 	float rx, ry, rz; //추가할 클라의 회전값
+<<<<<<< HEAD
+	SCENE_STATE eScene_state;
+=======
+>>>>>>> yjs
 };
 
 #pragma pack(pop)

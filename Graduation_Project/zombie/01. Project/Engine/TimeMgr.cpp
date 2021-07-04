@@ -7,7 +7,7 @@ CTimeMgr::CTimeMgr()
 	: m_llCurCount{}
 	, m_llOldCount{}
 	, m_llFrequency{}
-	, m_fDeltaTime (0.f)
+	, m_fDeltaTime(0.f)
 	, m_fAccTime(0.f)
 	, m_bFreeze(false)
 {
@@ -26,11 +26,11 @@ void CTimeMgr::init()
 void CTimeMgr::update()
 {
 	QueryPerformanceCounter(&m_llCurCount);
-	
+
 	m_fDeltaTime = (float)(m_llCurCount.QuadPart - m_llOldCount.QuadPart) / (float)m_llFrequency.QuadPart;
 	m_llOldCount = m_llCurCount;
 
-	m_fAccTime += m_fDeltaTime;	
+	m_fAccTime += m_fDeltaTime;
 
 	if (m_bFreeze)
 	{
@@ -43,16 +43,16 @@ void CTimeMgr::update()
 	if (m_fAccTime >= 1.f)
 	{
 		QueryPerformanceFrequency(&m_llFrequency);
-
+		m_fAccTime = 0.f;
 		m_fFPS = 1 / m_fDeltaTime;
 
 		// FPS 출력
 		wchar_t szFPS[50] = L"";
-		wsprintf(szFPS, L"FPS : %d", (int)i/ (int)m_fAccTime);
-		//wsprintf(szFPS, L"FPS : %d", i / 2);
+		//wsprintf(szFPS, L"FPS : %d", (int)i/ (int)m_fAccTime);
+		wsprintf(szFPS, L"FPS : %d", i / 2);
 		SetWindowText(CCore::GetInst()->m_hMainHwnd, szFPS);
 		i = 0;
-		m_fAccTime = 0.f;
+		//m_fAccTime = 0.f;
 	}
 
 	// 전역 상수버퍼에 전달 될 값
@@ -61,13 +61,3 @@ void CTimeMgr::update()
 
 
 }
-//
-//void CTimeMgr::render(HDC _dc)
-//{	
-//	if (m_fAccTime > 1.f)
-//	{
-//		QueryPerformanceFrequency(&m_llFrequency);
-//		m_fAccTime = 0.f;
-//		m_fFPS = 1 / m_fDeltaTime;
-//	}
-//}

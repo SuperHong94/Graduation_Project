@@ -49,7 +49,7 @@ void CAnimation2D::UpdateData()
 	data.vLen = m_vecFrm[m_iCurFrm].vLen;
 	data.vLT = m_vecFrm[m_iCurFrm].vLT;
 	data.vOffset = m_vecFrm[m_iCurFrm].vOffsetPos;
-	
+
 	// 현재 프레임 정보를 상수버퍼에 저장 후 b2 레지스터로 업데이트
 	CDevice::GetInst()->SetConstBufferToRegister(pAnimBuffer, pAnimBuffer->AddData(&data));
 
@@ -70,14 +70,14 @@ void CAnimation2D::Create(Ptr<CTexture> _pTex, Vec2 _vLT, Vec2 _vGap, int _iFrmC
 		frm.vLT = Vec2(vLT.x / _pTex->Width(), vLT.y / _pTex->Height());
 		frm.vLen = Vec2(_vGap.x / _pTex->Width(), _vGap.y / _pTex->Height());
 		frm.fDuration = _fDuration;
-		
+
 		m_vecFrm.push_back(frm);
 	}
 }
 
-void CAnimation2D::SaveToScene(FILE * _pFile)
-{	
-	UINT iFrmCount = (UINT) m_vecFrm.size();
+void CAnimation2D::SaveToScene(FILE* _pFile)
+{
+	UINT iFrmCount = (UINT)m_vecFrm.size();
 
 	fwrite(&iFrmCount, sizeof(UINT), 1, _pFile);
 	for (size_t i = 0; i < m_vecFrm.size(); ++i)
@@ -91,10 +91,10 @@ void CAnimation2D::SaveToScene(FILE * _pFile)
 		}
 	}
 
-	fwrite(&m_iCurFrm, 4, 1, _pFile);	
+	fwrite(&m_iCurFrm, 4, 1, _pFile);
 }
 
-void CAnimation2D::LoadFromScene(FILE * _pFile)
+void CAnimation2D::LoadFromScene(FILE* _pFile)
 {
 	UINT iFrmCount = 0;
 	fread(&iFrmCount, sizeof(UINT), 1, _pFile);
@@ -115,7 +115,7 @@ void CAnimation2D::LoadFromScene(FILE * _pFile)
 			if (nullptr == tFrm.pTex)
 			{
 				tFrm.pTex = CResMgr::GetInst()->Load<CTexture>(strTexName, strTexPath);
-			}			
+			}
 		}
 
 		m_vecFrm.push_back(tFrm);

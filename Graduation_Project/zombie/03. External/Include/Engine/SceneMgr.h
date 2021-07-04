@@ -5,7 +5,7 @@ class CScene;
 class CCamera;
 class CGameObject;
 
-enum class SCENE_STATE 
+enum class SCENE_STATE
 {
 	START_SCENE,
 	GAME_SCENE,
@@ -21,10 +21,15 @@ private:
 	GameMgr* m_pGameManager;
 	CGameObject* m_pPlayerArr[4];
 	CGameObject* monsterArr[100];
+	CGameObject* m_pItem[50];
+	CGameObject* m_Light;
 	int monsterCnt = 60;
+	int ItemCnt = 50;
 	int			sceneNum = 0;
 	bool		isChange = false;
 	float collOffset = 20000.f;
+	bool QuestVisible = true;
+	bool pressI = false;
 
 	// 서버와 통신 해야됨
 	int playerNum = 4;
@@ -33,6 +38,11 @@ private:
 
 	float posUIRatio = 64;
 	float miniMapUIRatio = 6.8;
+	float hpBarWidth = 0;
+	float hpBarHeight = 0;
+
+	Ptr<CTexture> GameSceneArrTex[50];
+	Ptr<CTexture> BulletCntArrTex[11];
 
 	SCENE_STATE SceneState = SCENE_STATE::START_SCENE;
 public:
@@ -46,11 +56,12 @@ public:
 	void update_tool();
 
 	void updateUI();
+
 	/*CScene* GetStartScene() { return m_pStartScene; }
 	CScene* GetGameScene() { return m_pGameScene; }
 	CScene* GetEndScene() { return m_pEndScene; }*/
 
-	bool CheckIsChange(){return isChange;}
+	bool CheckIsChange() { return isChange; }
 	void SetIsChange(bool b) { isChange = b; }
 
 	float GetCollOffset() { return collOffset; };
@@ -62,10 +73,8 @@ public:
 public:
 	CScene* GetCurScene();
 	void ChangeScene(CScene* _pNextScene);
-	void FindGameObjectByTag( const wstring& _strTag, vector<CGameObject*>& _vecFindObj);
+	void FindGameObjectByTag(const wstring& _strTag, vector<CGameObject*>& _vecFindObj);
 	void setMap();
-	//void FindGameObjectByPoint(POINT _point, vector<CGameObject*>& _vecFindObj, CCamera* _pToolCam = nullptr);
-
 
 public:
 	void CreateTargetUI();
