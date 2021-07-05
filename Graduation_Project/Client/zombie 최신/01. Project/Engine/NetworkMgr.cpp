@@ -88,10 +88,10 @@ void CNetworkMgr::UpdateScene()
 	case SCENE_STATE::START_SCENE:
 		break;
 	case SCENE_STATE::GAME_SCENE:
-		init_game();
-		CSceneMgr::GetInst()->NewCurScene();
-		CSceneMgr::GetInst()->init();
-		CSceneMgr::GetInst()->SetIsChange(true);
+	/*	init_game();
+		CSceneMgr::GetInst()->NewCurScene();*/
+		//CSceneMgr::GetInst()->init();
+		//CSceneMgr::GetInst()->SetIsChange(true);
 		break;
 	case SCENE_STATE::GAMECLEAR_SCENE:
 		break;
@@ -407,63 +407,63 @@ void CNetworkMgr::init()
 
 void CNetworkMgr::init_game()
 {
-	Ptr<CMeshData> pMeshData;
-	//m_pPlayerArray = new CGameObject * [MAX_USER];
-	for (int i = 0; i < MAX_USER; i++)
-	{
-		m_pPlayerArray[i] = new CGameObject;
-
-		// 모델을 플레이어별로 따로 설정할수도 있음
-		// 아직 보류
-		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
-		m_pPlayerArray[i] = pMeshData->Instantiate();
-
-		m_pPlayerArray[i]->SetName(L"Player Object");
-		m_pPlayerArray[i]->AddComponent(new CTransform);
-		//pPlayerObject->AddComponent(new CMeshRender);
-
-		// Transform 설정
-
-		if (i == m_playerId)
-			m_pPlayerArray[i]->Transform()->SetLocalPos(Vec3(0, 0.f, 0.f));
-		else
-			m_pPlayerArray[i]->Transform()->SetLocalPos(Vec3(-20000.f, 20000.f, -20000.f));
-
-
-		m_pPlayerArray[i]->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
-
-		//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
-
-		// MeshRender 설정
-		m_pPlayerArray[i]->MeshRender()->SetDynamicShadow(true);
-		//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
-		//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
-		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
-		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
-
-		//우선 충돌은 무시
-		/*m_pPlayerArr[i]->AddComponent(new CCollider2D);
-		m_pPlayerArr[i]->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
-		m_pPlayerArr[i]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
-		m_pPlayerArr[i]->Collider2D()->SetOffsetScale(Vec3(100.f, 0.f, 100.f));*/
-
-		// Script 설정
-		// 플레이어 일시
-		if (i == m_playerId)
-			m_pPlayerArray[i]->AddComponent(new CPlayerScript(m_pPlayerArray[i], true));
-		else {
-			m_pPlayerArray[i]->AddComponent(new CPlayerScript(m_pPlayerArray[i], false));
-		}
-
-		float collOffset = 2000.f;
-		m_pPlayerArray[i]->GetScript<CPlayerScript>()->SetBulletCollOffset(collOffset);
-
-		// AddGameObject 이건 씬에서 해줌
-		//m_pCurScene->FindLayer(L"Player")->AddGameObject(m_pPlayerArray[i]);
-
-	}
-#ifdef _DEBUG
-	std::cout << "플레이어 초기화 완료\n";
-#endif // _DEBUG
+//	Ptr<CMeshData> pMeshData;
+//	//m_pPlayerArray = new CGameObject * [MAX_USER];
+//	for (int i = 0; i < MAX_USER; i++)
+//	{
+//		m_pPlayerArray[i] = new CGameObject;
+//
+//		// 모델을 플레이어별로 따로 설정할수도 있음
+//		// 아직 보류
+//		pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
+//		m_pPlayerArray[i] = pMeshData->Instantiate();
+//
+//		m_pPlayerArray[i]->SetName(L"Player Object");
+//		m_pPlayerArray[i]->AddComponent(new CTransform);
+//		//pPlayerObject->AddComponent(new CMeshRender);
+//
+//		// Transform 설정
+//
+//		if (i == m_playerId)
+//			m_pPlayerArray[i]->Transform()->SetLocalPos(Vec3(0, 0.f, 0.f));
+//		else
+//			m_pPlayerArray[i]->Transform()->SetLocalPos(Vec3(-20000.f, 20000.f, -20000.f));
+//
+//
+//		m_pPlayerArray[i]->Transform()->SetLocalScale(Vec3(0.5f, 0.5f, 0.5f));
+//
+//		//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
+//
+//		// MeshRender 설정
+//		m_pPlayerArray[i]->MeshRender()->SetDynamicShadow(true);
+//		//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
+//		//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
+//		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
+//		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+//
+//		//우선 충돌은 무시
+//		/*m_pPlayerArr[i]->AddComponent(new CCollider2D);
+//		m_pPlayerArr[i]->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+//		m_pPlayerArr[i]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
+//		m_pPlayerArr[i]->Collider2D()->SetOffsetScale(Vec3(100.f, 0.f, 100.f));*/
+//
+//		// Script 설정
+//		// 플레이어 일시
+//		if (i == m_playerId)
+//			m_pPlayerArray[i]->AddComponent(new CPlayerScript(m_pPlayerArray[i], true));
+//		else {
+//			m_pPlayerArray[i]->AddComponent(new CPlayerScript(m_pPlayerArray[i], false));
+//		}
+//
+//		float collOffset = 2000.f;
+//		m_pPlayerArray[i]->GetScript<CPlayerScript>()->SetBulletCollOffset(collOffset);
+//
+//		// AddGameObject 이건 씬에서 해줌
+//		//m_pCurScene->FindLayer(L"Player")->AddGameObject(m_pPlayerArray[i]);
+//
+//	}
+//#ifdef _DEBUG
+//	std::cout << "플레이어 초기화 완료\n";
+//#endif // _DEBUG
 
 }

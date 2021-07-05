@@ -44,7 +44,7 @@ public:
 public: //오브젝트 관련 메소드
 
 	CGameObject** GetPlayerArray() { return m_pPlayerArray; }; //참조자 리턴 밖에서 수정가능
-
+	void SetPlayerArray(CGameObject* Playerarr, int i) { m_pPlayerArray[i] = Playerarr; };
 	//void SetPlayerArray(CGameObject* playerArray[MAX_USER]) { m_pPlayerArray = playerArray; };
 	//void SetPlayerArray(CGameObject playerArray[][MAX_USER]) { m_pPlayerArray = playerArray; };
 	int GetId() { return m_id; };
