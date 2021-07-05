@@ -16,7 +16,7 @@ CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	status = new PlayerStatus();
 	isPlayer = player;
 
-	// ÃÑ¾Ë »ý¼º¤©
+	// ÃÑ¾Ë »ý¼º
 	for (int i = 0; i < BulletCnt; i++)
 	{
 		pBullet[i] = new CGameObject;
@@ -471,12 +471,11 @@ void CPlayerScript::update()
 
 					if (!pBullet[i]->GetScript<CBulletScript>()->GetActive())
 					{
-
 						pBullet[i]->GetScript<CBulletScript>()->SetActive(true);
 
 						pBullet[i]->GetScript<CBulletScript>()->SetDir(vNBulletDir);
 
-						pBullet[i]->Transform()->SetLocalPos(Vec3(vPos.x + vNBulletDir.x * 70, bulletHeight, vPos.z + vNBulletDir.z * 65));
+						pBullet[i]->Transform()->SetLocalPos(Vec3(vPos.x + vNBulletDir.x * 40, bulletHeight, vPos.z + vNBulletDir.z * 35));
 
 						/*			pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
 									pBullet->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));*/
@@ -519,6 +518,7 @@ void CPlayerScript::update()
 						// ÃÑ¾Ë ¹æÇâ ¼³Á¤
 						float temp = atan2(vNBulletDir.z, vNBulletDir.x);
 						pBullet[i]->Transform()->SetLocalRot(Vec3(XM_PI / 2, -temp, 0.f));
+
 
 						break;
 					}

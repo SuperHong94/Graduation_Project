@@ -435,11 +435,17 @@ void CNetworkMgr::init_game()
 		//pPlayerObject->Transform()->SetLocalRot(Vec3(0.f, 0.f, XM_PI));
 
 		// MeshRender 설정
-		//pPlayerObject->MeshRender()->SetDynamicShadow(true);
+		m_pPlayerArray[i]->MeshRender()->SetDynamicShadow(true);
 		//pPlayerObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"SphereMesh"));
 		//pPlayerObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
 		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pColor.GetPointer());
 		//pPlayerObject->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_1, pNormal.GetPointer());
+
+		//우선 충돌은 무시
+		/*m_pPlayerArr[i]->AddComponent(new CCollider2D);
+		m_pPlayerArr[i]->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::RECT);
+		m_pPlayerArr[i]->Collider2D()->SetOffsetPos(Vec3(0.f, 50.f + collOffset, 0.f));
+		m_pPlayerArr[i]->Collider2D()->SetOffsetScale(Vec3(100.f, 0.f, 100.f));*/
 
 		// Script 설정
 		// 플레이어 일시
@@ -449,7 +455,10 @@ void CNetworkMgr::init_game()
 			m_pPlayerArray[i]->AddComponent(new CPlayerScript(m_pPlayerArray[i], false));
 		}
 
-		// AddGameObject
+		float collOffset = 2000.f;
+		m_pPlayerArray[i]->GetScript<CPlayerScript>()->SetBulletCollOffset(collOffset);
+
+		// AddGameObject 이건 씬에서 해줌
 		//m_pCurScene->FindLayer(L"Player")->AddGameObject(m_pPlayerArray[i]);
 
 	}

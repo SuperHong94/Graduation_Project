@@ -72,6 +72,11 @@ CSceneMgr::CSceneMgr()
 	BulletCntArrTex[8] = (CResMgr::GetInst()->Load<CTexture>(L"8", L"Texture\\UI\\8.png"));
 	BulletCntArrTex[9] = (CResMgr::GetInst()->Load<CTexture>(L"9", L"Texture\\UI\\9.png"));
 	BulletCntArrTex[10] = (CResMgr::GetInst()->Load<CTexture>(L"10", L"Texture\\UI\\10.png"));
+
+	//BulletArrTex[0] = (CResMgr::GetInst()->Load<CTexture>(L"Bullet", L"Texture\\UI\\Bullet.png"));
+	//BulletArrTex[1] = (CResMgr::GetInst()->Load<CTexture>(L"FBullet", L"Texture\\UI\\FBullet.png"));
+	//BulletArrTex[2] = (CResMgr::GetInst()->Load<CTexture>(L"TBullet", L"Texture\\UI\\TBullet.png"));
+	//BulletArrTex[3] = (CResMgr::GetInst()->Load<CTexture>(L"IBullet", L"Texture\\UI\\IBullet.png"));
 }
 
 CSceneMgr::~CSceneMgr()
@@ -341,6 +346,7 @@ void CSceneMgr::init()
 	playerID = CNetworkMgr::GetInst()->GetPlayerId();
 	SceneState = CNetworkMgr::GetInst()->GetSceneState();
 	//initStartScene();
+;
 	initGameScene();
 	//initEndScene();
 
@@ -349,6 +355,8 @@ void CSceneMgr::init()
 
 	m_pCurScene->awake();
 	m_pCurScene->start();
+
+
 }
 
 void CSceneMgr::initGameScene()
@@ -486,7 +494,7 @@ void CSceneMgr::initGameScene()
 		for (int i = 0; i < MAX_USER; ++i)
 			m_pPlayerArr[i] = ppt[i];
 		for (int i = 0; i < MAX_USER; ++i)
-			m_pCurScene->FindLayer(L"Player")->AddGameObject(ppt[i]);
+			m_pCurScene->FindLayer(L"Player")->AddGameObject(m_pPlayerArr[i]);
 
 		//pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\SoldierIdle.mdat", L"MeshData\\SoldierIdle.mdat");
 
@@ -942,6 +950,8 @@ void CSceneMgr::initGameScene()
 		pPlayerObject->AddComponent(new CTransform);
 		pPlayerObject->Transform()->SetLocalPos(Vec3(-200.f, 0.f, 200.f));
 		pPlayerObject->AddComponent(new CPlayerScript(pPlayerObject, false));
+
+
 		m_pCurScene->FindLayer(L"Player")->AddGameObject(pPlayerObject);
 
 		// ==================
