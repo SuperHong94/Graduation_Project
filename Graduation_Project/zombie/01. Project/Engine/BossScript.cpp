@@ -80,6 +80,19 @@ void CBossScript::update()
 
 	if (status->state != BossState::B_Die)
 	{
+		// 애니메이션 체크
+		if (status->IsAnimationChange)
+		{
+			if (status->checkAnimationChangeTime > 0)
+				status->checkAnimationChangeTime -= DT;
+
+			if (status->checkAnimationChangeTime <= 0)
+			{
+				status->checkAnimationChangeTime = 0.3f;
+				status->IsAnimationChange = false;
+			}
+		}
+
 		// 좀비 방향 설정
 		Vec2 v1, v2;
 		v1.x = vPos.x;
@@ -118,7 +131,7 @@ void CBossScript::update()
 				HpBarObject->Transform()->SetLocalPos(Vec3(preVpos.x * (1 - 0.2) + (vPos.x) * 0.2, vPos.y + 230, preVpos.z * (1 - 0.4) + (vPos.z) * 0.4));
 		}
 
-		HpBarObject->Transform()->SetLocalScale(Vec3(100 * status->hp / 100., 10, 1));
+		HpBarObject->Transform()->SetLocalScale(Vec3(100 * status->hp / 1000, 10, 1));
 
 		// 특수 총알 효과 시간 차감
 		// 얼음
@@ -202,7 +215,7 @@ void CBossScript::update()
 		if (status->attackCoolTime <= 0)
 		{
 			status->isAttack = false;
-			status->attackCoolTime = 2.6f;
+			status->attackCoolTime = 4.3f;
 		}
 	}
 }

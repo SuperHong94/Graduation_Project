@@ -9,14 +9,16 @@ struct BossStatus
 	BossState state;
 	float distanceToPlayer = 0;
 	float attackRange = 100;
-	float attackDamage = 10.f;
+	float attackDamage = 30.f;
 	bool PlayerInRange = false;
 	bool PlayerInAttackRange = false;
 	bool isAttack = false;
 	float recognizeRange = 1000.f;	// 인지 범위
-	float attackCoolTime = 2.6f;
-	float attackDelay = 1.2f;	// 정확한 공격 타이밍을 계산하기 위한 변수
-	float hp = 100;
+	float attackCoolTime = 4.3f;
+	float attackDelay = 0.8f;	// 정확한 공격 타이밍을 계산하기 위한 변수
+	bool IsAnimationChange = false;
+	float checkAnimationChangeTime = 0.3f;
+	float hp = 1000;
 	float speed = 300;
 	float disappearCnt = 0;
 	bool IsDisappear = false;
@@ -50,10 +52,10 @@ public:
 			status->PlayerInRange = true;
 
 			//상태 변경
-			if (status->state != BossState::B_Run && status->distanceToPlayer > status->attackRange)
+			if (status->state != BossState::B_Run && status->distanceToPlayer > status->attackRange && !status->IsAnimationChange)
 			{
 				status->state = BossState::B_Run;
-
+				status->IsAnimationChange = true;
 				//애니메이션 변경
 				Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\BossRun.mdat", L"MeshData\\BossRun.mdat");
 				pObject->ChangeAnimation(pMeshData);
@@ -64,10 +66,10 @@ public:
 		{
 			status->PlayerInRange = false;
 
-			if (status->state != BossState::B_IDLE)
+			if (status->state != BossState::B_IDLE && !status->IsAnimationChange)
 			{
 				status->state = BossState::B_IDLE;
-
+				status->IsAnimationChange = true;
 				//애니메이션 변경
 				Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\BossIdle.mdat", L"MeshData\\BossIdle.mdat");
 				pObject->ChangeAnimation(pMeshData);
@@ -91,10 +93,10 @@ public:
 			status->PlayerInAttackRange = true;
 
 			//상태변경
-			if (status->state != BossState::B_Attack)
+			if (status->state != BossState::B_Attack && !status->IsAnimationChange)
 			{
 				status->state = BossState::B_Attack;
-
+				status->IsAnimationChange = true;
 				//애니메이션 변경
 				Ptr<CMeshData> pMeshData = CResMgr::GetInst()->Load<CMeshData>(L"MeshData\\BossAttack.mdat", L"MeshData\\BossAttack.mdat");
 				pObject->ChangeAnimation(pMeshData);
@@ -106,7 +108,7 @@ public:
 			{
 				status->isAttack = true;
 				{
-					status->attackDelay = 1.2f;
+					status->attackDelay = 0.8f;
 					// 플레이어 데미지
 					status->TargetObject->GetScript<CPlayerScript>()->getDamage(status->attackDamage);
 				}
@@ -121,20 +123,24 @@ public:
 		else
 		{
 			// 공격 쿨타임 초기화
-			status->attackDelay = 1.2f;
-			status->attackCoolTime = 2.6f;
+			status->attackDelay = 0.8f;
+			status->attackCoolTime = 4.3f;
 
 			status->PlayerInAttackRange = false;
-			if (status->distanceToPlayer <= status->recognizeRange)
+			if (!status->IsAnimationChange)
 			{
-				status->state = BossState::B_Run;
+				if (status->distanceToPlayer <= status->recognizeRange)
+				{
+					status->state = BossState::B_Run;
+					status->IsAnimationChange = true;
+				}
+				else
+				{
+					status->PlayerInRange = false;
+					status->state = BossState::B_IDLE;
+					status->IsAnimationChange = true;
+				}
 			}
-			else
-			{
-				status->PlayerInRange = false;
-				status->state = BossState::B_IDLE;
-			}
-
 			// 공격 취소
 			status->isAttack = false;
 		}
@@ -150,12 +156,13 @@ private:
 public:
 	BossAttackPlayer(BossStatus* status, CGameObject* pObject, CScene* pscene) : status(status), pObject(pObject), pScene(pscene) {}
 	virtual bool run() override {
-		if (status->distanceToPlayer <= 0)
+		if (status->distanceToPlayer <= 0 && !status->IsAnimationChange)
 		{
 
 			// 나중에 구현
 			status->PlayerInAttackRange = true;
 			status->state = BossState::B_Attack;
+			status->IsAnimationChange = true;
 		}
 		return true;
 	}
