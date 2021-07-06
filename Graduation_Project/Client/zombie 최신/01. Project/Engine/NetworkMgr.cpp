@@ -185,6 +185,17 @@ void CNetworkMgr::process(char* buf)
 		m_pPlayerArray[id]->GetScript<CPlayerScript>()->Transform()->SetLocalPos({ packet->px, packet->py, packet->pz });
 	}
 	break;
+
+	case S2C_FIRE:
+	{
+		s2c_fire* packet = reinterpret_cast<s2c_fire*>(buf);
+		int id = packet->id;
+		m_pPlayerArray[id]->GetScript<CPlayerScript>()->GetStatus()->bulletState = packet->eBulletState;
+		m_pPlayerArray[id]->GetScript<CPlayerScript>()->FireBullet(
+			Vec3(packet->pX, packet->pY, packet->pZ), Vec3(packet->dX, packet->dY, packet->dZ)
+		);
+	}
+		break;
 	case S2C_DUMMY:
 	{
 #ifdef _DEBUG
@@ -329,6 +340,25 @@ void CNetworkMgr::send_rollEnd_packet(const Vec3& pos)
 	send_packet(&packet);
 }
 
+void CNetworkMgr::send_fireBullet(const BulletState bulletState, const Vec3& pos, const Vec3& dir)
+{
+	c2s_fire packet;
+	packet.size = sizeof(c2s_fire);
+	packet.type = C2S_FIRE;
+	packet.id = m_id; //누가쐈는지 알게한다.
+	packet.pX = pos.x;
+	packet.pY = pos.y;
+	packet.pZ = pos.z;
+
+	packet.dX = dir.x;
+	packet.dY = dir.y;
+	packet.dZ = dir.z;
+	packet.eBulletState = bulletState;
+
+	send_packet(&packet);
+
+}
+
 
 
 
@@ -465,5 +495,5 @@ void CNetworkMgr::init_game()
 //#ifdef _DEBUG
 //	std::cout << "플레이어 초기화 완료\n";
 //#endif // _DEBUG
-
+	
 }

@@ -64,6 +64,7 @@ public:
 
 	void getDamage(float damage);
 
+
 	PlayerStatus* GetStatus() { return status; };
 	void SetStatus(PlayerStatus* st);
 
@@ -72,7 +73,7 @@ public:
 
 	float GetCollOffset() { return collOffset; };
 	void SetCollOffset(float offset) { collOffset = offset; };
-
+	void FireBullet(const Vec3& pos, const Vec3& dir);
 public:
 	CLONE(CPlayerScript);
 

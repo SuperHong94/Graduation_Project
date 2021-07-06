@@ -7,6 +7,7 @@
 
 #include "RenderMgr.h"
 #include "NetworkMgr.h"
+
 CPlayerScript::CPlayerScript(CGameObject* Object, bool player)
 	: CScript((UINT)SCRIPT_TYPE::PLAYERSCRIPT)
 	, m_pOriginMtrl(nullptr)
@@ -429,10 +430,10 @@ void CPlayerScript::update()
 
 			// 총알
 			//
-
-
 			if (KEY_TAB(KEY_TYPE::KEY_LBTN) && !status->IsRoll)
 			{
+
+				//CNetworkMgr::GetInst()->send_fireBullet(status->bulletState);//총알 쐈다고 서버에 보내기
 				bulletHeight = 100;
 
 				vBulletTargetPos.x = (bulletHeight - vPickRayOrig.y) * vPickRayDir.x / vPickRayDir.y + vPickRayOrig.x;
@@ -447,7 +448,7 @@ void CPlayerScript::update()
 				//printf("%f	%f	%f\n", vBulletDir.x, vBulletDir.y, vBulletDir.z);
 
 				Vec3 vNBulletDir = vBulletDir.Normalize();
-
+				Vec3 bulletPos;
 				//텍스처
 				//텍스처
 				Ptr<CTexture> pNormal;
@@ -471,11 +472,13 @@ void CPlayerScript::update()
 
 					if (!pBullet[i]->GetScript<CBulletScript>()->GetActive())
 					{
+
 						pBullet[i]->GetScript<CBulletScript>()->SetActive(true);
 
 						pBullet[i]->GetScript<CBulletScript>()->SetDir(vNBulletDir);
 
-						pBullet[i]->Transform()->SetLocalPos(Vec3(vPos.x + vNBulletDir.x * 40, bulletHeight, vPos.z + vNBulletDir.z * 35));
+						bulletPos = { vPos.x + vNBulletDir.x * 40, bulletHeight, vPos.z + vNBulletDir.z * 35 };
+						pBullet[i]->Transform()->SetLocalPos(bulletPos);
 
 						/*			pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
 									pBullet->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));*/
@@ -517,9 +520,9 @@ void CPlayerScript::update()
 
 						// 총알 방향 설정
 						float temp = atan2(vNBulletDir.z, vNBulletDir.x);
+
 						pBullet[i]->Transform()->SetLocalRot(Vec3(XM_PI / 2, -temp, 0.f));
-
-
+						CNetworkMgr::GetInst()->send_fireBullet(status->bulletState, bulletPos, vNBulletDir); //총알쐈다고 보내기
 						break;
 					}
 
@@ -539,9 +542,9 @@ void CPlayerScript::update()
 
 
 		}
-		else if (!isPlayer&&status->isDisappear == false)
+		else if (!isPlayer && status->isDisappear == false)
 		{
-		
+
 			// 애니메이션 상태가 바뀌었는지 확인
 			if (previousState != status->state)
 			{
@@ -567,10 +570,10 @@ void CPlayerScript::update()
 					// 이건 모델 피봇 잘못설정해서 임시로 설정
 					// 수정되면 지울 것
 					Vec3 temp = pObject->Transform()->GetLocalPos();
-				
+
 					pObject->Transform()->SetLocalPos(Vec3(temp.x, 0.f, temp.z));
 					collOffset = 50;
-					
+
 					//pObject->Collider2D()->SetOffsetPos(Vec3(0.f, 100 + collOffset, 0.f));
 				}
 				else {
@@ -640,9 +643,9 @@ void CPlayerScript::update()
 
 					vPos += 20 * rollDir;
 					pObject->Transform()->SetLocalPos(vPos);
-					
+
 				}
-				
+
 			}
 
 		}
@@ -682,6 +685,93 @@ void CPlayerScript::update()
 				Vec3 vPos = pObject->Transform()->GetLocalPos();
 				pObject->Transform()->SetLocalPos(Vec3(20000.f, 20000.f, 20000.f));
 			}
+		}
+	}
+}
+
+
+void CPlayerScript::FireBullet(const Vec3& pos, const Vec3& dir)
+{
+	bulletHeight = 100;
+
+
+
+	//printf("%f	%f	%f\n", vBulletDir.x, vBulletDir.y, vBulletDir.z);
+
+	Vec3 vNBulletDir = dir;
+	Vec3 bulletPos = pos;
+	//텍스처
+	//텍스처
+	Ptr<CTexture> pNormal;
+	Ptr<CTexture> pFire;
+	Ptr<CTexture> pIce;
+	Ptr<CTexture> pThunder;
+	if (status->bulletState == BulletState::B_Normal)
+		pNormal = CResMgr::GetInst()->Load<CTexture>(L"NormalB", L"Texture\\Bullet\\NormalBullet.png");
+	else if (status->bulletState == BulletState::B_Fire)
+		pFire = CResMgr::GetInst()->Load<CTexture>(L"FireB", L"Texture\\Bullet\\FireBullet.png");
+	else if (status->bulletState == BulletState::B_Ice)
+		pIce = CResMgr::GetInst()->Load<CTexture>(L"IceB", L"Texture\\Bullet\\IceBullet.png");
+	else if (status->bulletState == BulletState::B_Thunder)
+		pThunder = CResMgr::GetInst()->Load<CTexture>(L"ThunderB", L"Texture\\Bullet\\ThunderBullet.png");
+
+	// 총알 위치 & 상태
+	for (int i = 0; i < BulletCnt; i++)
+	{
+		// 상태
+		pBullet[i]->GetScript<CBulletScript>()->SetState(status->bulletState);
+
+		if (!pBullet[i]->GetScript<CBulletScript>()->GetActive())
+		{
+
+			pBullet[i]->GetScript<CBulletScript>()->SetActive(true);
+
+			pBullet[i]->GetScript<CBulletScript>()->SetDir(vNBulletDir);
+
+			pBullet[i]->Transform()->SetLocalPos(bulletPos);
+
+			/*			pBullet->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
+						pBullet->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));*/
+
+			pBullet[i]->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
+			Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(L"TexMtrl");
+			pBullet[i]->MeshRender()->SetMaterial(pMtrl->Clone());
+
+			//충돌체 위치 조정
+			pBullet[i]->Collider2D()->SetOffsetPos(Vec3(0.f, 0.f, -BulletCollOffset));
+
+			//추가 공격력 설정
+			pBullet[i]->GetScript<CBulletScript>()->setDamage(status->AdditionAttack);
+
+
+			if (status->bulletState == BulletState::B_Normal)
+			{
+				pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pNormal.GetPointer());
+				// 총알 크기 설정
+				pBullet[i]->Transform()->SetLocalScale(Vec3(50.f, 3.5f, 30.f));
+			}
+			else if (status->bulletState == BulletState::B_Fire)
+			{
+				pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pFire.GetPointer());
+				pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 7.f, 30.f));
+
+			}
+			else if (status->bulletState == BulletState::B_Ice)
+			{
+				pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pIce.GetPointer());
+				pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 7.f, 30.f));
+
+			}
+			else if (status->bulletState == BulletState::B_Thunder)
+			{
+				pBullet[i]->MeshRender()->GetSharedMaterial()->SetData(SHADER_PARAM::TEX_0, pThunder.GetPointer());
+				pBullet[i]->Transform()->SetLocalScale(Vec3(80.f, 7.f, 30.f));
+			}
+
+			// 총알 방향 설정
+			float temp = atan2(vNBulletDir.z, vNBulletDir.x);
+			pBullet[i]->Transform()->SetLocalRot(Vec3(XM_PI / 2, -temp, 0.f));
+			break;
 		}
 	}
 }

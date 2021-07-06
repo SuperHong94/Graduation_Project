@@ -216,6 +216,11 @@ void roll_update(c2s_roll_start* packet)
 		if (c.second.m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE && c.second.m_id != c_id) //게임씬일때 보내기
 			send_roll_packet(c.second.m_id, c_id); //c.secnod.m_id에게 c_id 정보 보내기
 }
+
+void send_fire_bullet(int p_id, int c_id)
+{
+}
+
 void proccess_packet(int c_id, unsigned char* buf)
 {
 	//buf[1]에 type이 들어감
@@ -263,6 +268,30 @@ void proccess_packet(int c_id, unsigned char* buf)
 				send_roll_end_packet(c.second.m_id, c_id); //c.secnod.m_id에게 c_id 정보 보내기
 	}
 	break;
+	case C2S_FIRE:
+	{
+		c2s_fire* packet = reinterpret_cast<c2s_fire*>(buf);
+		int c_id = packet->id;
+
+		s2c_fire p;
+		p.size = sizeof(s2c_fire);
+		p.type = S2C_FIRE;
+		p.id = c_id;
+		p.pX = packet->pX;
+		p.pY = packet->pY;
+		p.pZ = packet->pZ;
+
+		p.dX = packet->dX;
+		p.dY = packet->dY;
+		p.dZ = packet->dZ;
+
+		p.eBulletState = packet->eBulletState;
+		
+		for (auto& c : clients)
+			if (c.second.m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE && c.second.m_id != c_id) //게임씬일때 보내기
+				send_packet(c.second.m_id, &p);
+	}
+		break;
 	default:
 		break;
 	}

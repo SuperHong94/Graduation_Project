@@ -40,6 +40,7 @@ public:
 	void send_Key_packet(EKEY_EVENT key, Vec3 Rotation);
 	void send_rollStart_packet(const Vec3& dir);
 	void send_rollEnd_packet(const Vec3& pos);
+	void send_fireBullet(const BulletState bulletState,const Vec3& pos,const Vec3& dir);
 
 public: //오브젝트 관련 메소드
 
