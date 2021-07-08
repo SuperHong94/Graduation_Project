@@ -33,15 +33,6 @@ enum class SCRIPT_TYPE
 
 
 
-enum MonsterState
-{
-	M_Wander,
-	M_Run,
-	M_Attack,
-	M_Damage,
-	M_Die,
-	M_Respawn,
-};
 
 enum BossState
 {

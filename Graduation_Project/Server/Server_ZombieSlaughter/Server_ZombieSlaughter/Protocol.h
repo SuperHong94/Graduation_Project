@@ -33,6 +33,16 @@ enum PlayerState
 	p_None,
 };
 
+
+enum MonsterState
+{
+	M_Wander,
+	M_Run,
+	M_Attack,
+	M_Damage,
+	M_Die,
+	M_Respawn,
+};
 //클라크기
 constexpr int FRAME_BUFFER_WIDTH = 1024;
 constexpr int FRAME_BUFFER_HEIGHT = 768;
