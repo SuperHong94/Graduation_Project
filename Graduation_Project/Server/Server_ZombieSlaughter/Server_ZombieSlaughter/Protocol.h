@@ -9,6 +9,7 @@ constexpr int MAX_USER = 4; //0번은 서버
 constexpr int MAX_NAME = 100;
 constexpr int MAX_BUFFER = 1024;
 
+constexpr int MAX_MONSTER = 60;//최대 좀비수
 
 
 enum BulletState

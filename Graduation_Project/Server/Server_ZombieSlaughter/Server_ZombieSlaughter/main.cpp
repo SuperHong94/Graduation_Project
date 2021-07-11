@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "PlayerObject.h"
-
+#include "Zombie.h"
 
 enum EOP_TYPE { OP_RECV, OP_SEND, OP_ACCEPT };
 struct MY_OVER
@@ -28,6 +28,8 @@ struct CLIENT
 
 constexpr int SERVER_ID = 0;
 unordered_map<int, CLIENT> clients;
+
+array<CZombie, MAX_MONSTER> zombieArr;
 
 
 
@@ -341,6 +343,11 @@ int main()
 {
 	wcout.imbue(locale("korean"));
 
+
+	//좀비 정보 초기화
+	for (auto& zombie : zombieArr) {
+		zombie.init();
+	}
 
 
 	int ret = 0;

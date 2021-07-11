@@ -418,7 +418,7 @@ void CPlayerScript::update()
 			float temp = atan2(vBulletTargetPos.z - vPos.z, vBulletTargetPos.x - vPos.x);
 			if (!status->IsRoll)
 				Transform()->SetLocalRot(Vec3(0.f, -temp - XM_PI / 2, 0.f));
-
+			
 			// ÃÑ¾Ë
 			if (KEY_TAB(KEY_TYPE::KEY_LBTN) && !status->IsRoll)
 			{

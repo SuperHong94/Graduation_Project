@@ -16,7 +16,7 @@ private:
 	CGameObject* monsterArr[100];
 	CGameObject* m_pItem[50];
 	CGameObject* m_Light;
-	int monsterCnt = 60;
+	int monsterCnt = MAX_MONSTER;
 	int ItemCnt = 50;
 	int			sceneNum = 0;
 	bool		isChange = false;

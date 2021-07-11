@@ -10,6 +10,7 @@ private:
 
 
 	CGameObject* m_pPlayerArray[MAX_USER];
+	CGameObject* m_pMonsterArr[100];
 
 	int m_id;
 	int m_playerId;
@@ -46,6 +47,7 @@ public: //오브젝트 관련 메소드
 
 	CGameObject** GetPlayerArray() { return m_pPlayerArray; }; //참조자 리턴 밖에서 수정가능
 	void SetPlayerArray(CGameObject* Playerarr, int i) { m_pPlayerArray[i] = Playerarr; };
+	void SetMonsterArray(CGameObject* monster, int i) { m_pMonsterArr[i] = monster; };
 	//void SetPlayerArray(CGameObject* playerArray[MAX_USER]) { m_pPlayerArray = playerArray; };
 	//void SetPlayerArray(CGameObject playerArray[][MAX_USER]) { m_pPlayerArray = playerArray; };
 	int GetId() { return m_id; };

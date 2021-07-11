@@ -346,7 +346,7 @@ void CSceneMgr::init()
 	playerID = CNetworkMgr::GetInst()->GetPlayerId();
 	//SceneState = CNetworkMgr::GetInst()->GetSceneState();
 	//initStartScene();
-	
+
 	initGameScene();
 	//initEndScene();
 
@@ -658,8 +658,10 @@ void CSceneMgr::initGameScene()
 			// 좀비 초기 위치 설정
 			while (!isRightPos)
 			{
-				randomXPos = rand() % 9000 - 4500;
-				randomZPos = rand() % 9000 - 4500;
+				//randomXPos = rand() % 9000 - 4500;
+				//randomZPos = rand() % 9000 - 4500;
+				randomXPos = 5000.f;
+				randomZPos = 5000.f;
 
 				if (randomXPos >= -1500 && randomXPos <= 1500 && randomZPos >= -1500 && randomZPos <= 1500)
 					isRightPos = false;
@@ -690,6 +692,11 @@ void CSceneMgr::initGameScene()
 			m_pCurScene->FindLayer(L"Monster")->AddGameObject(pObject);
 
 			monsterArr[i] = pObject;
+		}
+
+		//몬스터 NetworkMgr에 등록
+		for (int i = 0; i < monsterCnt; ++i) {
+			CNetworkMgr::GetInst()->SetMonsterArray(monsterArr[i], i);
 		}
 
 
@@ -1277,9 +1284,9 @@ void CSceneMgr::update()
 			//m_pCurScene = new CScene;
 			////delete m_pCurScene;
 			//SceneState = SCENE_STATE::GAME_SCENE;
-		
+
 			m_pCurScene = new CScene;
-			
+
 			SceneState = SCENE_STATE::GAME_SCENE;
 			// 변수값 초기화
 			initValue();

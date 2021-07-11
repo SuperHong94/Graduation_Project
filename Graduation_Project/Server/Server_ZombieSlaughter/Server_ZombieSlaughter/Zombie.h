@@ -23,7 +23,14 @@ class CZombie :protected CObject
 	bool IsDisappear = false;
 	bool IsCollide = false;
 
+
 	CPlayerObject* targetObject;
+
+public:
+	CZombie();
+	virtual ~CZombie();
+	void init();
+
 
 };
 
