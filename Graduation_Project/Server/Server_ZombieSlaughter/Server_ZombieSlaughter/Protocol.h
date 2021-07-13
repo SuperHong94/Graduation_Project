@@ -82,6 +82,9 @@ constexpr unsigned char C2S_FIRE = 15;	//클라에서 총알 발사 보내기
 constexpr unsigned char S2C_FIRE = 16;	//서버에서 총알 발사 보내기
 
 
+constexpr unsigned char S2C_ZOMBIE_INFO = 17;	//서버에서 좀비 정보보내기
+
+
 
 enum EKEY_EVENT
 {
@@ -255,5 +258,15 @@ struct s2c_fire
 	float pX, pY, pZ; //총알 발사 위치
 	BulletState eBulletState; //어떤 총알 발사했는지 보내기
 
+};
+
+struct s2c_zombie_info
+{
+	unsigned char size;
+	unsigned char type;
+	int id; //어느 좀비인지 알려주기
+	float px, py, pz;//좀비 위치
+	float dx, dy, dz;//좀비 방향
+	MonsterState state;//좀비 상태 
 };
 #pragma pack(pop)

@@ -139,6 +139,9 @@ void upadate_scene_state(int c_id, c2s_chage_scene* packet)
 			}
 		}
 
+		//몬스터 정보 보내기
+		
+
 
 	}
 	break;
@@ -345,8 +348,9 @@ int main()
 
 
 	//좀비 정보 초기화
-	for (auto& zombie : zombieArr) {
-		zombie.init();
+	for (int i = 0; i < MAX_MONSTER; ++i)
+	{
+		zombieArr[i].init(i);
 	}
 
 

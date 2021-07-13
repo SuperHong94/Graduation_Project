@@ -22,14 +22,16 @@ class CZombie :protected CObject
 	float disappearCnt = 0;
 	bool IsDisappear = false;
 	bool IsCollide = false;
-
+	bool isActive = false;
 
 	CPlayerObject* targetObject;
+
+	int m_id;
 
 public:
 	CZombie();
 	virtual ~CZombie();
-	void init();
+	void init(int m_id);
 
 
 };
