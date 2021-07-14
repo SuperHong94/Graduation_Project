@@ -342,6 +342,27 @@ void disconnect(int key)
 	}
 }
 
+void do_ai()
+{
+	//테스트용으로 일단 좀비 랜덤 무브하기
+	while (true){
+		for (int i = 0; i < MAX_MONSTER; ++i) {
+			if ((high_resolution_clock::now() - zombieArr[i].getLastTime() > 1s)) {
+				//이동
+				zombieArr[i].move2target();
+				for (auto& p : clients)
+				{
+					if (p.second.m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) {
+						//npc 이동했다고 알리기
+					}
+				}
+				zombieArr[i].setLastTime(high_resolution_clock::now());
+			}
+				
+		}
+	}
+
+}
 int main()
 {
 	wcout.imbue(locale("korean"));
@@ -352,6 +373,7 @@ int main()
 	{
 		zombieArr[i].init(i);
 	}
+	cout << "NPC 초기화완료\n";
 
 
 	int ret = 0;
@@ -510,6 +532,8 @@ int main()
 
 
 	}
+	thread ai_thread{ do_ai };
+	ai_thread.join();
 	closesocket(listenSocket);
 	WSACleanup();
 

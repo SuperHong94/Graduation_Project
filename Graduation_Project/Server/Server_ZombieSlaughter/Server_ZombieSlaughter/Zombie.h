@@ -25,14 +25,16 @@ class CZombie :protected CObject
 	bool isActive = false;
 
 	CPlayerObject* targetObject;
-
+	Vec3 targetDir;
 	int m_id;
+	chrono::high_resolution_clock::time_point m_last_move_time; //마지막으로 움직인 시각
 
 public:
 	CZombie();
 	virtual ~CZombie();
 	void init(int m_id);
-
-
+	chrono::high_resolution_clock::time_point getLastTime();
+	void move2target(); //타겟 위치로 이동
+	void setLastTime(high_resolution_clock::time_point tp);
 };
 

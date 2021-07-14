@@ -5,6 +5,8 @@
 #include <map>
 #include <array>
 
+#include <chrono>
+#include <thread>
 //네트워크 관련
 #include <WS2tcpip.h>
 #include <MSWSock.h>//acceptEx를위해서
@@ -25,6 +27,7 @@ typedef DirectX::SimpleMath::Vector3 Vec3;
 typedef DirectX::SimpleMath::Vector4 Vec4;
 using DirectX::SimpleMath::Matrix;
 using namespace std;
+using namespace chrono;
 
 
 
