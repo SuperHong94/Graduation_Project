@@ -9,7 +9,7 @@ protected:
 public:
 	CObject();
 	virtual ~CObject();
-	virtual void init()=0; 
+
 	virtual void Update() = 0;
 	Vec3 GetPostion() { return m_postion; };
 	void SetPostion(Vec3 pos) { m_postion = pos; };

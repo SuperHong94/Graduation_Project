@@ -29,9 +29,7 @@ struct CLIENT
 constexpr int SERVER_ID = 0;
 unordered_map<int, CLIENT> clients;
 
-array<CZombie, MAX_MONSTER> zombieArr;
-
-
+std::array<CZombie, MAX_MONSTER> zombieArr;
 
 
 
@@ -341,6 +339,31 @@ void disconnect(int key)
 		}
 	}
 }
+void send_zombieInfo(int zombieID)
+{
+
+	Vec3 pos = zombieArr[zombieID].GetPostion();
+	Vec3 dir = zombieArr[zombieID].GetDir();
+	s2c_zombie_info packet;
+	packet.type = S2C_ZOMBIE_INFO;
+	packet.size = sizeof(s2c_zombie_info);
+	packet.px = pos.x;
+	packet.py = pos.y;
+	packet.pz = pos.z;
+
+	packet.dx = dir.x;
+	packet.dy = dir.y;
+	packet.dz = dir.z;
+
+	packet.state = zombieArr[zombieID].GetState();
+	packet.id = zombieID;
+
+	for (auto& c : clients) {
+		if (c.second.m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) {
+			send_packet(c.second.m_id, &packet);
+		}
+	}
+}
 
 void do_ai()
 {
@@ -354,6 +377,7 @@ void do_ai()
 				{
 					if (p.second.m_pPlayer->GetSceneState() == SCENE_STATE::GAME_SCENE) {
 						//npc 이동했다고 알리기
+						send_zombieInfo(i);
 					}
 				}
 				zombieArr[i].setLastTime(high_resolution_clock::now());

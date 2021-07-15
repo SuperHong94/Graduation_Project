@@ -5,7 +5,8 @@ enum class ZOMBIETYPE
 {
 
 };
-class CZombie :protected CObject
+class CZombie 
+	:public CObject
 {
 	MonsterState m_eMosterState;
 	float distanceToPlayer = 0;
@@ -25,16 +26,21 @@ class CZombie :protected CObject
 	bool isActive = false;
 
 	CPlayerObject* targetObject;
-	Vec3 targetDir;
+	Vec3 m_dir;
 	int m_id;
 	chrono::high_resolution_clock::time_point m_last_move_time; //마지막으로 움직인 시각
 
 public:
 	CZombie();
 	virtual ~CZombie();
-	void init(int m_id);
+	virtual void init(int m_id);
+	virtual void Update();
 	chrono::high_resolution_clock::time_point getLastTime();
 	void move2target(); //타겟 위치로 이동
 	void setLastTime(high_resolution_clock::time_point tp);
+	
+
+	MonsterState GetState() { return m_eMosterState; };
+	const Vec3& GetDir();
 };
 
